@@ -1,6 +1,6 @@
 ---
 title: "How to Lower Your Cost Per Lead in Google Ads (Without Cutting Spend)"
-description: "Practical ways GTA service businesses can cut wasted Google Ads spend and lower cost per lead - negatives, match types, tracking, and landing page fixes that work."
+description: "Practical ways GTA service businesses cut wasted Google Ads spend and lower cost per lead - negatives, match types, tracking, and landing page fixes that work."
 date: "2026-05-28"
 category: "Google Ads"
 author: "PPC Guru"

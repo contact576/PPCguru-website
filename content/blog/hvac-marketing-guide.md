@@ -1,6 +1,6 @@
 ---
 title: "The HVAC Marketing Playbook for GTA Contractors (2026)"
-description: "A practical HVAC marketing guide for Toronto and GTA contractors - handling seasonal demand, emergency leads, Google Ads, reviews, and lowering cost per booked job."
+description: "A practical HVAC marketing guide for Toronto and GTA contractors - handling seasonal demand, emergency leads, Google Ads, reviews, and cost per booked job."
 date: "2026-02-18"
 category: "Lead Generation"
 author: "PPC Guru"

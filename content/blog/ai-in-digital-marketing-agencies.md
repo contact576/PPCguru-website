@@ -1,6 +1,6 @@
 ---
 title: "How AI Is Really Changing Marketing Agencies (And What It Means for You)"
-description: "An honest look at how AI is changing digital marketing agencies in 2026 - what it does well, where it fails, and what local service businesses should actually expect."
+description: "An honest look at how AI is changing marketing agencies in 2026 - what it does well, where it fails, and what local service businesses should expect."
 date: "2026-01-27"
 category: "Strategy"
 author: "PPC Guru"

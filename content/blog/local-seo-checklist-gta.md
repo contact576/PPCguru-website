@@ -1,6 +1,6 @@
 ---
 title: "The Local SEO Checklist for GTA Service Businesses (2026)"
-description: "A practical local SEO checklist for Toronto and GTA service businesses - Google Business Profile, reviews, citations, and on-page fixes that bring in local leads."
+description: "A practical local SEO checklist for Toronto and GTA service businesses - Google Business Profile, reviews, citations, and on-page fixes that win local leads."
 date: "2026-04-22"
 category: "SEO"
 author: "PPC Guru"
