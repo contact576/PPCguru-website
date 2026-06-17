@@ -12,7 +12,7 @@ export default function FunnelCanvas({ isMobile = false }: { isMobile?: boolean 
   return (
     <Canvas
       dpr={dpr}
-      camera={{ position: [0, 0, 8.5], fov: 45 }}
+      camera={{ position: [0, 0, 7], fov: 48 }}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ background: "transparent" }}
     >

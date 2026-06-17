@@ -29,7 +29,7 @@ export default function BlogPage() {
       <Section>
         {featured && (
           <Link href={`/blog/${featured.slug}`} className="group mb-10 block overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] transition-colors hover:border-[var(--color-violet)]">
-            <div className="bg-radial-glow p-8 md:p-12">
+            <div className="bg-[var(--color-cream)] p-8 md:p-12">
               <span className="text-sm font-medium text-[var(--color-cyan-bright)]">{featured.category}</span>
               <h2 className="mt-3 max-w-3xl text-3xl font-bold md:text-4xl">{featured.title}</h2>
               <p className="mt-4 max-w-2xl text-[var(--color-ink-dim)]">{featured.description}</p>

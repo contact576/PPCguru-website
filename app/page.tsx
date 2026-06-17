@@ -20,7 +20,7 @@ export default function HomePage() {
       <ServiceGrid />
       <ProcessSteps />
       <AiShowcase />
-      <CaseStudyCards limit={6} />
+      <CaseStudyCards limit={6} tone="coral" />
       <IndustryGrid limit={9} />
       <CalculatorTeaser />
       <WhyUs />

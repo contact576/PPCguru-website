@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 export default function NotFound() {
   return (
     <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 text-center">
-      <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.15]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-radial-glow" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-warm-wash" />
       <div className="relative">
         <p className="font-display text-8xl font-bold text-gradient md:text-9xl">404</p>
         <h1 className="mt-4 text-2xl font-bold md:text-3xl">This page didn&apos;t convert</h1>

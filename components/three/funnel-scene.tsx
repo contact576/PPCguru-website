@@ -5,8 +5,8 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { scrollState } from "@/lib/scroll-store";
 
-const COUNT_DESKTOP = 9000;
-const COUNT_MOBILE = 2600;
+const COUNT_DESKTOP = 14000;
+const COUNT_MOBILE = 4000;
 
 const vertexShader = /* glsl */ `
   uniform float uTime;
@@ -107,7 +107,7 @@ export function FunnelPoints({ isMobile = false }: { isMobile?: boolean }) {
     () => ({
       uTime: { value: 0 },
       uFill: { value: 0.15 },
-      uSize: { value: isMobile ? 26 : 34 },
+      uSize: { value: isMobile ? 30 : 42 },
       uPixelRatio: { value: typeof window !== "undefined" ? Math.min(window.devicePixelRatio, 2) : 1 },
     }),
     [isMobile]

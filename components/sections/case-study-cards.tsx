@@ -8,14 +8,16 @@ export function CaseStudyCards({
   heading = true,
   limit,
   items,
+  tone = "white",
 }: {
   heading?: boolean;
   limit?: number;
   items?: CaseStudy[];
+  tone?: "white" | "coral" | "soft";
 }) {
   const list = items ?? (limit ? caseStudies.slice(0, limit) : caseStudies);
   return (
-    <Section id="results">
+    <Section id="results" tone={tone}>
       {heading ? (
         <SectionHeading
           eyebrow="Proof"
