@@ -4,17 +4,24 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-violet] disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap",
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-orange)] disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap",
   {
     variants: {
       variant: {
+        // Editorial black pill (Figma primary)
         primary:
-          "bg-gradient-to-r from-[--color-violet] to-[--color-cyan] text-[#0a0a0f] font-semibold hover:shadow-[0_0_40px_-6px_var(--color-violet)] hover:scale-[1.02]",
+          "bg-[var(--color-ink)] text-white hover:bg-[#262622] hover:-translate-y-0.5",
+        // Brand orange pill — the saturated conversion CTA
+        accent:
+          "bg-[var(--color-orange)] text-white font-semibold hover:bg-[var(--color-orange-deep)] hover:-translate-y-0.5 shadow-[0_8px_24px_-10px_var(--color-orange)]",
         solid:
-          "bg-[--color-violet] text-white hover:bg-[--color-violet-bright]",
+          "bg-[var(--color-orange)] text-white hover:bg-[var(--color-orange-deep)]",
+        // White pill with hairline border
         outline:
-          "border border-[--color-border-bright] text-[--color-ink] hover:border-[--color-violet] hover:bg-[--color-surface]",
-        ghost: "text-[--color-ink-dim] hover:text-[--color-ink] hover:bg-[--color-surface]",
+          "border border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)] hover:-translate-y-0.5",
+        secondary:
+          "border border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)]",
+        ghost: "text-[var(--color-ink-dim)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)]",
       },
       size: {
         sm: "h-9 px-4 text-sm",

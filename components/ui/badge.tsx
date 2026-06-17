@@ -10,7 +10,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-[--color-border-bright] bg-[--color-surface] px-3.5 py-1.5 text-xs font-medium text-[--color-ink-dim]",
+        "inline-flex items-center gap-2 rounded-full border border-[var(--color-border-bright)] bg-[var(--color-surface)] px-3.5 py-1.5 text-xs font-medium text-[var(--color-ink-dim)]",
         className
       )}
     >
@@ -19,11 +19,11 @@ export function Badge({
   );
 }
 
-/** Small accent-dot eyebrow label used above section headings. */
+/** Mono uppercase eyebrow label used above section headings (Figma taxonomy style). */
 export function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-2 text-sm font-medium tracking-wide text-[--color-cyan-bright] uppercase", className)}>
-      <span className="h-1.5 w-1.5 rounded-full bg-[--color-cyan] shadow-[0_0_10px_var(--color-cyan)]" />
+    <span className={cn("eyebrow inline-flex items-center gap-2 text-[var(--color-ink-dim)]", className)}>
+      <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-orange)]" />
       {children}
     </span>
   );

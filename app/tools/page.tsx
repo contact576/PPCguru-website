@@ -34,21 +34,21 @@ export default function ToolsPage() {
           {tools.map((t) => {
             const Icon = t.icon;
             return (
-              <Link key={t.href} href={t.href} className="group flex items-start gap-5 rounded-2xl border border-[--color-border] bg-[--color-surface] p-7 transition-all hover:-translate-y-1 hover:border-[--color-violet]">
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-violet)_16%,transparent)] text-[--color-cyan-bright]"><Icon size={24} /></span>
+              <Link key={t.href} href={t.href} className="group flex items-start gap-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-7 transition-all hover:-translate-y-1 hover:border-[var(--color-violet)]">
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-violet)_16%,transparent)] text-[var(--color-cyan-bright)]"><Icon size={24} /></span>
                 <div>
                   <div className="flex items-center gap-1.5">
                     <h2 className="text-lg font-semibold">{t.name}</h2>
-                    <ArrowUpRight size={16} className="text-[--color-ink-faint] group-hover:text-[--color-cyan-bright]" />
+                    <ArrowUpRight size={16} className="text-[var(--color-ink-faint)] group-hover:text-[var(--color-cyan-bright)]" />
                   </div>
-                  <p className="mt-1.5 text-sm text-[--color-ink-dim]">{t.desc}</p>
+                  <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{t.desc}</p>
                 </div>
               </Link>
             );
           })}
         </div>
-        <p className="mt-6 flex items-center justify-center gap-2 text-sm text-[--color-ink-faint]">
-          <Sparkles size={14} className="text-[--color-cyan-bright]" /> AI tools run on Claude and work best with an API key configured — see setup notes.
+        <p className="mt-6 flex items-center justify-center gap-2 text-sm text-[var(--color-ink-faint)]">
+          <Sparkles size={14} className="text-[var(--color-cyan-bright)]" /> AI tools run on Claude and work best with an API key configured — see setup notes.
         </p>
       </Section>
       <CtaBlock />

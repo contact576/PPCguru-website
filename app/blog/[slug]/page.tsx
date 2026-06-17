@@ -51,7 +51,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
       <PageHero eyebrow={post.category} title={post.title} intro={post.description} breadcrumbs={crumbs}>
-        <div className="flex items-center gap-4 text-sm text-[--color-ink-faint]">
+        <div className="flex items-center gap-4 text-sm text-[var(--color-ink-faint)]">
           <span className="flex items-center gap-1.5"><CalendarDays size={14} /> {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" })}</span>
           <span className="flex items-center gap-1.5"><Clock size={14} /> {post.readingTime}</span>
           <span>· By {post.author}</span>
@@ -65,13 +65,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </Section>
 
       <Section className="!pt-0">
-        <div className="mx-auto max-w-3xl border-t border-[--color-border] pt-10">
+        <div className="mx-auto max-w-3xl border-t border-[var(--color-border)] pt-10">
           <h2 className="text-xl font-semibold">Keep reading</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-3">
             {related.map((p) => (
-              <Link key={p.slug} href={`/blog/${p.slug}`} className="group rounded-2xl border border-[--color-border] bg-[--color-surface] p-5 transition-colors hover:border-[--color-violet]">
-                <span className="text-xs text-[--color-cyan-bright]">{p.category}</span>
-                <h3 className="mt-1.5 font-semibold leading-snug group-hover:text-[--color-ink]">{p.title}</h3>
+              <Link key={p.slug} href={`/blog/${p.slug}`} className="group rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 transition-colors hover:border-[var(--color-violet)]">
+                <span className="text-xs text-[var(--color-cyan-bright)]">{p.category}</span>
+                <h3 className="mt-1.5 font-semibold leading-snug group-hover:text-[var(--color-ink)]">{p.title}</h3>
               </Link>
             ))}
           </div>

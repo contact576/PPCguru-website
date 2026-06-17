@@ -14,13 +14,13 @@ export function WhyUs() {
       <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {differentiators.map((d, i) => (
           <Reveal key={d.title} delay={(i % 3) * 0.05}>
-            <div className="flex h-full gap-4 rounded-2xl border border-[--color-border] bg-[--color-surface] p-6">
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[--color-success]">
+            <div className="flex h-full gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[var(--color-success)]">
                 <Check size={16} />
               </span>
               <div>
-                <h3 className="font-semibold text-[--color-ink]">{d.title}</h3>
-                <p className="mt-1.5 text-sm text-[--color-ink-dim]">{d.body}</p>
+                <h3 className="font-semibold text-[var(--color-ink)]">{d.title}</h3>
+                <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{d.body}</p>
               </div>
             </div>
           </Reveal>

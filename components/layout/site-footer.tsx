@@ -11,12 +11,12 @@ import { PartnerBadges } from "@/components/shared/partner-badges";
 export function SiteFooter() {
   const year = new Date().getFullYear();
   return (
-    <footer className="border-t border-[--color-border] bg-[--color-base-2]">
+    <footer className="border-t border-[var(--color-border)] bg-[var(--color-base-2)]">
       <div className="container-page py-16">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="flex flex-col gap-5">
             <Logo />
-            <p className="max-w-xs text-sm text-[--color-ink-dim]">{siteConfig.description}</p>
+            <p className="max-w-xs text-sm text-[var(--color-ink-dim)]">{siteConfig.description}</p>
             <PartnerBadges />
             <div className="flex gap-3 pt-1">
               <SocialIcon href={siteConfig.social.instagram} label="Instagram"><InstagramIcon /></SocialIcon>
@@ -38,32 +38,32 @@ export function SiteFooter() {
                 { label: "AI Ad Copy Generator", href: "/tools/ad-copy-generator" },
               ]}
             />
-            <div className="flex flex-col gap-2.5 text-sm text-[--color-ink-dim]">
-              <a href={siteConfig.contact.phoneHref} className="flex items-center gap-2 hover:text-[--color-ink]"><Phone size={15} /> {siteConfig.contact.phone}</a>
-              <a href={`mailto:${siteConfig.contact.email}`} className="flex items-center gap-2 hover:text-[--color-ink]"><Mail size={15} /> {siteConfig.contact.email}</a>
+            <div className="flex flex-col gap-2.5 text-sm text-[var(--color-ink-dim)]">
+              <a href={siteConfig.contact.phoneHref} className="flex items-center gap-2 hover:text-[var(--color-ink)]"><Phone size={15} /> {siteConfig.contact.phone}</a>
+              <a href={`mailto:${siteConfig.contact.email}`} className="flex items-center gap-2 hover:text-[var(--color-ink)]"><Mail size={15} /> {siteConfig.contact.email}</a>
               <span className="flex items-center gap-2"><MapPin size={15} /> {siteConfig.contact.addressLocality}, {siteConfig.contact.addressRegion}</span>
             </div>
           </div>
         </div>
 
         {/* Local SEO link row */}
-        <div className="mt-12 border-t border-[--color-border] pt-8">
-          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[--color-ink-faint]">Areas we serve</p>
-          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[--color-ink-dim]">
+        <div className="mt-12 border-t border-[var(--color-border)] pt-8">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-faint)]">Areas we serve</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[var(--color-ink-dim)]">
             {cities.map((c) => (
-              <Link key={c.slug} href={`/${c.slug}/google-ads`} className="hover:text-[--color-cyan-bright]">
+              <Link key={c.slug} href={`/${c.slug}/google-ads`} className="hover:text-[var(--color-cyan-bright)]">
                 Google Ads {c.name}
               </Link>
             ))}
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-[--color-border] pt-8 text-sm text-[--color-ink-faint] md:flex-row md:items-center">
+        <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-[var(--color-border)] pt-8 text-sm text-[var(--color-ink-faint)] md:flex-row md:items-center">
           <p>© {year} {siteConfig.legalName}. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-[--color-ink]">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-[--color-ink]">Terms</Link>
-            <Link href="/contact" className="hover:text-[--color-ink]">Contact</Link>
+            <Link href="/privacy" className="hover:text-[var(--color-ink)]">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-[var(--color-ink)]">Terms</Link>
+            <Link href="/contact" className="hover:text-[var(--color-ink)]">Contact</Link>
           </div>
         </div>
       </div>
@@ -74,11 +74,11 @@ export function SiteFooter() {
 function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-xs font-semibold uppercase tracking-wide text-[--color-ink-faint]">{title}</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-faint)]">{title}</p>
       <ul className="flex flex-col gap-2.5">
         {links.map((l) => (
           <li key={l.href}>
-            <Link href={l.href} className="text-sm text-[--color-ink-dim] transition-colors hover:text-[--color-ink]">
+            <Link href={l.href} className="text-sm text-[var(--color-ink-dim)] transition-colors hover:text-[var(--color-ink)]">
               {l.label}
             </Link>
           </li>
@@ -95,7 +95,7 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
       aria-label={label}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-[--color-border] text-[--color-ink-dim] transition-colors hover:border-[--color-violet] hover:text-[--color-ink]"
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-ink-dim)] transition-colors hover:border-[var(--color-violet)] hover:text-[var(--color-ink)]"
     >
       {children}
     </a>

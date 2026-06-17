@@ -78,8 +78,8 @@ export default async function LocationServicePage({ params }: { params: Promise<
         <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           <div>
             <SectionHeading align="left" eyebrow="Why local matters" title={`${s.name} built for the ${c.name} market`} />
-            <p className="mt-6 text-[--color-ink-dim]">{c.context}</p>
-            <p className="mt-4 text-[--color-ink-dim]">
+            <p className="mt-6 text-[var(--color-ink-dim)]">{c.context}</p>
+            <p className="mt-4 text-[var(--color-ink-dim)]">
               As a Google Partner and Meta Business Partner, {siteConfig.name} pairs national-grade
               expertise with on-the-ground knowledge of {c.name} and the wider {c.region} market. We
               build campaigns around your most profitable services and the neighbourhoods that matter —
@@ -87,8 +87,8 @@ export default async function LocationServicePage({ params }: { params: Promise<
             </p>
             <ul className="mt-7 space-y-3">
               {fullService.outcomes.map((o) => (
-                <li key={o} className="flex items-center gap-3 text-[--color-ink]">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[--color-success]"><Check size={13} /></span>
+                <li key={o} className="flex items-center gap-3 text-[var(--color-ink)]">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[var(--color-success)]"><Check size={13} /></span>
                   {o}
                 </li>
               ))}
@@ -100,28 +100,28 @@ export default async function LocationServicePage({ params }: { params: Promise<
             </div>
           </div>
 
-          <aside className="h-fit rounded-2xl border border-[--color-border] bg-[--color-surface] p-6">
-            <div className="flex items-center gap-2 text-sm font-semibold"><MapPin size={16} className="text-[--color-cyan-bright]" /> Neighbourhoods we serve</div>
+          <aside className="h-fit rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+            <div className="flex items-center gap-2 text-sm font-semibold"><MapPin size={16} className="text-[var(--color-cyan-bright)]" /> Neighbourhoods we serve</div>
             <div className="mt-4 flex flex-wrap gap-2">
               {c.neighbourhoods.map((n) => (
-                <span key={n} className="rounded-full border border-[--color-border] px-3 py-1.5 text-xs text-[--color-ink-dim]">{n}</span>
+                <span key={n} className="rounded-full border border-[var(--color-border)] px-3 py-1.5 text-xs text-[var(--color-ink-dim)]">{n}</span>
               ))}
             </div>
-            <div className="mt-6 border-t border-[--color-border] pt-5 text-sm font-semibold">Other services in {c.name}</div>
+            <div className="mt-6 border-t border-[var(--color-border)] pt-5 text-sm font-semibold">Other services in {c.name}</div>
             <div className="mt-3 flex flex-col gap-2">
               {locationServices.filter((x) => x.slug !== service).map((x) => (
-                <Link key={x.slug} href={`/${city}/${x.slug}`} className="text-sm text-[--color-ink-dim] hover:text-[--color-cyan-bright]">{x.name} →</Link>
+                <Link key={x.slug} href={`/${city}/${x.slug}`} className="text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-cyan-bright)]">{x.name} →</Link>
               ))}
             </div>
           </aside>
         </div>
       </Section>
 
-      <Section className="bg-[--color-base-2]">
+      <Section className="bg-[var(--color-base-2)]">
         <SectionHeading align="left" eyebrow="Nearby" title={`${s.name} in other ${c.region} cities`} />
         <div className="mt-8 flex flex-wrap gap-3">
           {otherCities.map((x) => (
-            <Link key={x.slug} href={`/${x.slug}/${service}`} className="rounded-full border border-[--color-border] bg-[--color-surface] px-5 py-2.5 text-sm transition-colors hover:border-[--color-cyan] hover:text-[--color-cyan-bright]">
+            <Link key={x.slug} href={`/${x.slug}/${service}`} className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm transition-colors hover:border-[var(--color-cyan)] hover:text-[var(--color-cyan-bright)]">
               {x.name}
             </Link>
           ))}

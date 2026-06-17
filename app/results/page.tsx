@@ -25,7 +25,7 @@ export default function ResultsPage() {
       <StatBand />
       <CaseStudyCards heading={false} />
       <div className="container-page pb-4">
-        <p className="text-center text-xs text-[--color-ink-faint]">{REPRESENTATIVE_DISCLOSURE}</p>
+        <p className="text-center text-xs text-[var(--color-ink-faint)]">{REPRESENTATIVE_DISCLOSURE}</p>
       </div>
       <CtaBlock />
     </>

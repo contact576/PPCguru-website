@@ -20,8 +20,8 @@ export function LegalLayout({
       />
       <Section className="!pt-12">
         <div className="mx-auto max-w-3xl">
-          <p className="mb-8 text-sm text-[--color-ink-faint]">Last updated: {updated}</p>
-          <div className="space-y-6 text-[--color-ink-dim] [&_a]:text-[--color-cyan-bright] [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-[--color-ink] [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed">
+          <p className="mb-8 text-sm text-[var(--color-ink-faint)]">Last updated: {updated}</p>
+          <div className="space-y-6 text-[var(--color-ink-dim)] [&_a]:text-[var(--color-cyan-bright)] [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-[var(--color-ink)] [&_li]:ml-5 [&_li]:list-disc [&_p]:leading-relaxed">
             {children}
           </div>
         </div>

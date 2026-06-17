@@ -43,7 +43,7 @@ export default function PrivacyPage() {
       <h2>Contact us</h2>
       <p>Questions about this policy or our privacy practices can be directed to {siteConfig.name} at <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a> or {siteConfig.contact.phone}, {siteConfig.contact.addressLocality}, {siteConfig.contact.addressRegion}, Canada.</p>
 
-      <p className="text-xs text-[--color-ink-faint]">This policy is provided as a starting template and should be reviewed by qualified legal counsel before launch to ensure it reflects your actual data practices and current legal requirements.</p>
+      <p className="text-xs text-[var(--color-ink-faint)]">This policy is provided as a starting template and should be reviewed by qualified legal counsel before launch to ensure it reflects your actual data practices and current legal requirements.</p>
     </LegalLayout>
   );
 }
