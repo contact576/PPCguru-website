@@ -3,8 +3,11 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site-config";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
+import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { FloatingCta } from "@/components/shared/floating-cta";
+import { OfferPopup } from "@/components/shared/offer-popup";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
 
 const inter = Inter({
@@ -62,9 +65,12 @@ export default function RootLayout({
       <body className="min-h-screen antialiased">
         <OrganizationJsonLd />
         <SmoothScrollProvider>
+          <AnnouncementBar />
           <SiteHeader />
           <main id="main">{children}</main>
           <SiteFooter />
+          <FloatingCta />
+          <OfferPopup />
         </SmoothScrollProvider>
       </body>
     </html>

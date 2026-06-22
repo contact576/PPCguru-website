@@ -43,15 +43,16 @@ export function Button({ className, variant, size, href, ...props }: ButtonProps
   const classes = cn(buttonVariants({ variant, size }), className);
   if (href) {
     const isExternal = href.startsWith("http");
+    const onClick = props.onClick as unknown as React.MouseEventHandler;
     if (isExternal) {
       return (
-        <a href={href} className={classes} target="_blank" rel="noopener noreferrer">
+        <a href={href} className={classes} target="_blank" rel="noopener noreferrer" onClick={onClick}>
           {props.children}
         </a>
       );
     }
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} onClick={onClick}>
         {props.children}
       </Link>
     );
