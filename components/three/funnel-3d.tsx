@@ -32,7 +32,8 @@ export function Funnel3D() {
     setIsMobile(window.matchMedia("(max-width: 768px)").matches);
     getGPUTier()
       .then((t) => {
-        if (!cancelled) setCapable(t.tier >= 1 && !t.isMobile ? true : t.tier >= 2);
+        // Mount the canvas for any WebGL-capable tier (>=1); only tier 0 falls back.
+        if (!cancelled) setCapable(t.tier >= 1);
       })
       .catch(() => !cancelled && setCapable(false));
     return () => {

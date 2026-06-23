@@ -50,10 +50,10 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
   const metrics = benchmark[platform];
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-[--color-border] bg-[--color-surface]">
+    <div className="overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)]">
       <div className="grid lg:grid-cols-[1fr_1.1fr]">
         {/* ---------- Inputs ---------- */}
-        <div className="border-b border-[--color-border] p-7 lg:border-b-0 lg:border-r">
+        <div className="border-b border-[var(--color-border)] p-7 lg:border-b-0 lg:border-r">
           <h3 className="text-lg font-semibold">Your inputs</h3>
 
           {!fixedPlatform && (
@@ -65,8 +65,8 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
                     onClick={() => setPlatform(p)}
                     className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
                       platform === p
-                        ? "border-[--color-violet] bg-[color-mix(in_srgb,var(--color-violet)_14%,transparent)] text-[--color-ink]"
-                        : "border-[--color-border] text-[--color-ink-dim] hover:border-[--color-border-bright]"
+                        ? "border-[var(--color-violet)] bg-[color-mix(in_srgb,var(--color-violet)_14%,transparent)] text-[var(--color-ink)]"
+                        : "border-[var(--color-border)] text-[var(--color-ink-dim)] hover:border-[var(--color-border-bright)]"
                     }`}
                   >
                     {p === "google" ? "Google" : "Meta"}
@@ -80,7 +80,7 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
             <select
               value={industrySlug}
               onChange={(e) => onIndustryChange(e.target.value)}
-              className="w-full rounded-xl border border-[--color-border] bg-[--color-base] px-4 py-3 text-sm text-[--color-ink] outline-none focus:border-[--color-violet]"
+              className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-violet)]"
             >
               {industryBenchmarks.map((b) => (
                 <option key={b.slug} value={b.slug}>{b.label}</option>
@@ -96,23 +96,23 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
               step={250}
               value={budget}
               onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full accent-[--color-violet]"
+              className="w-full accent-[var(--color-violet)]"
             />
-            <div className="mt-1 flex justify-between text-xs text-[--color-ink-faint]">
+            <div className="mt-1 flex justify-between text-xs text-[var(--color-ink-faint)]">
               <span>$500</span><span>$50,000</span>
             </div>
           </Field>
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="Avg. customer value">
-              <div className="flex items-center rounded-xl border border-[--color-border] bg-[--color-base] px-3">
-                <span className="text-[--color-ink-faint]">$</span>
+              <div className="flex items-center rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-3">
+                <span className="text-[var(--color-ink-faint)]">$</span>
                 <input
                   type="number"
                   value={avgTicket}
                   min={0}
                   onChange={(e) => setAvgTicket(Number(e.target.value))}
-                  className="w-full bg-transparent px-2 py-3 text-sm text-[--color-ink] outline-none"
+                  className="w-full bg-transparent px-2 py-3 text-sm text-[var(--color-ink)] outline-none"
                 />
               </div>
             </Field>
@@ -124,13 +124,13 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
                 step={1}
                 value={closeRate}
                 onChange={(e) => setCloseRate(Number(e.target.value))}
-                className="mt-3 w-full accent-[--color-cyan]"
+                className="mt-3 w-full accent-[var(--color-cyan)]"
               />
             </Field>
           </div>
 
-          <div className="mt-5 rounded-xl border border-[--color-border] bg-[--color-base] p-4 text-xs text-[--color-ink-faint]">
-            <p className="mb-2 flex items-center gap-1.5 font-medium text-[--color-ink-dim]"><Info size={13} /> {benchmark.label} · {PLATFORM_LABEL[platform]} benchmarks{metrics.estimate ? " (estimated)" : ""}</p>
+          <div className="mt-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] p-4 text-xs text-[var(--color-ink-faint)]">
+            <p className="mb-2 flex items-center gap-1.5 font-medium text-[var(--color-ink-dim)]"><Info size={13} /> {benchmark.label} · {PLATFORM_LABEL[platform]} benchmarks{metrics.estimate ? " (estimated)" : ""}</p>
             <div className="grid grid-cols-3 gap-2">
               <Bench label="Avg CPC" value={formatCurrency(metrics.cpc, { maximumFractionDigits: 2 })} />
               <Bench label="Avg CTR" value={`${(metrics.ctr * 100).toFixed(2)}%`} />
@@ -161,11 +161,11 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
             key={result.roas.toFixed(1)}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative mt-5 flex items-center gap-2 rounded-xl border border-[--color-border] bg-[--color-base] px-4 py-3 text-sm"
+            className="relative mt-5 flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm"
           >
-            <TrendingUp size={16} className="text-[--color-success]" />
-            <span className="text-[--color-ink-dim]">
-              At {formatCurrency(budget)}/mo in <strong className="text-[--color-ink]">{benchmark.label}</strong>, a typical account could see roughly <strong className="text-[--color-ink]">{formatNumber(result.leads)} leads</strong> and <strong className="text-[--color-ink]">{formatCurrency(result.revenue)}</strong> in revenue.
+            <TrendingUp size={16} className="text-[var(--color-success)]" />
+            <span className="text-[var(--color-ink-dim)]">
+              At {formatCurrency(budget)}/mo in <strong className="text-[var(--color-ink)]">{benchmark.label}</strong>, a typical account could see roughly <strong className="text-[var(--color-ink)]">{formatNumber(result.leads)} leads</strong> and <strong className="text-[var(--color-ink)]">{formatCurrency(result.revenue)}</strong> in revenue.
             </span>
           </motion.div>
 
@@ -175,9 +175,9 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
         </div>
       </div>
 
-      <div className="border-t border-[--color-border] bg-[--color-base-2] px-7 py-4">
-        <p className="text-xs text-[--color-ink-faint]">{BENCHMARK_DISCLAIMER}</p>
-        <p className="mt-1 text-[10px] text-[--color-ink-faint]">Sources: {BENCHMARK_SOURCES.join(" · ")}.</p>
+      <div className="border-t border-[var(--color-border)] bg-[var(--color-base-2)] px-7 py-4">
+        <p className="text-xs text-[var(--color-ink-faint)]">{BENCHMARK_DISCLAIMER}</p>
+        <p className="mt-1 text-[10px] text-[var(--color-ink-faint)]">Sources: {BENCHMARK_SOURCES.join(" · ")}.</p>
       </div>
     </div>
   );
@@ -186,7 +186,7 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="mt-5 block">
-      <span className="mb-2 block text-sm font-medium text-[--color-ink-dim]">{label}</span>
+      <span className="mb-2 block text-sm font-medium text-[var(--color-ink-dim)]">{label}</span>
       {children}
     </label>
   );
@@ -194,19 +194,19 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 function Bench({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[--color-ink-faint]">{label}</p>
-      <p className="font-semibold text-[--color-ink]">{value}</p>
+      <p className="text-[var(--color-ink-faint)]">{label}</p>
+      <p className="font-semibold text-[var(--color-ink)]">{value}</p>
     </div>
   );
 }
 function FunnelRow({ label, sub, value, color, pct }: { label: string; sub: string; value: string; color: string; pct: number }) {
   return (
-    <div className="rounded-xl border border-[--color-border] bg-[--color-base] p-3" style={{ width: `${Math.max(60, pct * 100)}%`, marginLeft: `${(1 - Math.max(0.6, pct)) * 50}%` }}>
+    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] p-3" style={{ width: `${Math.max(60, pct * 100)}%`, marginLeft: `${(1 - Math.max(0.6, pct)) * 50}%` }}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color, boxShadow: `0 0 10px ${color}` }} />
-          <span className="text-sm font-medium text-[--color-ink]">{label}</span>
-          <span className="hidden text-xs text-[--color-ink-faint] sm:inline">{sub}</span>
+          <span className="text-sm font-medium text-[var(--color-ink)]">{label}</span>
+          <span className="hidden text-xs text-[var(--color-ink-faint)] sm:inline">{sub}</span>
         </div>
         <span className="font-display text-lg font-bold" style={{ color }}>{value}</span>
       </div>
@@ -215,9 +215,9 @@ function FunnelRow({ label, sub, value, color, pct }: { label: string; sub: stri
 }
 function Big({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className={`rounded-xl border p-4 ${highlight ? "border-[--color-violet] bg-[color-mix(in_srgb,var(--color-violet)_10%,transparent)]" : "border-[--color-border] bg-[--color-base]"}`}>
-      <p className="text-xs text-[--color-ink-faint]">{label}</p>
-      <p className={`mt-1 text-2xl font-bold ${highlight ? "text-gradient" : "text-[--color-ink]"}`}>{value}</p>
+    <div className={`rounded-xl border p-4 ${highlight ? "border-[var(--color-violet)] bg-[color-mix(in_srgb,var(--color-violet)_10%,transparent)]" : "border-[var(--color-border)] bg-[var(--color-base)]"}`}>
+      <p className="text-xs text-[var(--color-ink-faint)]">{label}</p>
+      <p className={`mt-1 text-2xl font-bold ${highlight ? "text-gradient" : "text-[var(--color-ink)]"}`}>{value}</p>
     </div>
   );
 }

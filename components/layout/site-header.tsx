@@ -26,9 +26,9 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "fixed top-0 z-50 w-full transition-all duration-300",
+        "fixed top-9 z-50 w-full transition-all duration-300",
         scrolled
-          ? "border-b border-[--color-border] bg-[color-mix(in_srgb,var(--color-base)_82%,transparent)] backdrop-blur-xl"
+          ? "border-b border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-base)_82%,transparent)] backdrop-blur-xl"
           : "border-b border-transparent"
       )}
     >
@@ -46,7 +46,7 @@ export function SiteHeader() {
                 href={item.href}
                 className={cn(
                   "rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
-                  active ? "text-[--color-ink]" : "text-[--color-ink-dim] hover:text-[--color-ink]"
+                  active ? "text-[var(--color-ink)]" : "text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"
                 )}
               >
                 {item.label}
@@ -56,13 +56,13 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Button href={siteConfig.cta.primaryHref} size="sm">
+          <Button href={siteConfig.cta.primaryHref} size="sm" variant="accent">
             {siteConfig.cta.primaryLabel}
           </Button>
         </div>
 
         <button
-          className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-[--color-border] text-[--color-ink] lg:hidden"
+          className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-ink)] lg:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
@@ -74,7 +74,7 @@ export function SiteHeader() {
       {/* Mobile menu */}
       <div
         className={cn(
-          "fixed inset-0 z-40 origin-top bg-[--color-base] transition-all duration-300 lg:hidden",
+          "fixed inset-0 z-40 origin-top bg-[var(--color-base)] transition-all duration-300 lg:hidden",
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         )}
       >
@@ -83,12 +83,12 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="border-b border-[--color-border] py-4 text-2xl font-semibold text-[--color-ink]"
+              className="border-b border-[var(--color-border)] py-4 text-2xl font-semibold text-[var(--color-ink)]"
             >
               {item.label}
             </Link>
           ))}
-          <Button href={siteConfig.cta.primaryHref} size="lg" className="mt-6 w-full">
+          <Button href={siteConfig.cta.primaryHref} size="lg" variant="accent" className="mt-6 w-full">
             {siteConfig.cta.primaryLabel}
           </Button>
         </div>

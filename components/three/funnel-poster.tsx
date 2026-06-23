@@ -6,7 +6,10 @@
 export function FunnelPoster() {
   return (
     <div className="relative h-full w-full overflow-hidden">
-      <div className="absolute left-1/2 top-1/2 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 bg-radial-glow" />
+      <div
+        className="absolute left-1/2 top-1/2 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2"
+        style={{ background: "radial-gradient(60% 60% at 50% 35%, rgba(124,92,255,0.35), transparent 70%)" }}
+      />
       <svg
         viewBox="0 0 400 500"
         className="absolute left-1/2 top-1/2 h-[90%] -translate-x-1/2 -translate-y-1/2 opacity-90"

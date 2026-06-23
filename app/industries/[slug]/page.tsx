@@ -53,8 +53,8 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
             <SectionHeading align="left" eyebrow="The challenge" title="What's holding growth back" />
             <ul className="mt-8 space-y-3">
               {ind.painPoints.map((p) => (
-                <li key={p} className="flex items-start gap-3 text-[--color-ink-dim]">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-danger)_16%,transparent)] text-[--color-danger]"><X size={13} /></span>
+                <li key={p} className="flex items-start gap-3 text-[var(--color-ink-dim)]">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-danger)_16%,transparent)] text-[var(--color-danger)]"><X size={13} /></span>
                   {p}
                 </li>
               ))}
@@ -64,8 +64,8 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
             <SectionHeading align="left" eyebrow="Our approach" title="How we fix it" />
             <ul className="mt-8 space-y-3">
               {ind.approach.map((a) => (
-                <li key={a} className="flex items-start gap-3 text-[--color-ink]">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[--color-success]"><Check size={13} /></span>
+                <li key={a} className="flex items-start gap-3 text-[var(--color-ink)]">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[var(--color-success)]"><Check size={13} /></span>
                   {a}
                 </li>
               ))}
@@ -75,7 +75,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
       </Section>
 
       {/* Related services */}
-      <Section className="bg-[--color-base-2]">
+      <Section className="bg-[var(--color-base-2)]">
         <SectionHeading align="left" eyebrow="Services" title={`What we run for ${ind.name.toLowerCase()}`} />
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {relatedServices.map((s, i) => {
@@ -83,10 +83,10 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
             const Icon = s.icon;
             return (
               <Reveal key={s.slug} delay={i * 0.05}>
-                <Link href={`/services/${s.slug}`} className="group flex h-full flex-col gap-3 rounded-2xl border border-[--color-border] bg-[--color-surface] p-6 transition-all hover:-translate-y-1 hover:border-[--color-violet]">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-violet)_18%,transparent)] text-[--color-cyan-bright]"><Icon size={20} /></span>
+                <Link href={`/services/${s.slug}`} className="group flex h-full flex-col gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-all hover:-translate-y-1 hover:border-[var(--color-violet)]">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-violet)_18%,transparent)] text-[var(--color-cyan-bright)]"><Icon size={20} /></span>
                   <h3 className="font-semibold">{s.name}</h3>
-                  <p className="text-sm text-[--color-ink-dim]">{s.short}</p>
+                  <p className="text-sm text-[var(--color-ink-dim)]">{s.short}</p>
                 </Link>
               </Reveal>
             );

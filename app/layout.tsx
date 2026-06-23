@@ -1,21 +1,24 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site-config";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
+import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
+import { FloatingCta } from "@/components/shared/floating-cta";
+import { OfferPopup } from "@/components/shared/offer-popup";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -58,13 +61,16 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
       <body className="min-h-screen antialiased">
         <OrganizationJsonLd />
         <SmoothScrollProvider>
+          <AnnouncementBar />
           <SiteHeader />
           <main id="main">{children}</main>
           <SiteFooter />
+          <FloatingCta />
+          <OfferPopup />
         </SmoothScrollProvider>
       </body>
     </html>

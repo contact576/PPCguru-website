@@ -39,7 +39,7 @@ export default function AboutPage() {
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
             <SectionHeading align="left" eyebrow="Our story" title="Built to be accountable" />
-            <div className="mt-6 space-y-4 text-[--color-ink-dim]">
+            <div className="mt-6 space-y-4 text-[var(--color-ink-dim)]">
               <p>Most agencies report on impressions, clicks and "reach." Business owners don&apos;t pay their bills with impressions. We started {siteConfig.name} to fix that — to build a marketing partner that talks about leads, booked jobs and revenue, and proves it.</p>
               <p>Since {siteConfig.founded}, we&apos;ve grown into a Google Partner and Meta Business Partner agency serving service businesses across the GTA, the rest of Canada, and the USA — with deep, repeatable playbooks in healthcare, home services, construction, immigration and real estate.</p>
               <p>What makes us different is how we work: an AI-augmented production system that lets a small, senior team produce more audits, more creative and sharper reporting than agencies many times our size — all directed and reviewed by humans who actually care about your numbers.</p>
@@ -54,9 +54,9 @@ export default function AboutPage() {
                 ["Honesty over hype", "No guaranteed-#1 promises. Just clear expectations and real reporting."],
                 ["Niche depth", "We go deep in a handful of verticals rather than being generalists."],
               ].map(([t, b]) => (
-                <li key={t} className="rounded-xl border border-[--color-border] bg-[--color-surface] p-5">
-                  <p className="font-semibold text-[--color-ink]">{t}</p>
-                  <p className="mt-1 text-sm text-[--color-ink-dim]">{b}</p>
+                <li key={t} className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+                  <p className="font-semibold text-[var(--color-ink)]">{t}</p>
+                  <p className="mt-1 text-sm text-[var(--color-ink-dim)]">{b}</p>
                 </li>
               ))}
             </ul>
@@ -64,27 +64,27 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section className="bg-[--color-base-2]">
+      <Section className="bg-[var(--color-base-2)]">
         <SectionHeading eyebrow="Leadership" title="Founder-led, hands-on" intro="Small enough to care, structured enough to deliver." />
         <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
           {founders.map((f, i) => (
             <Reveal key={f.name} delay={i * 0.06}>
-              <div className="h-full rounded-2xl border border-[--color-border] bg-[--color-surface] p-7">
+              <div className="h-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-7">
                 <div className="flex items-center gap-4">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[--color-violet] to-[--color-cyan] text-lg font-bold text-[#0a0a0f]">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-violet)] to-[var(--color-cyan)] text-lg font-bold text-[#0a0a0f]">
                     {f.name.split(" ").map((n) => n[0]).join("")}
                   </span>
                   <div>
-                    <p className="font-semibold text-[--color-ink]">{f.name}</p>
-                    <p className="text-sm text-[--color-cyan-bright]">{f.role}</p>
+                    <p className="font-semibold text-[var(--color-ink)]">{f.name}</p>
+                    <p className="text-sm text-[var(--color-cyan-bright)]">{f.role}</p>
                   </div>
                 </div>
-                <p className="mt-5 text-sm text-[--color-ink-dim]">{f.bio}</p>
+                <p className="mt-5 text-sm text-[var(--color-ink-dim)]">{f.bio}</p>
               </div>
             </Reveal>
           ))}
         </div>
-        <p className="mt-8 text-center text-xs text-[--color-ink-faint]">Team photos &amp; additional team members to be added. Verify founder bio details before launch.</p>
+        <p className="mt-8 text-center text-xs text-[var(--color-ink-faint)]">Team photos &amp; additional team members to be added. Verify founder bio details before launch.</p>
       </Section>
 
       <WhyUs />

@@ -17,13 +17,13 @@ export function PartnerBadges({ className }: { className?: string }) {
 
 function Badge({ title, sub, color }: { title: string; sub: string; color: string }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-xl border border-[--color-border] bg-[--color-surface] px-3.5 py-2">
+    <div className="flex items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2">
       <span className="flex h-7 w-7 items-center justify-center rounded-lg" style={{ backgroundColor: `${color}22`, color }}>
         <BadgeCheck size={16} />
       </span>
       <span className="leading-tight">
-        <span className="block text-xs font-semibold text-[--color-ink]">{title}</span>
-        <span className="block text-[10px] uppercase tracking-wide text-[--color-ink-faint]">{sub}</span>
+        <span className="block text-xs font-semibold text-[var(--color-ink)]">{title}</span>
+        <span className="block text-[10px] uppercase tracking-wide text-[var(--color-ink-faint)]">{sub}</span>
       </span>
     </div>
   );
