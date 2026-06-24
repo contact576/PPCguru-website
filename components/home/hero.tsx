@@ -29,7 +29,7 @@ export function Hero() {
           {/* Left — editorial */}
           <div>
             <motion.span
-              className="eyebrow inline-flex items-center gap-2 text-[var(--color-ink-dim)]"
+              className="eyebrow inline-flex items-center gap-2 text-[var(--color-orange-deep)]"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}

@@ -14,7 +14,7 @@
   --color-surface: #ffffff;       /* cards (with hairline borders) */
   --color-surface-2: #f7f7f5;
   --color-border: #e6e6e6;        /* hairline */
-  --color-border-bright: #d6d6d2;
+  --color-border-bright: #c4c4be; /* visible button/outline borders on white */
 
   /* Text — hierarchy by weight + near-black tones, not opacity */
   --color-ink: #0a0a0a;
@@ -94,6 +94,17 @@
     line-height: 1.04;
     color: var(--color-ink);
   }
+  /* Accessibility floor: visible keyboard focus on all interactive elements. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-orange);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after {
@@ -116,9 +127,9 @@
   .eyebrow {
     font-family: var(--font-mono);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.8rem;
-    font-weight: 500;
+    letter-spacing: 0.12em;
+    font-size: 0.8125rem;
+    font-weight: 600;
   }
   /* Subtle dotted grid — only used on dark navy panels */
   .bg-grid-dark {

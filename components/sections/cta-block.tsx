@@ -12,7 +12,7 @@ export function CtaBlock({
   return (
     <section className="py-6 md:py-10">
       <div className="container-page">
-        <div className="relative overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-navy)] px-8 py-16 text-center md:px-16 md:py-24">
+        <div className="relative overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-navy)] px-8 py-16 text-center md:px-16 md:py-24">
           <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-50" />
           <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[var(--color-orange)] opacity-30 blur-3xl" />
           <div className="relative mx-auto max-w-2xl">
@@ -30,7 +30,7 @@ export function CtaBlock({
                 Try the ROI calculator
               </Button>
             </div>
-            <p className="mt-6 font-mono text-xs uppercase tracking-wider text-white/45">
+            <p className="mt-6 font-mono text-xs uppercase tracking-wider text-white/60">
               No long-term contracts · You keep ownership of your accounts
             </p>
           </div>

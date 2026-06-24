@@ -16,11 +16,11 @@ const buttonVariants = cva(
           "bg-[var(--color-orange)] text-white font-semibold hover:bg-[var(--color-orange-deep)] hover:-translate-y-0.5 shadow-[0_8px_24px_-10px_var(--color-orange)]",
         solid:
           "bg-[var(--color-orange)] text-white hover:bg-[var(--color-orange-deep)]",
-        // White pill with hairline border
+        // White pill with a clearly visible 1.5px border — never washes out on white
         outline:
-          "border border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)] hover:-translate-y-0.5",
+          "border-[1.5px] border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)] hover:bg-[var(--color-surface-2)] hover:-translate-y-0.5",
         secondary:
-          "border border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)]",
+          "border-[1.5px] border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)]",
         ghost: "text-[var(--color-ink-dim)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)]",
       },
       size: {

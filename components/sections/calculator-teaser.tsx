@@ -28,9 +28,25 @@ export function CalculatorTeaser() {
               </Button>
             </div>
           </div>
-          <div className="hidden justify-center lg:flex">
-            <div className="flex h-40 w-40 items-center justify-center rounded-3xl bg-[color-mix(in_srgb,var(--color-violet)_14%,transparent)] text-[var(--color-violet-bright)]">
-              <Calculator size={72} strokeWidth={1.25} />
+          {/* Compact sample-projection card so the block reads as the tool, not a lone icon. */}
+          <div className="hidden lg:block">
+            <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-tile">
+              <div className="flex items-center gap-2 text-[var(--color-ink-faint)]">
+                <Calculator size={16} /> <span className="font-mono text-[11px] uppercase tracking-wide">Sample · HVAC · $3,000/mo</span>
+              </div>
+              <div className="mt-4 space-y-3">
+                {[
+                  { label: "Est. clicks", value: "310" },
+                  { label: "Est. leads", value: "20" },
+                  { label: "Projected revenue", value: "$44.7k", strong: true },
+                ].map((r) => (
+                  <div key={r.label} className="flex items-center justify-between border-b border-[var(--color-border)] pb-2 last:border-0 last:pb-0">
+                    <span className="text-sm text-[var(--color-ink-dim)]">{r.label}</span>
+                    <span className={r.strong ? "text-xl font-extrabold text-gradient" : "text-lg font-bold text-[var(--color-ink)]"}>{r.value}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-3 text-[10px] text-[var(--color-ink-faint)]">Illustrative — run the calculator for your numbers.</p>
             </div>
           </div>
         </div>

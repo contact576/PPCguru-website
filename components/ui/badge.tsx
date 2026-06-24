@@ -22,8 +22,8 @@ export function Badge({
 /** Mono uppercase eyebrow label used above section headings (Figma taxonomy style). */
 export function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <span className={cn("eyebrow inline-flex items-center gap-2 text-[15px] font-semibold text-[var(--color-ink)]", className)}>
-      <span className="h-2 w-2 rounded-full bg-[var(--color-orange)]" />
+    <span className={cn("eyebrow inline-flex items-center gap-2 text-[var(--color-orange-deep)]", className)}>
+      <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-orange)]" />
       {children}
     </span>
   );

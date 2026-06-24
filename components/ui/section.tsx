@@ -73,7 +73,7 @@ export function SectionHeading({
     >
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
       <h2 className="text-3xl md:text-5xl font-bold text-balance">{title}</h2>
-      {intro ? <p className="text-lg opacity-80 text-pretty">{intro}</p> : null}
+      {intro ? <p className="text-lg text-[var(--color-ink-dim)] text-pretty">{intro}</p> : null}
     </div>
   );
 }
