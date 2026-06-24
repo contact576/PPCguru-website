@@ -40,13 +40,23 @@ export function FloatingCta() {
           show ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <a
-          href={siteConfig.contact.phoneHref}
-          onClick={() => track("phone_click", { source: "mobile_bar" })}
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--color-border-bright)] py-3 text-sm font-medium text-[var(--color-ink)]"
-        >
-          <Phone size={16} /> Call
-        </a>
+        {siteConfig.contact.phone ? (
+          <a
+            href={siteConfig.contact.phoneHref}
+            onClick={() => track("phone_click", { source: "mobile_bar" })}
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--color-border-bright)] py-3 text-sm font-medium text-[var(--color-ink)]"
+          >
+            <Phone size={16} /> Call
+          </a>
+        ) : (
+          <Link
+            href="/contact"
+            onClick={() => track("cta_click", { source: "mobile_bar_call" })}
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--color-border-bright)] py-3 text-sm font-medium text-[var(--color-ink)]"
+          >
+            <Phone size={16} /> Book a call
+          </Link>
+        )}
         <Link
           href="/contact"
           onClick={() => track("cta_click", { source: "mobile_bar" })}

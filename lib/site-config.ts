@@ -21,9 +21,13 @@ export const siteConfig = {
 
   // Contact — TODO(client): confirm exact public details before launch
   contact: {
-    email: "hello@ppcguru.ca", // TODO(client) confirm
-    phone: "+1 (000) 000-0000", // TODO(client) confirm — used for click-to-call
-    phoneHref: "tel:+10000000000", // TODO(client) confirm
+    email: "hello@ppcguru.ca", // [VERIFY] confirm real inbox before launch
+    // Phone intentionally blank — no placeholder number is shown anywhere.
+    // [VERIFY]: add the real business phone + WhatsApp; components show a
+    // "Book a call" CTA instead while these are empty.
+    phone: "",
+    phoneHref: "",
+    whatsapp: "", // e.g. "https://wa.me/1XXXXXXXXXX" — [VERIFY] real WhatsApp number
     addressLocality: "Brampton",
     addressRegion: "ON",
     addressCountry: "CA",

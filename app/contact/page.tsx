@@ -43,7 +43,13 @@ export default function ContactPage() {
             <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
               <h2 className="font-semibold">Reach us directly</h2>
               <div className="mt-4 space-y-3 text-sm">
-                <a href={siteConfig.contact.phoneHref} className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Phone size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.phone}</a>
+                {/* Phone shown only when a real number is configured. [VERIFY] add phone + WhatsApp. */}
+                {siteConfig.contact.phone ? (
+                  <a href={siteConfig.contact.phoneHref} className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Phone size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.phone}</a>
+                ) : null}
+                {siteConfig.contact.whatsapp ? (
+                  <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Phone size={16} className="text-[var(--color-cyan-bright)]" /> WhatsApp</a>
+                ) : null}
                 <a href={`mailto:${siteConfig.contact.email}`} className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Mail size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.email}</a>
                 <span className="flex items-center gap-3 text-[var(--color-ink-dim)]"><MapPin size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.addressLocality}, {siteConfig.contact.addressRegion} · {siteConfig.trust.serviceArea}</span>
                 <span className="flex items-center gap-3 text-[var(--color-ink-dim)]"><Clock size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.hours}</span>

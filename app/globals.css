@@ -148,7 +148,7 @@
 
 .container-page {
   width: 100%;
-  max-width: 80rem;
+  max-width: 84rem; /* ~1344px — wider desktop presence */
   margin-inline: auto;
   padding-inline: 1.25rem;
 }

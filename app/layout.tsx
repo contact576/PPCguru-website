@@ -71,6 +71,19 @@ export default function RootLayout({
           <SiteFooter />
           <FloatingCta />
           <OfferPopup />
+          {/*
+            PRE-LAUNCH VERIFICATION CHECKLIST (search the codebase for "[VERIFY]"):
+            [ ] Real phone number + WhatsApp (siteConfig.contact) — currently blank, shows "Book a call"
+            [ ] Real email + mailing address / service area
+            [ ] Google Partner + Meta Business Partner status & badge-usage rights
+            [ ] Microsoft Advertising certification (if claimed)
+            [ ] Review rating + count (none published yet; no Review schema until real)
+            [ ] Replace representative case studies & testimonials with approved, real ones
+            [ ] Pricing ranges & 30-Day Sprint terms; no-long-term-contract policy
+            [ ] GA4 / GTM / Meta Pixel IDs (lib/analytics.ts hooks are no-ops) + cookie/consent banner
+            [ ] CRM/email wiring for forms (app/contact/actions.ts, offer popup)
+            [ ] Privacy / Terms reviewed by counsel; verify schema validity
+          */}
         </SmoothScrollProvider>
       </body>
     </html>

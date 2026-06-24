@@ -39,7 +39,15 @@ export function SiteFooter() {
               ]}
             />
             <div className="flex flex-col gap-2.5 text-sm text-[var(--color-ink-dim)]">
-              <a href={siteConfig.contact.phoneHref} className="flex items-center gap-2 hover:text-[var(--color-ink)]"><Phone size={15} /> {siteConfig.contact.phone}</a>
+              {/* [VERIFY] add real phone + WhatsApp; until then we show a Book-a-call CTA, never a placeholder number. */}
+              {siteConfig.contact.phone ? (
+                <a href={siteConfig.contact.phoneHref} className="flex items-center gap-2 hover:text-[var(--color-ink)]"><Phone size={15} /> {siteConfig.contact.phone}</a>
+              ) : (
+                <Link href="/contact" className="flex items-center gap-2 hover:text-[var(--color-ink)]"><Phone size={15} /> Book a call</Link>
+              )}
+              {siteConfig.contact.whatsapp ? (
+                <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[var(--color-ink)]"><Phone size={15} /> WhatsApp</a>
+              ) : null}
               <a href={`mailto:${siteConfig.contact.email}`} className="flex items-center gap-2 hover:text-[var(--color-ink)]"><Mail size={15} /> {siteConfig.contact.email}</a>
               <span className="flex items-center gap-2"><MapPin size={15} /> {siteConfig.contact.addressLocality}, {siteConfig.contact.addressRegion}</span>
             </div>

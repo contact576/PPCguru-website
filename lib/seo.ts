@@ -39,7 +39,7 @@ export function organizationSchema() {
     url: siteConfig.url,
     description: siteConfig.description,
     email: siteConfig.contact.email,
-    telephone: siteConfig.contact.phone,
+    ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phone } : {}),
     foundingDate: String(siteConfig.founded),
     founder: siteConfig.founders.map((name) => ({ "@type": "Person", name })),
     address: {
@@ -50,11 +50,9 @@ export function organizationSchema() {
     },
     areaServed: ["Canada", "United States"],
     sameAs: [siteConfig.social.instagram, siteConfig.social.linkedin, siteConfig.social.facebook],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: siteConfig.trust.googleReviewRating,
-      reviewCount: siteConfig.trust.googleReviewCount.replace(/\D/g, "") || "60",
-    },
+    // NOTE: aggregateRating intentionally omitted — do NOT publish Review/Rating
+    // schema until the rating + review count are verified from a real source.
+    // [VERIFY]: Add aggregateRating only with a confirmed rating and reviewCount.
     knowsAbout: ["Google Ads", "Meta Ads", "SEO", "PPC", "Conversion optimization"],
   };
 }

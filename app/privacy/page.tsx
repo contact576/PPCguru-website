@@ -41,7 +41,7 @@ export default function PrivacyPage() {
       <p>Subject to applicable law, you may request access to, correction of, or deletion of your personal information. To make a request, contact us at <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.</p>
 
       <h2>Contact us</h2>
-      <p>Questions about this policy or our privacy practices can be directed to {siteConfig.name} at <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a> or {siteConfig.contact.phone}, {siteConfig.contact.addressLocality}, {siteConfig.contact.addressRegion}, Canada.</p>
+      <p>Questions about this policy or our privacy practices can be directed to {siteConfig.name} at <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>, based in {siteConfig.contact.addressLocality}, {siteConfig.contact.addressRegion}, Canada.</p>
 
       <p className="text-xs text-[var(--color-ink-faint)]">This policy is provided as a starting template and should be reviewed by qualified legal counsel before launch to ensure it reflects your actual data practices and current legal requirements.</p>
     </LegalLayout>

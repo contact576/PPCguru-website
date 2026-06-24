@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { motion } from "motion/react";
-import { ArrowRight, MousePointerClick, Users, CalendarCheck, Star } from "lucide-react";
+import { ArrowRight, MousePointerClick, Users, CalendarCheck } from "lucide-react";
 import { Funnel3D } from "@/components/three/funnel-3d";
 import { Button } from "@/components/ui/button";
 import { PartnerBadges } from "@/components/shared/partner-badges";
@@ -72,22 +72,21 @@ export function Hero() {
               </Button>
             </motion.div>
 
+            {/* Non-numeric trust row — no unverified ratings/counts published.
+                [VERIFY]: A "rated X from Y reviews" line can be added once real. */}
             <motion.div
-              className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3"
+              className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.4 }}
             >
-              <span className="inline-flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)]">
-                <span className="flex">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} size={15} className="fill-[var(--color-gold)] text-[var(--color-gold)]" />
-                  ))}
+              {["Transparent reporting", "You own your account", "No long-term lock-in"].map((c) => (
+                <span key={c} className="rounded-full border border-[var(--color-border)] bg-white px-3 py-1 text-xs font-medium text-[var(--color-ink-dim)]">
+                  {c}
                 </span>
-                {siteConfig.trust.googleReviewRating} · {siteConfig.trust.activeClients} clients
-              </span>
-              <PartnerBadges />
+              ))}
             </motion.div>
+            <div className="mt-5"><PartnerBadges /></div>
           </div>
 
           {/* Right — navy panel with the live 3D funnel */}
@@ -111,9 +110,10 @@ export function Hero() {
               </div>
 
               <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
+                {/* Illustrative sample dashboard — not a client metric. */}
                 <div className="rounded-2xl bg-white/10 px-4 py-3 backdrop-blur-md">
-                  <p className="font-mono text-[10px] uppercase tracking-wider text-white/60">Avg. return on ad spend</p>
-                  <p className="text-2xl font-bold text-white">{siteConfig.trust.avgRoas}</p>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-white/60">Sample dashboard</p>
+                  <p className="text-lg font-bold text-white">Built around ROAS</p>
                 </div>
                 <p className="font-mono text-[10px] uppercase tracking-wider text-white/50">Scroll → fills the funnel</p>
               </div>

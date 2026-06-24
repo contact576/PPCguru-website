@@ -54,7 +54,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
     description: `${s.name} for ${c.name} service businesses.`,
     areaServed: { "@type": "City", name: c.name },
     url: `${siteConfig.url}/${city}/${service}`,
-    telephone: siteConfig.contact.phone,
+    ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phone } : {}),
     parentOrganization: { "@id": `${siteConfig.url}/#organization` },
   };
 

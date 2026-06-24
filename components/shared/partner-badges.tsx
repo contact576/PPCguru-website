@@ -6,11 +6,14 @@ import { cn } from "@/lib/utils";
  * Uses styled text badges (no third-party logo assets shipped). Swap for the
  * official badge artwork from your partner dashboards before launch if desired.
  */
+// [VERIFY] BEFORE LAUNCH: Confirm Google Partner + Meta Business Partner status and
+// the right to display official badge artwork. Until confirmed, these are styled
+// text badges (no official logos) reflecting the company's stated partnerships.
 export function PartnerBadges({ className }: { className?: string }) {
   return (
     <div className={cn("flex flex-wrap items-center gap-3", className)}>
-      <Badge title="Google Partner" sub="Verified" color="#4285F4" />
-      <Badge title="Meta Business Partner" sub="Verified" color="#0866FF" />
+      <Badge title="Google Partner" sub="Partner program" color="#4285F4" />
+      <Badge title="Meta Business Partner" sub="Partner program" color="#0866FF" />
     </div>
   );
 }
