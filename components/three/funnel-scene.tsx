@@ -5,8 +5,8 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { scrollState } from "@/lib/scroll-store";
 
-const COUNT_DESKTOP = 14000;
-const COUNT_MOBILE = 4000;
+const COUNT_DESKTOP = 20000;
+const COUNT_MOBILE = 6000;
 
 const vertexShader = /* glsl */ `
   uniform float uTime;
@@ -16,46 +16,50 @@ const vertexShader = /* glsl */ `
   attribute float aSeed;
   attribute float aSpeed;
   attribute float aAngle;
-  varying float vStage;   // 0=clicks (top) .. 1=jobs (basin)
+  varying float vStage;   // 0=spend (top) .. 1=revenue (basin)
   varying float vAlpha;
+  varying float vActive;
 
   void main() {
     // continuous descent 0..1 driven by time + per-particle phase
-    float t = fract(uTime * aSpeed * 0.06 + aSeed);
+    float t = fract(uTime * aSpeed * 0.055 + aSeed);
 
-    // vertical position: top (+3.2) down to basin (-3.2)
-    float y = mix(3.2, -3.2, t);
+    // vertical position: top (+3.4) down to basin (-3.4)
+    float y = mix(3.4, -3.4, t);
 
-    // funnel radius profile: wide mouth -> narrow neck (at t~0.72) -> basin
-    float neck = 0.72;
-    float topR = 3.0;
-    float neckR = 0.28;
-    float basinR = 1.5;
+    // funnel radius profile: wide mouth -> narrow neck (t~0.7) -> basin
+    float neck = 0.7;
+    float topR = 3.25;
+    float neckR = 0.22;
+    float basinR = 1.7;
     float radius;
     if (t < neck) {
-      radius = mix(topR, neckR, pow(t / neck, 1.3));
+      radius = mix(topR, neckR, pow(t / neck, 1.35));
     } else {
-      radius = mix(neckR, basinR, (t - neck) / (1.0 - neck));
+      radius = mix(neckR, basinR, pow((t - neck) / (1.0 - neck), 0.85));
     }
 
-    // swirl
-    float angle = aAngle + uTime * 0.25 + t * 6.2831 * 1.5;
+    // swirl — accelerates through the neck for a "drawn-in" feel
+    float angle = aAngle + uTime * 0.28 + t * 6.2831 * 1.6;
     float x = cos(angle) * radius;
     float z = sin(angle) * radius;
 
-    // subtle pointer parallax handled on the group; keep particle local here
-    vec3 pos = vec3(x, y, z);
+    // slight turbulence so the stream breathes
+    x += sin(uTime * 0.6 + aSeed * 12.0) * 0.06 * (1.0 - t);
+    z += cos(uTime * 0.5 + aSeed * 9.0) * 0.06 * (1.0 - t);
 
+    vec3 pos = vec3(x, y, z);
     vStage = t;
 
     // particles only "active" up to the fill line set by scroll
-    float activated = smoothstep(uFill + 0.08, uFill - 0.02, t);
-    // even inactive ones faintly visible near the mouth for life
-    vAlpha = mix(0.12, 1.0, activated);
+    float activated = smoothstep(uFill + 0.06, uFill - 0.03, t);
+    vActive = activated;
+    // inactive ones are faint embers near the mouth (keeps it alive pre-scroll)
+    vAlpha = mix(0.07, 1.0, activated);
 
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mvPosition;
-    gl_PointSize = uSize * uPixelRatio * (1.0 / -mvPosition.z) * (0.6 + activated * 0.8);
+    gl_PointSize = uSize * uPixelRatio * (1.0 / -mvPosition.z) * (0.55 + activated * 0.9);
   }
 `;
 
@@ -63,20 +67,25 @@ const fragmentShader = /* glsl */ `
   precision mediump float;
   varying float vStage;
   varying float vAlpha;
+  varying float vActive;
 
   void main() {
-    // soft round sprite
+    // soft round sprite with a hot core
     vec2 c = gl_PointCoord - 0.5;
     float d = length(c);
     if (d > 0.5) discard;
     float soft = smoothstep(0.5, 0.0, d);
+    float core = smoothstep(0.18, 0.0, d);
 
-    // color ramp: cyan (clicks) -> violet (leads) -> gold (jobs)
-    vec3 cyan   = vec3(0.36, 0.84, 0.96);
-    vec3 violet = vec3(0.49, 0.36, 1.0);
-    vec3 gold   = vec3(1.0, 0.81, 0.36);
-    vec3 col = mix(cyan, violet, smoothstep(0.0, 0.72, vStage));
-    col = mix(col, gold, smoothstep(0.72, 1.0, vStage));
+    // brand ramp: deep ember (spend) -> orange (leads) -> gold (revenue)
+    vec3 ember  = vec3(0.72, 0.15, 0.04);
+    vec3 orange = vec3(1.0, 0.42, 0.12);
+    vec3 gold   = vec3(1.0, 0.74, 0.26);
+    vec3 col = mix(ember, orange, smoothstep(0.0, 0.7, vStage));
+    col = mix(col, gold, smoothstep(0.7, 1.0, vStage));
+
+    // active particles get a white-hot center — like accumulating revenue
+    col += core * vActive * vec3(0.9, 0.7, 0.45);
 
     gl_FragColor = vec4(col, soft * vAlpha);
   }
@@ -107,27 +116,28 @@ export function FunnelPoints({ isMobile = false }: { isMobile?: boolean }) {
     () => ({
       uTime: { value: 0 },
       uFill: { value: 0.15 },
-      uSize: { value: isMobile ? 30 : 42 },
+      uSize: { value: isMobile ? 26 : 34 },
       uPixelRatio: { value: typeof window !== "undefined" ? Math.min(window.devicePixelRatio, 2) : 1 },
     }),
     [isMobile]
   );
 
   useFrame((_, delta) => {
+    const d = Math.min(delta, 0.05); // clamp so tab-refocus doesn't jump
     if (matRef.current) {
-      matRef.current.uniforms.uTime.value += delta;
+      matRef.current.uniforms.uTime.value += d;
       // lerp fill toward scroll-driven target (never setState per frame)
       const target = 0.12 + scrollState.funnelProgress * 0.9;
       const u = matRef.current.uniforms.uFill;
-      u.value += (target - u.value) * Math.min(1, delta * 3);
+      u.value += (target - u.value) * Math.min(1, d * 3);
     }
     if (groupRef.current) {
-      // gentle pointer parallax + idle rotation
-      groupRef.current.rotation.y += delta * 0.04;
-      const targetX = scrollState.pointerY * 0.12;
-      const targetY = scrollState.pointerX * 0.2;
-      groupRef.current.rotation.x += (targetX - groupRef.current.rotation.x) * 0.04;
-      groupRef.current.position.x += (targetY * 0.4 - groupRef.current.position.x) * 0.04;
+      // gentle idle rotation + pronounced pointer parallax (reacts to cursor)
+      groupRef.current.rotation.y += d * 0.05;
+      const targetX = scrollState.pointerY * 0.18;
+      const targetY = scrollState.pointerX * 0.32;
+      groupRef.current.rotation.x += (targetX - groupRef.current.rotation.x) * 0.05;
+      groupRef.current.position.x += (targetY * 0.5 - groupRef.current.position.x) * 0.05;
     }
   });
 

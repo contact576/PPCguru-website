@@ -42,7 +42,7 @@ export function WasteAudit() {
 
       <div className="mt-12 grid gap-6 lg:grid-cols-[1fr_1.1fr]">
         {/* Inputs */}
-        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-7">
+        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7">
           <Field label={`Monthly ad spend: ${formatCurrency(spend)}`}>
             <input type="range" min={500} max={50000} step={250} value={spend} onChange={(e) => setSpend(+e.target.value)} className="w-full accent-[var(--color-orange)]" />
           </Field>

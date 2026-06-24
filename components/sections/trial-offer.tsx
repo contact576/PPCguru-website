@@ -43,7 +43,7 @@ export function TrialOffer() {
           </p>
         </div>
 
-        <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-tile md:p-8">
+        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 shadow-tile md:p-8">
           <p className="font-mono text-[11px] uppercase tracking-wide text-[var(--color-ink-faint)]">What&apos;s in the sprint</p>
           <ul className="mt-4 space-y-3">
             {included.map((item) => (

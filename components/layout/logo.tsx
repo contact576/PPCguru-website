@@ -16,9 +16,9 @@ export function LogoMark({ size = 34, className }: { size?: number; className?: 
       className={className}
       aria-hidden
     >
-      {/* bulb base */}
-      <rect x="18" y="47.5" width="12" height="2.6" rx="1.3" fill="#2b2b2b" />
-      <rect x="19.6" y="51.6" width="8.8" height="2.6" rx="1.3" fill="#2b2b2b" />
+      {/* bulb base — lightened so it reads on the dark canvas */}
+      <rect x="18" y="47.5" width="12" height="2.6" rx="1.3" fill="#9a948c" />
+      <rect x="19.6" y="51.6" width="8.8" height="2.6" rx="1.3" fill="#9a948c" />
       {/* face / bulb glass */}
       <path d="M24 6C13.5 6 7 14 7 23c0 7 4.4 12 8.4 17.5h17.2C36.6 35 41 30 41 23 41 14 34.5 6 24 6Z" fill="#f6cbb0" />
       {/* turban — gold side band */}

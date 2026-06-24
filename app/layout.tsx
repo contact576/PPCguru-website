@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site-config";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
@@ -9,11 +9,20 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { FloatingCta } from "@/components/shared/floating-cta";
 import { OfferPopup } from "@/components/shared/offer-popup";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
+import { Cursor } from "@/components/ui/cursor";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
+});
+
+// Display face — characterful editorial grotesque (the "voice" of the brand).
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const jetbrains = JetBrains_Mono({
@@ -61,9 +70,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
+    <html lang="en" className={`${inter.variable} ${bricolage.variable} ${jetbrains.variable}`}>
       <body className="min-h-screen antialiased">
         <OrganizationJsonLd />
+        <Cursor />
         <SmoothScrollProvider>
           <AnnouncementBar />
           <SiteHeader />

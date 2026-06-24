@@ -14,8 +14,9 @@ const COLORED: Record<string, string> = {
 };
 
 /**
- * Standard section wrapper. With a pastel/navy `tone` it renders the Figma-style
- * full-width rounded color-block panel; with white/soft it's a plain band.
+ * Standard section wrapper. With a tonal `tone` it renders a rounded
+ * instrument-panel (dark tint + hairline border + faint inner grid); with
+ * white/soft it's a plain band on the canvas.
  */
 export function Section({
   children,
@@ -30,10 +31,17 @@ export function Section({
 }) {
   if (tone in COLORED) {
     return (
-      <section id={id} className="py-5 md:py-7">
+      <section id={id} className="py-6 md:py-9">
         <div className="container-page">
-          <div className={cn("rounded-[var(--radius-lg)] px-6 py-16 md:px-14 md:py-20", COLORED[tone], className)}>
-            {children}
+          <div
+            className={cn(
+              "relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] px-6 py-16 md:px-14 md:py-24",
+              COLORED[tone],
+              className
+            )}
+          >
+            <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-40" />
+            <div className="relative">{children}</div>
           </div>
         </div>
       </section>
@@ -42,7 +50,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={cn("relative py-16 md:py-24", tone === "soft" && "bg-[var(--color-base-2)]", className)}
+      className={cn("relative py-20 md:py-28", tone === "soft" && "bg-[var(--color-base-2)]", className)}
     >
       <div className="container-page">{children}</div>
     </section>
@@ -72,8 +80,8 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="text-3xl md:text-5xl font-bold text-balance">{title}</h2>
-      {intro ? <p className="text-lg text-[var(--color-ink-dim)] text-pretty">{intro}</p> : null}
+      <h2 className="text-[2.1rem] leading-[0.98] md:text-[3.4rem] font-bold text-balance tracking-[-0.02em]">{title}</h2>
+      {intro ? <p className="text-lg text-[var(--color-ink-dim)] text-pretty md:text-xl">{intro}</p> : null}
     </div>
   );
 }

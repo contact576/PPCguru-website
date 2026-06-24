@@ -27,7 +27,7 @@ export function WhatsIncluded() {
       />
       <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         {/* Deliverables / dashboard */}
-        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-7">
+        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7">
           <p className="font-mono text-[11px] uppercase tracking-wide text-[var(--color-ink-faint)]">You receive, on a clear cadence</p>
           <ul className="mt-4 space-y-3">
             {deliverables.map((d) => (
@@ -47,7 +47,7 @@ export function WhatsIncluded() {
         </div>
 
         {/* Included checklist */}
-        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-7">
+        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7">
           <p className="font-mono text-[11px] uppercase tracking-wide text-[var(--color-ink-faint)]">What management includes</p>
           <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
             {included.map((i) => (

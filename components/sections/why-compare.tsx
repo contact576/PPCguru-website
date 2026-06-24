@@ -39,7 +39,7 @@ export function WhyCompare() {
             ))}
           </ul>
         </div>
-        <div className="rounded-[var(--radius-lg)] border-2 border-[var(--color-orange)] bg-white p-7 shadow-tile md:p-8">
+        <div className="rounded-[var(--radius-lg)] border-2 border-[var(--color-orange)] bg-[var(--color-surface)] p-7 shadow-tile md:p-8">
           <h3 className="text-xl font-bold text-[var(--color-ink)]">The PPC Guru way</h3>
           <ul className="mt-5 space-y-3.5">
             {theWay.map((p) => (

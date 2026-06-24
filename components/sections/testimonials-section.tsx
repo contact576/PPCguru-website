@@ -14,7 +14,7 @@ export function TestimonialsSection() {
       <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {testimonials.map((t, i) => (
           <Reveal key={i} delay={(i % 3) * 0.05}>
-            <figure className="flex h-full flex-col rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-tile">
+            <figure className="flex h-full flex-col rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 shadow-tile">
               <Quote size={22} className="text-[var(--color-orange)]" />
               <blockquote className="mt-4 flex-1 text-[var(--color-ink)]">{t.quote}</blockquote>
               <figcaption className="mt-6 border-t border-[var(--color-border)] pt-4 text-sm">

@@ -1,64 +1,74 @@
 @import "tailwindcss";
 
 /* ----------------------------------------------------------------------------
-   PPC Guru design system — LIGHT EDITORIAL.
-   White canvas + black ink, oversized pastel color-block sections, pill CTAs,
-   mono eyebrow labels. Brand accent = orange (#E8612A) + gold (#F4A100) from
-   the PPC Guru logo. Adapted from the uploaded Figma design system (DESIGN.md).
+   PPC Guru — CINEMATIC HUD (v3).
+   Near-black canvas, warm-white ink, orange→gold neon accent used like a
+   heads-up display. Concept: "mission control for ad spend" — the site reads
+   like a live performance terminal. Mono = real telemetry labels, not decor.
+
+   Legacy v1/v2 token NAMES are kept and remapped to dark values so every
+   existing component (Section tones, Button, cards) re-skins to the dark
+   system automatically. New work should prefer the semantic names:
+   --bg / --ink / --orange / --gold / --line / --panel.
 ---------------------------------------------------------------------------- */
 
 @theme {
-  /* Surfaces (token names kept from v1 so components re-skin automatically) */
-  --color-base: #ffffff;          /* page canvas */
-  --color-base-2: #f7f7f5;        /* soft alternate band */
-  --color-surface: #ffffff;       /* cards (with hairline borders) */
-  --color-surface-2: #f7f7f5;
-  --color-border: #e6e6e6;        /* hairline */
-  --color-border-bright: #c4c4be; /* visible button/outline borders on white */
+  /* ---- Canvas + surfaces (legacy names remapped to dark) ---- */
+  --color-base: #08070b;          /* page canvas — near-black, faint cool */
+  --color-base-2: #0d0c12;        /* soft alternate band */
+  --color-surface: #100e16;       /* cards */
+  --color-surface-2: #16131d;     /* raised cards / inputs */
+  --color-line: rgba(255, 255, 255, 0.10);
+  --color-border: rgba(255, 255, 255, 0.10);        /* hairline on dark */
+  --color-border-bright: rgba(255, 255, 255, 0.24); /* visible outline on dark */
 
-  /* Text — hierarchy by weight + near-black tones, not opacity */
-  --color-ink: #0a0a0a;
-  --color-ink-dim: #3a3a36;
-  --color-ink-faint: #76766f;
+  /* ---- Ink (warm whites — hierarchy by tone + weight, not opacity) ---- */
+  --color-ink: #f5f1ea;
+  --color-ink-dim: #b7b0a4;
+  --color-ink-faint: #837c72;
 
-  /* Brand accent — orange → gold (maps onto v1 violet/cyan token names) */
-  --color-violet: #e8612a;
-  --color-violet-bright: #f4a100;
-  --color-cyan: #e8612a;
-  --color-cyan-bright: #d24e1d;
-  --color-gold: #f4a100;
-  --color-accent: #e8612a;
-  --color-orange: #e8612a;
+  /* ---- Brand neon — orange → gold (pops on near-black) ---- */
+  --color-orange: #ff6a2b;        /* brightened from #e8612a for glow on dark */
+  --color-orange-base: #e8612a;
   --color-orange-deep: #d24e1d;
+  --color-gold: #ffb43d;
+  --color-gold-deep: #f4a100;
+  --color-accent: #ff6a2b;
+  /* legacy aliases used by the funnel + old classes */
+  --color-violet: #ff6a2b;
+  --color-violet-bright: #ffb43d;
+  --color-cyan: #ff8a3d;
+  --color-cyan-bright: #ffb43d;
 
-  /* Pastel color-block palette (Figma) */
-  --color-cream: #f4ecd6;
-  --color-coral: #f6cdb8;
-  --color-lime: #dceeb1;
-  --color-lilac: #d8c8f6;
-  --color-mint: #c8e6cd;
-  --color-pink: #efd4d4;
-  --color-navy: #1f1d3d;
-  --color-navy-ink: #f4f3ff;
+  /* ---- Tonal panels (old pastel names → dark tinted surfaces) ---- */
+  --color-cream: #15120b;   /* warm */
+  --color-coral: #1b0f09;   /* ember */
+  --color-lime: #0f140b;    /* cool-warm */
+  --color-lilac: #120e1d;   /* violet-dark */
+  --color-mint: #0a1410;    /* teal-dark */
+  --color-pink: #190f17;    /* magenta-dark */
+  --color-navy: #0b0a14;    /* deep instrument navy */
+  --color-navy-ink: #f5f1ea;
 
-  /* Semantic */
-  --color-success: #1ea64a;
-  --color-warning: #c77d12;
-  --color-danger: #d64545;
+  /* ---- Semantic ---- */
+  --color-success: #34d27b;
+  --color-warning: #ffb43d;
+  --color-danger: #ff5d5d;
 
-  /* Fonts */
-  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* ---- Fonts ---- */
+  --font-display: var(--font-bricolage), "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", menlo, monospace;
 
-  /* Radii (Figma scale) */
-  --radius-md: 8px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  /* ---- Radii ---- */
+  --radius-md: 10px;
+  --radius-lg: 22px;
+  --radius-xl: 34px;
   --radius-pill: 50px;
 
   --animate-marquee: marquee 38s linear infinite;
-  --animate-float: float 8s ease-in-out infinite;
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-pulse-glow: pulseGlow 3.5s ease-in-out infinite;
 }
 
 @keyframes marquee {
@@ -67,7 +77,15 @@
 }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+@keyframes scanline {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
 }
 
 @layer base {
@@ -75,6 +93,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    background-color: var(--color-base);
   }
   body {
     background-color: var(--color-base);
@@ -82,19 +101,31 @@
     font-family: var(--font-sans);
     font-weight: 400;
     overflow-x: hidden;
+    position: relative;
+  }
+  /* Cinematic film grain — barely-there, sells the "instrument" feel. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   ::selection {
-    background-color: var(--color-gold);
-    color: #0a0a0a;
+    background-color: var(--color-orange);
+    color: #08070b;
   }
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.04;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
     color: var(--color-ink);
   }
-  /* Accessibility floor: visible keyboard focus on all interactive elements. */
+  /* Accessibility floor: visible keyboard focus everywhere. */
   a:focus-visible,
   button:focus-visible,
   input:focus-visible,
@@ -102,8 +133,8 @@
   textarea:focus-visible,
   [tabindex]:focus-visible {
     outline: 2px solid var(--color-orange);
-    outline-offset: 2px;
-    border-radius: 4px;
+    outline-offset: 3px;
+    border-radius: 6px;
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -112,6 +143,12 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
     }
+    body::after { display: none; }
+  }
+  /* Hide the native cursor on devices with a real pointer (custom HUD cursor
+     takes over). Touch devices keep default behaviour. */
+  @media (hover: hover) and (pointer: fine) {
+    html.has-custom-cursor, html.has-custom-cursor * { cursor: none; }
   }
 }
 
@@ -123,66 +160,91 @@
     background-clip: text;
     color: transparent;
   }
-  /* Mono eyebrow label */
+  /* Neon glow on the gradient text for hero moments */
+  .text-glow {
+    text-shadow: 0 0 36px color-mix(in srgb, var(--color-orange) 45%, transparent);
+  }
+  /* Outlined "kinetic" display type — used sparingly for big statements */
+  .text-stroke {
+    -webkit-text-stroke: 1.4px color-mix(in srgb, var(--color-ink) 55%, transparent);
+    color: transparent;
+  }
+  /* Mono HUD / telemetry label */
   .eyebrow {
     font-family: var(--font-mono);
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.8125rem;
-    font-weight: 600;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-orange);
   }
-  /* Subtle dotted grid — only used on dark navy panels */
+  /* Dotted instrument grid */
   .bg-grid-dark {
     background-image:
-      linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);
-    background-size: 44px 44px;
+      linear-gradient(to right, rgba(255,255,255,0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
-  /* Soft warm wash for accent areas on light bg */
+  /* Radial HUD glow behind hero / feature moments */
   .bg-warm-wash {
-    background: radial-gradient(70% 70% at 50% 0%, color-mix(in srgb, var(--color-gold) 16%, transparent), transparent 72%);
+    background: radial-gradient(60% 60% at 50% 0%, color-mix(in srgb, var(--color-orange) 22%, transparent), transparent 70%);
   }
-  /* Card on white — hairline, no glow */
+  .bg-ember-glow {
+    background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--color-orange) 30%, transparent), transparent 72%);
+  }
+  /* Cards on dark — hairline + faint inner lift */
   .card-flat {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
   }
   .card-glass {
-    background: var(--color-surface);
+    background: color-mix(in srgb, var(--color-surface) 70%, transparent);
     border: 1px solid var(--color-border);
+    backdrop-filter: blur(14px);
   }
-  /* legacy no-op so old references don't add a dark glow */
+  /* legacy no-op kept so old references don't break */
   .bg-radial-glow { background: none; }
-  .ring-accent { box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-orange) 40%, transparent); }
-  .shadow-tile { box-shadow: 0 6px 24px -10px rgba(0,0,0,0.12); }
+  .ring-accent { box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-orange) 50%, transparent), 0 0 40px -8px color-mix(in srgb, var(--color-orange) 60%, transparent); }
+  .shadow-tile { box-shadow: 0 24px 60px -28px rgba(0,0,0,0.85); }
+  .shadow-glow { box-shadow: 0 0 50px -12px color-mix(in srgb, var(--color-orange) 55%, transparent); }
+
+  /* Hairline divider with a centre glow node */
+  .rule-glow {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border-bright), transparent);
+  }
 }
 
+/* Generous, fluid side space — the "breathing room" the editorial grid needs */
 .container-page {
   width: 100%;
-  max-width: 84rem; /* ~1344px — wider desktop presence */
+  max-width: 88rem; /* ~1408px */
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  padding-inline: clamp(1.25rem, 5.5vw, 6rem);
 }
-@media (min-width: 768px) {
-  .container-page { padding-inline: 2rem; }
+.container-tight {
+  width: 100%;
+  max-width: 64rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5.5vw, 6rem);
 }
 
-/* Blog markdown typography (light) */
-.prose-blog { color: var(--color-ink-dim); line-height: 1.75; font-size: 1.0625rem; }
-.prose-blog > * + * { margin-top: 1.25rem; }
-.prose-blog h2 { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; color: var(--color-ink); margin-top: 2.75rem; letter-spacing: -0.02em; }
-.prose-blog h3 { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; color: var(--color-ink); margin-top: 2rem; }
+/* Blog markdown typography (dark) */
+.prose-blog { color: var(--color-ink-dim); line-height: 1.78; font-size: 1.075rem; }
+.prose-blog > * + * { margin-top: 1.3rem; }
+.prose-blog h2 { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--color-ink); margin-top: 3rem; letter-spacing: -0.02em; line-height: 1.05; }
+.prose-blog h3 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--color-ink); margin-top: 2.1rem; }
 .prose-blog p { color: var(--color-ink-dim); }
 .prose-blog strong { color: var(--color-ink); font-weight: 600; }
-.prose-blog a { color: var(--color-orange-deep); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+.prose-blog a { color: var(--color-gold); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
 .prose-blog ul, .prose-blog ol { padding-left: 1.5rem; }
 .prose-blog ul { list-style: disc; }
 .prose-blog ol { list-style: decimal; }
 .prose-blog li { margin-top: 0.5rem; }
 .prose-blog li::marker { color: var(--color-orange); }
-.prose-blog blockquote { border-left: 3px solid var(--color-orange); padding-left: 1.25rem; font-style: italic; color: var(--color-ink); }
-.prose-blog code { background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 6px; padding: 0.1rem 0.4rem; font-size: 0.875em; font-family: var(--font-mono); }
+.prose-blog blockquote { border-left: 2px solid var(--color-orange); padding-left: 1.25rem; font-style: italic; color: var(--color-ink); }
+.prose-blog code { background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 6px; padding: 0.1rem 0.4rem; font-size: 0.875em; font-family: var(--font-mono); color: var(--color-gold); }
 .prose-blog table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
 .prose-blog th, .prose-blog td { border: 1px solid var(--color-border); padding: 0.6rem 0.85rem; text-align: left; }
 .prose-blog th { background: var(--color-surface-2); color: var(--color-ink); font-weight: 600; }
-.prose-blog hr { border-color: var(--color-border); margin: 2.5rem 0; }
+.prose-blog hr { border-color: var(--color-border); margin: 2.75rem 0; }

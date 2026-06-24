@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { mainNav, siteConfig } from "@/lib/site-config";
 import { Button } from "@/components/ui/button";
+import { Magnetic } from "@/components/ui/magnetic";
 import { Logo } from "@/components/layout/logo";
 
 export function SiteHeader() {
@@ -56,9 +57,11 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Button href={siteConfig.cta.primaryHref} size="sm" variant="accent">
-            {siteConfig.cta.primaryLabel}
-          </Button>
+          <Magnetic strength={0.3}>
+            <Button href={siteConfig.cta.primaryHref} size="sm" variant="accent" data-cursor="Book">
+              {siteConfig.cta.primaryLabel}
+            </Button>
+          </Magnetic>
         </div>
 
         <button

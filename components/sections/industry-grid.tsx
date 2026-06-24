@@ -47,7 +47,7 @@ export function IndustryGrid({ heading = true, limit }: { heading?: boolean; lim
           <Reveal key={ind.slug} delay={(i % 6) * 0.04}>
             <Link
               href={`/industries/${ind.slug}`}
-              className="group flex h-full flex-col gap-3 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-tile"
+              className="group flex h-full flex-col gap-3 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-all hover:-translate-y-1 hover:shadow-tile"
             >
               <div className="flex items-start justify-between">
                 {(() => {

@@ -67,7 +67,7 @@ export function OfferPopup() {
       aria-label="Free PPC waste audit offer"
     >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
-      <div className="relative w-full max-w-md rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-7 shadow-tile">
+      <div className="relative w-full max-w-md rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 shadow-tile">
         <button
           onClick={() => setOpen(false)}
           aria-label="Close"

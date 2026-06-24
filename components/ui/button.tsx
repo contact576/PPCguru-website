@@ -4,24 +4,24 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-orange)] disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap",
+  "group/btn relative inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-base)] focus-visible:ring-[var(--color-orange)] disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap",
   {
     variants: {
       variant: {
-        // Editorial black pill (Figma primary)
+        // Warm-white pill — the neutral primary, pops on near-black
         primary:
-          "bg-[var(--color-ink)] text-white hover:bg-[#262622] hover:-translate-y-0.5",
-        // Brand orange pill — the saturated conversion CTA
+          "bg-[var(--color-ink)] text-[#0a0a0a] font-semibold hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-18px_rgba(255,255,255,0.5)]",
+        // Brand orange→gold neon pill — the saturated conversion CTA
         accent:
-          "bg-[var(--color-orange)] text-white font-semibold hover:bg-[var(--color-orange-deep)] hover:-translate-y-0.5 shadow-[0_8px_24px_-10px_var(--color-orange)]",
+          "bg-[var(--color-orange)] text-[#120600] font-semibold hover:-translate-y-0.5 shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-gold)_60%,transparent),0_14px_40px_-12px_var(--color-orange)] hover:shadow-[0_0_0_1px_var(--color-gold),0_18px_54px_-10px_var(--color-orange)]",
         solid:
-          "bg-[var(--color-orange)] text-white hover:bg-[var(--color-orange-deep)]",
-        // White pill with a clearly visible 1.5px border — never washes out on white
+          "bg-[var(--color-orange)] text-[#120600] font-semibold hover:bg-[var(--color-gold)]",
+        // Hairline ghost pill on dark — visible, lifts on hover
         outline:
-          "border-[1.5px] border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)] hover:bg-[var(--color-surface-2)] hover:-translate-y-0.5",
+          "border border-[var(--color-border-bright)] bg-white/[0.02] text-[var(--color-ink)] hover:border-[var(--color-orange)] hover:bg-white/[0.05] hover:-translate-y-0.5",
         secondary:
-          "border-[1.5px] border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)]",
-        ghost: "text-[var(--color-ink-dim)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)]",
+          "border border-[var(--color-border-bright)] bg-white/[0.02] text-[var(--color-ink)] hover:border-[var(--color-orange)]",
+        ghost: "text-[var(--color-ink-dim)] hover:text-[var(--color-ink)] hover:bg-white/[0.04]",
       },
       size: {
         sm: "h-9 px-4 text-sm",

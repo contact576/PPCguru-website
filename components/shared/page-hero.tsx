@@ -34,7 +34,7 @@ export function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-white pt-36 pb-16 md:pt-44 md:pb-20">
+    <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-surface)] pt-36 pb-16 md:pt-44 md:pb-20">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-warm-wash" />
       <div className="container-page relative">
         {breadcrumbs ? <div className="mb-6"><Breadcrumbs items={breadcrumbs} /></div> : null}

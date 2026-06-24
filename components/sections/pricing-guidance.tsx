@@ -45,7 +45,7 @@ export function PricingGuidance() {
         {tiers.map((t) => (
           <div
             key={t.name}
-            className={`flex h-full flex-col rounded-[var(--radius-lg)] border bg-white p-7 ${t.featured ? "border-2 border-[var(--color-orange)] shadow-tile" : "border-[var(--color-border)]"}`}
+            className={`flex h-full flex-col rounded-[var(--radius-lg)] border bg-[var(--color-surface)] p-7 ${t.featured ? "border-2 border-[var(--color-orange)] shadow-tile" : "border-[var(--color-border)]"}`}
           >
             {t.featured && <span className="mb-3 inline-block w-fit rounded-full bg-[var(--color-orange)] px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-white">Most popular</span>}
             <h3 className="text-xl font-bold">{t.name}</h3>

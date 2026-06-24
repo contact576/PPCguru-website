@@ -30,7 +30,7 @@ export function CalculatorTeaser() {
           </div>
           {/* Compact sample-projection card so the block reads as the tool, not a lone icon. */}
           <div className="hidden lg:block">
-            <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-tile">
+            <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-tile">
               <div className="flex items-center gap-2 text-[var(--color-ink-faint)]">
                 <Calculator size={16} /> <span className="font-mono text-[11px] uppercase tracking-wide">Sample · HVAC · $3,000/mo</span>
               </div>

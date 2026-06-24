@@ -8,7 +8,7 @@ export function FunnelPoster() {
     <div className="relative h-full w-full overflow-hidden">
       <div
         className="absolute left-1/2 top-1/2 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2"
-        style={{ background: "radial-gradient(60% 60% at 50% 35%, rgba(124,92,255,0.35), transparent 70%)" }}
+        style={{ background: "radial-gradient(55% 55% at 50% 45%, rgba(255,106,43,0.30), transparent 70%)" }}
       />
       <svg
         viewBox="0 0 400 500"
@@ -18,18 +18,18 @@ export function FunnelPoster() {
       >
         <defs>
           <linearGradient id="funnelStroke" x1="0" y1="0" x2="0" y2="500" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#5ee7f7" />
-            <stop offset="0.6" stopColor="#7c5cff" />
-            <stop offset="1" stopColor="#ffce5c" />
+            <stop stopColor="#b8260a" />
+            <stop offset="0.6" stopColor="#ff6a2b" />
+            <stop offset="1" stopColor="#ffb43d" />
           </linearGradient>
           <radialGradient id="dotGlow" cx="0.5" cy="0.5" r="0.5">
-            <stop stopColor="#9b7bff" stopOpacity="0.9" />
-            <stop offset="1" stopColor="#9b7bff" stopOpacity="0" />
+            <stop stopColor="#ffb43d" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#ffb43d" stopOpacity="0" />
           </radialGradient>
         </defs>
 
         {/* funnel outline */}
-        <path d="M40 60 L360 60 L235 250 L235 360 L165 400 L165 250 Z" stroke="url(#funnelStroke)" strokeWidth="1.5" opacity="0.55" />
+        <path d="M40 60 L360 60 L235 250 L235 360 L165 400 L165 250 Z" stroke="url(#funnelStroke)" strokeWidth="1.5" opacity="0.5" />
 
         {/* particle dots distributed through the funnel */}
         {Array.from({ length: 70 }).map((_, i) => {
@@ -38,7 +38,7 @@ export function FunnelPoster() {
           const spread = t < 0.55 ? 150 * (1 - t / 0.6) + 12 : 35;
           const x = 200 + (Math.sin(i * 12.9898) * 43758.5453 % 1) * spread - spread / 2;
           const r = 1.4 + ((i * 7) % 5) * 0.5;
-          const fill = t < 0.5 ? "#5ee7f7" : t < 0.78 ? "#7c5cff" : "#ffce5c";
+          const fill = t < 0.5 ? "#d9381e" : t < 0.78 ? "#ff6a2b" : "#ffb43d";
           return <circle key={i} cx={x} cy={y} r={r} fill={fill} opacity={0.85} />;
         })}
         {/* basin glow */}

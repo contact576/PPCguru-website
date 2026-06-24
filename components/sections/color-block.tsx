@@ -10,7 +10,7 @@ const BG: Record<BlockColor, string> = {
   mint: "bg-[var(--color-mint)] text-[var(--color-ink)]",
   pink: "bg-[var(--color-pink)] text-[var(--color-ink)]",
   navy: "bg-[var(--color-navy)] text-[var(--color-navy-ink)]",
-  white: "bg-white text-[var(--color-ink)]",
+  white: "bg-[var(--color-surface)] text-[var(--color-ink)]",
 };
 
 /**
