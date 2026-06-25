@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, X, ArrowRight } from "lucide-react";
 import { services, getService } from "@/lib/data/services";
 import { industries } from "@/lib/data/industries";
 import { Section, SectionHeading } from "@/components/ui/section";
@@ -12,6 +12,18 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
+import {
+  GoogleAdsArt, MetaAdsArt, SeoArt, CreativeArt, WebDesignArt, CrmArt,
+} from "@/components/illustrations/hero-art";
+
+const SERVICE_ART: Record<string, React.ReactNode> = {
+  "google-ads": <GoogleAdsArt />,
+  "meta-ads": <MetaAdsArt />,
+  "seo": <SeoArt />,
+  "creative": <CreativeArt />,
+  "web-design": <WebDesignArt />,
+  "crm": <CrmArt />,
+};
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -29,38 +41,81 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const service = getService(slug);
   if (!service) notFound();
 
-  const relatedIndustries = industries.filter((i) => i.services.includes(slug)).slice(0, 5);
+  const relatedIndustries = industries.filter((i) => i.services.includes(slug)).slice(0, 6);
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
     { name: service.name, path: `/services/${slug}` },
   ];
+  const firstWord = service.name.split(" ")[0];
 
   return (
     <>
       <JsonLd data={serviceSchema({ name: service.name, description: service.description, path: `/services/${slug}` })} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
-      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs}>
-        <Button href="/contact" size="lg">Get a free {service.name.split(" ")[0]} audit <ArrowRight size={18} /></Button>
+      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} art={SERVICE_ART[slug]}>
+        <Button href="/contact" size="lg">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
       </PageHero>
 
-      {/* Outcomes */}
-      <Section>
-        <SectionHeading align="left" eyebrow="What you get" title="Outcomes we optimize for" />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+      {/* Outcomes strip */}
+      <Section className="!pb-0">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {service.outcomes.map((o) => (
             <div key={o} className="flex items-center gap-3 rounded-[14px] border border-[#dddbc9] bg-[#fbfaf2] px-5 py-4">
-              <span className="flex h-7 w-7 items-center justify-center rounded-[8px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Check size={15} /></span>
-              <span className="font-medium">{o}</span>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Check size={15} /></span>
+              <span className="text-sm font-medium">{o}</span>
             </div>
           ))}
         </div>
       </Section>
 
-      {/* Deliverables */}
-      <Section className="bg-[var(--color-base-2)]">
-        <SectionHeading align="left" eyebrow="What's included" title="What we actually do" />
+      {/* Symptoms — problem framing */}
+      <Section>
+        <SectionHeading align="left" eyebrow="Sound familiar?" title={<>Signs your {firstWord.toLowerCase() === "websites" ? "site" : firstWord.toLowerCase()} is <span className="text-gradient">leaving money on the table</span></>} />
+        <div className="mt-10 grid gap-4 md:grid-cols-2">
+          {service.symptoms.map((s, i) => (
+            <Reveal key={s} delay={(i % 2) * 0.05}>
+              <div className="flex h-full items-start gap-3.5 rounded-[18px] border border-[#f0d4c4] bg-white p-5">
+                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[rgba(242,106,43,.14)] text-[var(--color-coral)]"><X size={15} /></span>
+                <p className="text-[15px] text-[var(--color-ink-dim)]">{s}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* What's included + who it's for */}
+      <Section tone="cream">
+        <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+          <div>
+            <SectionHeading align="left" eyebrow="What's included" title={<>Every {firstWord} engagement <span className="text-gradient">includes</span></>} />
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              {service.included.map((it) => (
+                <div key={it} className="flex items-center gap-3 rounded-[12px] border border-[#dddbc9] bg-white px-4 py-3.5">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#eef2dd] text-[#5f6f17]"><Check size={13} /></span>
+                  <span className="text-sm font-medium text-[var(--color-ink)]">{it}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <SectionHeading align="left" eyebrow="Who it's for" title="Is this you?" />
+            <ul className="mt-8 space-y-3">
+              {service.whoFor.map((w) => (
+                <li key={w} className="flex items-start gap-3 text-[15px] text-[var(--color-ink-dim)]">
+                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[var(--color-lime)] ring-2 ring-[#cfe39a]" />
+                  {w}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Section>
+
+      {/* Deliverables — detailed */}
+      <Section>
+        <SectionHeading align="left" eyebrow="What we actually do" title={<>The work behind <span className="text-gradient">the results</span></>} />
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           {service.deliverables.map((d, i) => (
             <Reveal key={d.title} delay={(i % 2) * 0.05}>
@@ -73,9 +128,24 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
+      {/* Campaign types / platforms */}
+      <Section tone="cream">
+        <SectionHeading align="left" eyebrow="Channels & tactics" title={<>What we run for <span className="text-gradient">{service.name.toLowerCase()}</span></>} />
+        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {service.platforms.map((p, i) => (
+            <Reveal key={p.name} delay={(i % 4) * 0.05}>
+              <div className="h-full rounded-[20px] border border-[#dddbc9] bg-white p-6">
+                <div className="head text-[16px] text-[var(--color-ink)]">{p.name}</div>
+                <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
       {/* Process */}
       <Section>
-        <SectionHeading align="left" eyebrow="The process" title={`How we run ${service.name}`} />
+        <SectionHeading align="left" eyebrow="The process" title={<>How we run <span className="text-gradient">{service.name}</span></>} />
         <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {service.process.map((p) => (
             <div key={p.step} className="rounded-[22px] border border-[var(--color-border)] bg-white p-6">
@@ -87,13 +157,43 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
+      {/* Transparency: what we report + what affects cost */}
+      <Section tone="cream">
+        <div className="grid gap-12 lg:grid-cols-2">
+          <div>
+            <SectionHeading align="left" eyebrow="No black box" title={<>What we <span className="text-gradient">report on</span></>} />
+            <p className="mt-4 text-[var(--color-ink-dim)]">Every metric ties back to leads, booked jobs and revenue — not impressions. You own your account and your data, always.</p>
+            <div className="mt-7 grid gap-2.5 sm:grid-cols-2">
+              {service.metrics.map((m) => (
+                <div key={m} className="flex items-center gap-2.5 rounded-[12px] border border-[#dddbc9] bg-white px-4 py-3 text-sm text-[var(--color-ink)]">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--color-ink)] text-[var(--color-lime)]"><Check size={11} /></span>
+                  {m}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <SectionHeading align="left" eyebrow="Transparent pricing" title={<>What shapes your <span className="text-gradient">investment</span></>} />
+            <p className="mt-4 text-[var(--color-ink-dim)]">Management fees depend on scope. Ad spend is separate and paid directly to the platforms. We confirm your exact scope after a review — no surprises.</p>
+            <ul className="mt-7 space-y-3">
+              {service.pricingFactors.map((f) => (
+                <li key={f} className="flex items-start gap-3 rounded-[12px] border border-[#dddbc9] bg-white px-4 py-3.5 text-sm text-[var(--color-ink-dim)]">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#eef2dd] text-[#5f6f17] text-[11px] font-bold">$</span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Section>
+
       {/* Related industries */}
       {relatedIndustries.length > 0 && (
-        <Section className="bg-[var(--color-base-2)]">
+        <Section>
           <SectionHeading align="left" eyebrow="Where it works" title="Industries we run this for" />
           <div className="mt-8 flex flex-wrap gap-3">
             {relatedIndustries.map((ind) => (
-              <Link key={ind.slug} href={`/industries/${ind.slug}`} className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm transition-colors hover:border-[var(--color-cyan)] hover:text-[var(--color-cyan-bright)]">
+              <Link key={ind.slug} href={`/industries/${ind.slug}`} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-5 py-2.5 text-xs uppercase tracking-[.05em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]">
                 {ind.name}
               </Link>
             ))}

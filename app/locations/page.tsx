@@ -5,6 +5,7 @@ import { cities, locationServices } from "@/lib/data/locations";
 import { Section } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { LocationsArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -22,6 +23,7 @@ export default function LocationsPage() {
         title={<>Local marketing across the <span className="text-gradient">GTA & Ontario</span></>}
         intro="We combine GTA-local market knowledge with national reach. Find your city and the service you need below."
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Locations", path: "/locations" }]}
+        art={<LocationsArt />}
       />
       <Section>
         <div className="grid gap-6 md:grid-cols-2">

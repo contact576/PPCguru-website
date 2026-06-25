@@ -6,6 +6,7 @@ import { WhyUs } from "@/components/sections/why-us";
 import { CaseStudyCards } from "@/components/sections/case-study-cards";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { PartnerBadges } from "@/components/shared/partner-badges";
+import { IndustriesArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -23,6 +24,7 @@ export default function IndustriesPage() {
         title={<>Marketing built around <span className="text-gradient">your industry</span></>}
         intro="We don't do generic. We build repeatable, vertical-specific playbooks for the local service businesses we know best."
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Industries", path: "/industries" }]}
+        art={<IndustriesArt />}
       >
         <PartnerBadges />
       </PageHero>

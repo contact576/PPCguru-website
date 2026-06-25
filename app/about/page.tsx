@@ -6,6 +6,7 @@ import { StatBand } from "@/components/sections/stat-band";
 import { WhyUs } from "@/components/sections/why-us";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { Reveal } from "@/components/ui/reveal";
+import { AboutArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 
@@ -29,6 +30,7 @@ export default function AboutPage() {
         title={<>A results-first agency for <span className="text-gradient">service businesses</span></>}
         intro={`Founded in ${siteConfig.founded} in the Greater Toronto Area, ${siteConfig.name} helps local service businesses across Canada and the USA turn ad spend into booked jobs — with AI doing the heavy lifting and humans owning the judgment.`}
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "About", path: "/about" }]}
+        art={<AboutArt />}
       >
         <PartnerBadges />
       </PageHero>

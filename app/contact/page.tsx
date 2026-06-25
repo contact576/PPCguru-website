@@ -4,6 +4,7 @@ import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { ContactForm } from "@/components/contact/contact-form";
 import { PartnerBadges } from "@/components/shared/partner-badges";
+import { ContactArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 
@@ -22,6 +23,7 @@ export default function ContactPage() {
         title={<>Book your <span className="text-gradient">free audit</span></>}
         intro="Tell us about your business and we'll review your accounts, tracking and competitors — then show you a realistic plan to turn ad spend into booked jobs. No obligation."
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }]}
+        art={<ContactArt />}
       />
       <Section className="!pt-12">
         <div className="grid gap-10 lg:grid-cols-[1fr_360px]">

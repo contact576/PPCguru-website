@@ -8,6 +8,7 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { PartnerBadges } from "@/components/shared/partner-badges";
 import { companyFaqs } from "@/lib/data/company";
+import { ServicesArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -25,6 +26,7 @@ export default function ServicesPage() {
         title={<>Everything you need to turn ad spend into <span className="text-gradient">booked jobs</span></>}
         intro="Paid ads, SEO, creative and the systems behind them — delivered by one accountable, AI-augmented team and measured against revenue."
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Services", path: "/services" }]}
+        art={<ServicesArt />}
       >
         <PartnerBadges />
       </PageHero>

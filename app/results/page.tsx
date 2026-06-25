@@ -3,6 +3,7 @@ import { PageHero } from "@/components/shared/page-hero";
 import { CaseStudyCards } from "@/components/sections/case-study-cards";
 import { StatBand } from "@/components/sections/stat-band";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { ResultsArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 import { REPRESENTATIVE_DISCLOSURE } from "@/lib/data/case-studies";
 
@@ -21,6 +22,7 @@ export default function ResultsPage() {
         title={<>Results that show up in the <span className="text-gradient">bank account</span></>}
         intro="We measure success in leads, booked jobs and revenue — not impressions. Here's how that looks across our core verticals."
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Results", path: "/results" }]}
+        art={<ResultsArt />}
       />
       <StatBand />
       <CaseStudyCards heading={false} />

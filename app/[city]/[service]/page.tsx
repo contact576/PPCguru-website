@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Check, ArrowRight, MapPin } from "lucide-react";
 import { allLocationParams, getCity, getLocationService, cities, locationServices } from "@/lib/data/locations";
 import { getService } from "@/lib/data/services";
+import { CityServiceArt } from "@/components/illustrations/hero-art";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Button } from "@/components/ui/button";
@@ -70,6 +71,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
         title={<>{s.name} in <span className="text-gradient">{c.name}</span></>}
         intro={`We help ${c.name} service businesses ${s.verb} that turn into qualified leads and booked jobs. ${c.context}`}
         breadcrumbs={crumbs}
+        art={<CityServiceArt icon={fullService.icon} city={c.name} />}
       >
         <Button href="/contact" size="lg">Get a free {c.name} audit <ArrowRight size={18} /></Button>
       </PageHero>

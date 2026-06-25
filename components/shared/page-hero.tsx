@@ -19,19 +19,22 @@ export function Breadcrumbs({ items }: { items: { name: string; path: string }[]
   );
 }
 
-/** Standard inner-page hero with subtle grid + glow, eyebrow, title and intro. */
+/** Standard inner-page hero with subtle grid + glow, eyebrow, title and intro.
+ *  Pass `art` (a hero illustration) to render the two-column editorial layout. */
 export function PageHero({
   eyebrow,
   title,
   intro,
   breadcrumbs,
   children,
+  art,
 }: {
   eyebrow?: string;
   title: React.ReactNode;
   intro?: React.ReactNode;
   breadcrumbs?: { name: string; path: string }[];
   children?: React.ReactNode;
+  art?: React.ReactNode;
 }) {
   return (
     <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-base)] pt-32 pb-16 md:pt-40 md:pb-20">
@@ -49,11 +52,16 @@ export function PageHero({
         style={{ background: "radial-gradient(circle,rgba(206,255,58,.16),transparent 65%)" }}
       />
       <div className="container-page relative">
-        {breadcrumbs ? <div className="mb-6"><Breadcrumbs items={breadcrumbs} /></div> : null}
-        {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-        <h1 className="head mt-5 max-w-4xl text-[clamp(2.6rem,5.5vw,4.6rem)] text-balance">{title}</h1>
-        {intro ? <p className="mt-6 max-w-2xl text-lg text-[var(--color-ink-dim)] md:text-xl">{intro}</p> : null}
-        {children ? <div className="mt-8">{children}</div> : null}
+        <div className={art ? "grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14" : ""}>
+          <div>
+            {breadcrumbs ? <div className="mb-6"><Breadcrumbs items={breadcrumbs} /></div> : null}
+            {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+            <h1 className="head mt-5 max-w-4xl text-[clamp(2.6rem,5.5vw,4.6rem)] text-balance">{title}</h1>
+            {intro ? <p className="mt-6 max-w-2xl text-lg text-[var(--color-ink-dim)] md:text-xl">{intro}</p> : null}
+            {children ? <div className="mt-8">{children}</div> : null}
+          </div>
+          {art ? <div className="relative mx-auto w-full max-w-[560px] lg:mx-0">{art}</div> : null}
+        </div>
       </div>
     </section>
   );

@@ -4,6 +4,7 @@ import { Calculator, Gauge, Sparkles, PenLine, ArrowUpRight } from "lucide-react
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { ToolsArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -28,6 +29,7 @@ export default function ToolsPage() {
         title={<>Free tools to size up your <span className="text-gradient">growth potential</span></>}
         intro="No sign-up walls, no fluff. Use our calculators and AI tools to understand what your marketing could be doing — then book a free audit if you want help getting there."
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Free Tools", path: "/tools" }]}
+        art={<ToolsArt />}
       />
       <Section>
         <div className="grid gap-5 md:grid-cols-2">

@@ -5,6 +5,7 @@ import { getAllPosts } from "@/lib/blog";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { BlogArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -25,6 +26,7 @@ export default function BlogPage() {
         title={<>Marketing that <span className="text-gradient">actually moves the needle</span></>}
         intro="No fluff. Practical guides on paid ads, SEO and lead generation for service businesses — written by the team running the campaigns."
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }]}
+        art={<BlogArt />}
       />
       <Section>
         {featured && (

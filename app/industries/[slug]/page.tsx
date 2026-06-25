@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Check, X, ArrowRight } from "lucide-react";
+import {
+  Check, X, ArrowRight, Activity, HeartPulse, Smile, Wind, Droplets, Zap, Hammer,
+  Home, Plane, Scale, Building2, Wrench, Dumbbell, Sparkles, Briefcase, type LucideIcon,
+} from "lucide-react";
 import { industries, getIndustry } from "@/lib/data/industries";
+import { IndustryArt } from "@/components/illustrations/hero-art";
 import { getService } from "@/lib/data/services";
 import { caseStudiesByIndustry } from "@/lib/data/case-studies";
 import { Section, SectionHeading } from "@/components/ui/section";
@@ -14,6 +18,24 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+
+const INDUSTRY_ICONS: Record<string, LucideIcon> = {
+  physiotherapy: Activity,
+  "healthcare-clinics": HeartPulse,
+  dental: Smile,
+  hvac: Wind,
+  plumbing: Droplets,
+  electrical: Zap,
+  "construction-renovation": Hammer,
+  roofing: Home,
+  immigration: Plane,
+  "law-firms": Scale,
+  "real-estate": Building2,
+  "home-improvement": Wrench,
+  "fitness-gyms": Dumbbell,
+  "med-spa": Sparkles,
+  "professional-services": Briefcase,
+};
 
 export function generateStaticParams() {
   return industries.map((i) => ({ slug: i.slug }));
@@ -42,7 +64,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <JsonLd data={breadcrumbSchema(crumbs)} />
-      <PageHero eyebrow={`${ind.name} marketing`} title={ind.name} intro={ind.hero} breadcrumbs={crumbs}>
+      <PageHero eyebrow={`${ind.name} marketing`} title={ind.name} intro={ind.hero} breadcrumbs={crumbs} art={<IndustryArt icon={INDUSTRY_ICONS[ind.slug] ?? Briefcase} name={ind.name.split(" ")[0]} />}>
         <Button href="/contact" size="lg">Get a free audit <ArrowRight size={18} /></Button>
       </PageHero>
 
