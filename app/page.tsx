@@ -15,7 +15,17 @@ const WRAP = "mx-auto max-w-[1480px] px-5 py-20 md:px-8 md:py-24";
 const ink = "#14170e", cream = "#f1efe3", lime = "#ceff3a", olive = "#6f7d22", coral = "#f26a2b";
 
 function Eyebrow({ children, color = olive }: { children: React.ReactNode; color?: string }) {
-  return <div className="eyebrow" style={{ color, marginBottom: 18 }}>{children}</div>;
+  return (
+    <div className="eyebrow" style={{ color, marginBottom: 18, display: "inline-flex", alignItems: "center", gap: 10 }}>
+      <svg width="44" height="12" viewBox="0 0 44 12" fill="none" aria-hidden style={{ flexShrink: 0 }}>
+        <line x1="1" y1="7" x2="13" y2="7" stroke={coral} strokeWidth="2" strokeLinecap="round" strokeDasharray="2 3" />
+        <path d="M17 7 H34 l 5 -4.5" stroke={olive} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="15" cy="7" r="2.8" fill={ink} />
+        <circle cx="40" cy="2.5" r="3" fill={lime} stroke={olive} strokeWidth="1" />
+      </svg>
+      {children}
+    </div>
+  );
 }
 function Em({ children, color = "#5d6b1a" }: { children: React.ReactNode; color?: string }) {
   return <span className="serif" style={{ textTransform: "none", fontWeight: 400, fontStyle: "italic", color }}>{children}</span>;
