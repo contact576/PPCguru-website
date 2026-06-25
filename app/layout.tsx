@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Archivo, DM_Serif_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site-config";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
@@ -7,18 +7,29 @@ import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { FloatingCta } from "@/components/shared/floating-cta";
-import { OfferPopup } from "@/components/shared/offer-popup";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
 
-const inter = Inter({
+// Display + body workhorse — Archivo (the design's primary grotesk).
+const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-archivo",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+// Italic editorial accent for emphasis words.
+const dmSerif = DM_Serif_Display({
+  subsets: ["latin"],
+  variable: "--font-dm-serif",
+  weight: ["400"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -61,7 +72,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${dmSerif.variable} ${jetbrains.variable}`}>
       <body className="min-h-screen antialiased">
         <OrganizationJsonLd />
         <SmoothScrollProvider>
@@ -70,7 +81,6 @@ export default function RootLayout({
           <main id="main">{children}</main>
           <SiteFooter />
           <FloatingCta />
-          <OfferPopup />
           {/*
             PRE-LAUNCH VERIFICATION CHECKLIST (search the codebase for "[VERIFY]"):
             [ ] Real phone number + WhatsApp (siteConfig.contact) — currently blank, shows "Book a call"

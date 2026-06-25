@@ -47,9 +47,10 @@
   --color-warning: #c77d12;
   --color-danger: #d64545;
 
-  /* Fonts */
-  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Fonts — Archivo (display/body), DM Serif Display (italic accent), JetBrains Mono (labels) */
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-dm-serif), "DM Serif Display", ui-serif, Georgia, serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", menlo, monospace;
 
   /* Radii (Figma scale) */
@@ -113,22 +114,22 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    background-color: var(--color-base);
-    color: var(--color-ink);
+    background-color: #f1efe3;       /* cream canvas (handoff design) */
+    color: #14170e;                  /* near-black olive ink */
     font-family: var(--font-sans);
     font-weight: 400;
     overflow-x: hidden;
   }
   ::selection {
-    background-color: var(--color-gold);
-    color: #0a0a0a;
+    background-color: #ceff3a;        /* acid lime */
+    color: #14170e;
   }
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.04;
-    color: var(--color-ink);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 0.92;
+    color: #14170e;
   }
   /* Accessibility floor: visible keyboard focus on all interactive elements. */
   a:focus-visible,
@@ -269,4 +270,39 @@
   --color-ring: var(--ring);
   /* radius-* intentionally not remapped — the @theme block above already
      defines the brand radius scale (8/24/32px) used across the site. */
+}
+
+/* ===========================================================================
+   HANDOFF DESIGN SYSTEM (PPC Guru Home — cream/lime/ink editorial)
+   Fonts: Archivo (head/body) · DM Serif Display (italic accent) · JetBrains Mono.
+   Classes + keyframes mirror the approved Claude Design handoff exactly.
+   =========================================================================== */
+.serif   { font-family: var(--font-serif), serif; font-weight: 400; }
+.grotesk { font-family: var(--font-display), sans-serif; }
+.mono    { font-family: var(--font-mono), monospace; }
+.eyebrow { font-family: var(--font-mono), monospace; font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
+.head    { font-family: var(--font-display), sans-serif; font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; line-height: .9; }
+
+/* Scroll-reveal */
+[data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1); }
+[data-reveal].in { opacity: 1; transform: none; }
+
+/* Hand-drawn scribble around emphasis word */
+.scribble path { stroke-dasharray: var(--len); stroke-dashoffset: 0; animation: scribble 1.1s cubic-bezier(.5,0,.2,1) forwards .35s; }
+@keyframes scribble { from { stroke-dashoffset: var(--len); } to { stroke-dashoffset: 0; } }
+
+@keyframes ppcMarquee { to { transform: translateX(-50%); } }
+@keyframes ppcFloat  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes ppcFloat2 { 0%,100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
+@keyframes ppcPulse  { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+@keyframes ppcDash   { to { stroke-dashoffset: 0; } }
+@keyframes ppcSpin   { to { transform: rotate(360deg); } }
+
+.mq { display: inline-flex; white-space: nowrap; animation: ppcMarquee 28s linear infinite; }
+.mq-rev { animation-direction: reverse; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mq { animation: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .scribble path { animation: none !important; stroke-dashoffset: 0 !important; }
 }
