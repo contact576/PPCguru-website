@@ -8,7 +8,10 @@ import { CityServiceArt } from "@/components/illustrations/hero-art";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
+import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
+import { ServiceProof } from "@/components/sections/service-proof";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
@@ -73,7 +76,9 @@ export default async function LocationServicePage({ params }: { params: Promise<
         breadcrumbs={crumbs}
         art={<CityServiceArt icon={fullService.icon} city={c.name} />}
       >
-        <Button href="/contact" size="lg">Get a free {c.name} audit <ArrowRight size={18} /></Button>
+        <Magnetic>
+          <Button href="/contact" size="lg">Get a free {c.name} audit <ArrowRight size={18} /></Button>
+        </Magnetic>
       </PageHero>
 
       <Section>
@@ -118,6 +123,25 @@ export default async function LocationServicePage({ params }: { params: Promise<
           </aside>
         </div>
       </Section>
+
+      {/* How we run this service locally */}
+      <Section tone="cream">
+        <SectionHeading align="left" eyebrow="How we work" title={<>How we run <span className="text-gradient">{s.name.toLowerCase()}</span> in {c.name}</>} />
+        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {fullService.process.map((p, i) => (
+            <Reveal key={p.step} delay={(i % 4) * 0.05}>
+              <SpotlightCard className="h-full rounded-[22px] border border-[var(--color-border)] bg-white p-6">
+                <span className="head text-[42px]" style={{ color: "rgba(111,125,34,.3)" }}>{p.step}</span>
+                <h3 className="head mt-3 text-[18px]">{p.title}</h3>
+                <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
+              </SpotlightCard>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* Local proof — representative results for this service */}
+      <ServiceProof serviceName={fullService.name} proofStats={fullService.proofStats} caseStudySlugs={fullService.caseStudySlugs} />
 
       <Section className="bg-[var(--color-base-2)]">
         <SectionHeading align="left" eyebrow="Nearby" title={`${s.name} in other ${c.region} cities`} />

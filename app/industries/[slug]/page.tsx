@@ -13,6 +13,7 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
+import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { CaseStudyCards } from "@/components/sections/case-study-cards";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
@@ -65,7 +66,9 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
     <>
       <JsonLd data={breadcrumbSchema(crumbs)} />
       <PageHero eyebrow={`${ind.name} marketing`} title={ind.name} intro={ind.hero} breadcrumbs={crumbs} art={<IndustryArt icon={INDUSTRY_ICONS[ind.slug] ?? Briefcase} name={ind.name.split(" ")[0]} />}>
-        <Button href="/contact" size="lg">Get a free audit <ArrowRight size={18} /></Button>
+        <Magnetic>
+          <Button href="/contact" size="lg">Get a free audit <ArrowRight size={18} /></Button>
+        </Magnetic>
       </PageHero>
 
       {/* Pain points → approach */}
@@ -105,11 +108,13 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
             const Icon = s.icon;
             return (
               <Reveal key={s.slug} delay={i * 0.05}>
-                <Link href={`/services/${s.slug}`} className="group flex h-full flex-col gap-3 rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-6 transition-all hover:-translate-y-1 hover:border-[var(--color-ink)]">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Icon size={21} /></span>
-                  <h3 className="head text-[17px]">{s.name}</h3>
-                  <p className="text-sm text-[var(--color-ink-dim)]">{s.short}</p>
-                </Link>
+                <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2]">
+                  <Link href={`/services/${s.slug}`} className="group flex h-full flex-col gap-3 rounded-[22px] p-6">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Icon size={21} /></span>
+                    <h3 className="head text-[17px]">{s.name}</h3>
+                    <p className="text-sm text-[var(--color-ink-dim)]">{s.short}</p>
+                  </Link>
+                </SpotlightCard>
               </Reveal>
             );
           })}
