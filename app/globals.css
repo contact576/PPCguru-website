@@ -9,38 +9,41 @@
 ---------------------------------------------------------------------------- */
 
 @theme {
-  /* Surfaces (token names kept from v1 so components re-skin automatically) */
-  --color-base: #ffffff;          /* page canvas */
-  --color-base-2: #f7f7f5;        /* soft alternate band */
-  --color-surface: #ffffff;       /* cards (with hairline borders) */
-  --color-surface-2: #f7f7f5;
-  --color-border: #e6e6e6;        /* hairline */
-  --color-border-bright: #c4c4be; /* visible button/outline borders on white */
+  /* Surfaces — handoff palette (cream canvas / olive ink). Token names kept so
+     all existing token-based components re-skin to the new design automatically. */
+  --color-base: #f1efe3;          /* cream page canvas */
+  --color-base-2: #f7f5ea;        /* soft alternate band */
+  --color-surface: #fbfaf2;       /* cards */
+  --color-surface-2: #f7f5ea;
+  --color-border: #dddbc9;        /* hairline */
+  --color-border-bright: #c4c2b0; /* visible outline on cream */
 
-  /* Text — hierarchy by weight + near-black tones, not opacity */
-  --color-ink: #0a0a0a;
-  --color-ink-dim: #3a3a36;
-  --color-ink-faint: #76766f;
+  /* Text — near-black olive hierarchy */
+  --color-ink: #14170e;
+  --color-ink-dim: #54564a;
+  --color-ink-faint: #83856f;
 
-  /* Brand accent — orange → gold (maps onto v1 violet/cyan token names) */
-  --color-violet: #e8612a;
-  --color-violet-bright: #f4a100;
-  --color-cyan: #e8612a;
-  --color-cyan-bright: #d24e1d;
-  --color-gold: #f4a100;
-  --color-accent: #e8612a;
-  --color-orange: #e8612a;
-  --color-orange-deep: #d24e1d;
+  /* Brand accent — olive green for accent TEXT (readable on cream); lime for
+     fills. Legacy violet/cyan names remapped to olive so old classes stay on-brand. */
+  --color-violet: #6f7d22;
+  --color-violet-bright: #9bd227;
+  --color-cyan: #6f7d22;
+  --color-cyan-bright: #5f6f17;
+  --color-gold: #5f6f17;          /* gradient end — kept readable on cream */
+  --color-accent: #6f7d22;
+  --color-orange: #6f7d22;        /* accent text (olive) */
+  --color-orange-deep: #5d6b1a;
+  --color-lime: #ceff3a;          /* signature lime fill */
+  --color-coral: #f26a2b;         /* "waste/leak" accent only */
 
-  /* Pastel color-block palette (Figma) */
-  --color-cream: #f4ecd6;
-  --color-coral: #f6cdb8;
-  --color-lime: #dceeb1;
-  --color-lilac: #d8c8f6;
-  --color-mint: #c8e6cd;
-  --color-pink: #efd4d4;
-  --color-navy: #1f1d3d;
-  --color-navy-ink: #f4f3ff;
+  /* Tonal panels (old pastel names → cream/lime/ink design panels) */
+  --color-cream: #f7f5ea;
+  --color-lime-soft: #eef2dd;
+  --color-lilac: #eef2dd;
+  --color-mint: #eef2dd;
+  --color-pink: #f6e6db;
+  --color-navy: #14170e;          /* dark feature panel */
+  --color-navy-ink: #f1efe3;
 
   /* Semantic */
   --color-success: #1ea64a;

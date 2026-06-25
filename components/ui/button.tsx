@@ -4,23 +4,23 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-orange)] disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap",
+  "mono inline-flex items-center justify-center gap-2 rounded-[14px] font-semibold uppercase tracking-[.06em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-lime)] disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap",
   {
     variants: {
       variant: {
-        // Editorial black pill (Figma primary)
+        // Ink pill (primary) — dark olive on cream
         primary:
-          "bg-[var(--color-ink)] text-white hover:bg-[#262622] hover:-translate-y-0.5",
-        // Brand orange pill — the saturated conversion CTA
+          "bg-[var(--color-ink)] text-[#f1efe3] hover:-translate-y-0.5",
+        // Lime CTA — the saturated conversion button (ink text on lime)
         accent:
-          "bg-[var(--color-orange)] text-white font-semibold hover:bg-[var(--color-orange-deep)] hover:-translate-y-0.5 shadow-[0_8px_24px_-10px_var(--color-orange)]",
+          "bg-[var(--color-lime)] text-[var(--color-ink)] hover:-translate-y-0.5 shadow-[0_12px_34px_rgba(206,255,58,.3)]",
         solid:
-          "bg-[var(--color-orange)] text-white hover:bg-[var(--color-orange-deep)]",
-        // White pill with a clearly visible 1.5px border — never washes out on white
+          "bg-[var(--color-lime)] text-[var(--color-ink)] hover:-translate-y-0.5",
+        // Cream/hairline outline pill on cream
         outline:
-          "border-[1.5px] border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)] hover:bg-[var(--color-surface-2)] hover:-translate-y-0.5",
+          "border border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)] hover:-translate-y-0.5",
         secondary:
-          "border-[1.5px] border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)]",
+          "border border-[var(--color-border-bright)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)]",
         ghost: "text-[var(--color-ink-dim)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-2)]",
       },
       size: {

@@ -34,12 +34,15 @@ export function PageHero({
   children?: React.ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-white pt-36 pb-16 md:pt-44 md:pb-20">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-warm-wash" />
+    <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-base)] pt-32 pb-16 md:pt-40 md:pb-20">
+      <div
+        className="pointer-events-none absolute -right-24 -top-32 h-[460px] w-[460px]"
+        style={{ background: "radial-gradient(circle,rgba(206,255,58,.16),transparent 65%)" }}
+      />
       <div className="container-page relative">
         {breadcrumbs ? <div className="mb-6"><Breadcrumbs items={breadcrumbs} /></div> : null}
         {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-        <h1 className="mt-4 max-w-4xl text-4xl font-bold md:text-6xl text-balance">{title}</h1>
+        <h1 className="head mt-5 max-w-4xl text-[clamp(2.6rem,5.5vw,4.6rem)] text-balance">{title}</h1>
         {intro ? <p className="mt-6 max-w-2xl text-lg text-[var(--color-ink-dim)] md:text-xl">{intro}</p> : null}
         {children ? <div className="mt-8">{children}</div> : null}
       </div>
