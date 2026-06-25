@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
+import { SpotlightCard } from "@/components/ui/interactive";
 import { caseStudies, type CaseStudy } from "@/lib/data/case-studies";
 
 export function CaseStudyCards({
@@ -28,9 +29,10 @@ export function CaseStudyCards({
       <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {list.map((c, i) => (
           <Reveal key={c.slug} delay={(i % 3) * 0.06}>
+            <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] transition-colors duration-300 hover:border-[var(--color-ink)]">
             <Link
               href={`/results/${c.slug}`}
-              className="group flex h-full flex-col rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-ink)]"
+              className="group flex h-full flex-col rounded-[22px] p-7"
             >
               <div className="flex items-center justify-between">
                 <span className="mono rounded-[7px] bg-[var(--color-lime)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[.05em] text-[var(--color-ink)]">{c.industry}</span>
@@ -46,6 +48,7 @@ export function CaseStudyCards({
                 <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>
             </Link>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>
