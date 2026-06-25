@@ -34,12 +34,12 @@ export default function ToolsPage() {
           {tools.map((t) => {
             const Icon = t.icon;
             return (
-              <Link key={t.href} href={t.href} className="group flex items-start gap-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-7 transition-all hover:-translate-y-1 hover:border-[var(--color-violet)]">
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-violet)_16%,transparent)] text-[var(--color-cyan-bright)]"><Icon size={24} /></span>
+              <Link key={t.href} href={t.href} className="group flex items-start gap-5 rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7 transition-all hover:-translate-y-1 hover:border-[var(--color-ink)]">
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[15px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Icon size={24} /></span>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <h2 className="text-lg font-semibold">{t.name}</h2>
-                    <ArrowUpRight size={16} className="text-[var(--color-ink-faint)] group-hover:text-[var(--color-cyan-bright)]" />
+                    <h2 className="head text-[19px]">{t.name}</h2>
+                    <ArrowUpRight size={16} className="text-[var(--color-ink-faint)] group-hover:text-[var(--color-ink)]" />
                   </div>
                   <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{t.desc}</p>
                 </div>

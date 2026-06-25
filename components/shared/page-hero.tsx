@@ -35,6 +35,15 @@ export function PageHero({
 }) {
   return (
     <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-base)] pt-32 pb-16 md:pt-40 md:pb-20">
+      {/* contour lines — mirrors the homepage hero backdrop */}
+      <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" className="pointer-events-none absolute inset-0 h-full w-full" style={{ opacity: 0.5 }} aria-hidden>
+        <g fill="none" stroke="#14170e" strokeWidth="1" strokeOpacity=".05">
+          <path d="M-50 180 C 200 120, 380 260, 560 200 S 920 90, 1260 220" />
+          <path d="M-50 280 C 220 220, 400 360, 600 300 S 940 190, 1260 320" />
+          <path d="M-50 380 C 240 320, 420 460, 640 400 S 980 290, 1260 420" />
+          <ellipse cx="640" cy="340" rx="360" ry="210" strokeOpacity=".05" />
+        </g>
+      </svg>
       <div
         className="pointer-events-none absolute -right-24 -top-32 h-[460px] w-[460px]"
         style={{ background: "radial-gradient(circle,rgba(206,255,58,.16),transparent 65%)" }}

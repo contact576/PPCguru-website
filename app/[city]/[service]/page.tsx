@@ -88,7 +88,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
             <ul className="mt-7 space-y-3">
               {fullService.outcomes.map((o) => (
                 <li key={o} className="flex items-center gap-3 text-[var(--color-ink)]">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[var(--color-success)]"><Check size={13} /></span>
+                  <span className="flex h-6 w-6 items-center justify-center rounded-[7px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Check size={13} /></span>
                   {o}
                 </li>
               ))}
@@ -100,7 +100,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
             </div>
           </div>
 
-          <aside className="h-fit rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+          <aside className="h-fit rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-6">
             <div className="flex items-center gap-2 text-sm font-semibold"><MapPin size={16} className="text-[var(--color-cyan-bright)]" /> Neighbourhoods we serve</div>
             <div className="mt-4 flex flex-wrap gap-2">
               {c.neighbourhoods.map((n) => (

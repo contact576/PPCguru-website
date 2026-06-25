@@ -54,8 +54,8 @@ export default function AboutPage() {
                 ["Honesty over hype", "No guaranteed-#1 promises. Just clear expectations and real reporting."],
                 ["Niche depth", "We go deep in a handful of verticals rather than being generalists."],
               ].map(([t, b]) => (
-                <li key={t} className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-                  <p className="font-semibold text-[var(--color-ink)]">{t}</p>
+                <li key={t} className="rounded-[16px] border border-[#dddbc9] bg-[#fbfaf2] p-5">
+                  <p className="head text-[16px] text-[var(--color-ink)]">{t}</p>
                   <p className="mt-1 text-sm text-[var(--color-ink-dim)]">{b}</p>
                 </li>
               ))}
@@ -69,14 +69,14 @@ export default function AboutPage() {
         <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
           {founders.map((f, i) => (
             <Reveal key={f.name} delay={i * 0.06}>
-              <div className="h-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-7">
+              <div className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
                 <div className="flex items-center gap-4">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[var(--color-violet)] to-[var(--color-cyan)] text-lg font-bold text-[#0a0a0f]">
+                  <span className="head flex h-14 w-14 items-center justify-center rounded-[16px] bg-[var(--color-ink)] text-lg text-[var(--color-lime)]">
                     {f.name.split(" ").map((n) => n[0]).join("")}
                   </span>
                   <div>
-                    <p className="font-semibold text-[var(--color-ink)]">{f.name}</p>
-                    <p className="text-sm text-[var(--color-cyan-bright)]">{f.role}</p>
+                    <p className="head text-[17px] text-[var(--color-ink)]">{f.name}</p>
+                    <p className="mono text-xs uppercase tracking-[.08em] text-[#5f6f17]">{f.role}</p>
                   </div>
                 </div>
                 <p className="mt-5 text-sm text-[var(--color-ink-dim)]">{f.bio}</p>

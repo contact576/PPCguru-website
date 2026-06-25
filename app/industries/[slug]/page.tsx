@@ -83,9 +83,9 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
             const Icon = s.icon;
             return (
               <Reveal key={s.slug} delay={i * 0.05}>
-                <Link href={`/services/${s.slug}`} className="group flex h-full flex-col gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-all hover:-translate-y-1 hover:border-[var(--color-violet)]">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-violet)_18%,transparent)] text-[var(--color-cyan-bright)]"><Icon size={20} /></span>
-                  <h3 className="font-semibold">{s.name}</h3>
+                <Link href={`/services/${s.slug}`} className="group flex h-full flex-col gap-3 rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-6 transition-all hover:-translate-y-1 hover:border-[var(--color-ink)]">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Icon size={21} /></span>
+                  <h3 className="head text-[17px]">{s.name}</h3>
                   <p className="text-sm text-[var(--color-ink-dim)]">{s.short}</p>
                 </Link>
               </Reveal>

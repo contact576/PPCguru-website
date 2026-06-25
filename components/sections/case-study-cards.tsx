@@ -30,21 +30,20 @@ export function CaseStudyCards({
           <Reveal key={c.slug} delay={(i % 3) * 0.06}>
             <Link
               href={`/results/${c.slug}`}
-              className="group flex h-full flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-violet)]"
+              className="group flex h-full flex-col rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-ink)]"
             >
-              <div className="flex items-center gap-2 text-xs text-[var(--color-ink-faint)]">
-                <span>{c.industry}</span>
-                <span>·</span>
-                <span>{c.location}</span>
+              <div className="flex items-center justify-between">
+                <span className="mono rounded-[7px] bg-[var(--color-lime)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[.05em] text-[var(--color-ink)]">{c.industry}</span>
+                <span className="mono text-[10px] tracking-[.04em] text-[var(--color-ink-faint)]">{c.location}</span>
               </div>
               <div className="mt-5">
-                <div className="text-5xl font-bold text-gradient">{c.headlineMetric.value}</div>
-                <p className="mt-1 text-sm text-[var(--color-ink-dim)]">{c.headlineMetric.label}</p>
+                <div className="head text-[46px] text-[var(--color-ink)]">{c.headlineMetric.value}</div>
+                <p className="mono mt-1 text-[11.5px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{c.headlineMetric.label}</p>
               </div>
               <p className="mt-5 flex-1 text-sm text-[var(--color-ink-dim)]">{c.client} · {c.service}</p>
-              <div className="mt-5 flex items-center gap-1.5 text-sm font-medium text-[var(--color-cyan-bright)]">
+              <div className="mono mt-5 flex items-center gap-1.5 border-t border-[#e3e1d2] pt-4 text-[11px] font-bold uppercase tracking-[.05em] text-[var(--color-ink)]">
                 Read the case study
-                <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>
             </Link>
           </Reveal>
