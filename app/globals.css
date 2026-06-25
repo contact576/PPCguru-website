@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 /* ----------------------------------------------------------------------------
    PPC Guru design system — LIGHT EDITORIAL.
@@ -57,17 +58,52 @@
   --radius-xl: 32px;
   --radius-pill: 50px;
 
-  --animate-marquee: marquee 38s linear infinite;
+  /* Marquee + ambient (Magic UI compatible — uses --duration/--gap from the component) */
+  --animate-marquee: marquee var(--duration, 40s) linear infinite;
+  --animate-marquee-vertical: marquee-vertical var(--duration, 40s) linear infinite;
   --animate-float: float 8s ease-in-out infinite;
+  /* Magic UI text/border effects */
+  --animate-shiny-text: shiny-text 8s infinite;
+  --animate-gradient: gradient 8s linear infinite;
+  --animate-aurora: aurora 8s ease-in-out infinite alternate;
+  --animate-shimmer-slide: shimmer-slide var(--speed, 3s) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed, 3s) * 2) infinite linear;
 }
 
 @keyframes marquee {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to { transform: translateX(calc(-100% - var(--gap, 1rem))); }
+}
+@keyframes marquee-vertical {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(-100% - var(--gap, 1rem))); }
 }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
+}
+@keyframes shiny-text {
+  0%, 90%, 100% { background-position: calc(-100% - var(--shiny-width, 100px)) 0; }
+  30%, 60% { background-position: calc(100% + var(--shiny-width, 100px)) 0; }
+}
+@keyframes gradient {
+  to { background-position: var(--bg-size, 300%) 0; }
+}
+@keyframes aurora {
+  0% { background-position: 0% 50%; transform: rotate(-5deg) scale(0.9); }
+  25% { background-position: 50% 100%; transform: rotate(5deg) scale(1.1); }
+  50% { background-position: 100% 50%; transform: rotate(-3deg) scale(0.95); }
+  75% { background-position: 50% 0%; transform: rotate(3deg) scale(1.05); }
+  100% { background-position: 0% 50%; transform: rotate(-5deg) scale(0.9); }
+}
+@keyframes shimmer-slide {
+  to { transform: translate(calc(100cqw - 100%), 0); }
+}
+@keyframes spin-around {
+  0% { transform: translateZ(0) rotate(0); }
+  15%, 35% { transform: translateZ(0) rotate(90deg); }
+  65%, 85% { transform: translateZ(0) rotate(270deg); }
+  100% { transform: translateZ(0) rotate(360deg); }
 }
 
 @layer base {
@@ -186,3 +222,51 @@
 .prose-blog th, .prose-blog td { border: 1px solid var(--color-border); padding: 0.6rem 0.85rem; text-align: left; }
 .prose-blog th { background: var(--color-surface-2); color: var(--color-ink); font-weight: 600; }
 .prose-blog hr { border-color: var(--color-border); margin: 2.5rem 0; }
+
+/* ----------------------------------------------------------------------------
+   shadcn/ui theming layer (tweakcn-compatible).
+   These are the standard shadcn design tokens, mapped to the PPC Guru brand so
+   any shadcn-registry component renders on-brand. Regenerate a full palette at
+   https://tweakcn.com and paste the :root/.dark block here.
+   NOTE: `accent` and `border` are intentionally NOT remapped — they already
+   exist in the @theme block above (brand orange / hairline) and are used by
+   existing components; leaving them avoids regressions.
+---------------------------------------------------------------------------- */
+:root {
+  --radius: 0.625rem;
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #e8612a;            /* brand orange */
+  --primary-foreground: #ffffff;
+  --secondary: #f7f7f5;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f7f7f5;
+  --muted-foreground: #76766f;
+  --destructive: #d64545;
+  --input: #e6e6e6;
+  --ring: #e8612a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  /* radius-* intentionally not remapped — the @theme block above already
+     defines the brand radius scale (8/24/32px) used across the site. */
+}
