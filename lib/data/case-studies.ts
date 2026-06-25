@@ -215,6 +215,13 @@ export function getCaseStudy(slug: string) {
   return caseStudies.find((c) => c.slug === slug);
 }
 
+/** Return case studies for the given slugs, preserving order; skips unknown slugs. */
+export function getCaseStudies(slugs: string[]) {
+  return slugs
+    .map((s) => caseStudies.find((c) => c.slug === s))
+    .filter((c): c is CaseStudy => Boolean(c));
+}
+
 export function caseStudiesByIndustry(industrySlug: string) {
   return caseStudies.filter((c) => c.industrySlug === industrySlug);
 }

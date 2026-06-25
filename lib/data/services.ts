@@ -32,11 +32,23 @@ export type Service = {
   // What shapes the investment (honest, no fabricated numbers).
   pricingFactors: string[];
   faqs: { q: string; a: string }[];
+  // Curated representative case studies (slugs from case-studies.ts) to surface
+  // as proof on this service page.
+  caseStudySlugs: string[];
+  // "What good looks like" — representative benchmark ranges, framed as typical
+  // targets, NOT guarantees. [VERIFY] swap for real, consented numbers at launch.
+  proofStats: { value: string; label: string }[];
 };
 
 export const services: Service[] = [
   {
     slug: "google-ads",
+    caseStudySlugs: ["physiotherapy-clinic-north-york", "hvac-mississauga-lead-gen", "basement-renovation-gta"],
+    proofStats: [
+      { value: "−30–45%", label: "typical cut in wasted spend, first 90 days" },
+      { value: "2–3×", label: "more qualified leads as bidding matures" },
+      { value: "60 days", label: "to a cleaner cost-per-lead signal" },
+    ],
     name: "Google Ads Management",
     short: "Search, Performance Max & shopping campaigns engineered for booked jobs.",
     hero: "Stop paying for clicks that don't convert. We build, manage and optimize Google Ads around one number: your cost per booked job.",
@@ -111,6 +123,12 @@ export const services: Service[] = [
   },
   {
     slug: "meta-ads",
+    caseStudySlugs: ["immigration-consultant-brampton", "real-estate-team-gta", "hvac-mississauga-lead-gen"],
+    proofStats: [
+      { value: "−25–40%", label: "cost per lead after creative testing" },
+      { value: "Weekly", label: "fresh creative tested to beat fatigue" },
+      { value: "<5 min", label: "automated speed-to-lead follow-up" },
+    ],
     name: "Meta Ads (Facebook & Instagram)",
     short: "Lead-gen campaigns and scroll-stopping creative across Facebook & Instagram.",
     hero: "We turn Facebook and Instagram into a predictable lead channel — with creative that stops the scroll and offers that convert.",
@@ -184,6 +202,12 @@ export const services: Service[] = [
   },
   {
     slug: "seo",
+    caseStudySlugs: ["physiotherapy-clinic-north-york", "dental-practice-etobicoke"],
+    proofStats: [
+      { value: "60–90 days", label: "to first local ranking gains" },
+      { value: "Top-3", label: "local map-pack visibility we target" },
+      { value: "24/7", label: "leads that don't switch off with budget" },
+    ],
     name: "SEO & Local Search",
     short: "Technical SEO, location pages and Google Business Profile that compound over time.",
     hero: "Paid ads turn off when the budget does. SEO compounds. We build the organic engine that brings leads while you sleep.",
@@ -257,6 +281,12 @@ export const services: Service[] = [
   },
   {
     slug: "creative",
+    caseStudySlugs: ["real-estate-team-gta", "immigration-consultant-brampton", "hvac-mississauga-lead-gen"],
+    proofStats: [
+      { value: "3–5×", label: "more creative volume vs in-house" },
+      { value: "Days", label: "brief-to-live turnaround" },
+      { value: "Always-on", label: "testing to outrun ad fatigue" },
+    ],
     name: "Creative Production",
     short: "Scroll-stopping static, carousel and short-form video creative — AI-accelerated.",
     hero: "Creative is the single biggest lever on ad performance. We produce more of it, faster, with an AI-augmented studio.",
@@ -324,6 +354,12 @@ export const services: Service[] = [
   },
   {
     slug: "web-design",
+    caseStudySlugs: ["basement-renovation-gta", "real-estate-team-gta"],
+    proofStats: [
+      { value: "+20–40%", label: "typical lift in landing-page conversion" },
+      { value: "<2.5s", label: "Core Web Vitals load target" },
+      { value: "Mobile-first", label: "where most of your clicks land" },
+    ],
     name: "Websites & Landing Pages",
     short: "Conversion-focused websites and landing pages that turn clicks into leads.",
     hero: "The fastest way to lower your cost per lead is often a better landing page. We build sites engineered to convert.",
@@ -391,6 +427,12 @@ export const services: Service[] = [
   },
   {
     slug: "crm",
+    caseStudySlugs: ["immigration-consultant-brampton", "hvac-mississauga-lead-gen", "dental-practice-etobicoke"],
+    proofStats: [
+      { value: "<5 min", label: "automated first follow-up to new leads" },
+      { value: "7-day+", label: "nurture sequences for unready leads" },
+      { value: "1 dashboard", label: "from ad spend to booked revenue" },
+    ],
     name: "CRM & Marketing Operations",
     short: "GoHighLevel pipelines, lead routing and reporting that close the loop.",
     hero: "Leads are only worth something if they're followed up fast. We build the CRM and automation that turn leads into booked jobs.",

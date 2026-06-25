@@ -7,6 +7,7 @@ import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { FloatingCta } from "@/components/shared/floating-cta";
+import { CursorGlow } from "@/components/ui/interactive";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
 
 // Display + body workhorse — Archivo (the design's primary grotesk).
@@ -75,6 +76,7 @@ export default function RootLayout({
     <html lang="en" className={`${archivo.variable} ${dmSerif.variable} ${jetbrains.variable}`}>
       <body className="min-h-screen antialiased">
         <OrganizationJsonLd />
+        <CursorGlow />
         <SmoothScrollProvider>
           <AnnouncementBar />
           <SiteHeader />

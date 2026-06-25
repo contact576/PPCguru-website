@@ -8,7 +8,9 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
+import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
+import { ServiceProof } from "@/components/sections/service-proof";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
@@ -55,7 +57,9 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
       <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} art={SERVICE_ART[slug]}>
-        <Button href="/contact" size="lg">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
+        <Magnetic>
+          <Button href="/contact" size="lg">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
+        </Magnetic>
       </PageHero>
 
       {/* Outcomes strip */}
@@ -119,10 +123,10 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <div className="mt-10 grid gap-5 md:grid-cols-2">
           {service.deliverables.map((d, i) => (
             <Reveal key={d.title} delay={(i % 2) * 0.05}>
-              <div className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
+              <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
                 <h3 className="head text-[18px]">{d.title}</h3>
                 <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{d.body}</p>
-              </div>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>
@@ -134,10 +138,10 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {service.platforms.map((p, i) => (
             <Reveal key={p.name} delay={(i % 4) * 0.05}>
-              <div className="h-full rounded-[20px] border border-[#dddbc9] bg-white p-6">
+              <SpotlightCard className="h-full rounded-[20px] border border-[#dddbc9] bg-white p-6">
                 <div className="head text-[16px] text-[var(--color-ink)]">{p.name}</div>
                 <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
-              </div>
+              </SpotlightCard>
             </Reveal>
           ))}
         </div>
@@ -147,15 +151,20 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <Section>
         <SectionHeading align="left" eyebrow="The process" title={<>How we run <span className="text-gradient">{service.name}</span></>} />
         <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {service.process.map((p) => (
-            <div key={p.step} className="rounded-[22px] border border-[var(--color-border)] bg-white p-6">
-              <span className="head text-[42px]" style={{ color: "rgba(111,125,34,.3)" }}>{p.step}</span>
-              <h3 className="head mt-3 text-[18px]">{p.title}</h3>
-              <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
-            </div>
+          {service.process.map((p, i) => (
+            <Reveal key={p.step} delay={(i % 4) * 0.05}>
+              <SpotlightCard className="h-full rounded-[22px] border border-[var(--color-border)] bg-white p-6">
+                <span className="head text-[42px]" style={{ color: "rgba(111,125,34,.3)" }}>{p.step}</span>
+                <h3 className="head mt-3 text-[18px]">{p.title}</h3>
+                <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
+              </SpotlightCard>
+            </Reveal>
           ))}
         </div>
       </Section>
+
+      {/* Proof — representative results + curated case studies */}
+      <ServiceProof serviceName={service.name} proofStats={service.proofStats} caseStudySlugs={service.caseStudySlugs} />
 
       {/* Transparency: what we report + what affects cost */}
       <Section tone="cream">
