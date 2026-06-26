@@ -17,7 +17,7 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import {
-  GoogleAdsArt, MetaAdsArt, SeoArt, CreativeArt, WebDesignArt, CrmArt,
+  GoogleAdsArt, MetaAdsArt, SeoArt, CreativeArt, WebDesignArt, CrmArt, ServicesArt,
 } from "@/components/illustrations/hero-art";
 
 const SERVICE_ART: Record<string, React.ReactNode> = {
@@ -27,6 +27,14 @@ const SERVICE_ART: Record<string, React.ReactNode> = {
   "creative": <CreativeArt />,
   "web-design": <WebDesignArt />,
   "crm": <CrmArt />,
+  // New services reuse the closest existing art until bespoke art ships.
+  "linkedin-ads": <MetaAdsArt />,
+  "tiktok-ads": <MetaAdsArt />,
+  "microsoft-ads": <GoogleAdsArt />,
+  "pinterest-ads": <MetaAdsArt />,
+  "youtube-ads": <CreativeArt />,
+  "ai-automation": <CrmArt />,
+  "cro-landing-pages": <WebDesignArt />,
 };
 
 export function generateStaticParams() {
@@ -58,7 +66,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <JsonLd data={serviceSchema({ name: service.name, description: service.description, path: `/services/${slug}` })} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
-      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} art={SERVICE_ART[slug]}>
+      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} art={SERVICE_ART[slug] ?? <ServicesArt />}>
         <Magnetic>
           <Button href="/contact" size="lg">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
         </Magnetic>
