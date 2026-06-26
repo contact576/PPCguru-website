@@ -15,6 +15,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { CaseStudyCards } from "@/components/sections/case-study-cards";
+import { IndustryReality, IndustryPlaybook, IndustryHacks, IndustryPlan90 } from "@/components/sections/industry-deep";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -99,6 +100,9 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
         </div>
       </Section>
 
+      {/* Industry reality + benchmarks */}
+      <IndustryReality name={ind.name} reality={ind.reality} benchmarks={ind.benchmarks} />
+
       {/* Related services */}
       <Section className="bg-[var(--color-base-2)]">
         <SectionHeading align="left" eyebrow="Services" title={`What we run for ${ind.name.toLowerCase()}`} />
@@ -120,6 +124,15 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
           })}
         </div>
       </Section>
+
+      {/* Per-channel playbook */}
+      {ind.playbook && <IndustryPlaybook name={ind.name} playbook={ind.playbook} />}
+
+      {/* Industry hacks */}
+      {ind.hacks && <IndustryHacks name={ind.name} hacks={ind.hacks} />}
+
+      {/* Sample 90-day plan */}
+      {ind.plan90 && <IndustryPlan90 items={ind.plan90} />}
 
       {cases.length > 0 && <CaseStudyCards items={cases} heading />}
 

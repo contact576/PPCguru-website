@@ -8,6 +8,20 @@ export type Industry = {
   approach: string[];
   services: string[]; // service slugs most relevant
   faqs: { q: string; a: string }[];
+
+  // ---- Optional "deep" blocks. Render only when present. ----
+  /** Industry reality / market context paragraph(s). */
+  reality?: string;
+  /** Expected benchmarks & lead economics for this vertical. */
+  benchmarks?: { label: string; value: string }[];
+  /** Per-channel strategy (Google, Meta, SEO, website, AI). */
+  playbook?: { channel: string; body: string }[];
+  /** Industry-specific tactics / "hacks". */
+  hacks?: string[];
+  /** Sample 90-day growth plan. */
+  plan90?: { window: string; title: string; body: string }[];
+  /** benchmarks.ts industry slug for the embedded estimate link. */
+  calculatorIndustrySlug?: string;
 };
 
 export const industries: Industry[] = [
@@ -23,6 +37,36 @@ export const industries: Industry[] = [
     faqs: [
       { q: "Do you understand healthcare advertising rules?", a: "Yes. We keep claims compliant and avoid implying guaranteed medical outcomes, while still driving high-intent bookings." },
       { q: "Can you track phone bookings?", a: "Absolutely — many clinic patients call. We set up call tracking so we optimize to real booked assessments." },
+      { q: "How fast can we expect more bookings?", a: "Paid search can lift bookings within the first few weeks once tracking and campaigns are rebuilt; local SEO compounds over 3–6 months. We pair both so you have leads now and a compounding channel later." },
+      { q: "Can you help clinics with multiple practitioners or locations?", a: "Yes — we build location- and condition-specific pages and campaigns so each clinic and service line gets its own visibility and tracking." },
+    ],
+    calculatorIndustrySlug: "physiotherapy",
+    reality:
+      "Physiotherapy is high-intent and intensely local: patients search by problem — back pain, knee pain, sports injury, post-surgery rehab, pelvic floor, vestibular, WSIB or motor-vehicle-accident rehab — and usually book within a day or two of searching. That means the clinic that shows up with a fast, trustworthy, easy-to-book experience wins the assessment.\n\nThe hard part isn't traffic, it's economics and follow-up: high cost per click in competitive areas, untracked phone bookings, and calendars that swing between full and empty. Our goal is to build systems that outperform generic benchmarks by tightening tracking, conversion rate, lead quality and speed-to-book — not by simply spending more.",
+    benchmarks: [
+      { label: "Typical Google CPC", value: "$4–6" },
+      { label: "Booking conversion rate", value: "6–10%" },
+      { label: "Avg. patient value", value: "$400–900" },
+      { label: "First local ranking gains", value: "60–90 days" },
+    ],
+    playbook: [
+      { channel: "Google Ads", body: "Structure campaigns by condition + neighbourhood (e.g. 'pelvic floor physio North York'), with rigorous negatives and call tracking so spend optimizes to booked assessments, not clicks." },
+      { channel: "Meta Ads", body: "Education- and story-led campaigns around pain awareness and recovery, plus retargeting — useful for treatments patients don't yet search for by name." },
+      { channel: "Local SEO", body: "Google Business Profile optimization, reviews, and genuinely useful condition + location pages to win the map pack for high-intent local searches." },
+      { channel: "Website & booking", body: "Condition, treatment, insurance/payment, practitioner and location pages with online booking and click-to-call front and centre." },
+      { channel: "AI & automation", body: "Missed-call and missed-lead follow-up, review requests, lead scoring and appointment reminders so fewer bookings slip through." },
+    ],
+    hacks: [
+      "Separate WSIB and motor-vehicle-accident rehab into their own campaigns and pages — different intent, different language, often higher value.",
+      "Bid hardest on condition + neighbourhood terms; they convert far better than generic 'physiotherapy near me'.",
+      "Put insurance/direct-billing and 'book online' above the fold — they remove the two biggest booking objections.",
+      "Use call tracking and treat a booked assessment (not a form fill) as the conversion the platforms optimize toward.",
+      "Build a review-generation flow — rating and review count materially lift both map-pack rank and conversion.",
+    ],
+    plan90: [
+      { window: "Days 1–30", title: "Audit & tracking", body: "Fix GA4/call tracking, rebuild high-intent Search by condition + area, and launch a booking-focused landing experience." },
+      { window: "Days 31–60", title: "Optimize & local", body: "Mine search terms, tune bidding to booked assessments, optimize Google Business Profile and publish condition/location pages." },
+      { window: "Days 61–90", title: "Scale & compound", body: "Scale the campaigns booking patients, add retargeting and review automation, and let local SEO start compounding." },
     ],
   },
   {
@@ -45,7 +89,33 @@ export const industries: Industry[] = [
     painPoints: ["Expensive clicks in a crowded market", "Untracked phone calls", "Inconsistent high-value case flow", "Review profile not growing"],
     approach: ["High-intent Search for implants, Invisalign, emergencies", "Call tracking on every campaign", "Review-generation flow to grow ratings", "Local SEO + service pages by neighbourhood"],
     services: ["google-ads", "seo", "crm"],
-    faqs: [{ q: "How do you get more high-value cases?", a: "We bias spend and creative toward implant, ortho and cosmetic intent rather than cheap, low-value searches." }],
+    faqs: [{ q: "How do you get more high-value cases?", a: "We bias spend and creative toward implant, ortho and cosmetic intent rather than cheap, low-value searches." }, { q: "Can you track phone calls to specific campaigns?", a: "Yes — call tracking ties every booked call back to the campaign and keyword that drove it, so we optimize to new patients, not clicks." }],
+    calculatorIndustrySlug: "dental",
+    reality:
+      "Dentistry is one of the most competitive and expensive local categories, and the money is concentrated in a few high-value cases — implants, Invisalign/ortho, cosmetic and emergencies. Most practices waste budget on cheap, low-intent clicks and lose the real ROI because phone calls go untracked. The win comes from biasing spend toward high-value intent, tracking every call, and protecting a strong review profile.",
+    benchmarks: [
+      { label: "Typical Google CPC", value: "$6–9" },
+      { label: "Booking conversion rate", value: "6–9%" },
+      { label: "Avg. case value", value: "$1,000–6,000+" },
+      { label: "Calls now tracked", value: "target 100%" },
+    ],
+    playbook: [
+      { channel: "Google Ads", body: "High-intent Search for implants, Invisalign, cosmetic and emergency dentistry, with call tracking on every campaign." },
+      { channel: "Meta Ads", body: "Cosmetic and Invisalign demand-gen with before/after-style social proof and retargeting." },
+      { channel: "Local SEO", body: "Google Business Profile, reviews and neighbourhood service pages to win the local map pack." },
+      { channel: "AI & CRM", body: "Speed-to-lead and front-desk follow-up so booked calls don't slip, plus review automation." },
+    ],
+    hacks: [
+      "Split high-value services (implants, Invisalign) into their own campaigns — never let them share budget with cheap cleanings.",
+      "Run emergency-dentist campaigns with call-only formats during opening hours.",
+      "Make call tracking the primary conversion; most dental ROI happens on the phone.",
+      "Invest in a review-generation flow — rating and recency move both rankings and conversion in a crowded market.",
+    ],
+    plan90: [
+      { window: "Days 1–30", title: "Track & focus", body: "Call tracking live, budget refocused on high-value case intent, landing pages tightened." },
+      { window: "Days 31–60", title: "Local & optimize", body: "GBP and neighbourhood SEO pages, search-term mining, review flow launched." },
+      { window: "Days 61–90", title: "Scale", body: "Scale the campaigns producing high-value cases and add retargeting." },
+    ],
   },
   {
     slug: "hvac",
@@ -56,7 +126,33 @@ export const industries: Industry[] = [
     painPoints: ["Seasonal demand swings", "Expensive clicks in peak season", "Leads going uncontacted", "No clarity on cost per install"],
     approach: ["Service-split Search with seasonal budget pacing", "Meta lead-gen for tune-ups and replacements", "Speed-to-lead SMS + call automation", "Unified dashboard from spend to installs"],
     services: ["google-ads", "meta-ads", "crm"],
-    faqs: [{ q: "Can you handle the seasonal swings?", a: "Yes — we pace budgets and shift between demand-gen and high-intent depending on the season." }],
+    faqs: [{ q: "Can you handle the seasonal swings?", a: "Yes — we pace budgets and shift between demand-gen and high-intent depending on the season." }, { q: "How do you stop leads going cold?", a: "Speed-to-lead automation contacts every new lead within minutes by SMS and call, which is where most HVAC jobs are won or lost." }],
+    calculatorIndustrySlug: "hvac",
+    reality:
+      "HVAC demand is seasonal and spiky — furnace emergencies in the cold, AC in the heat — so clicks get expensive exactly when you need them. Two things decide profitability: pacing budget to demand by service (furnace, AC, maintenance, install), and contacting leads within minutes before a competitor does. Most lost jobs aren't a targeting problem; they're a follow-up-speed problem.",
+    benchmarks: [
+      { label: "Typical Google CPC", value: "$9–13" },
+      { label: "Lead conversion rate", value: "6–8%" },
+      { label: "Avg. job / install value", value: "$300–8,000+" },
+      { label: "Speed-to-lead target", value: "<5 min" },
+    ],
+    playbook: [
+      { channel: "Google Ads", body: "Service-split Search (furnace, AC, maintenance, install) with seasonal budget pacing and call-only formats for emergencies." },
+      { channel: "Meta Ads", body: "Tune-up and replacement lead-gen with short-form video, plus retargeting for longer install decisions." },
+      { channel: "Local SEO", body: "Service-area pages, Google Business Profile and reviews to capture 'near me' emergency demand." },
+      { channel: "AI & CRM", body: "Speed-to-lead SMS + call automation and a spend-to-installs dashboard so budget follows what books." },
+    ],
+    hacks: [
+      "Pace budget to weather and season — pull back when demand is thin, push hard in peak.",
+      "Separate emergency intent and run call-only ads during opening hours.",
+      "Speed-to-lead is the single biggest lever — automate first contact within minutes.",
+      "Track to booked installs, not raw leads, so budget shifts to revenue not noise.",
+    ],
+    plan90: [
+      { window: "Days 1–30", title: "Audit & speed-to-lead", body: "Rebuild service-split Search, wire call tracking and instant lead follow-up." },
+      { window: "Days 31–60", title: "Optimize & local", body: "Seasonal pacing, search-term mining, service-area SEO and Meta lead-gen." },
+      { window: "Days 61–90", title: "Scale", body: "Scale by service line and connect spend to booked installs in one dashboard." },
+    ],
   },
   {
     slug: "plumbing",
