@@ -95,6 +95,16 @@ export default async function LocationServicePage({ params }: { params: Promise<
               build campaigns around your most profitable services and the neighbourhoods that matter —
               from {c.neighbourhoods.slice(0, 3).join(", ")} to {c.neighbourhoods[c.neighbourhoods.length - 1]}.
             </p>
+            <div className="mt-7 rounded-[18px] border border-[var(--accent-line)] bg-[var(--accent-soft)] p-5">
+              <div className="mono text-[11px] font-bold uppercase tracking-[.1em] text-[var(--accent-strong)]">In {c.name}, we focus on</div>
+              <ul className="mt-3 space-y-2.5">
+                {c.localFocus.map((f) => (
+                  <li key={f} className="flex items-start gap-3 text-[15px] text-[var(--color-ink)]">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />{f}
+                  </li>
+                ))}
+              </ul>
+            </div>
             <ul className="mt-7 space-y-3">
               {fullService.outcomes.map((o) => (
                 <li key={o} className="flex items-center gap-3 text-[var(--color-ink)]">
@@ -145,6 +155,9 @@ export default async function LocationServicePage({ params }: { params: Promise<
 
       {/* Local proof — representative results for this service */}
       <ServiceProof serviceName={fullService.name} proofStats={fullService.proofStats} caseStudySlugs={fullService.caseStudySlugs} />
+      <div className="container-page -mt-10 md:-mt-14">
+        <p className="text-center text-xs text-[var(--color-ink-faint)]">Figures are representative of results across our client base — not specific to {c.name}. Actual results vary by market, budget, tracking and offer.</p>
+      </div>
 
       <Section className="bg-[var(--color-base-2)]">
         <SectionHeading align="left" eyebrow="Nearby" title={`${s.name} in other ${c.region} cities`} />
