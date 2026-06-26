@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandMarquee } from "@/components/shared/logo-wall";
 
 /**
  * Footer — handoff design (dark olive #14170e, lime accents). Shared across all
@@ -24,7 +25,13 @@ function FCol({ title, links }: { title: string; links: { label: string; href: s
 export function SiteFooter() {
   return (
     <footer id="footer" style={{ background: "#14170e", color: "#9a9b88" }}>
-      <div style={{ maxWidth: 1480, margin: "0 auto", padding: "76px 32px 40px" }}>
+      <div style={{ maxWidth: 1480, margin: "0 auto", padding: "64px 20px 40px" }}>
+        {/* Brands we work with — carousel ([VERIFY] swap placeholders for real client logos) */}
+        <div style={{ marginBottom: 56, paddingBottom: 48, borderBottom: "1px solid rgba(241,239,227,.08)" }}>
+          <div className="mono" style={{ fontSize: 10.5, fontWeight: 700, color: "#75766a", letterSpacing: ".12em", textTransform: "uppercase", textAlign: "center", marginBottom: 18 }}>Brands we work with</div>
+          <BrandMarquee />
+        </div>
+
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1fr_1.1fr]">
           <div>
             <div style={{ lineHeight: 0.8, marginBottom: 16 }}>

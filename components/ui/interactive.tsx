@@ -50,7 +50,7 @@ export function CursorGlow() {
       const interactive = (e.target as Element | null)?.closest(
         "a, button, [data-cursor], input, textarea, select, label"
       );
-      scale.set(interactive ? 2.4 : 1);
+      scale.set(interactive ? 1.7 : 1);
     };
     const leave = () => opacity.set(0);
     window.addEventListener("pointermove", move, { passive: true });
@@ -66,14 +66,14 @@ export function CursorGlow() {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[9999] h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full"
       style={{
         x: ringX,
         y: ringY,
         scale,
         opacity,
-        border: "1.5px solid var(--color-olive, #6f7d22)",
-        background: "radial-gradient(circle, rgba(206,255,58,.22), transparent 70%)",
+        border: "1px solid var(--color-olive, #6f7d22)",
+        background: "radial-gradient(circle, rgba(206,255,58,.12), transparent 72%)",
         mixBlendMode: "multiply",
       }}
     />

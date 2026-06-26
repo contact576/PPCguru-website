@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { heroSampleModel as M } from "@/lib/data/performance-stats";
 
 /** Count-up that eases 0→value once on mount (respects reduced-motion). */
 function useCountUp(value: number, duration = 1500) {
@@ -32,13 +33,14 @@ export function HeroDashboard() {
   const [dash, setDash] = useState(420);
   useEffect(() => { const t = setTimeout(() => setDash(0), 150); return () => clearTimeout(t); }, []);
 
-  const spend = useCountUp(42800);
-  const waste = useCountUp(7140);
-  const leads = useCountUp(312);
-  const booked = useCountUp(148);
-  const roas = useCountUp(4.8);
-  const cplK = useCountUp(1);
-  const health = useCountUp(98);
+  // All numbers derive from one consistent sample model so nothing contradicts.
+  const spend = useCountUp(M.spend);
+  const waste = useCountUp(M.wasteRecovered);
+  const leads = useCountUp(M.qualifiedLeads);
+  const booked = useCountUp(M.booked);
+  const roas = useCountUp(M.roas);
+  const health = useCountUp(M.trackingHealth);
+  const costPerLead = leads > 0 ? spend / leads : 0; // ratio stays constant = spend/leads
 
   return (
     <div style={{ position: "relative" }} data-herodash="1">
@@ -46,7 +48,7 @@ export function HeroDashboard() {
       <div style={{ position: "absolute", top: 30, right: -12, zIndex: 3, background: "#f1efe3", color: "#14170e", borderRadius: 16, padding: "14px 17px", boxShadow: "0 18px 50px rgba(0,0,0,.5)", animation: "ppcFloat 6s ease-in-out infinite", minWidth: 168 }}>
         <div className="mono" style={{ fontSize: 10, color: "#6a6c5a", fontWeight: 600, letterSpacing: ".08em", textTransform: "uppercase" }}>Wasted spend found</div>
         <div className="head" style={{ fontSize: 26, marginTop: 4, color: "#14170e" }}>{money(waste)}</div>
-        <div className="mono" style={{ fontSize: 11, color: "#3f7d18", fontWeight: 600, marginTop: 2 }}>↓ resealed this month</div>
+        <div className="mono" style={{ fontSize: 11, color: "#3f7d18", fontWeight: 600, marginTop: 2 }}>↓ recovered this month</div>
       </div>
 
       {/* main dashboard */}
@@ -84,8 +86,8 @@ export function HeroDashboard() {
               <div className="head" style={{ fontSize: 23, color: "#f1efe3" }}>{roas.toFixed(1)}x</div>
             </div>
             <div style={{ textAlign: "right" }}>
-              <div className="mono" style={{ fontSize: 9, color: muted, fontWeight: 600, letterSpacing: ".06em", textTransform: "uppercase" }}>Cost / lead</div>
-              <div style={{ fontSize: 17, fontWeight: 800, color: "#f1efe3" }}>{money(42 * (0.4 + 0.6 * cplK))}</div>
+              <div className="mono" style={{ fontSize: 9, color: muted, fontWeight: 600, letterSpacing: ".06em", textTransform: "uppercase" }}>Cost / qual. lead</div>
+              <div style={{ fontSize: 17, fontWeight: 800, color: "#f1efe3" }}>{money(costPerLead)}</div>
             </div>
           </div>
           <svg viewBox="0 0 300 80" style={{ width: "100%", height: 62, display: "block" }} preserveAspectRatio="none">

@@ -7,6 +7,7 @@ import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { FloatingCta } from "@/components/shared/floating-cta";
+import { OfferPopup } from "@/components/shared/offer-popup";
 import { CursorGlow } from "@/components/ui/interactive";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
 
@@ -83,6 +84,7 @@ export default function RootLayout({
           <main id="main">{children}</main>
           <SiteFooter />
           <FloatingCta />
+          <OfferPopup />
           {/*
             PRE-LAUNCH VERIFICATION CHECKLIST (search the codebase for "[VERIFY]"):
             [ ] Real phone number + WhatsApp (siteConfig.contact) — currently blank, shows "Book a call"
