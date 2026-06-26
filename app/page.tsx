@@ -5,10 +5,12 @@ import { WasteCalculator } from "@/components/home/waste-calculator";
 import { FaqList } from "@/components/home/faq-list";
 import { AuditForm } from "@/components/home/audit-form";
 import {
-  tickerLoop, proofItems, sprintWeeks, homeServices, growthLoop, aiTasks, humanTasks,
+  tickerLoop, proofItems, proofPoints, sprintWeeks, homeServices, growthLoop, aiTasks, humanTasks,
   cmpBad, cmpGood, rptDeliverables, rptKpis, homeCases, homeIndustries, certGroups,
-  homePricing, homeTestimonials,
+  homePricing,
 } from "@/lib/data/home";
+import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
+import { AiOs } from "@/components/home/ai-os";
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-20 md:px-8 md:py-24";
@@ -117,13 +119,18 @@ export default function HomePage() {
             <Eyebrow>What you can count on</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Proof we can show <Em>before</Em> you book a call</h2>
           </div>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-[18px] sm:grid-cols-2">
             {proofItems.map((it) => (
               <div key={it.title} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28 }}>
                 <div style={{ width: 52, height: 52, borderRadius: 14, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 23, marginBottom: 18 }}>{it.icon}</div>
                 <div className="head" style={{ fontSize: 20, marginBottom: 8 }}>{it.title}</div>
                 <div style={{ fontSize: 14.5, color: "#54564a", lineHeight: 1.55 }}>{it.desc}</div>
               </div>
+            ))}
+          </div>
+          <div data-reveal style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, marginTop: 24 }}>
+            {proofPoints.map((p) => (
+              <span key={p} className="mono" style={{ fontSize: 11, fontWeight: 600, color: "#4f5f14", background: "#eef2dd", border: "1px solid #cfe39a", padding: "8px 13px", borderRadius: 999, letterSpacing: ".03em" }}>{p}</span>
             ))}
           </div>
         </div>
@@ -268,6 +275,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── AI OPERATING SYSTEM ────────────────────────────────────────────── */}
+      <AiOs />
 
       {/* ── COMPARISON ─────────────────────────────────────────────────────── */}
       <section style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
@@ -463,28 +473,14 @@ export default function HomePage() {
             <Eyebrow>In their words</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What working with us <Em>feels like</Em></h2>
           </div>
-          <div data-reveal style={{ textAlign: "center", marginBottom: 44 }}>{verifyChip("⚠ Representative · replace with verified client testimonials before launch")}</div>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
-            {homeTestimonials.map((t) => (
-              <div key={t.quote} data-reveal style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 22, padding: 26, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                  <span style={{ color: olive, fontSize: 15, letterSpacing: 2 }}>★★★★★</span>
-                  <span className="mono" style={{ fontSize: 9.5, fontWeight: 700, color: "#6b6d5c", border: "1px solid #dddbc9", padding: "4px 9px", borderRadius: 6, letterSpacing: ".05em", textTransform: "uppercase" }}>{t.platform}</span>
-                </div>
-                <p className="serif" style={{ fontSize: 17, color: "#2c2e22", lineHeight: 1.45, flex: 1, textTransform: "none" }}>&ldquo;{t.quote}&rdquo;</p>
-                <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid #e3e0d0" }}>
-                  <div className="head" style={{ fontSize: 14 }}>{t.name}</div>
-                  <div className="mono" style={{ fontSize: 11, color: "#83856f", letterSpacing: ".03em", marginTop: 3 }}>{t.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <div data-reveal style={{ textAlign: "center", marginBottom: 36 }}>{verifyChip("⚠ Representative · replace with verified client testimonials before launch")}</div>
         </div>
+        <TestimonialCarousel />
       </section>
 
       {/* ── FAQ ────────────────────────────────────────────────────────────── */}
       <section id="faq" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
-        <div className="mx-auto max-w-[920px] px-5 py-20 md:px-8 md:py-24">
+        <div className="mx-auto max-w-[1080px] px-5 py-20 md:px-8 md:py-24">
           <div data-reveal style={{ textAlign: "center", marginBottom: 48 }}>
             <Eyebrow>FAQ</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Questions, <Em>answered</Em></h2>

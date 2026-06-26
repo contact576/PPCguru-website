@@ -12,12 +12,18 @@ export const tickerLoop = [
 ];
 
 export const proofItems = [
-  { icon: "📈", title: "Weekly reporting", desc: "See exactly what changed every single week — not just at month-end." },
-  { icon: "🔑", title: "You own your account", desc: "Your data, history and billing stay yours. No hostage situations." },
-  { icon: "🔍", title: "Audit-first onboarding", desc: "We find the leaks before we scale — fixes before spend." },
-  { icon: "🧩", title: "One team, every channel", desc: "Google, Meta, SEO & CRM managed by one accountable team." },
-  { icon: "📅", title: "Month-to-month", desc: "No long-term lock-in. We earn the relationship every month." },
-  { icon: "📍", title: "GTA-based support", desc: "Brampton / Greater Toronto Area — real local accountability." },
+  { icon: "🔍", title: "Account Waste Snapshot", desc: "Search terms eating budget, low-intent campaigns, broken or missing conversion tracking, and landing-page friction — quantified, before you pay us a cent." },
+  { icon: "📊", title: "Benchmark Comparison", desc: "Your CPC, CPL, conversion rate and cost-per-booked-job vs your industry range — so you know whether budget, targeting, offer or landing page is the real bottleneck." },
+  { icon: "🗺️", title: "Growth Opportunity Map", desc: "Quick-win campaigns, fresh creative angles, local-SEO gaps, and the retargeting and follow-up you're leaving on the table." },
+  { icon: "📅", title: "90-Day Scaling Plan", desc: "Days 1–7 audit & tracking, 8–30 restructure & launch, 31–60 optimize & expand, 61–90 scale winners & automate reporting." },
+];
+
+// Smaller, secondary trust points (weekly reporting, ownership, etc.).
+export const proofPoints = [
+  "Weekly action summaries — not just month-end reports",
+  "You keep full ownership of your accounts & data",
+  "Month-to-month — no long-term lock-in",
+  "GTA-based, one accountable team across every channel",
 ];
 
 export const sprintWeeks = [
