@@ -12,6 +12,8 @@ export const siteConfig = {
   domain: "ppcguru.ca",
   url: "https://ppcguru.ca",
   tagline: "Ad spend, turned into booked jobs.",
+  // Defensible-confident trust line (avoid unqualified "#1/best" claims).
+  trustLine: "Toronto's AI-first performance marketing agency — Google-trained, AI-powered, GTA-based.",
   description:
     "PPC Guru is a Google Partner & Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA. AI-augmented Google Ads, Meta Ads, SEO and creative.",
 

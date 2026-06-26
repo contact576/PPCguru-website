@@ -85,6 +85,23 @@ export const logos: Logo[] = [
 
 export const logosByGroup = (group: LogoGroup) => logos.filter((l) => l.group === group);
 
+/**
+ * Unified "stack" — the single source for the merged homepage section that
+ * replaces the old separate "platforms/tools/credentials" + "AI operating
+ * system" blocks. Each tool renders as a monochrome pill with a monogram mark.
+ */
+export const stackGroups: { title: string; tools: string[] }[] = [
+  { title: "Advertising platforms", tools: ["Google Ads", "Meta Ads", "YouTube Ads", "Microsoft Ads", "TikTok Ads", "LinkedIn Ads", "Pinterest Ads", "Performance Max"] },
+  { title: "Analytics & tracking", tools: ["Google Analytics 4", "Google Tag Manager", "Looker Studio", "Search Console", "Merchant Center", "Microsoft Clarity"] },
+  { title: "Research & strategy AI", tools: ["ChatGPT", "Claude", "Gemini", "Perplexity", "Grok", "DeepSeek"] },
+  { title: "Creative & video AI", tools: ["Midjourney", "Adobe Firefly", "Runway", "HeyGen", "ElevenLabs", "CapCut", "Descript"] },
+  { title: "SEO & content", tools: ["Semrush", "Ahrefs", "Screaming Frog", "Surfer SEO", "Frase"] },
+  { title: "Ads optimization", tools: ["Optmyzr", "Adalysis", "Madgicx", "Revealbot", "Foreplay", "AdCreative.ai"] },
+  { title: "Automation & reporting", tools: ["Zapier", "Make", "n8n", "Airtable", "Supermetrics", "Slack"] },
+  { title: "Build & deploy", tools: ["Claude Code", "Cursor", "v0", "GitHub", "Vercel", "Next.js"] },
+  { title: "Partners & accreditation", tools: ["Google Partner", "Meta Business Partner", "BBB Accredited"] },
+];
+
 /** Groups used by the homepage "AI operating system" section. */
 export const aiToolGroups: { title: string; tools: string[] }[] = [
   { title: "Research & strategy", tools: ["ChatGPT", "Claude", "Gemini", "Perplexity", "Grok", "DeepSeek"] },

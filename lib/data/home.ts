@@ -75,18 +75,18 @@ export const homeCases = [
 ];
 
 export const homeIndustries = [
-  { name: "Physiotherapy & Rehab", icon: "🦵", angle: "High-intent patients searching for treatment now." },
-  { name: "Healthcare & Clinics", icon: "🩺", angle: "Patient acquisition for specialists & wellness." },
-  { name: "Dental & Orthodontics", icon: "🦷", angle: "Win high-value implant & cosmetic cases." },
-  { name: "HVAC & Home Comfort", icon: "❄️", angle: "Emergency calls, seasonal & service-area targeting." },
-  { name: "Plumbing", icon: "🔧", angle: "Be the first call for emergencies and projects." },
-  { name: "Electrical", icon: "⚡", angle: "Steady residential & commercial leads that convert." },
-  { name: "Construction & Reno", icon: "🏗️", angle: "High-ticket leads for renovators and builders." },
-  { name: "Roofing", icon: "🏠", angle: "Own storm-season demand & replacement jobs." },
-  { name: "Immigration Consulting", icon: "🛂", angle: "High-intent search & trust-focused landing pages." },
-  { name: "Real Estate", icon: "🏡", angle: "Booked buyer/seller leads with clear attribution." },
-  { name: "Legal & Professional", icon: "⚖️", angle: "High-value case enquiries with qualification forms." },
-  { name: "Restaurants & Food", icon: "🍽️", angle: "Local reach, orders and reservations that fill tables." },
+  { slug: "physiotherapy", name: "Physiotherapy & Rehab", icon: "🦵", angle: "High-intent patients searching for treatment now." },
+  { slug: "healthcare-clinics", name: "Healthcare & Clinics", icon: "🩺", angle: "Patient acquisition for specialists & wellness." },
+  { slug: "dental", name: "Dental & Orthodontics", icon: "🦷", angle: "Win high-value implant & cosmetic cases." },
+  { slug: "hvac", name: "HVAC & Home Comfort", icon: "❄️", angle: "Emergency calls, seasonal & service-area targeting." },
+  { slug: "plumbing", name: "Plumbing", icon: "🔧", angle: "Be the first call for emergencies and projects." },
+  { slug: "electrical", name: "Electrical", icon: "⚡", angle: "Steady residential & commercial leads that convert." },
+  { slug: "construction-renovation", name: "Construction & Reno", icon: "🏗️", angle: "High-ticket leads for renovators and builders." },
+  { slug: "roofing", name: "Roofing", icon: "🏠", angle: "Own storm-season demand & replacement jobs." },
+  { slug: "immigration", name: "Immigration Consulting", icon: "🛂", angle: "High-intent search & trust-focused landing pages." },
+  { slug: "real-estate", name: "Real Estate", icon: "🏡", angle: "Booked buyer/seller leads with clear attribution." },
+  { slug: "law-firms", name: "Legal & Professional", icon: "⚖️", angle: "High-value case enquiries with qualification forms." },
+  { slug: "med-spa", name: "Med Spa & Aesthetics", icon: "💆", angle: "High-value cosmetic & aesthetic bookings." },
 ];
 
 // chip styling helper status → colors

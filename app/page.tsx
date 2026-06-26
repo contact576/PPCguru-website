@@ -6,11 +6,12 @@ import { FaqList } from "@/components/home/faq-list";
 import { AuditForm } from "@/components/home/audit-form";
 import {
   tickerLoop, proofItems, proofPoints, sprintWeeks, homeServices, growthLoop, aiTasks, humanTasks,
-  cmpBad, cmpGood, rptDeliverables, rptKpis, homeCases, homeIndustries, certGroups,
+  cmpBad, cmpGood, rptDeliverables, rptKpis, homeCases, homeIndustries,
   homePricing,
 } from "@/lib/data/home";
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
-import { AiOs } from "@/components/home/ai-os";
+import { ToolsOs } from "@/components/home/tools-os";
+import { LeadCtaButton } from "@/components/shared/lead-cta";
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-20 md:px-8 md:py-24";
@@ -69,7 +70,7 @@ export default function HomePage() {
           <div>
             <div className="eyebrow" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#4f5f14", border: "1px solid rgba(95,111,23,.4)", padding: "8px 14px", borderRadius: 999, marginBottom: 30 }}>
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: lime, display: "inline-block", boxShadow: `0 0 8px ${lime}` }} />
-              Google &amp; Meta Partner · AI-augmented
+              Toronto&rsquo;s AI-first Google Ads agency · Google &amp; Meta Partner
             </div>
             <h1 className="head" style={{ fontSize: "clamp(3rem,7vw,6.4rem)" }}>
               <span style={{ display: "block" }}>Stop</span>
@@ -277,7 +278,7 @@ export default function HomePage() {
       </section>
 
       {/* ── AI OPERATING SYSTEM ────────────────────────────────────────────── */}
-      <AiOs />
+      <ToolsOs />
 
       {/* ── COMPARISON ─────────────────────────────────────────────────────── */}
       <section style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
@@ -403,38 +404,11 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
             {homeIndustries.map((i) => (
-              <div key={i.name} data-reveal style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 18, padding: 22 }}>
+              <Link key={i.name} href={`/industries/${i.slug}`} data-reveal className="group transition-all hover:-translate-y-1 hover:shadow-tile" style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 18, padding: 22, display: "block" }}>
                 <div style={{ width: 46, height: 46, borderRadius: 13, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 21, marginBottom: 14 }}>{i.icon}</div>
                 <div className="head" style={{ fontSize: 16, marginBottom: 8, lineHeight: 1.05 }}>{i.name}</div>
                 <div style={{ fontSize: 12.5, color: "#54564a", lineHeight: 1.5 }}>{i.angle}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CREDENTIALS ────────────────────────────────────────────────────── */}
-      <section id="credentials" style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0" }}>
-        <div className="mx-auto max-w-[1340px] px-5 py-20 md:px-8 md:py-24">
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 18px", textAlign: "center" }}>
-            <Eyebrow>Credentials</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Platforms, tools &amp; <Em>credentials</Em></h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>We work across these platforms every day. Partner and certification badges are shown honestly — and only marked verified once confirmed.</p>
-          </div>
-          <div data-reveal style={{ textAlign: "center", marginBottom: 40 }}>{verifyChip("⚠ Verify before launch · confirm partner status & badge-usage rights")}</div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {certGroups.map((g) => (
-              <div key={g.title} data-reveal style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 20, padding: 22 }}>
-                <div className="mono" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#83856f", marginBottom: 16 }}>{g.title}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {g.items.map((it) => (
-                    <div key={it.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, padding: "11px 13px", background: "#fbfaf2", border: "1px solid #ececdf", borderRadius: 12 }}>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: "#2c2e22", lineHeight: 1.2 }}>{it.name}</span>
-                      <span className="mono" style={{ flexShrink: 0, fontSize: 8.5, fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase", color: it.chipColor, background: it.chipBg, padding: "4px 7px", borderRadius: 6, whiteSpace: "nowrap" }}>{it.status}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -458,7 +432,7 @@ export default function HomePage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 26 }}>
                   {p.items.map((it) => <span key={it} style={{ display: "flex", alignItems: "flex-start", gap: 9, fontSize: 13.5, lineHeight: 1.4, color: p.dark ? "#e7e6d6" : "#2c2e22" }}><span style={{ color: p.dark ? lime : olive, flexShrink: 0 }}>✓</span>{it}</span>)}
                 </div>
-                <Link href="#audit" className="mono" style={{ marginTop: "auto", textAlign: "center", background: p.dark ? lime : ink, color: p.dark ? ink : cream, fontWeight: 700, fontSize: 12, letterSpacing: ".06em", textTransform: "uppercase", padding: 15, borderRadius: 13 }}>{p.cta}</Link>
+                <LeadCtaButton label={p.cta} source={`pricing:${p.name}`} title={`${p.name} — get started`} className="mono" style={{ marginTop: "auto", width: "100%", cursor: "pointer", border: "none", textAlign: "center", background: p.dark ? lime : ink, color: p.dark ? ink : cream, fontWeight: 700, fontSize: 12, letterSpacing: ".06em", textTransform: "uppercase", padding: 15, borderRadius: 13 }} />
               </div>
             ))}
           </div>

@@ -53,7 +53,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const service = getService(slug);
   if (!service) notFound();
 
-  const relatedIndustries = industries.filter((i) => i.services.includes(slug)).slice(0, 6);
+  const relatedIndustries = industries.filter((i) => i.services.includes(slug));
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
