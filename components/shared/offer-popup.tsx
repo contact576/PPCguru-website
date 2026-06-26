@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState, useActionState } from "react";
-import { X, ArrowRight } from "lucide-react";
-import { captureLead, type LeadState } from "@/app/actions/lead";
+import { useEffect, useState } from "react";
+import { X } from "lucide-react";
+import { LeadForm } from "@/components/shared/lead-form";
 import { offers } from "@/lib/data/offers";
-import { track } from "@/lib/analytics";
 
 /**
  * Two-step lead-capture funnel:
@@ -16,32 +15,6 @@ import { track } from "@/lib/analytics";
 const K = { modal: "ppcg_lead_modal", slide: "ppcg_lead_slide", done: "ppcg_lead_done" };
 const seen = (k: string) => { try { return !!localStorage.getItem(k); } catch { return false; } };
 const mark = (k: string) => { try { localStorage.setItem(k, "1"); } catch { /* ignore */ } };
-
-const initial: LeadState = { ok: false, message: "" };
-
-function LeadForm({ source, compact = false, onDone }: { source: string; compact?: boolean; onDone: () => void }) {
-  const [state, action, pending] = useActionState(captureLead, initial);
-  useEffect(() => { if (state.ok) { track("popup_submit", { source }); onDone(); } }, [state.ok, source, onDone]);
-
-  const field = "w-full rounded-xl border border-[var(--color-border)] px-4 py-2.5 text-sm outline-none focus:border-[var(--color-orange)]";
-  return (
-    <form action={action} className={compact ? "space-y-2.5" : "space-y-3"}>
-      <input type="text" name="company_website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
-      <input type="hidden" name="source" value={source} />
-      <input required name="name" placeholder="Name" className={field} />
-      <input required type="email" name="email" placeholder="Email" className={field} />
-      <div className={compact ? "" : "grid grid-cols-2 gap-3"}>
-        <input required name="phone" placeholder="Phone / WhatsApp" className={field} />
-        {!compact && <input name="website" placeholder="Website (optional)" className={field} />}
-      </div>
-      {state.message && !state.ok ? <p className="text-xs text-[var(--color-coral)]">{state.message}</p> : null}
-      <button type="submit" disabled={pending} className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-orange)] py-3 font-semibold text-white transition-colors hover:bg-[var(--color-orange-deep)] disabled:opacity-60">
-        {pending ? "Sending…" : (compact ? offers.credit.cta : offers.audit.cta)} <ArrowRight size={16} />
-      </button>
-      <p className="text-center text-[11px] text-[var(--color-ink-faint)]">By submitting, you agree to be contacted by PPC Guru. Unsubscribe anytime.</p>
-    </form>
-  );
-}
 
 export function OfferPopup() {
   const [phase, setPhase] = useState<"none" | "modal" | "slide">("none");
@@ -113,7 +86,7 @@ export function OfferPopup() {
           <span className="eyebrow text-[var(--color-orange)]">{offers.audit.eyebrow}</span>
           <h3 className="mt-3 text-2xl font-bold">{offers.audit.title}</h3>
           <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{offers.audit.body}</p>
-          <div className="mt-5"><LeadForm source="popup:audit" onDone={onDone} /></div>
+          <div className="mt-5"><LeadForm source="popup:audit" submitLabel={offers.audit.cta} onDone={onDone} /></div>
         </div>
       </div>
     );
@@ -127,7 +100,7 @@ export function OfferPopup() {
         <span className="eyebrow text-[var(--color-orange)]">{offers.credit.eyebrow}</span>
         <h3 className="mt-2 text-xl font-bold leading-tight">{offers.credit.title}</h3>
         <p className="mt-1.5 text-[13px] text-[var(--color-ink-dim)]">{offers.credit.body}</p>
-        <div className="mt-4"><LeadForm source="popup:credit" compact onDone={onDone} /></div>
+        <div className="mt-4"><LeadForm source="popup:credit" compact submitLabel={offers.credit.cta} onDone={onDone} /></div>
         <p className="mt-2 text-[10.5px] text-[var(--color-ink-faint)]">{offers.credit.fine}</p>
       </div>
     </div>

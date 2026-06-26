@@ -226,3 +226,190 @@ export function projectResults(opts: {
     profitMultiple: roas,
   };
 }
+
+/* ===========================================================================
+ * SEPARABLE MODEL (industry economics × platform modifiers)
+ * Lets the calculators cover ~36 industries × ~10 platforms without
+ * hand-authoring every cell. Per-(industry,platform) `overrides` preserve the
+ * directly-sourced rows above. Everything here is additive — the legacy exports
+ * stay intact.
+ * ========================================================================= */
+
+export type PlatformId =
+  | "google-search" | "pmax" | "display" | "youtube"
+  | "meta" | "instagram" | "tiktok" | "linkedin"
+  | "microsoft" | "pinterest";
+
+export type IntentTier = "high" | "mid" | "low";
+
+export type PlatformModel = {
+  id: PlatformId;
+  label: string;
+  group: "search" | "social" | "video" | "display";
+  /** × the industry's baseSearchCpc anchor. */
+  cpcMultiplier: number;
+  /** Platform-typical CTR (largely industry-independent). */
+  ctr: number;
+  /** × the industry's baseCvr (intent quality of the click). */
+  cvrMultiplier: number;
+  intent: IntentTier;
+};
+
+export const PLATFORMS: PlatformModel[] = [
+  { id: "google-search", label: "Google Search", group: "search", cpcMultiplier: 1.0, ctr: 0.062, cvrMultiplier: 1.0, intent: "high" },
+  { id: "microsoft", label: "Microsoft / Bing", group: "search", cpcMultiplier: 0.7, ctr: 0.028, cvrMultiplier: 0.95, intent: "high" },
+  { id: "pmax", label: "Performance Max", group: "search", cpcMultiplier: 0.7, ctr: 0.02, cvrMultiplier: 0.72, intent: "mid" },
+  { id: "meta", label: "Meta (Facebook)", group: "social", cpcMultiplier: 0.45, ctr: 0.02, cvrMultiplier: 0.7, intent: "mid" },
+  { id: "instagram", label: "Instagram", group: "social", cpcMultiplier: 0.5, ctr: 0.022, cvrMultiplier: 0.65, intent: "mid" },
+  { id: "tiktok", label: "TikTok", group: "social", cpcMultiplier: 0.35, ctr: 0.018, cvrMultiplier: 0.5, intent: "low" },
+  { id: "linkedin", label: "LinkedIn", group: "social", cpcMultiplier: 1.7, ctr: 0.005, cvrMultiplier: 0.6, intent: "mid" },
+  { id: "pinterest", label: "Pinterest", group: "social", cpcMultiplier: 0.3, ctr: 0.012, cvrMultiplier: 0.45, intent: "low" },
+  { id: "youtube", label: "YouTube", group: "video", cpcMultiplier: 0.3, ctr: 0.008, cvrMultiplier: 0.3, intent: "low" },
+  { id: "display", label: "Google Display", group: "display", cpcMultiplier: 0.25, ctr: 0.006, cvrMultiplier: 0.25, intent: "low" },
+];
+
+export function getPlatform(id: PlatformId): PlatformModel {
+  return PLATFORMS.find((p) => p.id === id) ?? PLATFORMS[0];
+}
+
+export type IndustryEconomics = {
+  slug: string;
+  label: string;
+  avgTicket: number;
+  closeRate: number;
+  /** Anchor: industry CPC on high-intent search. */
+  baseSearchCpc: number;
+  /** Anchor: industry lead CVR on a high-intent click. */
+  baseCvr: number;
+  /** Optional per-industry overrides of the intent-tier defaults. */
+  qualificationRate?: number;
+  bookedCallRate?: number;
+  /** Directly-sourced cells, by platform. */
+  overrides?: Partial<Record<PlatformId, PlatformMetrics>>;
+};
+
+const round2 = (n: number) => Math.round(n * 100) / 100;
+const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
+
+// Existing 15 verticals → economics, preserving their sourced google/meta cells.
+const legacyEconomics: IndustryEconomics[] = industryBenchmarks.map((b) => ({
+  slug: b.slug,
+  label: b.label,
+  avgTicket: b.avgTicket,
+  closeRate: b.closeRate,
+  baseSearchCpc: b.google.cpc,
+  baseCvr: b.google.cvr,
+  overrides: { "google-search": { ...b.google }, meta: { ...b.meta } },
+}));
+
+// Additional verticals (industry-typical estimates; all cells flagged estimate
+// via resolveCell unless overridden). Covers the brief's calculator industry set.
+const extraEconomics: IndustryEconomics[] = [
+  { slug: "chiropractic", label: "Chiropractic", avgTicket: 700, closeRate: 0.35, baseSearchCpc: 5.0, baseCvr: 0.085 },
+  { slug: "massage-therapy", label: "Massage Therapy", avgTicket: 120, closeRate: 0.4, baseSearchCpc: 3.2, baseCvr: 0.09 },
+  { slug: "personal-training", label: "Personal Training", avgTicket: 900, closeRate: 0.3, baseSearchCpc: 3.0, baseCvr: 0.08 },
+  { slug: "mortgage-broker", label: "Mortgage Broker", avgTicket: 4000, closeRate: 0.15, baseSearchCpc: 7.0, baseCvr: 0.06 },
+  { slug: "insurance", label: "Insurance", avgTicket: 1200, closeRate: 0.15, baseSearchCpc: 9.0, baseCvr: 0.065 },
+  { slug: "accounting", label: "Accounting & Bookkeeping", avgTicket: 1500, closeRate: 0.25, baseSearchCpc: 6.0, baseCvr: 0.07 },
+  { slug: "landscaping", label: "Landscaping", avgTicket: 3500, closeRate: 0.3, baseSearchCpc: 5.5, baseCvr: 0.07 },
+  { slug: "cleaning-services", label: "Cleaning Services", avgTicket: 400, closeRate: 0.35, baseSearchCpc: 4.0, baseCvr: 0.08 },
+  { slug: "auto-repair", label: "Auto Repair", avgTicket: 500, closeRate: 0.4, baseSearchCpc: 3.5, baseCvr: 0.08 },
+  { slug: "car-dealership", label: "Car Dealership", avgTicket: 1500, closeRate: 0.1, baseSearchCpc: 2.5, baseCvr: 0.05 },
+  { slug: "restaurants", label: "Restaurants", avgTicket: 60, closeRate: 0.5, baseSearchCpc: 1.8, baseCvr: 0.06 },
+  { slug: "catering", label: "Catering", avgTicket: 2500, closeRate: 0.3, baseSearchCpc: 3.5, baseCvr: 0.07 },
+  { slug: "event-venues", label: "Event Venues", avgTicket: 6000, closeRate: 0.25, baseSearchCpc: 4.5, baseCvr: 0.06 },
+  { slug: "wedding-services", label: "Wedding Services", avgTicket: 4000, closeRate: 0.25, baseSearchCpc: 4.0, baseCvr: 0.06 },
+  { slug: "ecommerce", label: "E-commerce", avgTicket: 90, closeRate: 0.35, baseSearchCpc: 1.2, baseCvr: 0.025 },
+  { slug: "beauty-salon", label: "Beauty & Salon", avgTicket: 120, closeRate: 0.4, baseSearchCpc: 2.5, baseCvr: 0.08 },
+  { slug: "education-coaching", label: "Education & Coaching", avgTicket: 1500, closeRate: 0.2, baseSearchCpc: 4.0, baseCvr: 0.06 },
+  { slug: "saas", label: "SaaS", avgTicket: 1200, closeRate: 0.15, baseSearchCpc: 6.0, baseCvr: 0.04 },
+  { slug: "financial-services", label: "Financial Services", avgTicket: 3000, closeRate: 0.15, baseSearchCpc: 8.0, baseCvr: 0.05 },
+  { slug: "travel-hospitality", label: "Travel & Hospitality", avgTicket: 800, closeRate: 0.2, baseSearchCpc: 2.0, baseCvr: 0.04 },
+  { slug: "pets-veterinary", label: "Pets & Veterinary", avgTicket: 350, closeRate: 0.4, baseSearchCpc: 3.5, baseCvr: 0.085 },
+  { slug: "generic", label: "Generic Local Service", avgTicket: 800, closeRate: 0.3, baseSearchCpc: 5.26, baseCvr: 0.0752 },
+];
+
+export const industryEconomics: IndustryEconomics[] = [...legacyEconomics, ...extraEconomics];
+
+export function getEconomics(slug: string): IndustryEconomics {
+  return industryEconomics.find((e) => e.slug === slug) ?? industryEconomics[0];
+}
+
+/** Effective {cpc, ctr, cvr} for an industry×platform, from override or model. */
+export function resolveCell(econ: IndustryEconomics, p: PlatformModel): PlatformMetrics {
+  const o = econ.overrides?.[p.id];
+  if (o && o.cpc != null && o.ctr != null && o.cvr != null) return { ...o };
+  return {
+    cpc: round2(o?.cpc ?? econ.baseSearchCpc * p.cpcMultiplier),
+    ctr: o?.ctr ?? p.ctr,
+    cvr: clamp(o?.cvr ?? econ.baseCvr * p.cvrMultiplier, 0.002, 0.5),
+    estimate: true,
+  };
+}
+
+const QUAL_BY_INTENT: Record<IntentTier, number> = { high: 0.7, mid: 0.5, low: 0.35 };
+
+export type FunnelStage = { low: number; mid: number; high: number };
+const stage = (mid: number): FunnelStage => ({ low: mid * 0.75, mid, high: mid * 1.25 });
+
+export type FunnelResult = {
+  impressions: FunnelStage;
+  clicks: FunnelStage;
+  leads: FunnelStage;
+  qualifiedLeads: FunnelStage;
+  bookedCalls: FunnelStage;
+  customers: FunnelStage;
+  revenue: FunnelStage;
+  costPerLead: number;
+  cac: number;
+  roas: number;
+  meta: { platform: PlatformId; industry: string; cell: PlatformMetrics; intent: IntentTier };
+};
+
+/**
+ * Forecasting funnel: budget → clicks → leads → qualified leads → booked calls
+ * → customers → revenue, each volume stage carrying a low/mid/high range. CPL,
+ * CAC and ROAS are point estimates off the mid value.
+ */
+export function projectFunnel(opts: {
+  budget: number;
+  platform: PlatformId;
+  industrySlug: string;
+  avgTicket?: number;
+  closeRate?: number;
+  qualificationRate?: number;
+  bookedCallRate?: number;
+}): FunnelResult {
+  const econ = getEconomics(opts.industrySlug);
+  const p = getPlatform(opts.platform);
+  const cell = resolveCell(econ, p);
+  const avgTicket = opts.avgTicket ?? econ.avgTicket;
+  const closeRate = opts.closeRate ?? econ.closeRate;
+  const qualRate = opts.qualificationRate ?? econ.qualificationRate ?? QUAL_BY_INTENT[p.intent];
+  const bookedRate = opts.bookedCallRate ?? econ.bookedCallRate ?? 0.6;
+
+  const clicks = cell.cpc > 0 ? opts.budget / cell.cpc : 0;
+  const impressions = cell.ctr > 0 ? clicks / cell.ctr : 0;
+  const leads = clicks * cell.cvr;
+  const qualifiedLeads = leads * qualRate;
+  const bookedCalls = qualifiedLeads * bookedRate;
+  const customers = leads * closeRate; // kept off total leads for ROAS continuity
+  const revenue = customers * avgTicket;
+  const costPerLead = leads > 0 ? opts.budget / leads : 0;
+  const cac = customers > 0 ? opts.budget / customers : 0;
+  const roas = opts.budget > 0 ? revenue / opts.budget : 0;
+
+  return {
+    impressions: stage(impressions),
+    clicks: stage(clicks),
+    leads: stage(leads),
+    qualifiedLeads: stage(qualifiedLeads),
+    bookedCalls: stage(bookedCalls),
+    customers: stage(customers),
+    revenue: stage(revenue),
+    costPerLead,
+    cac,
+    roas,
+    meta: { platform: p.id, industry: econ.slug, cell, intent: p.intent },
+  };
+}

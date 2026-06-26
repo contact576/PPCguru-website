@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { industryEconomics, PLATFORMS, getEconomics, getPlatform, resolveCell, type PlatformId } from "@/lib/data/benchmarks";
+
+const clampN = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
 
 const money = (n: number) => "$" + Math.round(n).toLocaleString("en-US");
 const num = (n: number) => Math.round(n).toLocaleString("en-US");
@@ -15,13 +18,32 @@ const risk = (s: number): Risk =>
 const labelStyle: React.CSSProperties = { fontSize: 10, color: muted, fontWeight: 600, letterSpacing: ".08em", textTransform: "uppercase" };
 const fieldStyle: React.CSSProperties = { width: "100%", background: "#0f1109", border: "1px solid rgba(241,239,227,.18)", color: "#f1efe3", fontSize: 14, padding: 12, borderRadius: 12, fontFamily: "inherit" };
 
+const initCell = resolveCell(getEconomics("hvac"), getPlatform("google-search"));
+
 export function WasteCalculator() {
-  const [industry, setIndustry] = useState("HVAC & Home Services");
-  const [platform, setPlatform] = useState("Google Ads");
+  const [industrySlug, setIndustrySlug] = useState("hvac");
+  const [platform, setPlatform] = useState<PlatformId>("google-search");
   const [spend, setSpend] = useState(4000);
-  const [cpc, setCpc] = useState(4);
-  const [conv, setConv] = useState(4);
-  const [leadValue, setLeadValue] = useState(600);
+  const [cpc, setCpc] = useState(clampN(initCell.cpc, 0.5, 25));
+  const [conv, setConv] = useState(clampN(initCell.cvr * 100, 0.5, 15));
+  const [leadValue, setLeadValue] = useState(clampN(getEconomics("hvac").avgTicket, 100, 5000));
+
+  // Industry/platform selection seeds CPC + conversion from the benchmark engine,
+  // so the numbers change with the dropdowns (sliders stay user-adjustable).
+  function applyCell(slug: string, pid: PlatformId) {
+    const c = resolveCell(getEconomics(slug), getPlatform(pid));
+    setCpc(clampN(Math.round(c.cpc * 100) / 100, 0.5, 25));
+    setConv(clampN(Math.round(c.cvr * 1000) / 10, 0.5, 15));
+  }
+  function onIndustry(slug: string) {
+    setIndustrySlug(slug);
+    applyCell(slug, platform);
+    setLeadValue(clampN(getEconomics(slug).avgTicket, 100, 5000));
+  }
+  function onPlatform(pid: PlatformId) {
+    setPlatform(pid);
+    applyCell(industrySlug, pid);
+  }
 
   const clicks = spend / Math.max(0.1, cpc);
   const leads = clicks * (conv / 100);
@@ -56,14 +78,14 @@ export function WasteCalculator() {
         <div style={{ gridColumn: "1 / -1", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
           <div>
             <label className="mono" style={{ ...labelStyle, display: "block", marginBottom: 8 }}>Industry</label>
-            <select value={industry} onChange={(e) => setIndustry(e.target.value)} style={fieldStyle}>
-              {["HVAC & Home Services", "Healthcare & Dental", "Construction & Renovation", "Real Estate", "Immigration Consulting", "Other Local Service"].map((o) => <option key={o}>{o}</option>)}
+            <select value={industrySlug} onChange={(e) => onIndustry(e.target.value)} style={fieldStyle}>
+              {industryEconomics.map((o) => <option key={o.slug} value={o.slug}>{o.label}</option>)}
             </select>
           </div>
           <div>
             <label className="mono" style={{ ...labelStyle, display: "block", marginBottom: 8 }}>Platform</label>
-            <select value={platform} onChange={(e) => setPlatform(e.target.value)} style={fieldStyle}>
-              {["Google Ads", "Meta Ads", "Microsoft Ads", "Multi-channel"].map((o) => <option key={o}>{o}</option>)}
+            <select value={platform} onChange={(e) => onPlatform(e.target.value as PlatformId)} style={fieldStyle}>
+              {PLATFORMS.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
             </select>
           </div>
         </div>

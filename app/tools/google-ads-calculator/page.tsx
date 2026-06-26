@@ -22,7 +22,7 @@ export default function GoogleAdsCalculatorPage() {
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Free Tools", path: "/tools" }, { name: "Google Ads Calculator", path: "/tools/google-ads-calculator" }]}
       />
       <Section className="!pt-10">
-        <AdCalculator platform="google" />
+        <AdCalculator platform="google-search" />
       </Section>
       <CtaBlock title="Want to actually hit these numbers?" intro="Book a free Google Ads audit and we'll show you exactly how to close the gap between benchmark and reality." />
     </>
