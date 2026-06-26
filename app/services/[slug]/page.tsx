@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { ServiceProof } from "@/components/sections/service-proof";
+import { AuditChecklist, AiAutomation, OptimizationCadence, Timeline30Day, ToolStack } from "@/components/sections/service-deep";
+import { DashboardMock } from "@/components/illustrations/dashboard-mock";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
@@ -73,6 +75,22 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           ))}
         </div>
       </Section>
+
+      {/* Sample dashboard — math-consistent, labelled sample */}
+      {service.dashboardMock && (
+        <Section>
+          <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+            <div>
+              <SectionHeading align="left" eyebrow="What you'll see" title={<>Everything ties back to <span className="text-gradient">revenue</span></>} intro="No vanity metrics. Your reporting connects spend to leads, customers and revenue — here's a sample of the kind of dashboard we run." />
+              <div className="mt-7"><Magnetic><Button href="/contact">Get your real numbers <ArrowRight size={16} /></Button></Magnetic></div>
+            </div>
+            <DashboardMock data={service.dashboardMock} />
+          </div>
+        </Section>
+      )}
+
+      {/* What we audit first */}
+      {service.auditChecklist && <AuditChecklist serviceName={service.name} groups={service.auditChecklist} />}
 
       {/* Symptoms — problem framing */}
       <Section>
@@ -162,6 +180,18 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           ))}
         </div>
       </Section>
+
+      {/* How we use AI & automation */}
+      {service.aiAutomation && <AiAutomation items={service.aiAutomation} />}
+
+      {/* Day-to-day optimization cadence */}
+      {service.optimizationCadence && <OptimizationCadence cadence={service.optimizationCadence} />}
+
+      {/* What we fix in the first 30 days */}
+      {service.first30Days && <Timeline30Day items={service.first30Days} />}
+
+      {/* Tool stack */}
+      {service.toolStack && <ToolStack groups={service.toolStack} />}
 
       {/* Proof — representative results + curated case studies */}
       <ServiceProof serviceName={service.name} proofStats={service.proofStats} caseStudySlugs={service.caseStudySlugs} />

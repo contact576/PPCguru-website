@@ -38,6 +38,21 @@ export type Service = {
   // "What good looks like" — representative benchmark ranges, framed as typical
   // targets, NOT guarantees. [VERIFY] swap for real, consented numbers at launch.
   proofStats: { value: string; label: string }[];
+
+  // ---- Optional "deep" fields. Each renders only when present, so existing
+  // services stay valid until populated. ----
+  /** "What we audit before optimization" — grouped checklist. */
+  auditChecklist?: { category: string; items: string[] }[];
+  /** "How we use AI & automation". */
+  aiAutomation?: { title: string; body: string }[];
+  /** "Our day-to-day optimization system". */
+  optimizationCadence?: { daily?: string[]; weekly?: string[]; monthly?: string[] };
+  /** "What we fix in the first 30 days" — timeline windows. */
+  first30Days?: { window: string; title: string; body: string }[];
+  /** Platform-specific tool stack, grouped. */
+  toolStack?: { group: string; tools: string[] }[];
+  /** Data for a math-consistent sample dashboard mock (labelled "sample"). */
+  dashboardMock?: { platformLabel: string; spend: number; cpc: number; ctr: number; cvr: number; closeRate: number; avgTicket: number };
 };
 
 export const services: Service[] = [
@@ -48,6 +63,33 @@ export const services: Service[] = [
       { value: "−30–45%", label: "typical cut in wasted spend, first 90 days" },
       { value: "2–3×", label: "more qualified leads as bidding matures" },
       { value: "60 days", label: "to a cleaner cost-per-lead signal" },
+    ],
+    dashboardMock: { platformLabel: "Google Ads", spend: 12000, cpc: 9.68, ctr: 0.062, cvr: 0.0656, closeRate: 0.15, avgTicket: 3500 },
+    auditChecklist: [
+      { category: "Tracking & measurement", items: ["GA4, GTM & Google Ads conversion audit", "Call & offline-conversion tracking", "Enhanced conversions / consent mode", "Conversion-value & ROAS readiness"] },
+      { category: "Account structure", items: ["Campaign & ad-group theming", "Match-type & search-term hygiene", "Negative-keyword gap analysis", "Budget allocation by money-maker"] },
+      { category: "Bidding & creative", items: ["Bid strategy vs goal fit (tCPA/tROAS)", "RSA ad strength & assets", "Landing-page experience & speed", "Competitor & auction-insights review"] },
+    ],
+    aiAutomation: [
+      { title: "AI search-term clustering", body: "We cluster thousands of search terms by intent to find waste and new winning themes far faster than manual review." },
+      { title: "Negative-keyword discovery", body: "AI surfaces junk and competitor terms draining budget; a strategist approves before anything goes live." },
+      { title: "Ad-copy variation at scale", body: "We generate and test more RSA assets and angles per ad group — every variation human-reviewed for compliance." },
+      { title: "Automated anomaly alerts", body: "Spend spikes, CPL drift, broken tracking and budget pacing trigger same-day alerts, not month-end surprises." },
+    ],
+    optimizationCadence: {
+      daily: ["Budget pacing & spend-spike checks", "Conversion-tracking health", "Search-term mining on top spenders"],
+      weekly: ["Negative-keyword updates", "Bid-strategy & target tuning", "Ad copy & asset testing", "Landing-page checks"],
+      monthly: ["Location/device/daypart review", "Competitor movement & impression share", "Growth-board re-prioritization", "Strategy & reporting review"],
+    },
+    first30Days: [
+      { window: "Days 1–7", title: "Audit & tracking", body: "60-point audit, GA4/GTM/conversion fixes, and a quantified map of wasted spend." },
+      { window: "Days 8–15", title: "Restructure", body: "Rebuild campaigns around money-making services with tight themes and negatives." },
+      { window: "Days 16–23", title: "Launch & test", body: "Conversion-based bidding live, RSA assets and landing-page tests running." },
+      { window: "Days 24–30", title: "Review & plan", body: "First results reviewed; a clear 90-day scaling plan and live dashboard." },
+    ],
+    toolStack: [
+      { group: "Google stack", tools: ["Google Ads", "Ads Editor", "GA4", "Tag Manager", "Search Console", "Looker Studio", "Merchant Center", "Keyword Planner"] },
+      { group: "AI & optimization", tools: ["Gemini", "ChatGPT", "Claude", "Optmyzr", "Adalysis", "Supermetrics"] },
     ],
     name: "Google Ads Management",
     short: "Search, Performance Max & shopping campaigns engineered for booked jobs.",
@@ -129,6 +171,32 @@ export const services: Service[] = [
       { value: "Weekly", label: "fresh creative tested to beat fatigue" },
       { value: "<5 min", label: "automated speed-to-lead follow-up" },
     ],
+    dashboardMock: { platformLabel: "Meta Ads", spend: 8000, cpc: 2.2, ctr: 0.0194, cvr: 0.055, closeRate: 0.12, avgTicket: 1400 },
+    auditChecklist: [
+      { category: "Tracking", items: ["Pixel & Conversions API setup", "Event match quality score", "Lead-to-CRM routing", "Attribution-window review"] },
+      { category: "Account & funnel", items: ["Campaign structure & budget", "Audience overlap & saturation", "Funnel stage mapping", "Offer & angle analysis"] },
+      { category: "Creative", items: ["Creative fatigue & frequency", "Hook-rate / thumb-stop review", "Format mix (static/video/carousel)", "Competitor ad-library scan"] },
+    ],
+    aiAutomation: [
+      { title: "AI-assisted creative testing", body: "We brief, generate and iterate more creative angles weekly, so winners surface faster — all human-directed." },
+      { title: "Competitor ad intelligence", body: "We mine the Meta ad library for angles and offers working in your category and adapt them to your brand." },
+      { title: "Lead-quality feedback loop", body: "CRM outcomes feed back into targeting and creative so spend shifts toward leads that actually book." },
+    ],
+    optimizationCadence: {
+      daily: ["Spend & frequency checks", "New-lead quality scan", "Creative performance review"],
+      weekly: ["Creative testing round", "Audience & budget shifts", "Retargeting sequence tuning"],
+      monthly: ["Funnel & offer review", "CAPI / event-quality audit", "Scaling & strategy review"],
+    },
+    first30Days: [
+      { window: "Days 1–7", title: "Tracking & offer", body: "Pixel/CAPI fixed, lead routing wired, offer and funnel mapped." },
+      { window: "Days 8–15", title: "Creative build", body: "First testing set of static, carousel and short-form video produced." },
+      { window: "Days 16–23", title: "Test", body: "Structured creative + audience testing to find early winners." },
+      { window: "Days 24–30", title: "Scale plan", body: "Winners identified; budget and a scaling plan set with you." },
+    ],
+    toolStack: [
+      { group: "Meta stack", tools: ["Ads Manager", "Business Suite", "Pixel", "Conversions API", "GA4", "Looker Studio"] },
+      { group: "AI & creative", tools: ["Claude", "ChatGPT", "AdCreative.ai", "Canva", "CapCut", "Foreplay", "Revealbot"] },
+    ],
     name: "Meta Ads (Facebook & Instagram)",
     short: "Lead-gen campaigns and scroll-stopping creative across Facebook & Instagram.",
     hero: "We turn Facebook and Instagram into a predictable lead channel — with creative that stops the scroll and offers that convert.",
@@ -207,6 +275,32 @@ export const services: Service[] = [
       { value: "60–90 days", label: "to first local ranking gains" },
       { value: "Top-3", label: "local map-pack visibility we target" },
       { value: "24/7", label: "leads that don't switch off with budget" },
+    ],
+    dashboardMock: { platformLabel: "Organic & Local", spend: 4000, cpc: 4.8, ctr: 0.064, cvr: 0.09, closeRate: 0.25, avgTicket: 850 },
+    auditChecklist: [
+      { category: "Technical", items: ["Core Web Vitals & speed", "Crawlability & indexation", "Schema / structured data", "Site architecture & internal links"] },
+      { category: "Local", items: ["Google Business Profile audit", "NAP & citation consistency", "Review profile & strategy", "Map-pack ranking gaps"] },
+      { category: "Content & authority", items: ["Keyword & intent mapping", "Location & service-page coverage", "Content-gap vs competitors", "Backlink profile review"] },
+    ],
+    aiAutomation: [
+      { title: "AI-assisted content briefs", body: "We build research-backed briefs and drafts fast — every piece edited by a human before it ships." },
+      { title: "Topic-cluster mapping", body: "AI helps map pillar/cluster structures and internal links to build topical authority efficiently." },
+      { title: "Search Console monitoring", body: "Automated tracking of rankings, impressions and CWV flags issues before they cost traffic." },
+    ],
+    optimizationCadence: {
+      daily: ["Rank & index monitoring", "GBP post / review checks"],
+      weekly: ["Content production & on-page", "Internal-linking updates", "Technical-fix verification"],
+      monthly: ["Content & link planning", "Local-pack & CWV review", "Reporting & strategy"],
+    },
+    first30Days: [
+      { window: "Days 1–7", title: "Audit & roadmap", body: "Technical, on-page and local audit with a prioritized roadmap." },
+      { window: "Days 8–15", title: "Fix foundations", body: "Resolve technical debt and optimize your core money pages." },
+      { window: "Days 16–23", title: "Build", body: "Location/service pages and the first content cluster go live." },
+      { window: "Days 24–30", title: "Earn", body: "GBP optimization, citations and the link/content plan kick off." },
+    ],
+    toolStack: [
+      { group: "SEO stack", tools: ["Search Console", "GA4", "Google Business Profile", "Semrush", "Ahrefs", "Screaming Frog", "Surfer SEO", "PageSpeed Insights"] },
+      { group: "AI & content", tools: ["Claude", "ChatGPT", "Gemini", "Frase", "Perplexity"] },
     ],
     name: "SEO & Local Search",
     short: "Technical SEO, location pages and Google Business Profile that compound over time.",
@@ -287,6 +381,15 @@ export const services: Service[] = [
       { value: "Days", label: "brief-to-live turnaround" },
       { value: "Always-on", label: "testing to outrun ad fatigue" },
     ],
+    aiAutomation: [
+      { title: "AI-accelerated production", body: "We use an internal AI workflow to produce and iterate static, carousel and video concepts faster — every asset human-reviewed and on-brand." },
+      { title: "Angle & hook ideation", body: "AI helps generate more messaging angles and hooks to test, so winners surface sooner." },
+      { title: "Performance feedback loop", body: "Ad results feed back into the next creative batch, so production is driven by data, not guesswork." },
+    ],
+    toolStack: [
+      { group: "Creative & video", tools: ["Figma", "Canva", "CapCut", "Descript", "Runway", "Midjourney", "Firefly", "HeyGen", "ElevenLabs"] },
+      { group: "Workflow", tools: ["Foreplay", "Airtable", "Notion", "Claude"] },
+    ],
     name: "Creative Production",
     short: "Scroll-stopping static, carousel and short-form video creative — AI-accelerated.",
     hero: "Creative is the single biggest lever on ad performance. We produce more of it, faster, with an AI-augmented studio.",
@@ -360,6 +463,31 @@ export const services: Service[] = [
       { value: "<2.5s", label: "Core Web Vitals load target" },
       { value: "Mobile-first", label: "where most of your clicks land" },
     ],
+    dashboardMock: { platformLabel: "Landing Page CRO", spend: 6000, cpc: 6.96, ctr: 0.06, cvr: 0.065, closeRate: 0.15, avgTicket: 2800 },
+    auditChecklist: [
+      { category: "Conversion", items: ["Message-match to the ad/offer", "Single primary action & CTA hierarchy", "Proof, trust & risk-reversal", "Form friction & field count"] },
+      { category: "Performance", items: ["Core Web Vitals & load time", "Mobile-first UX review", "Accessibility (WCAG) basics", "Above-the-fold clarity"] },
+      { category: "Tracking", items: ["Form & call event tracking", "GA4 / GTM wiring", "CRM & ad-platform integration", "A/B-test readiness"] },
+    ],
+    aiAutomation: [
+      { title: "AI-assisted wireframes", body: "We draft conversion-first layouts and copy variants quickly, then refine with a designer and strategist." },
+      { title: "Heuristic CRO review", body: "AI flags friction and clarity issues against proven CRO principles; humans decide what to test." },
+      { title: "Variant generation", body: "Faster headline/CTA/section variants for A/B testing — reviewed before they go live." },
+    ],
+    optimizationCadence: {
+      weekly: ["Conversion-rate monitoring", "A/B test review", "Speed & error checks"],
+      monthly: ["New test hypotheses", "Heatmap / session review", "CRO roadmap & reporting"],
+    },
+    first30Days: [
+      { window: "Days 1–7", title: "Map", body: "Offer, proof and primary action mapped; tracking plan defined." },
+      { window: "Days 8–18", title: "Design & build", body: "Conversion-first, mobile-first build in your brand system." },
+      { window: "Days 19–25", title: "Wire tracking", body: "Forms, calls and events wired to your CRM and ad platforms." },
+      { window: "Days 26–30", title: "Launch & test", body: "Go live, baseline conversion rate, and the first A/B test running." },
+    ],
+    toolStack: [
+      { group: "Build", tools: ["Figma", "Next.js", "Webflow", "WordPress", "Vercel"] },
+      { group: "Measure & AI", tools: ["GA4", "GTM", "Microsoft Clarity", "PageSpeed Insights", "Claude", "v0"] },
+    ],
     name: "Websites & Landing Pages",
     short: "Conversion-focused websites and landing pages that turn clicks into leads.",
     hero: "The fastest way to lower your cost per lead is often a better landing page. We build sites engineered to convert.",
@@ -432,6 +560,21 @@ export const services: Service[] = [
       { value: "<5 min", label: "automated first follow-up to new leads" },
       { value: "7-day+", label: "nurture sequences for unready leads" },
       { value: "1 dashboard", label: "from ad spend to booked revenue" },
+    ],
+    aiAutomation: [
+      { title: "Speed-to-lead automation", body: "Instant SMS/email and call routing fire the moment a lead comes in — AI drafts on-brand first-touch messages." },
+      { title: "Nurture sequences", body: "Automated multi-step email/SMS nurture revives leads that aren't ready yet, with AI-assisted copy." },
+      { title: "Closed-loop reporting", body: "Ad spend, leads and booked revenue flow into one dashboard so every dollar is attributable." },
+    ],
+    first30Days: [
+      { window: "Days 1–7", title: "Map", body: "We map your sales process, pipeline stages and lead lifecycle." },
+      { window: "Days 8–18", title: "Build", body: "Pipelines, calendars, routing and speed-to-lead automations configured." },
+      { window: "Days 19–25", title: "Connect", body: "Ads, forms and calls flow into one system with nurture live." },
+      { window: "Days 26–30", title: "Report", body: "A single spend-to-revenue dashboard you actually own." },
+    ],
+    toolStack: [
+      { group: "CRM & ops", tools: ["GoHighLevel", "Zapier", "Make", "n8n", "Airtable", "Slack"] },
+      { group: "Measure & AI", tools: ["GA4", "Looker Studio", "Supermetrics", "Claude"] },
     ],
     name: "CRM & Marketing Operations",
     short: "GoHighLevel pipelines, lead routing and reporting that close the loop.",
