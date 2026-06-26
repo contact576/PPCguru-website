@@ -12,6 +12,7 @@ import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { accentVarsFor } from "@/lib/data/themes";
 
 const ACCENT = "#2f8f6b";
 const INK = "#14170e";
@@ -29,7 +30,7 @@ const CONDITIONS = [
  */
 export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: CaseStudy[] }) {
   return (
-    <>
+    <div style={accentVarsFor(ACCENT)}>
       {/* ── Bespoke hero: clinical, booking-led, split with a calendar mock ── */}
       <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: ACCENT }} />
@@ -123,6 +124,6 @@ export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: Ca
       <LeadBand source="flagship:physiotherapy" title="Get a free clinic audit" />
       <FaqAccordion faqs={ind.faqs} title="Physiotherapy marketing — questions" />
       <CtaBlock title="Ready to fill your physiotherapy schedule?" />
-    </>
+    </div>
   );
 }

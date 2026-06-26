@@ -165,8 +165,10 @@
     font-weight: 400;
     text-transform: none;
     letter-spacing: 0;
-    color: #5d6b1a;
-    -webkit-text-fill-color: #5d6b1a;
+    /* Re-skins per page: inherits the vertical's --accent-strong when a page sets
+       it (see lib/data/themes.ts accentVars); falls back to olive elsewhere. */
+    color: var(--accent-strong, #5d6b1a);
+    -webkit-text-fill-color: var(--accent-strong, #5d6b1a);
     background: none;
   }
   /* Mono eyebrow label */

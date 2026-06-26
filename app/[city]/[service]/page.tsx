@@ -14,7 +14,7 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { ServiceProof } from "@/components/sections/service-proof";
 import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
-import { getAccent } from "@/lib/data/themes";
+import { getAccent, accentVars } from "@/lib/data/themes";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -67,7 +67,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
   const otherCities = cities.filter((x) => x.slug !== city).slice(0, 6);
 
   return (
-    <>
+    <div style={accentVars(service)}>
       <JsonLd data={localSchema} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
@@ -80,7 +80,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
         art={<CityServiceArt icon={fullService.icon} city={c.name} accent={getAccent(service)} />}
       >
         <Magnetic>
-          <Button href="/contact" size="lg">Get a free {c.name} audit <ArrowRight size={18} /></Button>
+          <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {c.name} audit <ArrowRight size={18} /></Button>
         </Magnetic>
       </PageHero>
 
@@ -98,7 +98,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
             <ul className="mt-7 space-y-3">
               {fullService.outcomes.map((o) => (
                 <li key={o} className="flex items-center gap-3 text-[var(--color-ink)]">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-[7px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Check size={13} /></span>
+                  <span className="flex h-6 w-6 items-center justify-center rounded-[7px] bg-[var(--accent)] text-white"><Check size={13} /></span>
                   {o}
                 </li>
               ))}
@@ -111,7 +111,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
           </div>
 
           <aside className="h-fit rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-6">
-            <div className="flex items-center gap-2 text-sm font-semibold"><MapPin size={16} className="text-[var(--color-cyan-bright)]" /> Neighbourhoods we serve</div>
+            <div className="flex items-center gap-2 text-sm font-semibold"><MapPin size={16} className="text-[var(--accent)]" /> Neighbourhoods we serve</div>
             <div className="mt-4 flex flex-wrap gap-2">
               {c.neighbourhoods.map((n) => (
                 <span key={n} className="rounded-full border border-[var(--color-border)] px-3 py-1.5 text-xs text-[var(--color-ink-dim)]">{n}</span>
@@ -120,7 +120,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
             <div className="mt-6 border-t border-[var(--color-border)] pt-5 text-sm font-semibold">Other services in {c.name}</div>
             <div className="mt-3 flex flex-col gap-2">
               {locationServices.filter((x) => x.slug !== service).map((x) => (
-                <Link key={x.slug} href={`/${city}/${x.slug}`} className="text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-cyan-bright)]">{x.name} →</Link>
+                <Link key={x.slug} href={`/${city}/${x.slug}`} className="text-sm text-[var(--color-ink-dim)] hover:text-[var(--accent-strong)]">{x.name} →</Link>
               ))}
             </div>
           </aside>
@@ -134,7 +134,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
           {fullService.process.map((p, i) => (
             <Reveal key={p.step} delay={(i % 4) * 0.05}>
               <SpotlightCard className="h-full rounded-[22px] border border-[var(--color-border)] bg-white p-6">
-                <span className="head text-[42px]" style={{ color: "rgba(111,125,34,.3)" }}>{p.step}</span>
+                <span className="head text-[42px]" style={{ color: "color-mix(in srgb, var(--accent) 38%, transparent)" }}>{p.step}</span>
                 <h3 className="head mt-3 text-[18px]">{p.title}</h3>
                 <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
               </SpotlightCard>
@@ -150,7 +150,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
         <SectionHeading align="left" eyebrow="Nearby" title={`${s.name} in other ${c.region} cities`} />
         <div className="mt-8 flex flex-wrap gap-3">
           {otherCities.map((x) => (
-            <Link key={x.slug} href={`/${x.slug}/${service}`} className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm transition-colors hover:border-[var(--color-cyan)] hover:text-[var(--color-cyan-bright)]">
+            <Link key={x.slug} href={`/${x.slug}/${service}`} className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm transition-colors hover:border-[var(--accent)] hover:text-[var(--accent-strong)]">
               {x.name}
             </Link>
           ))}
@@ -161,6 +161,6 @@ export default async function LocationServicePage({ params }: { params: Promise<
 
       <FaqAccordion faqs={fullService.faqs} title={`${s.name} in ${c.name} — questions`} />
       <CtaBlock title={`Grow your ${c.name} business with ${s.name.toLowerCase()}`} />
-    </>
+    </div>
   );
 }

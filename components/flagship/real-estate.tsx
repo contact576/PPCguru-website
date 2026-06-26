@@ -12,6 +12,7 @@ import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { accentVarsFor } from "@/lib/data/themes";
 
 const ACCENT = "#2f7d6b";
 const INK = "#14170e";
@@ -25,7 +26,7 @@ const FUNNELS = [
  *  design with a valuation-lead hero, distinct from the generic template. */
 export function RealEstateFlagship({ ind, cases }: { ind: Industry; cases: CaseStudy[] }) {
   return (
-    <>
+    <div style={accentVarsFor(ACCENT)}>
       <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: ACCENT }} />
         <div className="pointer-events-none absolute -right-32 -top-24 h-[440px] w-[440px] rounded-full" style={{ background: `radial-gradient(circle, color-mix(in srgb, ${ACCENT} 22%, transparent), transparent 65%)` }} />
@@ -102,6 +103,6 @@ export function RealEstateFlagship({ ind, cases }: { ind: Industry; cases: CaseS
       <LeadBand source="flagship:real-estate" title="Get a free lead-gen audit" />
       <FaqAccordion faqs={ind.faqs} title="Real estate marketing — questions" />
       <CtaBlock title="Ready for a predictable real-estate pipeline?" />
-    </>
+    </div>
   );
 }

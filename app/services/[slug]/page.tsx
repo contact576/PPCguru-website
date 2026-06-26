@@ -17,7 +17,7 @@ import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
-import { getAccent } from "@/lib/data/themes";
+import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
 
 // Which ad platform each service's calculator should default to.
@@ -87,13 +87,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   }
 
   return (
-    <>
+    <div style={accentVars(slug)}>
       <JsonLd data={serviceSchema({ name: service.name, description: service.description, path: `/services/${slug}` })} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
       <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={SERVICE_ART[slug] ?? <ServicesArt />}>
         <Magnetic>
-          <Button href="/contact" size="lg">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
+          <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
         </Magnetic>
       </PageHero>
 
@@ -101,8 +101,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <Section className="!pb-0">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {service.outcomes.map((o) => (
-            <div key={o} className="flex items-center gap-3 rounded-[14px] border border-[#dddbc9] bg-[#fbfaf2] px-5 py-4">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Check size={15} /></span>
+            <div key={o} className="flex items-center gap-3 rounded-[14px] border border-[var(--accent-line)] bg-[#fbfaf2] px-5 py-4">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] bg-[var(--accent)] text-white"><Check size={15} /></span>
               <span className="text-sm font-medium">{o}</span>
             </div>
           ))}
@@ -115,7 +115,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
             <div>
               <SectionHeading align="left" eyebrow="What you'll see" title={<>Everything ties back to <span className="text-gradient">revenue</span></>} intro="No vanity metrics. Your reporting connects spend to leads, customers and revenue — here's a sample of the kind of dashboard we run." />
-              <div className="mt-7"><Magnetic><Button href="/contact">Get your real numbers <ArrowRight size={16} /></Button></Magnetic></div>
+              <div className="mt-7"><Magnetic><Button href="/contact" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get your real numbers <ArrowRight size={16} /></Button></Magnetic></div>
             </div>
             <DashboardMock data={service.dashboardMock} />
           </div>
@@ -147,8 +147,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             <SectionHeading align="left" eyebrow="What's included" title={<>Every {firstWord} engagement <span className="text-gradient">includes</span></>} />
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {service.included.map((it) => (
-                <div key={it} className="flex items-center gap-3 rounded-[12px] border border-[#dddbc9] bg-white px-4 py-3.5">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#eef2dd] text-[#5f6f17]"><Check size={13} /></span>
+                <div key={it} className="flex items-center gap-3 rounded-[12px] border border-[var(--accent-line)] bg-white px-4 py-3.5">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]"><Check size={13} /></span>
                   <span className="text-sm font-medium text-[var(--color-ink)]">{it}</span>
                 </div>
               ))}
@@ -205,7 +205,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           {service.process.map((p, i) => (
             <Reveal key={p.step} delay={(i % 4) * 0.05}>
               <SpotlightCard className="h-full rounded-[22px] border border-[var(--color-border)] bg-white p-6">
-                <span className="head text-[42px]" style={{ color: "rgba(111,125,34,.3)" }}>{p.step}</span>
+                <span className="head text-[42px]" style={{ color: "color-mix(in srgb, var(--accent) 38%, transparent)" }}>{p.step}</span>
                 <h3 className="head mt-3 text-[18px]">{p.title}</h3>
                 <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
               </SpotlightCard>
@@ -284,6 +284,6 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
       <FaqAccordion faqs={service.faqs} title={`${service.name} — questions`} />
       <CtaBlock />
-    </>
+    </div>
   );
 }

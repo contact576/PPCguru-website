@@ -3,6 +3,25 @@
 import { useState } from "react";
 import { Copy, Check } from "lucide-react";
 
+/** Merge UTM params into a URL, preserving any existing query params and fragment.
+ *  Existing utm_* keys are overwritten; everything else is kept. */
+function buildTaggedUrl(raw: string, utm: Record<string, string>): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  const hashIdx = trimmed.indexOf("#");
+  const hash = hashIdx >= 0 ? trimmed.slice(hashIdx) : "";
+  const noHash = hashIdx >= 0 ? trimmed.slice(0, hashIdx) : trimmed;
+  const qIdx = noHash.indexOf("?");
+  const path = qIdx >= 0 ? noHash.slice(0, qIdx) : noHash;
+  const params = new URLSearchParams(qIdx >= 0 ? noHash.slice(qIdx + 1) : "");
+  for (const [k, v] of Object.entries(utm)) {
+    const val = v.trim();
+    if (val) params.set(k, val);
+  }
+  const qs = params.toString();
+  return `${path}${qs ? `?${qs}` : ""}${hash}`;
+}
+
 /** Pure-client UTM URL builder with copy-to-clipboard. */
 export function UtmBuilder() {
   const [url, setUrl] = useState("https://ppcguru.ca");
@@ -13,15 +32,13 @@ export function UtmBuilder() {
   const [content, setContent] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const params = new URLSearchParams();
-  if (source) params.set("utm_source", source.trim());
-  if (medium) params.set("utm_medium", medium.trim());
-  if (campaign) params.set("utm_campaign", campaign.trim());
-  if (term) params.set("utm_term", term.trim());
-  if (content) params.set("utm_content", content.trim());
-  const qs = params.toString();
-  const base = url.trim().replace(/\?.*$/, "");
-  const full = qs ? `${base}${base.includes("?") ? "&" : "?"}${qs}` : base;
+  const full = buildTaggedUrl(url, {
+    utm_source: source,
+    utm_medium: medium,
+    utm_campaign: campaign,
+    utm_term: term,
+    utm_content: content,
+  });
 
   async function copy() {
     try { await navigator.clipboard.writeText(full); setCopied(true); setTimeout(() => setCopied(false), 1600); } catch { /* ignore */ }

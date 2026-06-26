@@ -12,6 +12,7 @@ import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { accentVarsFor } from "@/lib/data/themes";
 
 const ACCENT = "#2f6db0";
 const INK = "#14170e";
@@ -26,7 +27,7 @@ const ANATOMY = [
  *  account", audit-first design distinct from the generic service template. */
 export function GoogleAdsFlagship({ service }: { service: Service }) {
   return (
-    <>
+    <div style={accentVarsFor(ACCENT)}>
       <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: ACCENT }} />
         <div className="pointer-events-none absolute -right-32 -top-24 h-[440px] w-[440px] rounded-full" style={{ background: `radial-gradient(circle, color-mix(in srgb, ${ACCENT} 22%, transparent), transparent 65%)` }} />
@@ -86,6 +87,6 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
       <LeadBand source="flagship:google-ads" title="Get a free Google Ads audit" />
       <FaqAccordion faqs={service.faqs} title="Google Ads Management — questions" />
       <CtaBlock />
-    </>
+    </div>
   );
 }

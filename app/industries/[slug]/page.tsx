@@ -18,7 +18,7 @@ import { CaseStudyCards } from "@/components/sections/case-study-cards";
 import { IndustryReality, IndustryPlaybook, IndustryHacks, IndustryPlan90 } from "@/components/sections/industry-deep";
 import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
-import { getAccent } from "@/lib/data/themes";
+import { getAccent, accentVars } from "@/lib/data/themes";
 import { PhysiotherapyFlagship } from "@/components/flagship/physiotherapy";
 import { RealEstateFlagship } from "@/components/flagship/real-estate";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
@@ -73,11 +73,11 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
   if (slug === "real-estate") return (<><JsonLd data={breadcrumbSchema(crumbs)} /><RealEstateFlagship ind={ind} cases={cases} /></>);
 
   return (
-    <>
+    <div style={accentVars(ind.slug)}>
       <JsonLd data={breadcrumbSchema(crumbs)} />
       <PageHero eyebrow={`${ind.name} marketing`} title={ind.name} intro={ind.hero} breadcrumbs={crumbs} accent={getAccent(ind.slug)} art={<IndustryArt icon={INDUSTRY_ICONS[ind.slug] ?? Briefcase} name={ind.name.split(" ")[0]} accent={getAccent(ind.slug)} />}>
         <Magnetic>
-          <Button href="/contact" size="lg">Get a free audit <ArrowRight size={18} /></Button>
+          <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free audit <ArrowRight size={18} /></Button>
         </Magnetic>
       </PageHero>
 
@@ -100,7 +100,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
             <ul className="mt-8 space-y-3">
               {ind.approach.map((a) => (
                 <li key={a} className="flex items-start gap-3 text-[var(--color-ink)]">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[var(--color-success)]"><Check size={13} /></span>
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]"><Check size={13} /></span>
                   {a}
                 </li>
               ))}
@@ -123,7 +123,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
               <Reveal key={s.slug} delay={i * 0.05}>
                 <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2]">
                   <Link href={`/services/${s.slug}`} className="group flex h-full flex-col gap-3 rounded-[22px] p-6">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--color-ink)] text-[var(--color-lime)]"><Icon size={21} /></span>
+                    <span className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--accent)] text-white"><Icon size={21} /></span>
                     <h3 className="head text-[17px]">{s.name}</h3>
                     <p className="text-sm text-[var(--color-ink-dim)]">{s.short}</p>
                   </Link>
@@ -156,6 +156,6 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
 
       <FaqAccordion faqs={ind.faqs} title={`${ind.name} — questions`} />
       <CtaBlock title={`Ready to grow your ${ind.name.toLowerCase()} business?`} />
-    </>
+    </div>
   );
 }

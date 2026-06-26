@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { captureLead } from "@/app/actions/lead";
 
 const track = (event: string, data?: Record<string, unknown>) => {
   try {
@@ -37,6 +38,7 @@ export function AuditForm() {
   const [contact, setContact] = useState("WhatsApp");
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const pick = (field: string, value: string, set: (v: string) => void) => {
     set(value); setError("");
@@ -44,12 +46,27 @@ export function AuditForm() {
     if (step < 4) setTimeout(() => setStep((s) => Math.min(4, s + 1)), 170);
   };
 
-  const submit = () => {
+  const submit = async () => {
     const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
     if (!name.trim() || !emailOk) { setError("Please enter your name and a valid business email."); return; }
-    track("audit_form_submit", { need, spend, issue });
-    setDone(true);
-    // [VERIFY] no-op demo — wire to a Server Action / CRM / Resend endpoint before launch.
+    setSubmitting(true); setError("");
+    // Persist via the shared lead action (Resend when configured, logs otherwise),
+    // packing the qualifying answers into `detail`.
+    const fd = new FormData();
+    fd.set("name", name.trim());
+    fd.set("email", email.trim());
+    fd.set("phone", phone.trim());
+    fd.set("website", website.trim());
+    fd.set("source", "home:audit");
+    fd.set("detail", `Need: ${need || "—"} · Monthly spend: ${spend || "—"} · Main issue: ${issue || "—"} · Preferred contact: ${contact}`);
+    const res = await captureLead({ ok: false, message: "" }, fd);
+    setSubmitting(false);
+    if (res.ok) {
+      track("audit_form_submit", { need, spend, issue });
+      setDone(true);
+    } else {
+      setError(res.message || "We couldn't submit that right now. Please try again.");
+    }
   };
 
   return (
@@ -111,7 +128,7 @@ export function AuditForm() {
             </div>
           </div>
           {error && <div style={{ marginTop: 14, fontSize: 13, color: "#c0531f", fontWeight: 600 }}>{error}</div>}
-          <button type="button" onClick={submit} className="mono" style={{ marginTop: 18, width: "100%", background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: 16, borderRadius: 13, cursor: "pointer", border: "none", boxShadow: "0 10px 28px rgba(206,255,58,.35)" }}>Send my free PPC audit request</button>
+          <button type="button" onClick={submit} disabled={submitting} className="mono" style={{ marginTop: 18, width: "100%", background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: 16, borderRadius: 13, cursor: submitting ? "wait" : "pointer", border: "none", boxShadow: "0 10px 28px rgba(206,255,58,.35)", opacity: submitting ? 0.7 : 1 }}>{submitting ? "Sending…" : "Send my free PPC audit request"}</button>
           <p style={{ fontSize: 11, color: "#83856f", marginTop: 12, lineHeight: 1.5 }}>By submitting, you agree to be contacted by PPC Guru about your audit request. No spam — unsubscribe anytime.</p>
           <button type="button" onClick={() => setStep(3)} className="mono" style={{ ...back, marginTop: 10 }}>← Back</button>
         </div>

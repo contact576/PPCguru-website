@@ -12,7 +12,10 @@ import { siteConfig } from "@/lib/site-config";
 const schema = z.object({
   name: z.string().min(2, "Please enter your name.").max(100),
   email: z.string().email("Please enter a valid email."),
-  phone: z.string().min(5, "Please enter a phone number.").max(40),
+  // Phone is collected by most forms but optional here so entry points that don't
+  // ask for it (e.g. the gated tools) still submit. Forms that require it enforce
+  // it in their own UI.
+  phone: z.string().max(40).optional().or(z.literal("")),
   website: z.string().max(200).optional().or(z.literal("")),
   source: z.string().max(80).optional().or(z.literal("")),
   detail: z.string().max(2000).optional().or(z.literal("")),

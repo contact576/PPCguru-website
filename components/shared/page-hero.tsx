@@ -41,14 +41,18 @@ export function PageHero({
   accent?: string;
 }) {
   const glow = accent
-    ? `radial-gradient(circle, color-mix(in srgb, ${accent} 24%, transparent), transparent 65%)`
+    ? `radial-gradient(circle, color-mix(in srgb, ${accent} 32%, transparent), transparent 64%)`
     : "radial-gradient(circle,rgba(206,255,58,.16),transparent 65%)";
+  // Bolder, directional wash so each vertical's hero clearly reads in its colour.
+  const heroBg = accent
+    ? `linear-gradient(165deg, color-mix(in srgb, ${accent} 20%, var(--color-base)) 0%, ${accentTint(accent)} 42%, var(--color-base) 78%)`
+    : undefined;
   return (
     <section
       className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-base)] pt-32 pb-16 md:pt-40 md:pb-20"
-      style={accent ? { background: accentTint(accent) } : undefined}
+      style={heroBg ? { background: heroBg } : undefined}
     >
-      {accent ? <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: accent, opacity: 0.7 }} /> : null}
+      {accent ? <div className="pointer-events-none absolute inset-x-0 top-0 h-[4px]" style={{ background: accent }} /> : null}
       {/* contour lines — mirrors the homepage hero backdrop */}
       <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" className="pointer-events-none absolute inset-0 h-full w-full" style={{ opacity: 0.5 }} aria-hidden>
         <g fill="none" stroke="#14170e" strokeWidth="1" strokeOpacity=".05">
