@@ -308,15 +308,15 @@
 @keyframes ppcPulse  { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
 @keyframes ppcDash   { to { stroke-dashoffset: 0; } }
 @keyframes ppcSpin   { to { transform: rotate(360deg); } }
-/* Brief attention-grabbing wobble that fires once per cycle (~5s), then rests. */
+/* Gentle attention nudge that fires briefly once per cycle, then rests. Kept
+   subtle on purpose — a small wobble, not a desperate jitter. */
 @keyframes ppcShake {
-  0%, 86%, 100% { transform: rotate(0deg); }
-  88% { transform: rotate(-5deg) scale(1.04); }
-  90% { transform: rotate(5deg) scale(1.04); }
-  92% { transform: rotate(-4deg); }
-  94% { transform: rotate(4deg); }
-  96% { transform: rotate(-2deg); }
-  98% { transform: rotate(1deg); }
+  0%, 88%, 100% { transform: rotate(0deg); }
+  90% { transform: rotate(-3deg) scale(1.02); }
+  92% { transform: rotate(3deg) scale(1.02); }
+  94% { transform: rotate(-2deg); }
+  96% { transform: rotate(2deg); }
+  98% { transform: rotate(-1deg); }
 }
 @media (prefers-reduced-motion: reduce) { .ppc-shake { animation: none !important; } }
 

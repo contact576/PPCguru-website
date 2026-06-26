@@ -86,11 +86,15 @@ export function SiteHeader() {
                   style={{ position: "absolute", top: "100%", left: 0, paddingTop: 8, minWidth: 248 }}
                 >
                   <div style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 16, padding: 8, boxShadow: "0 18px 50px rgba(20,23,14,.12)" }}>
-                    {item.children.map((c) => (
-                      <Link key={c.href} href={c.href} className="hover:bg-[#f4f2e6]" style={{ display: "block", padding: "10px 12px", borderRadius: 10, color: "#2c2e22", textTransform: "none", letterSpacing: 0, fontWeight: 500, fontSize: 13.5 }}>
-                        {c.label}
-                      </Link>
-                    ))}
+                    {item.children.map((c) =>
+                      c.heading ? (
+                        <div key={c.label} className="mono" style={{ padding: "11px 12px 4px", fontSize: 9.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#9a9b88" }}>{c.label}</div>
+                      ) : (
+                        <Link key={c.label} href={c.href} className="hover:bg-[#f4f2e6]" style={{ display: "block", padding: "9px 12px", borderRadius: 10, color: "#2c2e22", textTransform: "none", letterSpacing: 0, fontWeight: 500, fontSize: 13.5 }}>
+                          {c.label}
+                        </Link>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -137,9 +141,13 @@ export function SiteHeader() {
                 </div>
                 {item.children && expanded === item.label && (
                   <div style={{ display: "flex", flexDirection: "column", paddingBottom: 10 }}>
-                    {item.children.map((c) => (
-                      <Link key={c.href} href={c.href} onClick={() => setOpen(false)} style={{ padding: "9px 0 9px 12px", fontSize: 15, color: "#54564a" }}>{c.label}</Link>
-                    ))}
+                    {item.children.map((c) =>
+                      c.heading ? (
+                        <div key={c.label} className="mono" style={{ padding: "10px 0 3px 12px", fontSize: 9.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#9a9b88" }}>{c.label}</div>
+                      ) : (
+                        <Link key={c.label} href={c.href} onClick={() => setOpen(false)} style={{ padding: "9px 0 9px 12px", fontSize: 15, color: "#54564a" }}>{c.label}</Link>
+                      )
+                    )}
                   </div>
                 )}
               </div>

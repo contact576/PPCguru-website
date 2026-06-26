@@ -85,7 +85,7 @@ export const mainNav: { label: string; href: string }[] = [
 // Dropdown-aware navigation used by the header + mobile menu. Children list only
 // routes that exist (new service pages get added to the Services group when they
 // ship). The parent `href` is always a real hub page.
-export type NavChild = { label: string; href: string };
+export type NavChild = { label: string; href: string; heading?: boolean };
 export type NavItem = { label: string; href: string; children?: NavChild[] };
 
 export const nav: NavItem[] = [
@@ -93,19 +93,23 @@ export const nav: NavItem[] = [
     label: "Services",
     href: "/services",
     children: [
+      { label: "Paid search & shopping", href: "", heading: true },
       { label: "Google Ads", href: "/services/google-ads" },
+      { label: "Microsoft (Bing) Ads", href: "/services/microsoft-ads" },
+      { label: "Paid social", href: "", heading: true },
       { label: "Meta Ads", href: "/services/meta-ads" },
-      { label: "SEO & Local Search", href: "/services/seo" },
-      { label: "Creative Production", href: "/services/creative" },
-      { label: "Websites & Landing Pages", href: "/services/web-design" },
-      { label: "CRM & Marketing Ops", href: "/services/crm" },
       { label: "LinkedIn Ads", href: "/services/linkedin-ads" },
       { label: "TikTok Ads", href: "/services/tiktok-ads" },
-      { label: "Microsoft (Bing) Ads", href: "/services/microsoft-ads" },
       { label: "Pinterest Ads", href: "/services/pinterest-ads" },
       { label: "YouTube Ads", href: "/services/youtube-ads" },
-      { label: "AI Automation", href: "/services/ai-automation" },
+      { label: "SEO, web & conversion", href: "", heading: true },
+      { label: "SEO & Local Search", href: "/services/seo" },
+      { label: "Websites & Landing Pages", href: "/services/web-design" },
       { label: "Landing Pages & CRO", href: "/services/cro-landing-pages" },
+      { label: "Creative Production", href: "/services/creative" },
+      { label: "AI & operations", href: "", heading: true },
+      { label: "AI Automation", href: "/services/ai-automation" },
+      { label: "CRM & Marketing Ops", href: "/services/crm" },
       { label: "All services →", href: "/services" },
     ],
   },

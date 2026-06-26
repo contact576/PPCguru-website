@@ -85,7 +85,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-6 inline-flex h-13 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[var(--color-violet)] to-[var(--color-cyan)] py-3.5 font-semibold text-[#0a0a0f] transition-all hover:shadow-[0_0_40px_-6px_var(--color-violet)] disabled:opacity-60 sm:w-auto sm:px-10"
+        className="mt-6 inline-flex h-13 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-lime)] py-3.5 font-semibold text-[var(--color-ink)] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_34px_rgba(206,255,58,.4)] disabled:opacity-60 sm:w-auto sm:px-10"
       >
         {pending ? <><Loader2 size={18} className="animate-spin" /> Sending…</> : <>Get my free audit <ArrowRight size={18} /></>}
       </button>

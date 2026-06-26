@@ -480,7 +480,7 @@ export default function HomePage() {
           <div className="grid items-start gap-12 lg:grid-cols-[0.82fr_1.18fr]">
             <div data-reveal>
               <Eyebrow>Free PPC audit</Eyebrow>
-              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Find the <Em>leaks</Em> in your budget</h2>
+              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>See where your budget is <Em>really going</Em></h2>
               <p style={{ fontSize: 16.5, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 440 }}>Most accounts waste spend on poor tracking, weak keywords, bad landing pages or slow follow-up. We&rsquo;ll show you exactly where — before you commit to anything.</p>
               <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 11 }}>
                 {["Campaign structure & search-term waste", "Negative-keyword opportunities", "Conversion tracking — GA4 / GTM", "Landing-page & CRO review", "Budget allocation & competitor visibility", "A clear 30-day action plan"].map((t) => (
@@ -501,7 +501,7 @@ export default function HomePage() {
         </svg>
         <div style={{ position: "absolute", bottom: -160, left: "50%", transform: "translateX(-50%)", width: 680, height: 420, background: "radial-gradient(circle,rgba(255,255,255,.45),transparent 65%)" }} />
         <div data-reveal className="mx-auto max-w-[940px] px-5 py-24 text-center md:px-8" style={{ position: "relative" }}>
-          <h2 className="head" style={{ fontSize: "clamp(2.6rem,6vw,5rem)" }}>Find the <Em>leaks</Em><br />in your ad spend</h2>
+          <h2 className="head" style={{ fontSize: "clamp(2.6rem,6vw,5rem)" }}>Turn ad spend into<br /><Em>booked jobs</Em></h2>
           <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>Start with a free PPC audit or claim the 30-Day Growth Sprint. You&rsquo;ll get clear next steps before committing to a long-term plan.</p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 40 }}>
             <Link href="#audit" className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>Get Free PPC Audit</Link>
