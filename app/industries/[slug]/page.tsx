@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { CaseStudyCards } from "@/components/sections/case-study-cards";
 import { IndustryReality, IndustryPlaybook, IndustryHacks, IndustryPlan90 } from "@/components/sections/industry-deep";
+import { EstimateBand } from "@/components/sections/estimate-band";
+import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -135,6 +137,15 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
       {ind.plan90 && <IndustryPlan90 items={ind.plan90} />}
 
       {cases.length > 0 && <CaseStudyCards items={cases} heading />}
+
+      {/* Per-industry calculator */}
+      <EstimateBand
+        defaultIndustry={ind.calculatorIndustrySlug ?? ind.slug}
+        title={<>Estimate your <span className="text-gradient">{ind.name.split(" ")[0].toLowerCase()}</span> potential</>}
+        intro={`Model the leads, booked calls and revenue your ${ind.name.toLowerCase()} marketing budget could produce — by platform, with real benchmarks.`}
+      />
+
+      <LeadBand source={`industry:${ind.slug}`} title={`Grow your ${ind.name.split(" ")[0].toLowerCase()} business`} />
 
       <FaqAccordion faqs={ind.faqs} title={`${ind.name} — questions`} />
       <CtaBlock title={`Ready to grow your ${ind.name.toLowerCase()} business?`} />

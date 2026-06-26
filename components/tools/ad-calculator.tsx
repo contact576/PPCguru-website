@@ -21,9 +21,9 @@ import { ResultGate } from "@/components/tools/result-gate";
 
 const GROUP_LABEL: Record<string, string> = { search: "Search", social: "Social", video: "Video", display: "Display" };
 
-export function AdCalculator({ platform: fixedPlatform }: { platform?: PlatformId }) {
+export function AdCalculator({ platform: fixedPlatform, defaultIndustry }: { platform?: PlatformId; defaultIndustry?: string }) {
   const [platform, setPlatform] = useState<PlatformId>(fixedPlatform ?? "google-search");
-  const [industrySlug, setIndustrySlug] = useState("hvac");
+  const [industrySlug, setIndustrySlug] = useState(defaultIndustry ?? "hvac");
   const [budget, setBudget] = useState(3000);
   const econ = getEconomics(industrySlug);
   const [avgTicket, setAvgTicket] = useState<number>(econ.avgTicket);

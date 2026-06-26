@@ -12,6 +12,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { ServiceProof } from "@/components/sections/service-proof";
+import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
@@ -153,6 +154,8 @@ export default async function LocationServicePage({ params }: { params: Promise<
           ))}
         </div>
       </Section>
+
+      <LeadBand source={`location:${city}/${service}`} title={`Get a free ${c.name} audit`} />
 
       <FaqAccordion faqs={fullService.faqs} title={`${s.name} in ${c.name} — questions`} />
       <CtaBlock title={`Grow your ${c.name} business with ${s.name.toLowerCase()}`} />

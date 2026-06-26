@@ -13,7 +13,19 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { ServiceProof } from "@/components/sections/service-proof";
 import { AuditChecklist, AiAutomation, OptimizationCadence, Timeline30Day, ToolStack } from "@/components/sections/service-deep";
 import { DashboardMock } from "@/components/illustrations/dashboard-mock";
+import { EstimateBand } from "@/components/sections/estimate-band";
+import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
+import type { PlatformId } from "@/lib/data/benchmarks";
+
+// Which ad platform each service's calculator should default to.
+const SERVICE_PLATFORM: Record<string, PlatformId> = {
+  "google-ads": "google-search", "meta-ads": "meta", "youtube-ads": "youtube",
+  "microsoft-ads": "microsoft", "tiktok-ads": "tiktok", "linkedin-ads": "linkedin",
+  "pinterest-ads": "pinterest", "seo": "google-search", "web-design": "google-search",
+  "cro-landing-pages": "google-search", "creative": "meta", "crm": "google-search",
+  "ai-automation": "google-search",
+};
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import {
@@ -234,6 +246,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
+      {/* Per-service calculator */}
+      <EstimateBand
+        platform={SERVICE_PLATFORM[slug] ?? "google-search"}
+        title={<>Estimate your {firstWord.toLowerCase()} <span className="text-gradient">potential</span></>}
+        intro={`Pick your industry and budget — we'll model the leads, booked calls and revenue ${service.name.toLowerCase()} could produce, using real benchmarks and your average ticket.`}
+      />
+
       {/* Related industries */}
       {relatedIndustries.length > 0 && (
         <Section>
@@ -247,6 +266,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           </div>
         </Section>
       )}
+
+      <LeadBand source={`service:${slug}`} title={`Get a free ${firstWord} audit`} />
 
       <FaqAccordion faqs={service.faqs} title={`${service.name} — questions`} />
       <CtaBlock />
