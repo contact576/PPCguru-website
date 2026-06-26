@@ -44,7 +44,7 @@ export default function ToolsPage() {
           })}
         </div>
         <p className="mt-6 flex items-center justify-center gap-2 text-sm text-[var(--color-ink-faint)]">
-          <Sparkles size={14} className="text-[var(--color-cyan-bright)]" /> AI tools run on Claude and work best with an API key configured — see setup notes.
+          <Sparkles size={14} className="text-[var(--color-cyan-bright)]" /> Free to use — no account needed. The calculators show your full funnel; unlock revenue projections in one quick step.
         </p>
       </Section>
       <CtaBlock />

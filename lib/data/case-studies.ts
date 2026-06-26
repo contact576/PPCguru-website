@@ -307,7 +307,7 @@ export const caseStudies: CaseStudy[] = [
     headlineMetric: { value: "2.9x", label: "new-patient bookings" },
     secondaryMetrics: [
       { value: "−29%", label: "cost per new patient" },
-      { value: "62%", label: "of calls now tracked" },
+      { value: "100%", label: "of calls now tracked" },
       { value: "4.9★", label: "review rating grown" },
     ],
     timeframe: "First 6 months",

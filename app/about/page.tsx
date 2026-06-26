@@ -114,7 +114,6 @@ export default function AboutPage() {
             </Reveal>
           ))}
         </div>
-        <p className="mt-8 text-center text-xs text-[var(--color-ink-faint)]">Team photos &amp; additional team members to be added. Verify founder bio details before launch.</p>
       </Section>
 
       {/* Why most agencies fail */}

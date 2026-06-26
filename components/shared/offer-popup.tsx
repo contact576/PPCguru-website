@@ -1,9 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { LeadForm } from "@/components/shared/lead-form";
 import { offers } from "@/lib/data/offers";
+
+// Pages where an arrival pop-up would cover the primary task — never interrupt these.
+const SUPPRESS_ON = ["/contact", "/results", "/tools"];
 
 /**
  * Two-step lead-capture funnel:
@@ -17,17 +21,24 @@ const seen = (k: string) => { try { return !!localStorage.getItem(k); } catch { 
 const mark = (k: string) => { try { localStorage.setItem(k, "1"); } catch { /* ignore */ } };
 
 export function OfferPopup() {
+  const pathname = usePathname();
   const [phase, setPhase] = useState<"none" | "modal" | "slide">("none");
   const [submitted, setSubmitted] = useState(false);
 
-  // Arm step 1 (modal): 45% scroll OR 25s OR desktop exit-intent.
+  const suppressed = SUPPRESS_ON.some((p) => pathname === p || pathname.startsWith(p + "/"));
+
+  // Arm step 1 (modal): deep scroll (60%) OR 25s OR desktop exit-intent — but
+  // never within the first 12s (so a first-time visitor reads the hero first),
+  // and never on task pages (contact/results/tools).
   useEffect(() => {
-    if (typeof window === "undefined" || seen(K.done) || seen(K.modal)) return;
+    if (typeof window === "undefined" || suppressed || seen(K.done) || seen(K.modal)) return;
     let armed = false;
-    const fire = () => { if (armed) return; armed = true; setPhase("modal"); mark(K.modal); cleanup(); };
+    const startedAt = Date.now();
+    const MIN_DWELL = 12000;
+    const fire = () => { if (armed || Date.now() - startedAt < MIN_DWELL) return; armed = true; setPhase("modal"); mark(K.modal); cleanup(); };
     const onScroll = () => {
       const p = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight || 1);
-      if (p >= 0.45) fire();
+      if (p >= 0.6) fire();
     };
     const onExit = (e: MouseEvent) => { if (e.clientY <= 0) fire(); };
     const timer = setTimeout(fire, 25000);
@@ -35,7 +46,7 @@ export function OfferPopup() {
     document.addEventListener("mouseout", onExit);
     function cleanup() { clearTimeout(timer); window.removeEventListener("scroll", onScroll); document.removeEventListener("mouseout", onExit); }
     return cleanup;
-  }, []);
+  }, [suppressed]);
 
   // Esc closes whatever is open.
   useEffect(() => {
@@ -60,6 +71,7 @@ export function OfferPopup() {
 
   function onDone() { mark(K.done); setSubmitted(true); }
 
+  if (suppressed) return null;
   if (phase === "none" && !submitted) return null;
 
   // Success toast (after either form submits)

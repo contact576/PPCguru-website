@@ -12,6 +12,7 @@ import {
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { ToolsOs } from "@/components/home/tools-os";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { performanceStats } from "@/lib/data/performance-stats";
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-20 md:px-8 md:py-24";
@@ -33,9 +34,6 @@ function Eyebrow({ children, color = olive }: { children: React.ReactNode; color
 function Em({ children, color = "#5d6b1a" }: { children: React.ReactNode; color?: string }) {
   return <span className="serif" style={{ textTransform: "none", fontWeight: 400, fontStyle: "italic", color }}>{children}</span>;
 }
-const verifyChip = (text: string) => (
-  <span className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#c0531f", background: "rgba(242,106,43,.12)", border: "1px solid rgba(242,106,43,.3)", padding: "7px 12px", borderRadius: 8, letterSpacing: ".06em", textTransform: "uppercase" }}>{text}</span>
-);
 
 export default function HomePage() {
   return (
@@ -70,7 +68,7 @@ export default function HomePage() {
           <div>
             <div className="eyebrow" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#4f5f14", border: "1px solid rgba(95,111,23,.4)", padding: "8px 14px", borderRadius: 999, marginBottom: 30 }}>
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: lime, display: "inline-block", boxShadow: `0 0 8px ${lime}` }} />
-              Toronto&rsquo;s AI-first Google Ads agency · Google &amp; Meta Partner
+              GTA&rsquo;s AI-first Google &amp; Meta Partner agency · Canada &amp; USA
             </div>
             <h1 className="head" style={{ fontSize: "clamp(3rem,7vw,6.4rem)" }}>
               <span style={{ display: "block" }}>Stop</span>
@@ -133,6 +131,19 @@ export default function HomePage() {
             {proofPoints.map((p) => (
               <span key={p} className="mono" style={{ fontSize: 11, fontWeight: 600, color: "#4f5f14", background: "#eef2dd", border: "1px solid #cfe39a", padding: "8px 13px", borderRadius: 999, letterSpacing: ".03em" }}>{p}</span>
             ))}
+          </div>
+
+          {/* Real, client-confirmed track record (founder experience + agency aggregate). */}
+          <div data-reveal style={{ marginTop: 48, paddingTop: 40, borderTop: "1px solid #dddbc9" }}>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
+              {performanceStats.map((s) => (
+                <div key={s.label} style={{ textAlign: "center" }}>
+                  <div className="head" style={{ fontSize: "clamp(1.7rem,3vw,2.4rem)", color: ink, lineHeight: 1 }}>{s.value}</div>
+                  <div style={{ fontSize: 12, color: "#54564a", lineHeight: 1.4, marginTop: 8 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+            <p style={{ textAlign: "center", fontSize: 11.5, color: "#8a8c72", marginTop: 22, letterSpacing: ".02em" }}>Founder track record &amp; PPC Guru client aggregate — not a guarantee of individual results.</p>
           </div>
         </div>
       </section>
@@ -213,7 +224,7 @@ export default function HomePage() {
                     <span key={d} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: "#2c2e22" }}><span style={{ color: olive, fontSize: 13 }}>✓</span>{d}</span>
                   ))}
                 </div>
-                <Link href="#audit" className="mono" style={{ marginTop: "auto", fontSize: 11.5, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 7, borderTop: "1px solid #e3e1d2", paddingTop: 16 }}>Learn more →</Link>
+                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 11.5, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 7, borderTop: "1px solid #e3e1d2", paddingTop: 16 }}>Learn more →</Link>
               </div>
             ))}
           </div>
@@ -361,8 +372,7 @@ export default function HomePage() {
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Results that show up<br />in the <Em>bank account</Em></h2>
             <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 600 }}>Representative engagements showing how we turn spend into booked jobs. Anonymized — individual results vary.</p>
           </div>
-          <div data-reveal style={{ marginBottom: 40 }}>{verifyChip("⚠ Verify before launch · replace with real approved client case studies")}</div>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3" style={{ marginTop: 40 }}>
             {homeCases.map((c) => (
               <div key={c.industry} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 26, display: "flex", flexDirection: "column" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
@@ -386,7 +396,7 @@ export default function HomePage() {
                 <div style={{ fontSize: 13, color: "#54564a", lineHeight: 1.5, marginBottom: 18 }}><strong style={{ color: ink }}>Action:</strong> {c.action}</div>
                 <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid #e3e1d2", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span className="mono" style={{ fontSize: 10, color: "#8a8c72", letterSpacing: ".03em" }}>{c.channel} · {c.timeline}</span>
-                  <Link href="#audit" className="mono" style={{ fontSize: 11, fontWeight: 700, color: ink, letterSpacing: ".05em", textTransform: "uppercase" }}>View →</Link>
+                  <Link href={`/results/${c.slug}`} className="mono" style={{ fontSize: 11, fontWeight: 700, color: ink, letterSpacing: ".05em", textTransform: "uppercase" }}>View →</Link>
                 </div>
               </div>
             ))}
@@ -446,8 +456,8 @@ export default function HomePage() {
           <div data-reveal style={{ maxWidth: 760, margin: "0 auto 14px", textAlign: "center" }}>
             <Eyebrow>In their words</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What working with us <Em>feels like</Em></h2>
+            <p style={{ fontSize: 14, color: "#8a8c72", marginTop: 14 }}>Representative of the feedback we hear from clients.</p>
           </div>
-          <div data-reveal style={{ textAlign: "center", marginBottom: 36 }}>{verifyChip("⚠ Representative · replace with verified client testimonials before launch")}</div>
         </div>
         <TestimonialCarousel />
       </section>
@@ -496,7 +506,7 @@ export default function HomePage() {
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 40 }}>
             <Link href="#audit" className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>Get Free PPC Audit</Link>
             <Link href="#sprint" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>Claim 30-Day Sprint</Link>
-            <Link href="/contact" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 26px", borderRadius: 14, display: "inline-flex", alignItems: "center", gap: 9 }}><span style={{ width: 9, height: 9, borderRadius: "50%", background: ink }} />WhatsApp Us</Link>
+            <Link href="/contact" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 26px", borderRadius: 14, display: "inline-flex", alignItems: "center", gap: 9 }}><span style={{ width: 9, height: 9, borderRadius: "50%", background: ink }} />Message us</Link>
           </div>
           <p className="mono" style={{ fontSize: 11, color: "#3a4a10", marginTop: 28, letterSpacing: ".1em", textTransform: "uppercase" }}>No long-term contracts · You keep ownership of your accounts</p>
         </div>

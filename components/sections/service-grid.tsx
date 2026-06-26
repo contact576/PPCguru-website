@@ -4,6 +4,7 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { SpotlightCard } from "@/components/ui/interactive";
 import { services as allServices } from "@/lib/data/services";
+import { accentVars } from "@/lib/data/themes";
 
 export function ServiceGrid({
   heading = true,
@@ -31,9 +32,10 @@ export function ServiceGrid({
                 <Link
                   href={`/services/${s.slug}`}
                   className="group relative flex h-full flex-col gap-4 rounded-[22px] p-7"
+                  style={accentVars(s.slug)}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="flex h-[54px] w-[54px] items-center justify-center rounded-[15px] bg-[var(--color-ink)] text-[var(--color-lime)]">
+                    <span className="flex h-[54px] w-[54px] items-center justify-center rounded-[15px] bg-[var(--accent)] text-white">
                       <Icon size={23} />
                     </span>
                     <ArrowUpRight size={20} className="text-[var(--color-ink-faint)] transition-colors group-hover:text-[var(--color-ink)]" />

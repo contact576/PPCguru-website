@@ -45,15 +45,18 @@ export function WasteCalculator() {
     applyCell(industrySlug, pid);
   }
 
+  // Revenue figures convert leads → customers via the industry close rate (so we
+  // never imply every lead is a full-value sale). Keeps "missed revenue" defensible.
+  const closeRate = getEconomics(industrySlug).closeRate || 0.3;
   const clicks = spend / Math.max(0.1, cpc);
   const leads = clicks * (conv / 100);
   const wastePct = conv < 2 ? 0.26 : conv < 4 ? 0.16 : conv < 6 ? 0.1 : 0.07;
   const wasted = spend * wastePct;
   const wastedClicks = wasted / Math.max(0.1, cpc);
-  const liftLeads = leads * 0.25;
-  const potentialRev = liftLeads * leadValue;
+  const liftLeads = leads * 0.2;
+  const potentialRev = liftLeads * closeRate * leadValue;
   const lostLeads = wastedClicks * (conv / 100) + liftLeads;
-  const missedRev = lostLeads * leadValue;
+  const missedRev = lostLeads * closeRate * leadValue;
   const track = risk(conv < 2 ? 78 : conv < 4 ? 52 : 28);
   const lp = risk(conv < 2.5 ? 70 : conv < 5 ? 45 : 22);
   const auditPriority = wastePct >= 0.2 ? "High — book audit this week" : wastePct >= 0.12 ? "Medium — within 2 weeks" : "Healthy — fine-tune & scale";
@@ -92,7 +95,7 @@ export function WasteCalculator() {
         {slider("Monthly ad spend", money(spend), 500, 50000, 500, spend, setSpend, true)}
         {slider("Avg CPC", "$" + cpc.toFixed(2), 0.5, 25, 0.5, cpc, setCpc)}
         {slider("Conversion rate", conv.toFixed(1) + "%", 0.5, 15, 0.5, conv, setConv)}
-        {slider("Avg lead / sale value", money(leadValue), 100, 5000, 100, leadValue, setLeadValue, true)}
+        {slider("Avg sale value", money(leadValue), 100, 5000, 100, leadValue, setLeadValue, true)}
       </div>
 
       <div style={{ height: 1, background: "rgba(241,239,227,.12)", margin: "24px 0" }} />

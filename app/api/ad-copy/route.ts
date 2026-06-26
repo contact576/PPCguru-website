@@ -6,30 +6,43 @@ export const maxDuration = 20;
 
 type AdVariation = { headlines: string[]; descriptions: string[] };
 
-function fallbackCopy(business: string, offer: string, platform: string): AdVariation[] {
+/** Trim to a length limit on a word boundary — never mid-word, no dangling
+ *  punctuation, no "..." stubs. */
+function fit(text: string, max: number): string {
+  const s = text.trim().replace(/\s+/g, " ");
+  if (s.length <= max) return s;
+  const cut = s.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  const trimmed = lastSpace > max * 0.5 ? cut.slice(0, lastSpace) : cut;
+  return trimmed.replace(/[\s,;:.!\-–—]+$/, "");
+}
+
+function fallbackCopy(business: string, offer: string, _platform: string): AdVariation[] {
   const b = business.trim() || "Your Business";
-  const o = offer.trim() || "our services";
-  const cap = (s: string) => s.length > 30 ? s.slice(0, 27) + "..." : s;
+  const o = (offer.trim() || "our services").toLowerCase();
+  const bShort = fit(b, 16);
+  const H = (s: string) => fit(s, 30); // Google RSA headline limit
+  const D = (s: string) => fit(s, 90); // Google RSA description limit
   return [
     {
-      headlines: [cap(`${b} — Book Today`), cap(`Get ${o} Fast`), cap(`Trusted Local Experts`)],
+      headlines: [H(`${bShort} — Book Today`), H("Trusted Local Experts"), H("Free Quote, Fast")],
       descriptions: [
-        `Looking for ${o}? ${b} delivers fast, reliable results. Free quote — book online or call today.`.slice(0, 90),
-        `Top-rated ${o} near you. Friendly service, fair pricing, real results. Get started now.`.slice(0, 90),
+        D(`Looking for ${o}? ${b} delivers reliable results. Free quote — book online or call today.`),
+        D(`Top-rated and local. Friendly service, fair pricing, real results. Get started today.`),
       ],
     },
     {
-      headlines: [cap(`Need ${o}?`), cap(`${b} Can Help`), cap(`Free Quote Today`)],
+      headlines: [H(`${bShort} Can Help`), H("Get a Free Quote"), H("Local & Trusted")],
       descriptions: [
-        `${b} makes ${o} easy. Trusted by local customers. Request your free quote in minutes.`.slice(0, 90),
-        `Fast, professional ${o} from ${b}. No obligation. See why locals choose us — book now.`.slice(0, 90),
+        D(`${b} makes ${o} simple. Trusted by local customers. Request your free quote in minutes.`),
+        D(`Fast, professional service from ${b}. No obligation — see why locals choose us.`),
       ],
     },
     {
-      headlines: [cap(`${o} Done Right`), cap(`Same-Week Service`), cap(`Call ${b} Now`)],
+      headlines: [H("Same-Week Service"), H(`${bShort} Near You`), H("Book Online Now")],
       descriptions: [
-        `Quality ${o} without the wait. ${b} — clear pricing, great reviews. Get your free estimate.`.slice(0, 90),
-        `Skip the guesswork. ${b} delivers ${o} you can count on. Book your appointment today.`.slice(0, 90),
+        D(`Quality work without the wait. ${b} — clear pricing, great reviews. Get your free estimate.`),
+        D(`Skip the guesswork. ${b} delivers results you can count on. Book your appointment today.`),
       ],
     },
   ];

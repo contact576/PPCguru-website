@@ -7,6 +7,7 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { SpotlightCard } from "@/components/ui/interactive";
 import { industries } from "@/lib/data/industries";
+import { accentVars } from "@/lib/data/themes";
 
 // A per-industry icon encodes meaning (the vertical), unlike a decorative 01/02/03 number.
 const ICONS: Record<string, LucideIcon> = {
@@ -45,12 +46,13 @@ export function IndustryGrid({ heading = true, limit }: { heading?: boolean; lim
               <Link
                 href={`/industries/${ind.slug}`}
                 className="group flex h-full flex-col gap-3 rounded-[18px] p-6"
+                style={accentVars(ind.slug)}
               >
                 <div className="flex items-start justify-between">
                   {(() => {
                     const Icon = ICONS[ind.slug] ?? Briefcase;
                     return (
-                      <span className="flex h-[46px] w-[46px] items-center justify-center rounded-[13px] bg-[#eef2dd] text-[#5f6f17]">
+                      <span className="flex h-[46px] w-[46px] items-center justify-center rounded-[13px] bg-[var(--accent)] text-white">
                         <Icon size={21} strokeWidth={2} />
                       </span>
                     );

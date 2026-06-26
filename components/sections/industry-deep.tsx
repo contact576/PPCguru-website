@@ -22,7 +22,7 @@ export function IndustryReality({ name, reality, benchmarks }: { name: string; r
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {benchmarks.map((b) => (
                 <div key={b.label} className="rounded-[16px] border border-[#dddbc9] bg-white p-5">
-                  <div className="head text-[22px] text-[var(--color-ink)]">{b.value}</div>
+                  <div className="head text-[22px] text-[var(--accent-strong,var(--color-ink))]">{b.value}</div>
                   <div className="mono mt-1 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{b.label}</div>
                 </div>
               ))}
@@ -63,7 +63,7 @@ export function IndustryHacks({ name, hacks }: { name: string; hacks: NonNullabl
         {hacks.map((h, i) => (
           <Reveal key={h} delay={(i % 2) * 0.05}>
             <div className="flex h-full items-start gap-3.5 rounded-[18px] border border-[#dddbc9] bg-white p-5">
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#eef2dd] text-[#5f6f17]"><Lightbulb size={14} /></span>
+              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft,#eef2dd)] text-[var(--accent-strong,#5f6f17)]"><Lightbulb size={14} /></span>
               <p className="text-[14.5px] text-[var(--color-ink-dim)]">{h}</p>
             </div>
           </Reveal>

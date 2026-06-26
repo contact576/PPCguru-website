@@ -17,7 +17,7 @@ export function AuditChecklist({ serviceName, groups }: { serviceName: string; g
               <ul className="mt-4 space-y-2.5">
                 {g.items.map((it) => (
                   <li key={it} className="flex items-start gap-2.5 text-[13.5px] text-[var(--color-ink-dim)]">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#eef2dd] text-[#5f6f17]"><Check size={11} /></span>
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft,#eef2dd)] text-[var(--accent-strong,#5f6f17)]"><Check size={11} /></span>
                     {it}
                   </li>
                 ))}
@@ -63,11 +63,11 @@ export function OptimizationCadence({ cadence }: { cadence: NonNullable<Service[
         {cols.map((c, i) => (
           <Reveal key={c.label} delay={i * 0.05}>
             <div className="h-full rounded-[20px] border border-[#dddbc9] bg-white p-6">
-              <div className="mono text-[11px] font-bold uppercase tracking-[.1em] text-[#5f6f17]">{c.label}</div>
+              <div className="mono text-[11px] font-bold uppercase tracking-[.1em] text-[var(--accent-strong,#5f6f17)]">{c.label}</div>
               <ul className="mt-4 space-y-2.5">
                 {c.items!.map((it) => (
                   <li key={it} className="flex items-start gap-2.5 text-[13.5px] text-[var(--color-ink-dim)]">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-lime)] ring-2 ring-[#cfe39a]" />
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent,var(--color-lime))] ring-2 ring-[color-mix(in_srgb,var(--accent,#9bd227)_35%,transparent)]" />
                     {it}
                   </li>
                 ))}
@@ -109,7 +109,7 @@ export function ToolStack({ groups }: { groups: NonNullable<Service["toolStack"]
         {groups.map((g, i) => (
           <Reveal key={g.group} delay={(i % 2) * 0.05}>
             <div className="h-full rounded-[20px] border border-[#dddbc9] bg-white p-6">
-              <div className="mono text-[11px] font-bold uppercase tracking-[.1em] text-[#5f6f17]">{g.group}</div>
+              <div className="mono text-[11px] font-bold uppercase tracking-[.1em] text-[var(--accent-strong,#5f6f17)]">{g.group}</div>
               <div className="mt-4 flex flex-wrap gap-2">
                 {g.tools.map((t) => (
                   <span key={t} className="mono rounded-full border border-[#dddbc9] bg-[#fbfaf2] px-3 py-1.5 text-[11.5px] font-medium text-[var(--color-ink-dim)]">{t}</span>

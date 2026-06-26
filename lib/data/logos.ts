@@ -71,16 +71,19 @@ export const logos: Logo[] = [
   { name: "Meta Business Partner", group: "credential", sub: "Partner program" },
   { name: "BBB Accredited", group: "credential", sub: "Accredited business" },
 
-  // ---- Brands we work with (footer carousel — client supplies real assets) ----
-  // [VERIFY] replace these placeholders with real client/brand logos + consent.
-  { name: "Northside Physio", group: "client" },
-  { name: "ComfortAir HVAC", group: "client" },
-  { name: "BrightSmile Dental", group: "client" },
-  { name: "Apex Renovations", group: "client" },
-  { name: "Maple Immigration", group: "client" },
-  { name: "Skyline Realty", group: "client" },
-  { name: "PureForm Med Spa", group: "client" },
-  { name: "FitHouse Studios", group: "client" },
+  // ---- Industries we serve (footer carousel) ----
+  // Honest category labels, NOT named clients. Swap to real client logos only
+  // with written consent — see CONTENT-TODO.md.
+  { name: "Physiotherapy & Rehab", group: "client" },
+  { name: "HVAC & Home Comfort", group: "client" },
+  { name: "Dental & Orthodontics", group: "client" },
+  { name: "Construction & Renovation", group: "client" },
+  { name: "Immigration Consulting", group: "client" },
+  { name: "Real Estate", group: "client" },
+  { name: "Med Spa & Aesthetics", group: "client" },
+  { name: "Law Firms", group: "client" },
+  { name: "Roofing", group: "client" },
+  { name: "Fitness & Gyms", group: "client" },
 ];
 
 export const logosByGroup = (group: LogoGroup) => logos.filter((l) => l.group === group);

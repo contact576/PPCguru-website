@@ -26,9 +26,9 @@ export function SiteFooter() {
   return (
     <footer id="footer" style={{ background: "#14170e", color: "#9a9b88" }}>
       <div style={{ maxWidth: 1480, margin: "0 auto", padding: "64px 20px 40px" }}>
-        {/* Brands we work with — carousel ([VERIFY] swap placeholders for real client logos) */}
+        {/* Industries we serve — carousel (swap to real client logos with consent) */}
         <div style={{ marginBottom: 56, paddingBottom: 48, borderBottom: "1px solid rgba(241,239,227,.08)" }}>
-          <div className="mono" style={{ fontSize: 10.5, fontWeight: 700, color: "#75766a", letterSpacing: ".12em", textTransform: "uppercase", textAlign: "center", marginBottom: 18 }}>Brands we work with</div>
+          <div className="mono" style={{ fontSize: 10.5, fontWeight: 700, color: "#75766a", letterSpacing: ".12em", textTransform: "uppercase", textAlign: "center", marginBottom: 18 }}>Industries we serve</div>
           <BrandMarquee />
         </div>
 
@@ -80,7 +80,7 @@ export function SiteFooter() {
               <a href="mailto:hello@ppcguru.ca" style={{ ...col }} className="hover:text-[#ceff3a]">hello@ppcguru.ca</a>
               <span style={{ color: "#75766a" }}>Brampton, ON · GTA</span>
               <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#ceff3a", fontWeight: 600 }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ceff3a" }} />WhatsApp us
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ceff3a" }} />Message us
               </Link>
               <Link href="/contact" className="mono" style={{ marginTop: 6, background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 11.5, letterSpacing: ".05em", textTransform: "uppercase", textAlign: "center", padding: 13, borderRadius: 12 }}>Book a call</Link>
             </div>

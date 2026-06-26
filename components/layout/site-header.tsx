@@ -99,7 +99,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden lg:flex" style={{ alignItems: "center", gap: 10 }}>
-          <Link href="/contact" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11, fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase", color: "#3a3a36", padding: "10px 13px", border: "1px solid #d8d6c6", borderRadius: 12 }}>WhatsApp</Link>
+          <Link href="/contact" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11, fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase", color: "#3a3a36", padding: "10px 13px", border: "1px solid #d8d6c6", borderRadius: 12 }}>Message us</Link>
           <Link href="/contact" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 11.5, letterSpacing: ".05em", textTransform: "uppercase", padding: "12px 18px", borderRadius: 12, whiteSpace: "nowrap", boxShadow: "0 6px 20px rgba(206,255,58,.28)" }}>Book a Growth Audit</Link>
         </div>
 
