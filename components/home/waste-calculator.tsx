@@ -73,9 +73,9 @@ export function WasteCalculator() {
   );
 
   return (
-    <div data-reveal style={{ background: "#1b1f12", border: "1px solid rgba(241,239,227,.12)", borderRadius: 26, padding: 30, boxShadow: "0 40px 90px rgba(0,0,0,.4)" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px 22px" }}>
-        <div style={{ gridColumn: "1 / -1", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+    <div data-reveal className="p-5 md:p-[30px]" style={{ background: "#1b1f12", border: "1px solid rgba(241,239,227,.12)", borderRadius: 26, boxShadow: "0 40px 90px rgba(0,0,0,.4)" }}>
+      <div className="grid grid-cols-1 gap-x-[22px] gap-y-[18px] sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2" style={{ gridColumn: "1 / -1" }}>
           <div>
             <label className="mono" style={{ ...labelStyle, display: "block", marginBottom: 8 }}>Industry</label>
             <select value={industrySlug} onChange={(e) => onIndustry(e.target.value)} style={fieldStyle}>
@@ -91,13 +91,13 @@ export function WasteCalculator() {
         </div>
         {slider("Monthly ad spend", money(spend), 500, 50000, 500, spend, setSpend, true)}
         {slider("Avg CPC", "$" + cpc.toFixed(2), 0.5, 25, 0.5, cpc, setCpc)}
-        {slider("Conversion rate", conv + "%", 0.5, 15, 0.5, conv, setConv)}
+        {slider("Conversion rate", conv.toFixed(1) + "%", 0.5, 15, 0.5, conv, setConv)}
         {slider("Avg lead / sale value", money(leadValue), 100, 5000, 100, leadValue, setLeadValue, true)}
       </div>
 
       <div style={{ height: 1, background: "rgba(241,239,227,.12)", margin: "24px 0" }} />
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div style={{ background: "rgba(239,68,68,.1)", border: "1px solid rgba(239,68,68,.3)", borderRadius: 16, padding: 16 }}>
           <div className="mono" style={{ fontSize: 9.5, color: "#fca5a5", fontWeight: 600, letterSpacing: ".06em", textTransform: "uppercase" }}>Wasted / mo</div>
           <div className="head" style={{ fontSize: 23, color: "#f1efe3", marginTop: 5 }}>{money(wasted)}</div>

@@ -97,7 +97,7 @@ export function AuditForm() {
           <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
             <input value={name} onChange={(e) => { setName(e.target.value); setError(""); }} placeholder="Full name" aria-label="Full name" style={input} />
             <input type="email" value={email} onChange={(e) => { setEmail(e.target.value); setError(""); }} placeholder="Business email" aria-label="Business email" style={input} />
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 11 }}>
+            <div className="grid grid-cols-1 gap-[11px] sm:grid-cols-2">
               <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone / WhatsApp" aria-label="Phone or WhatsApp" style={input} />
               <input value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="Website URL" aria-label="Website URL" style={input} />
             </div>
