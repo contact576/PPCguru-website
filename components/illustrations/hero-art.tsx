@@ -480,11 +480,11 @@ export function ContactArt() {
 }
 
 /* ── Parametric: industry hero (icon + ambient + stat) ────────────────────── */
-export function IndustryArt({ icon: Icon, name }: { icon: LucideIcon; name: string }) {
+export function IndustryArt({ icon: Icon, name, accent = OLIVE }: { icon: LucideIcon; name: string; accent?: string }) {
   return (
     <Art label={`${name} marketing`}>
-      {/* ambient rings */}
-      <g fill="none" stroke={INK} strokeWidth="1.5" strokeOpacity=".12">
+      {/* ambient rings (accent-tinted) */}
+      <g fill="none" stroke={accent} strokeWidth="1.5" strokeOpacity=".22">
         <ellipse cx="280" cy="220" rx="190" ry="150" />
         <ellipse cx="280" cy="220" rx="130" ry="100" />
       </g>
@@ -497,25 +497,26 @@ export function IndustryArt({ icon: Icon, name }: { icon: LucideIcon; name: stri
         </g>
         {/* label lines */}
         <rect x="276" y="146" width="130" height="14" rx="7" fill={INK} opacity=".75" />
-        <rect x="276" y="170" width="96" height="10" rx="5" fill={OLIVE} />
+        <rect x="276" y="170" width="96" height="10" rx="5" fill={accent} />
         <rect x="276" y="196" width="130" height="8" rx="4" fill={INK} opacity=".2" />
-        {/* mini chart */}
+        {/* mini chart (accent line) */}
         <rect x="160" y="252" width="246" height="68" rx="14" fill="#eef2dd" />
-        <path d="M180 304 L222 296 L264 300 L306 280 L348 268 L388 246" fill="none" stroke={OLIVE} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        {[180, 222, 264, 306, 348, 388].map((x, i) => <circle key={x} cx={x} cy={[304, 296, 300, 280, 268, 246][i]} r="3.5" fill={OLIVE} />)}
+        <path d="M180 304 L222 296 L264 300 L306 280 L348 268 L388 246" fill="none" stroke={accent} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        {[180, 222, 264, 306, 348, 388].map((x, i) => <circle key={x} cx={x} cy={[304, 296, 300, 280, 268, 246][i]} r="3.5" fill={accent} />)}
       </g>
       <Chip x={360} y={70} label="Qualified leads" value="↑ booked jobs" accent={LIME} />
-      <Chip x={70} y={300} label="Built for" value={name.length > 14 ? name.slice(0, 12) + "…" : name} accent={OLIVE} />
+      <Chip x={70} y={300} label="Built for" value={name.length > 14 ? name.slice(0, 12) + "…" : name} accent={accent} />
     </Art>
   );
 }
 
 /* ── Parametric: city × service hero (map pin signpost + service icon) ─────── */
-export function CityServiceArt({ icon: Icon, city }: { icon: LucideIcon; city: string }) {
+export function CityServiceArt({ icon: Icon, city, accent = OLIVE }: { icon: LucideIcon; city: string; accent?: string }) {
   return (
     <Art label={`Marketing in ${city}`}>
       <g filter="url(#softShadow)">
         <rect x="60" y="60" width="320" height="330" rx="24" fill="#eef2dd" stroke="#cfe39a" />
+        <circle cx="220" cy="225" r="150" fill="none" stroke={accent} strokeWidth="1.5" strokeOpacity=".25" />
         <path d="M60 250 H380 M150 60 V390 M270 60 V390" stroke="#cfe39a" strokeWidth="6" />
         <path d="M60 150 C 160 170, 280 130, 380 165" stroke="#fff" strokeWidth="8" fill="none" />
         {/* secondary pins */}

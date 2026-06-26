@@ -14,6 +14,7 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { ServiceProof } from "@/components/sections/service-proof";
 import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { getAccent } from "@/lib/data/themes";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -75,7 +76,8 @@ export default async function LocationServicePage({ params }: { params: Promise<
         title={<>{s.name} in <span className="text-gradient">{c.name}</span></>}
         intro={`We help ${c.name} service businesses ${s.verb} that turn into qualified leads and booked jobs. ${c.context}`}
         breadcrumbs={crumbs}
-        art={<CityServiceArt icon={fullService.icon} city={c.name} />}
+        accent={getAccent(service)}
+        art={<CityServiceArt icon={fullService.icon} city={c.name} accent={getAccent(service)} />}
       >
         <Magnetic>
           <Button href="/contact" size="lg">Get a free {c.name} audit <ArrowRight size={18} /></Button>

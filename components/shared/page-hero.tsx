@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Eyebrow } from "@/components/ui/badge";
+import { accentTint } from "@/lib/data/themes";
 
 export function Breadcrumbs({ items }: { items: { name: string; path: string }[] }) {
   return (
@@ -28,6 +29,7 @@ export function PageHero({
   breadcrumbs,
   children,
   art,
+  accent,
 }: {
   eyebrow?: string;
   title: React.ReactNode;
@@ -35,9 +37,18 @@ export function PageHero({
   breadcrumbs?: { name: string; path: string }[];
   children?: React.ReactNode;
   art?: React.ReactNode;
+  /** Per-vertical accent — washes the hero, colours the glow + top rule. */
+  accent?: string;
 }) {
+  const glow = accent
+    ? `radial-gradient(circle, color-mix(in srgb, ${accent} 24%, transparent), transparent 65%)`
+    : "radial-gradient(circle,rgba(206,255,58,.16),transparent 65%)";
   return (
-    <section className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-base)] pt-32 pb-16 md:pt-40 md:pb-20">
+    <section
+      className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-base)] pt-32 pb-16 md:pt-40 md:pb-20"
+      style={accent ? { background: accentTint(accent) } : undefined}
+    >
+      {accent ? <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: accent, opacity: 0.7 }} /> : null}
       {/* contour lines — mirrors the homepage hero backdrop */}
       <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" className="pointer-events-none absolute inset-0 h-full w-full" style={{ opacity: 0.5 }} aria-hidden>
         <g fill="none" stroke="#14170e" strokeWidth="1" strokeOpacity=".05">
@@ -49,7 +60,7 @@ export function PageHero({
       </svg>
       <div
         className="pointer-events-none absolute -right-24 -top-32 h-[460px] w-[460px]"
-        style={{ background: "radial-gradient(circle,rgba(206,255,58,.16),transparent 65%)" }}
+        style={{ background: glow }}
       />
       <div className="container-page relative">
         <div className={art ? "grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14" : ""}>

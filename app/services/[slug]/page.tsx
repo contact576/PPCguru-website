@@ -17,6 +17,7 @@ import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
+import { getAccent } from "@/lib/data/themes";
 
 // Which ad platform each service's calculator should default to.
 const SERVICE_PLATFORM: Record<string, PlatformId> = {
@@ -78,7 +79,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <JsonLd data={serviceSchema({ name: service.name, description: service.description, path: `/services/${slug}` })} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
-      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} art={SERVICE_ART[slug] ?? <ServicesArt />}>
+      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={SERVICE_ART[slug] ?? <ServicesArt />}>
         <Magnetic>
           <Button href="/contact" size="lg">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
         </Magnetic>

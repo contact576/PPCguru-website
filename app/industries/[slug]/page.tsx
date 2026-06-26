@@ -18,6 +18,7 @@ import { CaseStudyCards } from "@/components/sections/case-study-cards";
 import { IndustryReality, IndustryPlaybook, IndustryHacks, IndustryPlan90 } from "@/components/sections/industry-deep";
 import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
+import { getAccent } from "@/lib/data/themes";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -68,7 +69,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <JsonLd data={breadcrumbSchema(crumbs)} />
-      <PageHero eyebrow={`${ind.name} marketing`} title={ind.name} intro={ind.hero} breadcrumbs={crumbs} art={<IndustryArt icon={INDUSTRY_ICONS[ind.slug] ?? Briefcase} name={ind.name.split(" ")[0]} />}>
+      <PageHero eyebrow={`${ind.name} marketing`} title={ind.name} intro={ind.hero} breadcrumbs={crumbs} accent={getAccent(ind.slug)} art={<IndustryArt icon={INDUSTRY_ICONS[ind.slug] ?? Briefcase} name={ind.name.split(" ")[0]} accent={getAccent(ind.slug)} />}>
         <Magnetic>
           <Button href="/contact" size="lg">Get a free audit <ArrowRight size={18} /></Button>
         </Magnetic>
