@@ -18,6 +18,7 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent } from "@/lib/data/themes";
+import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
 
 // Which ad platform each service's calculator should default to.
 const SERVICE_PLATFORM: Record<string, PlatformId> = {
@@ -73,6 +74,17 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     { name: service.name, path: `/services/${slug}` },
   ];
   const firstWord = service.name.split(" ")[0];
+
+  // Bespoke flagship layout for the Google Ads showcase service.
+  if (slug === "google-ads") {
+    return (
+      <>
+        <JsonLd data={serviceSchema({ name: service.name, description: service.description, path: `/services/${slug}` })} />
+        <JsonLd data={breadcrumbSchema(crumbs)} />
+        <GoogleAdsFlagship service={service} />
+      </>
+    );
+  }
 
   return (
     <>

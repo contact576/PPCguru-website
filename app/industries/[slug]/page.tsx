@@ -19,6 +19,8 @@ import { IndustryReality, IndustryPlaybook, IndustryHacks, IndustryPlan90 } from
 import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
 import { getAccent } from "@/lib/data/themes";
+import { PhysiotherapyFlagship } from "@/components/flagship/physiotherapy";
+import { RealEstateFlagship } from "@/components/flagship/real-estate";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -65,6 +67,10 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
     { name: "Industries", path: "/industries" },
     { name: ind.name, path: `/industries/${slug}` },
   ];
+
+  // Bespoke flagship layouts for showcase verticals.
+  if (slug === "physiotherapy") return (<><JsonLd data={breadcrumbSchema(crumbs)} /><PhysiotherapyFlagship ind={ind} cases={cases} /></>);
+  if (slug === "real-estate") return (<><JsonLd data={breadcrumbSchema(crumbs)} /><RealEstateFlagship ind={ind} cases={cases} /></>);
 
   return (
     <>
