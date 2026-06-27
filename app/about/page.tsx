@@ -5,7 +5,7 @@ import { PartnerBadges } from "@/components/shared/partner-badges";
 import { StatBand } from "@/components/sections/stat-band";
 import { WhyUs } from "@/components/sections/why-us";
 import { CtaBlock } from "@/components/sections/cta-block";
-import { Reveal } from "@/components/ui/reveal";
+import { TeamSection } from "@/components/sections/team";
 import { AboutArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -25,11 +25,6 @@ export const metadata: Metadata = buildMetadata({
     "PPC Guru is a founder-led, AI-augmented Google Partner & Meta Business Partner agency in the GTA, helping service businesses turn ad spend into booked jobs.",
   path: "/about",
 });
-
-const founders = [
-  { name: "Jaydeep Patel", role: "Founder & CEO", bio: "Jaydeep brings Google-trained thinking and deep Google Ads experience — having reviewed or managed 1,000+ ad accounts and worked across a $20M+ quarterly ad portfolio. He founded PPC Guru to bring that enterprise-grade rigour to local service businesses. He also runs Millennial Events Corp, producing large-scale North American comedy and music tours across 30+ cities — real-world proof of large-scale audience-building." },
-  { name: "Dhaval Patel", role: "Co-founder", bio: "Dhaval leads delivery and operations, building the AI-augmented systems and playbooks that let PPC Guru produce audits, creative and reporting faster than a traditional agency — without cutting corners." },
-];
 
 export default function AboutPage() {
   return (
@@ -94,26 +89,34 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section className="bg-[var(--color-base-2)]">
-        <SectionHeading eyebrow="Leadership" title="Founder-led, hands-on" intro="Small enough to care, structured enough to deliver." />
-        <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
-          {founders.map((f, i) => (
-            <Reveal key={f.name} delay={i * 0.06}>
-              <div className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
-                <div className="flex items-center gap-4">
-                  <span className="head flex h-14 w-14 items-center justify-center rounded-[16px] bg-[var(--color-ink)] text-lg text-[var(--color-lime)]">
-                    {f.name.split(" ").map((n) => n[0]).join("")}
-                  </span>
-                  <div>
-                    <p className="head text-[17px] text-[var(--color-ink)]">{f.name}</p>
-                    <p className="mono text-xs uppercase tracking-[.08em] text-[#5f6f17]">{f.role}</p>
-                  </div>
-                </div>
-                <p className="mt-5 text-sm text-[var(--color-ink-dim)]">{f.bio}</p>
-              </div>
-            </Reveal>
+      {/* Meet the team — data-driven (lib/data/team.ts); scales as the roster grows */}
+      <TeamSection />
+
+      {/* How we protect your accounts & data — SMB-honest trust signals */}
+      <Section>
+        <SectionHeading
+          align="left"
+          eyebrow="Trust & data"
+          title={<>Your accounts and data stay <span className="text-gradient">yours</span></>}
+          intro="No black box, no hostage-taking. Here's how we keep the relationship safe and transparent."
+        />
+        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[
+            ["You own everything", "Your Google Ads, Meta and analytics accounts, data, history and billing stay in your name — you keep full access even if we part ways."],
+            ["Privacy-first", "We follow PIPEDA and handle only the data we need, as set out in our Privacy Policy. Need a data-processing agreement? Just ask."],
+            ["Tracking done right", "Clean GA4 / GTM / conversion tracking we set up and document — no shady pixels, no guesswork."],
+            ["No lock-in", "Month-to-month, transparent weekly reporting, and a clear explanation of every change. We earn the relationship."],
+          ].map(([t, b]) => (
+            <div key={t} className="h-full rounded-[18px] border border-[#dddbc9] bg-[#fbfaf2] p-6">
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--color-ink)] text-[var(--color-lime)] text-sm font-bold">✓</div>
+              <p className="head text-[15px] text-[var(--color-ink)]">{t}</p>
+              <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{b}</p>
+            </div>
           ))}
         </div>
+        <p className="mt-5 text-xs text-[var(--color-ink-faint)]">
+          See our <a href="/privacy" className="underline hover:text-[var(--color-ink)]">Privacy Policy</a> for full details on how we collect, use and protect data.
+        </p>
       </Section>
 
       {/* Why most agencies fail */}
