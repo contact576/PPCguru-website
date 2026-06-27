@@ -15,7 +15,7 @@ import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { performanceStats } from "@/lib/data/performance-stats";
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
-const WRAP = "mx-auto max-w-[1480px] px-5 py-20 md:px-8 md:py-24";
+const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
 const ink = "#14170e", cream = "#f1efe3", lime = "#ceff3a", olive = "#6f7d22", coral = "#f26a2b";
 
 function Eyebrow({ children, color = olive }: { children: React.ReactNode; color?: string }) {
@@ -133,17 +133,17 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Real, client-confirmed track record (founder experience + agency aggregate). */}
+          {/* Real, client-confirmed aggregate results — three headline numbers, not a wall of stats. */}
           <div data-reveal style={{ marginTop: 48, paddingTop: 40, borderTop: "1px solid #dddbc9" }}>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
-              {performanceStats.map((s) => (
+            <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-x-8">
+              {performanceStats.filter((s) => s.proofType === "agency_aggregate").map((s) => (
                 <div key={s.label} style={{ textAlign: "center" }}>
-                  <div className="head" style={{ fontSize: "clamp(1.7rem,3vw,2.4rem)", color: ink, lineHeight: 1 }}>{s.value}</div>
-                  <div style={{ fontSize: 12, color: "#54564a", lineHeight: 1.4, marginTop: 8 }}>{s.label}</div>
+                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}>{s.value}</div>
+                  <div style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.4, marginTop: 10 }}>{s.label}</div>
                 </div>
               ))}
             </div>
-            <p style={{ textAlign: "center", fontSize: 11.5, color: "#8a8c72", marginTop: 22, letterSpacing: ".02em" }}>Founder track record &amp; PPC Guru client aggregate — not a guarantee of individual results.</p>
+            <p style={{ textAlign: "center", fontSize: 11.5, color: "#8a8c72", marginTop: 26, letterSpacing: ".02em" }}>PPC Guru client aggregate — not a guarantee of individual results.</p>
           </div>
         </div>
       </section>
