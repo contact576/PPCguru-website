@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { nav, type NavItem } from "@/lib/site-config";
+import { Logo } from "@/components/shared/logo";
 
 /**
  * Header — sticky, frosts to cream on scroll. Dropdown-aware: parents with
@@ -52,10 +53,7 @@ export function SiteHeader() {
       }}
     >
       <div style={{ maxWidth: 1480, margin: "0 auto", padding: "0 20px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
-        <Link href="/" aria-label="PPC Guru — home" style={{ display: "flex", flexDirection: "column", lineHeight: 0.8 }}>
-          <span className="serif" style={{ fontSize: 20, color: "#14170e", letterSpacing: ".02em" }}>PPC</span>
-          <span className="grotesk" style={{ fontWeight: 900, fontSize: 17, letterSpacing: "-.01em", color: "#14170e", textTransform: "uppercase" }}>Guru<span style={{ color: "#6f7d22" }}>.ca</span></span>
-        </Link>
+        <Logo href="/" variant="dark" size={38} />
 
         {/* Desktop nav */}
         <nav className="mono hidden lg:flex" aria-label="Primary" style={{ alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase" }}>
@@ -64,7 +62,7 @@ export function SiteHeader() {
             const color = active ? "#6f7d22" : "#3a3a36";
             if (!item.children) {
               return (
-                <Link key={item.label} href={item.href} className="transition-colors hover:text-[#6f7d22]" style={{ color, padding: "10px 12px", borderRadius: 10 }}>
+                <Link key={item.label} href={item.href} className="nav-underline transition-colors hover:text-[#6f7d22]" style={{ color, padding: "10px 12px", borderRadius: 10 }}>
                   {item.label}
                 </Link>
               );
@@ -74,7 +72,7 @@ export function SiteHeader() {
                 <Link
                   href={item.href}
                   aria-haspopup="true"
-                  className="transition-colors hover:text-[#6f7d22] group-focus-within:text-[#6f7d22]"
+                  className="nav-underline transition-colors hover:text-[#6f7d22] group-focus-within:text-[#6f7d22]"
                   style={{ color, padding: "10px 12px", borderRadius: 10, display: "inline-flex", alignItems: "center", gap: 5 }}
                 >
                   {item.label}
@@ -104,7 +102,7 @@ export function SiteHeader() {
 
         <div className="hidden lg:flex" style={{ alignItems: "center", gap: 10 }}>
           <Link href="/contact" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11, fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase", color: "#3a3a36", padding: "10px 13px", border: "1px solid #d8d6c6", borderRadius: 12 }}>Message us</Link>
-          <Link href="/contact" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 11.5, letterSpacing: ".05em", textTransform: "uppercase", padding: "12px 18px", borderRadius: 12, whiteSpace: "nowrap", boxShadow: "0 6px 20px rgba(206,255,58,.28)" }}>Book a Growth Audit</Link>
+          <Link href="/contact" className="mono btn-shine transition-transform hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 11.5, letterSpacing: ".05em", textTransform: "uppercase", padding: "12px 18px", borderRadius: 12, whiteSpace: "nowrap", boxShadow: "0 6px 20px rgba(206,255,58,.28)" }}>Book a Growth Audit</Link>
         </div>
 
         <button onClick={() => setOpen((v) => !v)} aria-label="Open menu" aria-expanded={open} className="lg:hidden" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, border: "1px solid #c4c2b0", background: "transparent", cursor: "pointer", color: "#14170e", borderRadius: 13 }}>
@@ -117,10 +115,7 @@ export function SiteHeader() {
         <div style={{ position: "fixed", inset: 0, height: "100dvh", zIndex: 90, background: "rgba(10,12,7,.6)", backdropFilter: "blur(4px)" }} onClick={() => setOpen(false)}>
           <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "min(92vw,380px)", height: "100dvh", background: "#f1efe3", borderLeft: "1px solid #dddbc9", padding: "22px 20px", display: "flex", flexDirection: "column", gap: 2, overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-              <div style={{ lineHeight: 0.8 }}>
-                <div className="serif" style={{ fontSize: 19 }}>PPC</div>
-                <div className="grotesk" style={{ fontWeight: 900, fontSize: 16, textTransform: "uppercase" }}>Guru<span style={{ color: "#6f7d22" }}>.ca</span></div>
-              </div>
+              <Logo variant="dark" size={36} />
               <button onClick={() => setOpen(false)} aria-label="Close menu" style={{ border: "1px solid #c4c2b0", background: "transparent", width: 44, height: 44, borderRadius: 12, fontSize: 17, cursor: "pointer", color: "#14170e" }}>✕</button>
             </div>
 

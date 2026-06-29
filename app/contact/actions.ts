@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { siteConfig } from "@/lib/site-config";
+import { saveLead } from "@/lib/supabase";
 
 const schema = z.object({
   name: z.string().min(2, "Please enter your name.").max(100),
@@ -57,7 +58,21 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     return { ok: false, message: "Spam check failed. Please try again." };
   }
 
+  // Persist to Supabase first (best-effort) so a request is never lost.
+  const stored = await saveLead({
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    company: data.company,
+    source: "contact",
+    budget: data.budget,
+    service: data.service,
+    message: data.message,
+  });
+
   // Deliver via Resend if configured; otherwise log (dev/no-key fallback).
+  let emailed = false;
+  let emailError = false;
   const resendKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL || siteConfig.contact.email;
   if (resendKey) {
@@ -80,11 +95,17 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
           data.message,
         ].join("\n"),
       });
+      emailed = true;
     } catch {
-      return { ok: false, message: "We couldn't send your message right now. Please email us directly." };
+      emailError = true;
     }
-  } else {
-    console.info("[contact] (no RESEND_API_KEY) submission:", { ...data, turnstileToken: undefined });
+  }
+
+  if (emailError && !stored) {
+    return { ok: false, message: "We couldn't send your message right now. Please email us directly." };
+  }
+  if (!emailed && !stored) {
+    console.info("[contact] (no RESEND_API_KEY / no Supabase) submission:", { ...data, turnstileToken: undefined });
   }
 
   return { ok: true, message: "Thanks — we've received your request and will be in touch within one business day." };

@@ -2,6 +2,7 @@ import { Check } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { SpotlightCard } from "@/components/ui/interactive";
+import { BrandIcon } from "@/components/shared/brand-logos";
 import type { Service } from "@/lib/data/services";
 
 /** "What we audit before optimization" — grouped checklist. */
@@ -112,7 +113,9 @@ export function ToolStack({ groups }: { groups: NonNullable<Service["toolStack"]
               <div className="mono text-[11px] font-bold uppercase tracking-[.1em] text-[var(--accent-strong,#5f6f17)]">{g.group}</div>
               <div className="mt-4 flex flex-wrap gap-2">
                 {g.tools.map((t) => (
-                  <span key={t} className="mono rounded-full border border-[#dddbc9] bg-[#fbfaf2] px-3 py-1.5 text-[11.5px] font-medium text-[var(--color-ink-dim)]">{t}</span>
+                  <span key={t} className="mono inline-flex items-center gap-1.5 rounded-full border border-[#dddbc9] bg-[#fbfaf2] py-1 pl-1 pr-3 text-[11.5px] font-medium text-[var(--color-ink-dim)]">
+                    <BrandIcon name={t} size={18} radius={5} />{t}
+                  </span>
                 ))}
               </div>
             </div>

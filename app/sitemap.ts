@@ -7,7 +7,7 @@ import { caseStudies } from "@/lib/data/case-studies";
 import { tools } from "@/lib/data/tools";
 import { getAllPostSlugs } from "@/lib/blog";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url;
   const now = new Date();
 
@@ -27,7 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const industryRoutes = industries.map((i) => ({ url: `${base}/industries/${i.slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 }));
   const locationRoutes = allLocationParams().map((p) => ({ url: `${base}/${p.city}/${p.service}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.6 }));
   const caseRoutes = caseStudies.map((c) => ({ url: `${base}/results/${c.slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.6 }));
-  const blogRoutes = getAllPostSlugs().map((slug) => ({ url: `${base}/blog/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.6 }));
+  const blogRoutes = (await getAllPostSlugs()).map((slug) => ({ url: `${base}/blog/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.6 }));
 
   return [...staticRoutes, ...toolRoutes, ...serviceRoutes, ...industryRoutes, ...locationRoutes, ...caseRoutes, ...blogRoutes];
 }

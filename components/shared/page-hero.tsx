@@ -2,6 +2,10 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Eyebrow } from "@/components/ui/badge";
 import { accentTint } from "@/lib/data/themes";
+import { HeroVectors } from "@/components/shared/hero-vectors";
+import { Reveal } from "@/components/ui/reveal";
+import { SplitHeading } from "@/components/ui/split-heading";
+import { ScrollParallax } from "@/components/shared/scroll-parallax";
 
 export function Breadcrumbs({ items }: { items: { name: string; path: string }[] }) {
   return (
@@ -53,15 +57,10 @@ export function PageHero({
       style={heroBg ? { background: heroBg } : undefined}
     >
       {accent ? <div className="pointer-events-none absolute inset-x-0 top-0 h-[4px]" style={{ background: accent }} /> : null}
-      {/* contour lines — mirrors the homepage hero backdrop */}
-      <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" className="pointer-events-none absolute inset-0 h-full w-full" style={{ opacity: 0.5 }} aria-hidden>
-        <g fill="none" stroke="#14170e" strokeWidth="1" strokeOpacity=".05">
-          <path d="M-50 180 C 200 120, 380 260, 560 200 S 920 90, 1260 220" />
-          <path d="M-50 280 C 220 220, 400 360, 600 300 S 940 190, 1260 320" />
-          <path d="M-50 380 C 240 320, 420 460, 640 400 S 980 290, 1260 420" />
-          <ellipse cx="640" cy="340" rx="360" ry="210" strokeOpacity=".05" />
-        </g>
-      </svg>
+      {/* layered vector backdrop — accent-aware, animated, GSAP parallax, reduced-motion safe */}
+      <ScrollParallax speed={18} className="pointer-events-none absolute inset-x-0 -inset-y-[14%]">
+        <HeroVectors accent={accent} animate idSeed="page-hero" />
+      </ScrollParallax>
       <div
         className="pointer-events-none absolute -right-24 -top-32 h-[460px] w-[460px]"
         style={{ background: glow }}
@@ -69,13 +68,13 @@ export function PageHero({
       <div className="container-page relative">
         <div className={art ? "grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14" : ""}>
           <div>
-            {breadcrumbs ? <div className="mb-6"><Breadcrumbs items={breadcrumbs} /></div> : null}
-            {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-            <h1 className="head mt-5 max-w-4xl text-[clamp(2.6rem,5.5vw,4.6rem)] text-balance">{title}</h1>
-            {intro ? <p className="mt-6 max-w-2xl text-lg text-[var(--color-ink-dim)] md:text-xl">{intro}</p> : null}
-            {children ? <div className="mt-8">{children}</div> : null}
+            {breadcrumbs ? <Reveal className="mb-6"><Breadcrumbs items={breadcrumbs} /></Reveal> : null}
+            {eyebrow ? <Reveal delay={0.05}><Eyebrow>{eyebrow}</Eyebrow></Reveal> : null}
+            <SplitHeading as="h1" className="head mt-5 max-w-4xl text-[clamp(2.6rem,5.5vw,4.6rem)] text-balance">{title}</SplitHeading>
+            {intro ? <Reveal delay={0.2}><p className="mt-6 max-w-2xl text-lg text-[var(--color-ink-dim)] md:text-xl">{intro}</p></Reveal> : null}
+            {children ? <Reveal delay={0.28}><div className="mt-8">{children}</div></Reveal> : null}
           </div>
-          {art ? <div className="relative mx-auto w-full max-w-[560px] lg:mx-0">{art}</div> : null}
+          {art ? <Reveal delay={0.18} scale className="relative mx-auto w-full max-w-[560px] lg:mx-0">{art}</Reveal> : null}
         </div>
       </div>
     </section>

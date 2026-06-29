@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { SpotlightCard } from "@/components/ui/interactive";
+import { AnimatedStat } from "@/components/ui/animated-stat";
 import { getCaseStudies, REPRESENTATIVE_DISCLOSURE } from "@/lib/data/case-studies";
 
 /**
@@ -36,7 +37,7 @@ export function ServiceProof({
         {proofStats.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.06}>
             <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
-              <div className="head text-[clamp(1.9rem,3.6vw,2.7rem)] leading-none text-[var(--color-ink)]">{s.value}</div>
+              <div className="head text-[clamp(1.9rem,3.6vw,2.7rem)] leading-none text-[var(--color-ink)]"><AnimatedStat value={s.value} /></div>
               <p className="mono mt-3 text-[11px] uppercase leading-relaxed tracking-[.04em] text-[var(--color-ink-dim)]">{s.label}</p>
             </SpotlightCard>
           </Reveal>
@@ -57,7 +58,7 @@ export function ServiceProof({
                   <span className="mono text-[10px] tracking-[.04em] text-[var(--color-ink-faint)]">{c.location}</span>
                 </div>
                 <div className="mt-5">
-                  <div className="head text-[46px] leading-none text-[var(--color-ink)]">{c.headlineMetric.value}</div>
+                  <div className="head text-[46px] leading-none text-[var(--color-ink)]"><AnimatedStat value={c.headlineMetric.value} /></div>
                   <p className="mono mt-1.5 text-[11.5px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{c.headlineMetric.label}</p>
                 </div>
                 <p className="mt-5 flex-1 text-sm text-[var(--color-ink-dim)]">{c.client} · {c.service}</p>

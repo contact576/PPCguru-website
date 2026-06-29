@@ -11,6 +11,7 @@ import { OfferPopup } from "@/components/shared/offer-popup";
 import { CookieConsent } from "@/components/shared/cookie-consent";
 import { CursorGlow } from "@/components/ui/interactive";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
+import { ChromeGate } from "@/components/layout/chrome-gate";
 
 // Display + body workhorse — Archivo (the design's primary grotesk).
 const archivo = Archivo({
@@ -75,16 +76,20 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${dmSerif.variable} ${jetbrains.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${archivo.variable} ${dmSerif.variable} ${jetbrains.variable}`}>
       <body className="min-h-screen antialiased">
         <OrganizationJsonLd />
         <CursorGlow />
         <SmoothScrollProvider>
-          <AnnouncementBar />
-          <SiteHeader />
+          <ChromeGate>
+            <AnnouncementBar />
+            <SiteHeader />
+          </ChromeGate>
           <main id="main">{children}</main>
-          <SiteFooter />
-          <FloatingCta />
+          <ChromeGate>
+            <SiteFooter />
+            <FloatingCta />
+          </ChromeGate>
           <OfferPopup />
           <CookieConsent />
           {/*

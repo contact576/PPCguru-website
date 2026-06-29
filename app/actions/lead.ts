@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { siteConfig } from "@/lib/site-config";
+import { saveLead } from "@/lib/supabase";
 
 /**
  * Shared lead-capture action used by the pop-up funnel and the gated tools.
@@ -43,6 +44,18 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
   // Honeypot triggered → silently accept.
   if (data.company_website) return { ok: true, message: "Thanks — we'll be in touch shortly." };
 
+  // Persist to Supabase first (best-effort) so a lead is never lost even if email fails.
+  const stored = await saveLead({
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    website: data.website,
+    source: data.source || "site",
+    message: data.detail,
+  });
+
+  let emailed = false;
+  let emailError = false;
   const resendKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL || siteConfig.contact.email;
   if (resendKey) {
@@ -63,11 +76,18 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
           data.detail ? `\n${data.detail}` : "",
         ].join("\n"),
       });
+      emailed = true;
     } catch {
-      return { ok: false, message: "We couldn't submit that right now. Please email us directly." };
+      emailError = true;
     }
-  } else {
-    console.info("[lead] (no RESEND_API_KEY) capture:", data);
+  }
+
+  // Only surface an error if we both failed to email AND failed to store it.
+  if (emailError && !stored) {
+    return { ok: false, message: "We couldn't submit that right now. Please email us directly." };
+  }
+  if (!emailed && !stored) {
+    console.info("[lead] (no RESEND_API_KEY / no Supabase) capture:", data);
   }
 
   return { ok: true, message: "Thanks — your report is unlocked and we'll be in touch shortly." };

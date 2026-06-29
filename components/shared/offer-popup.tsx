@@ -7,7 +7,7 @@ import { LeadForm } from "@/components/shared/lead-form";
 import { offers } from "@/lib/data/offers";
 
 // Pages where an arrival pop-up would cover the primary task — never interrupt these.
-const SUPPRESS_ON = ["/contact", "/results", "/tools"];
+const SUPPRESS_ON = ["/contact", "/results", "/tools", "/admin"];
 
 /**
  * Two-step lead-capture funnel:

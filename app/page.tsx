@@ -5,7 +5,7 @@ import { WasteCalculator } from "@/components/home/waste-calculator";
 import { FaqList } from "@/components/home/faq-list";
 import { AuditForm } from "@/components/home/audit-form";
 import {
-  tickerLoop, proofItems, proofPoints, sprintWeeks, homeServices, growthLoop, aiTasks, humanTasks,
+  tickerLoop, proofItems, proofPoints, sprintWeeks, homeServices, aiTasks, humanTasks,
   cmpBad, cmpGood, rptDeliverables, rptKpis, homeCases, homeIndustries,
   homePricing,
 } from "@/lib/data/home";
@@ -13,6 +13,13 @@ import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { ToolsOs } from "@/components/home/tools-os";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { performanceStats } from "@/lib/data/performance-stats";
+import { HeroVectors } from "@/components/shared/hero-vectors";
+import { AnimatedStat } from "@/components/ui/animated-stat";
+import { ScrollProgress } from "@/components/home/scroll-progress";
+import { ScrollParallax } from "@/components/shared/scroll-parallax";
+import { GsapHeroReveal } from "@/components/home/gsap-hero";
+import { GrowthLoopPinned } from "@/components/home/growth-loop-pinned";
+import { GsapText } from "@/components/shared/gsap-text";
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
@@ -38,20 +45,14 @@ function Em({ children, color = "#5d6b1a" }: { children: React.ReactNode; color?
 export default function HomePage() {
   return (
     <div style={{ position: "relative", overflowX: "hidden", background: cream }}>
+      <ScrollProgress />
       <RevealInit />
 
       {/* ── HERO ───────────────────────────────────────────────────────────── */}
       <section id="top" style={{ position: "relative", background: cream, overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.5 }} aria-hidden>
-          <g fill="none" stroke={ink} strokeWidth="1" strokeOpacity=".05">
-            <path d="M-50 180 C 200 120, 380 260, 560 200 S 920 90, 1260 220" />
-            <path d="M-50 260 C 220 200, 400 340, 600 280 S 940 170, 1260 300" />
-            <path d="M-50 360 C 240 300, 420 440, 640 380 S 980 270, 1260 400" />
-            <path d="M-50 460 C 260 400, 440 540, 680 480 S 1020 370, 1260 500" />
-            <ellipse cx="600" cy="360" rx="300" ry="180" strokeOpacity=".06" />
-            <ellipse cx="600" cy="360" rx="420" ry="250" strokeOpacity=".05" />
-          </g>
-        </svg>
+        <ScrollParallax speed={20} className="pointer-events-none absolute inset-x-0 -inset-y-[14%]">
+          <HeroVectors variant="feature" animate idSeed="home-hero" />
+        </ScrollParallax>
         <div style={{ position: "absolute", top: -140, right: -100, width: 520, height: 520, background: "radial-gradient(circle,rgba(206,255,58,.1),transparent 65%)" }} />
         {/* kinetic marquee behind */}
         <div style={{ position: "absolute", top: 120, left: 0, right: 0, overflow: "hidden", opacity: 0.16, pointerEvents: "none" }} aria-hidden>
@@ -65,7 +66,7 @@ export default function HomePage() {
         </div>
 
         <div className="mx-auto grid max-w-[1480px] items-center gap-11 px-5 py-[88px] md:px-8 md:py-[96px] lg:grid-cols-[1.05fr_1fr] lg:gap-14" style={{ position: "relative" }}>
-          <div>
+          <GsapHeroReveal>
             <div className="eyebrow" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#4f5f14", border: "1px solid rgba(95,111,23,.4)", padding: "8px 14px", borderRadius: 999, marginBottom: 30 }}>
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: lime, display: "inline-block", boxShadow: `0 0 8px ${lime}` }} />
               GTA&rsquo;s AI-first Google &amp; Meta Partner agency · Canada &amp; USA
@@ -84,7 +85,7 @@ export default function HomePage() {
               We audit, rebuild and manage Google Ads, Meta &amp; SEO so your budget turns into <strong style={{ color: ink, fontWeight: 700 }}>qualified leads, booked jobs and revenue.</strong> Find the leaks before you scale.
             </p>
             <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 34 }}>
-              <Link href="#audit" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Get Free PPC Audit →</Link>
+              <Link href="#audit" className="mono btn-shine transition-transform hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Get Free PPC Audit →</Link>
               <Link href="#calculator" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 26px", borderRadius: 14 }}>Try ROI Calculator</Link>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 40, flexWrap: "wrap" }}>
@@ -97,7 +98,7 @@ export default function HomePage() {
               </svg>
               <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.7 }}>Google &amp; Meta Partner<br />Performance marketing · GTA</div>
             </div>
-          </div>
+          </GsapHeroReveal>
           <HeroDashboard />
         </div>
       </section>
@@ -120,7 +121,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-[18px] sm:grid-cols-2">
             {proofItems.map((it) => (
-              <div key={it.title} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28 }}>
+              <div key={it.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28 }}>
                 <div style={{ width: 52, height: 52, borderRadius: 14, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 23, marginBottom: 18 }}>{it.icon}</div>
                 <div className="head" style={{ fontSize: 20, marginBottom: 8 }}>{it.title}</div>
                 <div style={{ fontSize: 14.5, color: "#54564a", lineHeight: 1.55 }}>{it.desc}</div>
@@ -138,7 +139,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-x-8">
               {performanceStats.filter((s) => s.proofType === "agency_aggregate").map((s) => (
                 <div key={s.label} style={{ textAlign: "center" }}>
-                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}>{s.value}</div>
+                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}><AnimatedStat value={s.value} /></div>
                   <div style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.4, marginTop: 10 }}>{s.label}</div>
                 </div>
               ))}
@@ -150,7 +151,7 @@ export default function HomePage() {
 
       {/* ── 30-DAY SPRINT ──────────────────────────────────────────────────── */}
       <section id="sprint" style={{ background: "#f7f5ea", color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <div style={{ position: "absolute", top: -120, left: -80, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.08),transparent 65%)" }} />
+        <div className="ambient-glow" style={{ position: "absolute", top: -120, left: -80, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.08),transparent 65%)" }} />
         <div className={WRAP} style={{ position: "relative" }}>
           <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.2fr]">
             <div data-reveal>
@@ -212,7 +213,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
             {homeServices.map((s) => (
-              <div key={s.title} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column" }}>
+              <div key={s.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
                   <span style={{ width: 54, height: 54, borderRadius: 15, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>{s.icon}</span>
                   <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72", letterSpacing: ".08em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "5px 9px", borderRadius: 7 }}>{s.bestFor}</span>
@@ -231,27 +232,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── GROWTH LOOP ────────────────────────────────────────────────────── */}
-      <section id="process" style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -100, right: -60, width: 380, height: 380, background: "radial-gradient(circle,rgba(206,255,58,.07),transparent 65%)" }} />
-        <div className={WRAP} style={{ position: "relative" }}>
-          <div data-reveal style={{ maxWidth: 720, margin: "0 auto 52px", textAlign: "center" }}>
-            <Eyebrow>How it works</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>The Guru <Em>Growth</Em> Loop</h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>A simple, repeatable loop that compounds results month over month — powered by our AI-augmented workflow.</p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {growthLoop.map((l) => (
-              <div key={l.num} data-reveal style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 22, padding: 26 }}>
-                <div className="head" style={{ fontSize: 42, color: "rgba(111,125,34,.3)", marginBottom: 14 }}>{l.num}</div>
-                <div style={{ width: 46, height: 46, borderRadius: 12, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 21, marginBottom: 16 }}>{l.icon}</div>
-                <div className="head" style={{ fontSize: 19, marginBottom: 9 }}>{l.title}</div>
-                <div style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.55 }}>{l.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── GROWTH LOOP (pinned, scroll-scrubbed) ──────────────────────────── */}
+      <GrowthLoopPinned />
 
       {/* ── AI EXECUTION ───────────────────────────────────────────────────── */}
       <section id="ai" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
@@ -259,7 +241,7 @@ export default function HomePage() {
           <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px" }}>
             <Eyebrow>AI-augmented, human-directed</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>AI-augmented execution.<br /><Em>Human-led</Em> strategy.</h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 560 }}>A command center where AI does the heavy lifting and strategists own every decision that touches your budget.</p>
+            <GsapText mode="scrub" style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 560 }}>A command center where AI does the heavy lifting and strategists own every decision that touches your budget.</GsapText>
           </div>
           <div className="grid gap-[18px] lg:grid-cols-2">
             <div data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 24, padding: 28 }}>
@@ -297,7 +279,7 @@ export default function HomePage() {
           <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px", textAlign: "center" }}>
             <Eyebrow>Why PPC Guru</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Typical agency vs <Em>the Guru way</Em></h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>The difference isn&rsquo;t just better bidding — it&rsquo;s transparency, ownership, and optimizing for revenue.</p>
+            <GsapText mode="scrub" style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>The difference isn&rsquo;t just better bidding — it&rsquo;s transparency, ownership, and optimizing for revenue.</GsapText>
           </div>
           <div className="grid gap-[18px] md:grid-cols-2">
             <div data-reveal style={{ background: "#fff", border: "1px solid #f0d4c4", borderRadius: 24, padding: 30 }}>
@@ -321,7 +303,7 @@ export default function HomePage() {
 
       {/* ── REPORTING ──────────────────────────────────────────────────────── */}
       <section style={{ background: "#f7f5ea", color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <div style={{ position: "absolute", bottom: -160, left: "8%", width: 480, height: 480, background: "radial-gradient(circle,rgba(206,255,58,.1),transparent 65%)" }} />
+        <div className="ambient-glow" style={{ position: "absolute", bottom: -160, left: "8%", width: 480, height: 480, background: "radial-gradient(circle,rgba(206,255,58,.1),transparent 65%)" }} />
         <div className={WRAP} style={{ position: "relative" }}>
           <div className="grid items-center gap-12 lg:grid-cols-[0.84fr_1.16fr]">
             <div data-reveal>
@@ -374,7 +356,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3" style={{ marginTop: 40 }}>
             {homeCases.map((c) => (
-              <div key={c.industry} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 26, display: "flex", flexDirection: "column" }}>
+              <div key={c.industry} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 26, display: "flex", flexDirection: "column" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
                   <span className="mono" style={{ fontSize: 10, fontWeight: 600, color: ink, background: lime, padding: "5px 10px", borderRadius: 7, letterSpacing: ".05em", textTransform: "uppercase" }}>{c.industry}</span>
                   <span className="mono" style={{ fontSize: 10, color: "#8a8c72", letterSpacing: ".04em" }}>{c.location}</span>
@@ -475,7 +457,7 @@ export default function HomePage() {
 
       {/* ── AUDIT FORM ─────────────────────────────────────────────────────── */}
       <section id="audit" style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -120, right: -90, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.2),transparent 65%)" }} />
+        <div className="ambient-glow" style={{ position: "absolute", top: -120, right: -90, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.2),transparent 65%)" }} />
         <div className="mx-auto max-w-[1360px] px-5 py-20 md:px-8 md:py-24" style={{ position: "relative" }}>
           <div className="grid items-start gap-12 lg:grid-cols-[0.82fr_1.18fr]">
             <div data-reveal>
@@ -501,7 +483,7 @@ export default function HomePage() {
         </svg>
         <div style={{ position: "absolute", bottom: -160, left: "50%", transform: "translateX(-50%)", width: 680, height: 420, background: "radial-gradient(circle,rgba(255,255,255,.45),transparent 65%)" }} />
         <div data-reveal className="mx-auto max-w-[940px] px-5 py-24 text-center md:px-8" style={{ position: "relative" }}>
-          <h2 className="head" style={{ fontSize: "clamp(2.6rem,6vw,5rem)" }}>Turn ad spend into<br /><Em>booked jobs</Em></h2>
+          <GsapText as="h2" mode="chars" className="head" style={{ fontSize: "clamp(2.6rem,6vw,5rem)" }}>Turn ad spend into<br /><Em>booked jobs</Em></GsapText>
           <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>Start with a free PPC audit or claim the 30-Day Growth Sprint. You&rsquo;ll get clear next steps before committing to a long-term plan.</p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 40 }}>
             <Link href="#audit" className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>Get Free PPC Audit</Link>

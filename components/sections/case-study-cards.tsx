@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { SpotlightCard } from "@/components/ui/interactive";
+import { AnimatedStat } from "@/components/ui/animated-stat";
 import { caseStudies, type CaseStudy } from "@/lib/data/case-studies";
 
 export function CaseStudyCards({
@@ -39,7 +40,7 @@ export function CaseStudyCards({
                 <span className="mono text-[10px] tracking-[.04em] text-[var(--color-ink-faint)]">{c.location}</span>
               </div>
               <div className="mt-5">
-                <div className="head text-[46px] text-[var(--color-ink)]">{c.headlineMetric.value}</div>
+                <div className="head text-[46px] text-[var(--color-ink)]"><AnimatedStat value={c.headlineMetric.value} /></div>
                 <p className="mono mt-1 text-[11.5px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{c.headlineMetric.label}</p>
               </div>
               <p className="mt-5 flex-1 text-sm text-[var(--color-ink-dim)]">{c.client} · {c.service}</p>

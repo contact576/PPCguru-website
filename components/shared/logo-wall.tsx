@@ -1,5 +1,6 @@
 import { Marquee } from "@/components/magicui/marquee";
 import { logosByGroup, type Logo, type LogoGroup } from "@/lib/data/logos";
+import { BrandIcon } from "@/components/shared/brand-logos";
 import { cn } from "@/lib/utils";
 
 /**
@@ -21,10 +22,11 @@ export function LogoPill({ logo, className }: { logo: Logo; className?: string }
   return (
     <span
       className={cn(
-        "mono inline-flex items-center whitespace-nowrap rounded-full border border-[#dddbc9] bg-white/60 px-4 py-2 text-[12px] font-semibold tracking-[.02em] text-[var(--color-ink-dim)] transition-colors hover:border-[var(--color-ink)] hover:text-[var(--color-ink)]",
+        "mono inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-[#dddbc9] bg-white/60 py-1.5 pl-1.5 pr-4 text-[12px] font-semibold tracking-[.02em] text-[var(--color-ink-dim)] transition-colors hover:border-[var(--color-ink)] hover:text-[var(--color-ink)]",
         className
       )}
     >
+      <BrandIcon name={logo.name} size={22} />
       {logo.abbr ?? logo.name}
     </span>
   );

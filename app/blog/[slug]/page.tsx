@@ -12,23 +12,26 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 
-export function generateStaticParams() {
-  return getAllPostSlugs().map((slug) => ({ slug }));
+export const revalidate = 60;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  return (await getAllPostSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   if (!post) return {};
   return buildMetadata({ title: post.title, description: post.description, path: `/blog/${slug}` });
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   if (!post) notFound();
 
-  const related = getAllPosts().filter((p) => p.slug !== slug).slice(0, 3);
+  const related = (await getAllPosts()).filter((p) => p.slug !== slug).slice(0, 3);
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Blog", path: "/blog" },
@@ -41,7 +44,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    author: { "@type": "Organization", name: siteConfig.name },
+    ...(post.coverImage ? { image: post.coverImage } : {}),
+    author: post.author && post.author !== siteConfig.name
+      ? { "@type": "Person", name: post.author }
+      : { "@type": "Organization", name: siteConfig.name },
     publisher: { "@id": `${siteConfig.url}/#organization` },
     mainEntityOfPage: `${siteConfig.url}/blog/${slug}`,
   };
@@ -59,6 +65,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </PageHero>
 
       <Section className="!pt-12">
+        {post.coverImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={post.coverImage}
+            alt={post.title}
+            className="mx-auto mb-10 max-w-3xl w-full rounded-[24px] border border-[var(--color-border)] object-cover"
+          />
+        ) : null}
         <article className="prose-blog mx-auto max-w-3xl">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </article>

@@ -15,7 +15,7 @@ export function ProcessSteps() {
           const Icon = s.icon;
           return (
             <Reveal key={s.step} delay={i * 0.08}>
-              <div className="relative flex h-full flex-col gap-4 rounded-[22px] border border-[var(--color-border)] bg-white p-7">
+              <div className="relative flex h-full flex-col gap-4 rounded-[22px] border border-[var(--color-border)] bg-white p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-ink)] hover:shadow-tile">
                 <div className="flex items-center justify-between">
                   <span className="head text-[42px]" style={{ color: "rgba(111,125,34,.3)" }}>
                     {s.step}
