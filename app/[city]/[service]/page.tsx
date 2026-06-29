@@ -4,11 +4,17 @@ import Link from "next/link";
 import { Check, ArrowRight, MapPin } from "lucide-react";
 import { allLocationParams, getCity, getLocationService, cities, locationServices } from "@/lib/data/locations";
 import { getService } from "@/lib/data/services";
+import { CityServiceArt } from "@/components/illustrations/hero-art";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
+import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
+import { ServiceProof } from "@/components/sections/service-proof";
+import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { getAccent, accentVars } from "@/lib/data/themes";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -61,7 +67,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
   const otherCities = cities.filter((x) => x.slug !== city).slice(0, 6);
 
   return (
-    <>
+    <div style={accentVars(service)}>
       <JsonLd data={localSchema} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
@@ -70,8 +76,12 @@ export default async function LocationServicePage({ params }: { params: Promise<
         title={<>{s.name} in <span className="text-gradient">{c.name}</span></>}
         intro={`We help ${c.name} service businesses ${s.verb} that turn into qualified leads and booked jobs. ${c.context}`}
         breadcrumbs={crumbs}
+        accent={getAccent(service)}
+        art={<CityServiceArt icon={fullService.icon} city={c.name} accent={getAccent(service)} />}
       >
-        <Button href="/contact" size="lg">Get a free {c.name} audit <ArrowRight size={18} /></Button>
+        <Magnetic>
+          <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {c.name} audit <ArrowRight size={18} /></Button>
+        </Magnetic>
       </PageHero>
 
       <Section>
@@ -85,10 +95,20 @@ export default async function LocationServicePage({ params }: { params: Promise<
               build campaigns around your most profitable services and the neighbourhoods that matter —
               from {c.neighbourhoods.slice(0, 3).join(", ")} to {c.neighbourhoods[c.neighbourhoods.length - 1]}.
             </p>
+            <div className="mt-7 rounded-[18px] border border-[var(--accent-line)] bg-[var(--accent-soft)] p-5">
+              <div className="mono text-[11px] font-bold uppercase tracking-[.1em] text-[var(--accent-strong)]">In {c.name}, we focus on</div>
+              <ul className="mt-3 space-y-2.5">
+                {c.localFocus.map((f) => (
+                  <li key={f} className="flex items-start gap-3 text-[15px] text-[var(--color-ink)]">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />{f}
+                  </li>
+                ))}
+              </ul>
+            </div>
             <ul className="mt-7 space-y-3">
               {fullService.outcomes.map((o) => (
                 <li key={o} className="flex items-center gap-3 text-[var(--color-ink)]">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[var(--color-success)]"><Check size={13} /></span>
+                  <span className="flex h-6 w-6 items-center justify-center rounded-[7px] bg-[var(--accent)] text-white"><Check size={13} /></span>
                   {o}
                 </li>
               ))}
@@ -100,8 +120,8 @@ export default async function LocationServicePage({ params }: { params: Promise<
             </div>
           </div>
 
-          <aside className="h-fit rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
-            <div className="flex items-center gap-2 text-sm font-semibold"><MapPin size={16} className="text-[var(--color-cyan-bright)]" /> Neighbourhoods we serve</div>
+          <aside className="h-fit rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-6">
+            <div className="flex items-center gap-2 text-sm font-semibold"><MapPin size={16} className="text-[var(--accent)]" /> Neighbourhoods we serve</div>
             <div className="mt-4 flex flex-wrap gap-2">
               {c.neighbourhoods.map((n) => (
                 <span key={n} className="rounded-full border border-[var(--color-border)] px-3 py-1.5 text-xs text-[var(--color-ink-dim)]">{n}</span>
@@ -110,26 +130,50 @@ export default async function LocationServicePage({ params }: { params: Promise<
             <div className="mt-6 border-t border-[var(--color-border)] pt-5 text-sm font-semibold">Other services in {c.name}</div>
             <div className="mt-3 flex flex-col gap-2">
               {locationServices.filter((x) => x.slug !== service).map((x) => (
-                <Link key={x.slug} href={`/${city}/${x.slug}`} className="text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-cyan-bright)]">{x.name} →</Link>
+                <Link key={x.slug} href={`/${city}/${x.slug}`} className="text-sm text-[var(--color-ink-dim)] hover:text-[var(--accent-strong)]">{x.name} →</Link>
               ))}
             </div>
           </aside>
         </div>
       </Section>
 
+      {/* How we run this service locally */}
+      <Section tone="cream">
+        <SectionHeading align="left" eyebrow="How we work" title={<>How we run <span className="text-gradient">{s.name.toLowerCase()}</span> in {c.name}</>} />
+        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {fullService.process.map((p, i) => (
+            <Reveal key={p.step} delay={(i % 4) * 0.05}>
+              <SpotlightCard className="h-full rounded-[22px] border border-[var(--color-border)] bg-white p-6">
+                <span className="head text-[42px]" style={{ color: "color-mix(in srgb, var(--accent) 38%, transparent)" }}>{p.step}</span>
+                <h3 className="head mt-3 text-[18px]">{p.title}</h3>
+                <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
+              </SpotlightCard>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* Local proof — representative results for this service */}
+      <ServiceProof serviceName={fullService.name} proofStats={fullService.proofStats} caseStudySlugs={fullService.caseStudySlugs} />
+      <div className="container-page -mt-10 md:-mt-14">
+        <p className="text-center text-xs text-[var(--color-ink-faint)]">Figures are representative of results across our client base — not specific to {c.name}. Actual results vary by market, budget, tracking and offer.</p>
+      </div>
+
       <Section className="bg-[var(--color-base-2)]">
         <SectionHeading align="left" eyebrow="Nearby" title={`${s.name} in other ${c.region} cities`} />
         <div className="mt-8 flex flex-wrap gap-3">
           {otherCities.map((x) => (
-            <Link key={x.slug} href={`/${x.slug}/${service}`} className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm transition-colors hover:border-[var(--color-cyan)] hover:text-[var(--color-cyan-bright)]">
+            <Link key={x.slug} href={`/${x.slug}/${service}`} className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-2.5 text-sm transition-colors hover:border-[var(--accent)] hover:text-[var(--accent-strong)]">
               {x.name}
             </Link>
           ))}
         </div>
       </Section>
 
+      <LeadBand source={`location:${city}/${service}`} title={`Get a free ${c.name} audit`} />
+
       <FaqAccordion faqs={fullService.faqs} title={`${s.name} in ${c.name} — questions`} />
       <CtaBlock title={`Grow your ${c.name} business with ${s.name.toLowerCase()}`} />
-    </>
+    </div>
   );
 }

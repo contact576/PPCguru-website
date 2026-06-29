@@ -5,12 +5,9 @@ import {
 } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
+import { SpotlightCard } from "@/components/ui/interactive";
 import { industries } from "@/lib/data/industries";
-
-const ACCENTS = [
-  "var(--color-lime)", "var(--color-lilac)", "var(--color-coral)",
-  "var(--color-mint)", "var(--color-pink)", "var(--color-cream)",
-];
+import { accentVars } from "@/lib/data/themes";
 
 // A per-industry icon encodes meaning (the vertical), unlike a decorative 01/02/03 number.
 const ICONS: Record<string, LucideIcon> = {
@@ -45,27 +42,27 @@ export function IndustryGrid({ heading = true, limit }: { heading?: boolean; lim
       <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((ind, i) => (
           <Reveal key={ind.slug} delay={(i % 6) * 0.04}>
-            <Link
-              href={`/industries/${ind.slug}`}
-              className="group flex h-full flex-col gap-3 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-tile"
-            >
-              <div className="flex items-start justify-between">
-                {(() => {
-                  const Icon = ICONS[ind.slug] ?? Briefcase;
-                  return (
-                    <span
-                      className="flex h-11 w-11 items-center justify-center rounded-xl text-[var(--color-ink)]"
-                      style={{ backgroundColor: ACCENTS[i % ACCENTS.length] }}
-                    >
-                      <Icon size={20} strokeWidth={2} />
-                    </span>
-                  );
-                })()}
-                <ArrowUpRight size={18} className="text-[var(--color-ink-faint)] transition-colors group-hover:text-[var(--color-orange)]" />
-              </div>
-              <h3 className="text-lg font-bold leading-snug text-[var(--color-ink)]">{ind.name}</h3>
-              <p className="text-sm text-[var(--color-ink-dim)]">{ind.short}</p>
-            </Link>
+            <SpotlightCard className="h-full rounded-[18px] border border-[#e3e0d0] bg-white">
+              <Link
+                href={`/industries/${ind.slug}`}
+                className="group flex h-full flex-col gap-3 rounded-[18px] p-6"
+                style={accentVars(ind.slug)}
+              >
+                <div className="flex items-start justify-between">
+                  {(() => {
+                    const Icon = ICONS[ind.slug] ?? Briefcase;
+                    return (
+                      <span className="flex h-[46px] w-[46px] items-center justify-center rounded-[13px] bg-[var(--accent)] text-white">
+                        <Icon size={21} strokeWidth={2} />
+                      </span>
+                    );
+                  })()}
+                  <ArrowUpRight size={18} className="text-[var(--color-ink-faint)] transition-colors group-hover:text-[var(--color-ink)]" />
+                </div>
+                <h3 className="head text-[16px] leading-tight text-[var(--color-ink)]">{ind.name}</h3>
+                <p className="text-sm text-[var(--color-ink-dim)]">{ind.short}</p>
+              </Link>
+            </SpotlightCard>
           </Reveal>
         ))}
       </div>

@@ -3,13 +3,16 @@ import { Eyebrow } from "./badge";
 
 export type Tone = "white" | "soft" | "cream" | "lime" | "lilac" | "mint" | "coral" | "pink" | "navy";
 
+// Tonal panels remapped to the handoff palette: soft cream/sage bands + one
+// dark feature panel. (Bright lime/coral are reserved for small accents, never
+// full sections.)
 const COLORED: Record<string, string> = {
-  cream: "bg-[var(--color-cream)] text-[var(--color-ink)]",
-  lime: "bg-[var(--color-lime)] text-[var(--color-ink)]",
-  lilac: "bg-[var(--color-lilac)] text-[var(--color-ink)]",
-  mint: "bg-[var(--color-mint)] text-[var(--color-ink)]",
-  coral: "bg-[var(--color-coral)] text-[var(--color-ink)]",
-  pink: "bg-[var(--color-pink)] text-[var(--color-ink)]",
+  cream: "bg-[#f7f5ea] text-[var(--color-ink)]",
+  lime: "bg-[#eef2dd] text-[var(--color-ink)]",
+  lilac: "bg-[#eef2dd] text-[var(--color-ink)]",
+  mint: "bg-[#eef2dd] text-[var(--color-ink)]",
+  coral: "bg-[#f6e6db] text-[var(--color-ink)]",
+  pink: "bg-[#f6e6db] text-[var(--color-ink)]",
   navy: "bg-[var(--color-navy)] text-[var(--color-navy-ink)]",
 };
 
@@ -72,7 +75,7 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="text-3xl md:text-5xl font-bold text-balance">{title}</h2>
+      <h2 className="head text-[clamp(2rem,4.6vw,3.4rem)] text-balance">{title}</h2>
       {intro ? <p className="text-lg text-[var(--color-ink-dim)] text-pretty">{intro}</p> : null}
     </div>
   );

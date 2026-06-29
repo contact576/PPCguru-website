@@ -28,7 +28,7 @@ export function StatBand() {
               const Icon = p.icon;
               return (
                 <div key={p.label} className="flex flex-col items-center text-center">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[var(--color-orange-deep)] shadow-tile">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--color-ink)] text-[var(--color-lime)]">
                     <Icon size={20} />
                   </span>
                   <p className="mt-3 text-sm font-bold text-[var(--color-ink)]">{p.label}</p>

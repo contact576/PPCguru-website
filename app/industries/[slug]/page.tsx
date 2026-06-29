@@ -1,19 +1,48 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Check, X, ArrowRight } from "lucide-react";
+import {
+  Check, X, ArrowRight, Activity, HeartPulse, Smile, Wind, Droplets, Zap, Hammer,
+  Home, Plane, Scale, Building2, Wrench, Dumbbell, Sparkles, Briefcase, type LucideIcon,
+} from "lucide-react";
 import { industries, getIndustry } from "@/lib/data/industries";
+import { IndustryArt } from "@/components/illustrations/hero-art";
 import { getService } from "@/lib/data/services";
 import { caseStudiesByIndustry } from "@/lib/data/case-studies";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
+import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { CaseStudyCards } from "@/components/sections/case-study-cards";
+import { IndustryReality, IndustryPlaybook, IndustryHacks, IndustryPlan90 } from "@/components/sections/industry-deep";
+import { EstimateBand } from "@/components/sections/estimate-band";
+import { LeadBand } from "@/components/sections/lead-band";
+import { getAccent, accentVars } from "@/lib/data/themes";
+import { PhysiotherapyFlagship } from "@/components/flagship/physiotherapy";
+import { RealEstateFlagship } from "@/components/flagship/real-estate";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+
+const INDUSTRY_ICONS: Record<string, LucideIcon> = {
+  physiotherapy: Activity,
+  "healthcare-clinics": HeartPulse,
+  dental: Smile,
+  hvac: Wind,
+  plumbing: Droplets,
+  electrical: Zap,
+  "construction-renovation": Hammer,
+  roofing: Home,
+  immigration: Plane,
+  "law-firms": Scale,
+  "real-estate": Building2,
+  "home-improvement": Wrench,
+  "fitness-gyms": Dumbbell,
+  "med-spa": Sparkles,
+  "professional-services": Briefcase,
+};
 
 export function generateStaticParams() {
   return industries.map((i) => ({ slug: i.slug }));
@@ -39,11 +68,17 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
     { name: ind.name, path: `/industries/${slug}` },
   ];
 
+  // Bespoke flagship layouts for showcase verticals.
+  if (slug === "physiotherapy") return (<><JsonLd data={breadcrumbSchema(crumbs)} /><PhysiotherapyFlagship ind={ind} cases={cases} /></>);
+  if (slug === "real-estate") return (<><JsonLd data={breadcrumbSchema(crumbs)} /><RealEstateFlagship ind={ind} cases={cases} /></>);
+
   return (
-    <>
+    <div style={accentVars(ind.slug)}>
       <JsonLd data={breadcrumbSchema(crumbs)} />
-      <PageHero eyebrow={`${ind.name} marketing`} title={ind.name} intro={ind.hero} breadcrumbs={crumbs}>
-        <Button href="/contact" size="lg">Get a free audit <ArrowRight size={18} /></Button>
+      <PageHero eyebrow={`${ind.name} marketing`} title={ind.name} intro={ind.hero} breadcrumbs={crumbs} accent={getAccent(ind.slug)} art={<IndustryArt icon={INDUSTRY_ICONS[ind.slug] ?? Briefcase} name={ind.name.split(" ")[0]} accent={getAccent(ind.slug)} />}>
+        <Magnetic>
+          <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free audit <ArrowRight size={18} /></Button>
+        </Magnetic>
       </PageHero>
 
       {/* Pain points → approach */}
@@ -65,7 +100,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
             <ul className="mt-8 space-y-3">
               {ind.approach.map((a) => (
                 <li key={a} className="flex items-start gap-3 text-[var(--color-ink)]">
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_18%,transparent)] text-[var(--color-success)]"><Check size={13} /></span>
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent-strong)]"><Check size={13} /></span>
                   {a}
                 </li>
               ))}
@@ -73,6 +108,9 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
           </div>
         </div>
       </Section>
+
+      {/* Industry reality + benchmarks */}
+      <IndustryReality name={ind.name} reality={ind.reality} benchmarks={ind.benchmarks} />
 
       {/* Related services */}
       <Section className="bg-[var(--color-base-2)]">
@@ -83,21 +121,41 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
             const Icon = s.icon;
             return (
               <Reveal key={s.slug} delay={i * 0.05}>
-                <Link href={`/services/${s.slug}`} className="group flex h-full flex-col gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-all hover:-translate-y-1 hover:border-[var(--color-violet)]">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-violet)_18%,transparent)] text-[var(--color-cyan-bright)]"><Icon size={20} /></span>
-                  <h3 className="font-semibold">{s.name}</h3>
-                  <p className="text-sm text-[var(--color-ink-dim)]">{s.short}</p>
-                </Link>
+                <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2]">
+                  <Link href={`/services/${s.slug}`} className="group flex h-full flex-col gap-3 rounded-[22px] p-6">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[var(--accent)] text-white"><Icon size={21} /></span>
+                    <h3 className="head text-[17px]">{s.name}</h3>
+                    <p className="text-sm text-[var(--color-ink-dim)]">{s.short}</p>
+                  </Link>
+                </SpotlightCard>
               </Reveal>
             );
           })}
         </div>
       </Section>
 
+      {/* Per-channel playbook */}
+      {ind.playbook && <IndustryPlaybook name={ind.name} playbook={ind.playbook} />}
+
+      {/* Industry hacks */}
+      {ind.hacks && <IndustryHacks name={ind.name} hacks={ind.hacks} />}
+
+      {/* Sample 90-day plan */}
+      {ind.plan90 && <IndustryPlan90 items={ind.plan90} />}
+
       {cases.length > 0 && <CaseStudyCards items={cases} heading />}
+
+      {/* Per-industry calculator */}
+      <EstimateBand
+        defaultIndustry={ind.calculatorIndustrySlug ?? ind.slug}
+        title={<>Estimate your <span className="text-gradient">{ind.name.split(" ")[0].toLowerCase()}</span> potential</>}
+        intro={`Model the leads, booked calls and revenue your ${ind.name.toLowerCase()} marketing budget could produce — by platform, with real benchmarks.`}
+      />
+
+      <LeadBand source={`industry:${ind.slug}`} title={`Grow your ${ind.name.split(" ")[0].toLowerCase()} business`} />
 
       <FaqAccordion faqs={ind.faqs} title={`${ind.name} — questions`} />
       <CtaBlock title={`Ready to grow your ${ind.name.toLowerCase()} business?`} />
-    </>
+    </div>
   );
 }

@@ -23,6 +23,18 @@ export type CaseStudy = {
   approach: string[];
   results: string;
   quote: { text: string; author: string; role: string };
+
+  // ---- Optional deep / storytelling fields. Render only when present. ----
+  /** 1–2 sentence narrative summary for the top of the page. */
+  executiveSummary?: string;
+  /** Before → after comparison rows for the visual. betterIsLower flips the arrow colour. */
+  beforeAfter?: { metric: string; before: string; after: string; betterIsLower?: boolean }[];
+  /** ROAS (or index) by month — drives the ROI trend chart. */
+  roiProgression?: number[];
+  /** Key decisions / pivots in the engagement. */
+  keyDecisions?: { title: string; body: string }[];
+  /** Repurposable lessons. */
+  keyTakeaways?: string[];
 };
 
 export const REPRESENTATIVE_DISCLOSURE =
@@ -31,6 +43,25 @@ export const REPRESENTATIVE_DISCLOSURE =
 export const caseStudies: CaseStudy[] = [
   {
     slug: "physiotherapy-clinic-north-york",
+    executiveSummary:
+      "A North York pelvic-floor physiotherapy clinic was paying premium prices for clicks that rarely turned into booked assessments. By rebuilding Google Ads around condition-and-neighbourhood intent, fixing tracking, and adding a booking-first landing experience, cost per booked assessment fell sharply while monthly bookings more than tripled — and local SEO began compounding as a second channel.",
+    beforeAfter: [
+      { metric: "Cost per booked assessment", before: "$210", after: "$122", betterIsLower: true },
+      { metric: "Booked assessments / month", before: "11", after: "34" },
+      { metric: "Local map-pack rank", before: "Page 2", after: "#1–3" },
+      { metric: "Tracked conversions", before: "~40%", after: "~100%" },
+    ],
+    roiProgression: [1.4, 1.9, 2.5, 3.0, 3.4, 3.8],
+    keyDecisions: [
+      { title: "Optimize to booked assessments, not clicks", body: "We wired call + form tracking and told the bid strategy to chase booked assessments — instantly cutting spend on curious-but-not-ready traffic." },
+      { title: "Split by condition + neighbourhood", body: "Pelvic-floor, MVA rehab and sports-injury each got their own tightly-themed campaigns and pages, lifting relevance and Quality Score." },
+      { title: "Booking-first landing experience", body: "Online booking and click-to-call moved above the fold with insurance/direct-billing messaging — removing the two biggest objections." },
+    ],
+    keyTakeaways: [
+      "In physio, the conversion is a booked assessment — track and bid to that, not clicks.",
+      "Condition + neighbourhood intent converts far better than generic 'physio near me'.",
+      "Pairing paid with local SEO builds a second, compounding channel within 90 days.",
+    ],
     client: "A pelvic-floor physiotherapy clinic",
     industrySlug: "physiotherapy",
     industry: "Physiotherapy",
@@ -61,6 +92,24 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "hvac-mississauga-lead-gen",
+    executiveSummary:
+      "A Mississauga HVAC company lost jobs to faster competitors and watched cost per lead spike every peak season. Service-split Search with seasonal pacing, Meta lead-gen, and speed-to-lead automation that called every lead within minutes cut cost per lead by a third while qualified install leads more than doubled.",
+    beforeAfter: [
+      { metric: "Cost per lead", before: "$96", after: "$64", betterIsLower: true },
+      { metric: "Qualified install leads / mo", before: "22", after: "57" },
+      { metric: "Avg. lead follow-up time", before: "~3 hrs", after: "<5 min" },
+      { metric: "Return on ad spend", before: "2.1x", after: "4.8x" },
+    ],
+    roiProgression: [2.1, 2.8, 3.6, 4.2, 4.8],
+    keyDecisions: [
+      { title: "Speed-to-lead automation", body: "Every new lead triggered an instant SMS + call attempt — the single biggest lever on booked installs." },
+      { title: "Seasonal budget pacing", body: "Budgets followed demand by service (furnace, AC, maintenance), pulling back in lulls and pushing in peaks." },
+    ],
+    keyTakeaways: [
+      "Most lost HVAC jobs are a follow-up-speed problem, not a targeting problem.",
+      "Track to booked installs so budget shifts to revenue, not raw leads.",
+      "Separate emergency intent and pace budget to the season.",
+    ],
     client: "A residential HVAC & home-comfort company",
     industrySlug: "hvac",
     industry: "HVAC",
@@ -91,6 +140,23 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "basement-renovation-gta",
+    executiveSummary:
+      "A GTA basement-renovation contractor had inconsistent, expensive, low-quality quote requests and a site that didn't build trust. A portfolio-led landing page, qualifying form questions and high-intent search by service and city more than doubled qualified consultations at a lower cost — pushing ROAS past 5x on high-ticket projects.",
+    beforeAfter: [
+      { metric: "Cost per qualified quote", before: "$320", after: "$198", betterIsLower: true },
+      { metric: "Consultation requests / mo", before: "9", after: "20" },
+      { metric: "Return on ad spend", before: "2.4x", after: "5.3x" },
+    ],
+    roiProgression: [2.4, 3.1, 3.9, 4.6, 5.3],
+    keyDecisions: [
+      { title: "Portfolio-led landing page", body: "Project galleries, financing and a quote flow replaced a generic homepage — quote quality jumped." },
+      { title: "Qualify before the sales call", body: "Form questions filtered tire-kickers so the team spent time on ready-to-build homeowners." },
+    ],
+    keyTakeaways: [
+      "For high-ticket reno, the landing page is often the bottleneck, not the ads.",
+      "Qualifying questions raise lead quality more than tighter targeting.",
+      "Remarketing matters — reno decisions take weeks.",
+    ],
     client: "A basement & home renovation contractor",
     industrySlug: "construction-renovation",
     industry: "Construction & Renovation",
@@ -121,6 +187,23 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "immigration-consultant-brampton",
+    executiveSummary:
+      "A Brampton immigration consultancy generated leads but had no system to follow up, so prospects went cold. Program-segmented Meta lead campaigns plus a CRM with instant follow-up and a 7-day nurture sequence more than tripled booked consultations while cutting cost per consultation nearly in half.",
+    beforeAfter: [
+      { metric: "Cost per consultation", before: "$78", after: "$41", betterIsLower: true },
+      { metric: "Booked consultations / mo", before: "14", after: "48" },
+      { metric: "Lead-to-client rate", before: "9%", after: "18%" },
+    ],
+    roiProgression: [1.6, 2.2, 2.9, 3.4],
+    keyDecisions: [
+      { title: "Segment by program", body: "Study, work and PR each got their own creative and landing pages with localized, multilingual messaging." },
+      { title: "Automated nurture", body: "A 7-day email + SMS sequence revived 'not yet' leads, lifting lead-to-client conversion." },
+    ],
+    keyTakeaways: [
+      "Lead-gen without follow-up automation wastes most of the spend.",
+      "Program-level segmentation beats one generic 'immigration' campaign.",
+      "Tie signed clients back to the originating ad to find true ROI.",
+    ],
     client: "A licensed immigration consultancy",
     industrySlug: "immigration",
     industry: "Immigration Consulting",
@@ -151,6 +234,23 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "real-estate-team-gta",
+    executiveSummary:
+      "A Vaughan real-estate team relied on referrals with an unpredictable pipeline. Home-valuation and new-listing lead campaigns on Meta with neighbourhood targeting, fast valuation landing pages and automatic agent routing quadrupled lead volume at a low cost per lead — adding a steady stream on top of referrals.",
+    beforeAfter: [
+      { metric: "Cost per buyer/seller lead", before: "$38", after: "$14", betterIsLower: true },
+      { metric: "Leads / month", before: "31", after: "127" },
+      { metric: "Landing-page conversion", before: "4%", after: "11%" },
+    ],
+    roiProgression: [1.8, 2.6, 3.2, 3.7],
+    keyDecisions: [
+      { title: "Lead with a home valuation", body: "A high-converting valuation page turned cold scrolls into appointments." },
+      { title: "Route + follow up instantly", body: "Leads auto-routed to agents with immediate follow-up, protecting conversion." },
+    ],
+    keyTakeaways: [
+      "A valuation offer converts far better than 'contact us'.",
+      "Weekly creative refreshes keep cost per lead low on Meta.",
+      "Predictable lead-gen reduces referral dependence.",
+    ],
     client: "A residential real-estate team",
     industrySlug: "real-estate",
     industry: "Real Estate",
@@ -181,6 +281,24 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "dental-practice-etobicoke",
+    executiveSummary:
+      "An Etobicoke dental practice couldn't tell which marketing produced new patients, and high-value cosmetic cases were inconsistent. High-intent Search for implants/Invisalign with call tracking, local SEO, a review-generation flow and CRM follow-up nearly tripled new-patient bookings while cutting cost per new patient.",
+    beforeAfter: [
+      { metric: "Cost per new patient", before: "$185", after: "$131", betterIsLower: true },
+      { metric: "New-patient bookings / mo", before: "26", after: "75" },
+      { metric: "Calls tracked", before: "0%", after: "100%" },
+      { metric: "Review rating", before: "4.3★", after: "4.9★" },
+    ],
+    roiProgression: [1.5, 2.0, 2.4, 2.7, 2.9],
+    keyDecisions: [
+      { title: "Call tracking as the conversion", body: "Most dental ROI happens on the phone — tracking it let us optimize to real new patients." },
+      { title: "Bias to high-value cases", body: "Budget and creative leaned into implants, Invisalign and cosmetic intent, not cheap cleanings." },
+    ],
+    keyTakeaways: [
+      "Untracked calls hide the true ROI of dental marketing — fix that first.",
+      "Concentrate spend on high-value case intent.",
+      "A strong review profile lifts both rankings and conversion.",
+    ],
     client: "A family & cosmetic dental practice",
     industrySlug: "dental",
     industry: "Dental",
@@ -189,7 +307,7 @@ export const caseStudies: CaseStudy[] = [
     headlineMetric: { value: "2.9x", label: "new-patient bookings" },
     secondaryMetrics: [
       { value: "−29%", label: "cost per new patient" },
-      { value: "62%", label: "of calls now tracked" },
+      { value: "100%", label: "of calls now tracked" },
       { value: "4.9★", label: "review rating grown" },
     ],
     timeframe: "First 6 months",
@@ -213,6 +331,13 @@ export const caseStudies: CaseStudy[] = [
 
 export function getCaseStudy(slug: string) {
   return caseStudies.find((c) => c.slug === slug);
+}
+
+/** Return case studies for the given slugs, preserving order; skips unknown slugs. */
+export function getCaseStudies(slugs: string[]) {
+  return slugs
+    .map((s) => caseStudies.find((c) => c.slug === s))
+    .filter((c): c is CaseStudy => Boolean(c));
 }
 
 export function caseStudiesByIndustry(industrySlug: string) {

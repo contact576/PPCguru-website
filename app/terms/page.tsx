@@ -37,8 +37,6 @@ export default function TermsPage() {
 
       <h2>Contact</h2>
       <p>Questions about these terms can be sent to <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.</p>
-
-      <p className="text-xs text-[var(--color-ink-faint)]">This document is a starting template and should be reviewed by qualified legal counsel before launch.</p>
     </LegalLayout>
   );
 }

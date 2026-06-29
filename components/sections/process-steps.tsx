@@ -15,16 +15,16 @@ export function ProcessSteps() {
           const Icon = s.icon;
           return (
             <Reveal key={s.step} delay={i * 0.08}>
-              <div className="relative flex h-full flex-col gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-7">
+              <div className="relative flex h-full flex-col gap-4 rounded-[22px] border border-[var(--color-border)] bg-white p-7">
                 <div className="flex items-center justify-between">
-                  <span className="font-display text-4xl font-bold text-[color-mix(in_srgb,var(--color-violet)_45%,transparent)]">
+                  <span className="head text-[42px]" style={{ color: "rgba(111,125,34,.3)" }}>
                     {s.step}
                   </span>
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--color-cyan)_16%,transparent)] text-[var(--color-cyan-bright)]">
-                    <Icon size={20} />
+                  <span className="flex h-[46px] w-[46px] items-center justify-center rounded-[12px] bg-[#eef2dd] text-[#5f6f17]">
+                    <Icon size={21} />
                   </span>
                 </div>
-                <h3 className="text-lg font-semibold">{s.title}</h3>
+                <h3 className="head text-[19px]">{s.title}</h3>
                 <p className="text-sm text-[var(--color-ink-dim)]">{s.body}</p>
               </div>
             </Reveal>

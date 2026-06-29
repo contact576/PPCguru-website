@@ -4,57 +4,127 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Marketing website for **PPC Guru**, a Google/Meta Partner digital marketing agency. Next.js 16 (App Router) + React 19 + TypeScript + Tailwind v4, with a scroll-driven Three.js hero, live ad-ROI calculators, AI tools, and a programmatic SEO architecture. Deployed on Vercel (`main` is the production branch; `vercel.json` pins the framework to Next.js).
+Marketing website for **PPC Guru**, an AI-first Google/Meta Partner performance-marketing agency (GTA /
+Canada / USA). Next.js 16 (App Router) + React 19 + TypeScript + Tailwind v4. It is both an **SEO surface**
+(programmatic service/industry/location pages + blog) and a **lead-generation funnel** (gated calculators,
+two-step pop-up, per-page contact bands). Deployed on Vercel; `main` is production (`vercel.json` pins Next.js).
+
+> **Design state:** `main` ships the original dark violet→cyan theme with a Three.js hero. The `claude/*`
+> revamp branches (PR #7) ship the current **cream/lime/ink** light design — that's what merges to `main`.
+> If something reads as "legacy" (Three.js funnel, `components/home/hero.tsx`, `components/home/ai-os.tsx`),
+> it's orphaned on the revamp branch — grep for imports before assuming it renders.
 
 ## Commands
 
 ```bash
 npm install
 npm run dev        # local dev (http://localhost:3000)
-npm run build      # production build — run this to validate; it type-checks all routes
+npm run build      # PRIMARY validation gate — full type-check + prerenders all ~90 routes
 npm run start      # serve the production build
-npm run lint       # next lint
 npm run typecheck  # tsc --noEmit
 ```
 
-There is **no test framework** configured — `npm run build` (which runs full TypeScript checking and prerenders all static routes) is the primary validation gate. Always run it after non-trivial changes.
+**No test framework** — `npm run build` is the gate; run it after non-trivial changes. **`npm run lint`
+is broken** (Next 16 removed `next lint`; the script errors with "Invalid project directory"). Rely on the
+build's type-checking instead.
 
 ## Architecture
 
-### Content is data-driven; pages are templates
-Almost nothing is hardcoded in pages. Content lives in typed modules and is rendered by thin page templates via `generateStaticParams`. To change copy/structure, edit the data — not the JSX.
+### Content is data-driven; pages are thin templates
+Edit the typed data modules, not the JSX. Pages render via `generateStaticParams`.
+- `lib/site-config.ts` — brand, NAP, trust numbers, `trustLine`, CTAs, AND the dropdown-aware `nav` model.
+- `lib/data/services.ts` (13: 6 original + 7 ad/AI/CRO), `industries.ts` (15), `locations.ts` (10 cities × 3),
+  `case-studies.ts` (6), `testimonials.ts`, `company.ts`, `home.ts` (homepage arrays).
+- `lib/data/benchmarks.ts` — the calculator engine (see below).
+- `lib/data/themes.ts` — `getAccent(slug)` + `accentTint()`: per-vertical accent colors.
+- `lib/data/logos.ts` — `stackGroups` (the merged tools/platforms/credentials section), `logosByGroup`,
+  client/credential logos (text-pill fallback; drop real assets in `/public`, set `src`).
+- `lib/data/tools.ts` — free-tools registry consumed by BOTH `app/tools/page.tsx` AND `app/sitemap.ts`
+  (add a tool here or it drops from the sitemap).
+- `lib/data/performance-stats.ts` — headline stats + `heroSampleModel` (one consistent set of hero numbers).
+- `lib/data/offers.ts` — pop-up funnel copy ($600 credit, free audit).
+- `content/blog/*.md` — posts read at build by `lib/blog.ts`.
 
-- `lib/site-config.ts` — single source of truth for brand, NAP, trust numbers, nav, CTAs.
-- `lib/data/services.ts`, `industries.ts`, `locations.ts`, `case-studies.ts`, `testimonials.ts`, `company.ts` — page content + the `get*`/`generateStaticParams` helpers.
-- `lib/data/benchmarks.ts` — ad benchmark dataset + `projectResults()`, the deterministic math behind both calculators (no AI in the math).
-- `content/blog/*.md` — blog posts (frontmatter + Markdown), read at build by `lib/blog.ts`.
+### Calculator / benchmark engine (`lib/data/benchmarks.ts`)
+Deterministic math, no AI. **Separable model**: `industryEconomics` (~36 verticals: avgTicket, closeRate,
+baseSearchCpc, baseCvr, …) × `PLATFORMS` (~10 `PlatformModel`s: cpcMultiplier, ctr, cvrMultiplier, intent).
+`resolveCell(econ, platform)` derives the effective `{cpc, ctr, cvr}` (real sourced rows preserved via
+`overrides`). `projectFunnel({budget, platform, industrySlug, …})` is the current function — returns the
+full funnel (clicks→leads→qualifiedLeads→bookedCalls→customers→revenue) with low/mid/high ranges + CPL/CAC/
+ROAS. The legacy `projectResults`/`industryBenchmarks`/`type Platform` remain as compat shims — prefer
+`projectFunnel`. **Industry AND platform must change outputs** (this was a fixed defect; don't regress it).
+Shared UI: `components/tools/ad-calculator.tsx` (`platform?`, `defaultIndustry?` props), embedded per-page
+via `components/sections/estimate-band.tsx`.
 
-### Routing notes
-- `app/[city]/[service]/` are **programmatic location pages** generated from `allLocationParams()` in `lib/data/locations.ts`, with `export const dynamicParams = false` (only generated combos render; everything else 404s). Static routes (`/services`, `/industries`, `/tools`, etc.) take precedence over this catch-all two-segment dynamic route.
-- SEO: per-page metadata via `buildMetadata()` and JSON-LD builders in `lib/seo.ts`, rendered through `components/seo/json-ld.tsx`. `app/sitemap.ts` and `app/robots.ts` enumerate all generated routes.
+### Lead capture & gating (first-class — every page is a conversion point)
+- `app/actions/lead.ts` `captureLead` — Zod + honeypot + optional Resend (logs without a key); the one
+  action behind all lead forms. `app/contact/actions.ts` is the separate full contact form.
+- `components/shared/lead-form.tsx` — the shared form (name/email/phone). Reused by:
+  `offer-popup.tsx` (two-step funnel: arrival audit modal → dismissal-armed $600 slide-in, session-capped,
+  mounted in `app/layout.tsx`), `components/shared/lead-cta.tsx` `LeadCtaButton` (button that opens a popup —
+  used for pricing CTAs), `components/sections/lead-band.tsx` (per-page contact band), and
+  `components/tools/result-gate.tsx` (`ResultGate` blurs the value half of tool results until a lead submits).
 
-### The 3D "performance funnel" hero (`components/three/`)
-- `funnel-3d.tsx` is the entry point. It renders a static SVG fallback (`funnel-poster.tsx`) by default and only mounts the WebGL canvas when: section is near viewport (IntersectionObserver) **and** `getGPUTier()` (detect-gpu) ≥ 1 **and** not `prefers-reduced-motion`. The canvas is `next/dynamic({ ssr: false })` so three.js stays out of first-load JS.
-- `funnel-canvas.tsx` = the `<Canvas>` (drei `PerformanceMonitor`/`AdaptiveDpr`); `funnel-scene.tsx` = `THREE.Points` + custom GLSL shader.
-- **Scroll sync rule:** animation is driven by the mutable `lib/scroll-store.ts` object (written by `components/providers/smooth-scroll-provider.tsx` = Lenis + GSAP ScrollTrigger, and by the hero), read inside `useFrame`. **Never** drive 3D via React state / per-frame `setState`.
+### Routing & page templates
+- `app/[city]/[service]/` — programmatic location pages from `allLocationParams()`, `dynamicParams = false`.
+- Service (`app/services/[slug]`) & industry (`app/industries/[slug]`) pages render guarded deep sections
+  when the data is present (`components/sections/service-deep.tsx`: AuditChecklist, AiAutomation,
+  OptimizationCadence, Timeline30Day, ToolStack; `industry-deep.tsx`: IndustryReality, IndustryPlaybook,
+  IndustryHacks, IndustryPlan90). All deep fields on the `Service`/`Industry`/`CaseStudy` types are
+  **optional** — keep them optional so existing entries don't break the build.
+- **Flagship pages** (`components/flagship/*`): bespoke layouts rendered via a conditional early-return in
+  the `[slug]` templates for `physiotherapy`, `real-estate` (industry) and `google-ads` (service).
+- **Per-vertical theming**: `PageHero` takes an `accent` prop (hero wash + top rule + glow); the parametric
+  `IndustryArt`/`CityServiceArt` take `accent`. Pages pass `getAccent(slug)`. Accents are a secondary layer —
+  the cream/lime/ink system stays primary.
+- SEO: `buildMetadata()` + JSON-LD builders in `lib/seo.ts` via `components/seo/json-ld.tsx`;
+  `app/sitemap.ts` + `app/robots.ts` enumerate routes.
+
+### Results / case studies
+`app/results/[slug]/page.tsx` renders storytelling sections from optional `CaseStudy` fields
+(`executiveSummary`, `beforeAfter`, `roiProgression`, `keyDecisions`, `keyTakeaways`) using SVG visuals in
+`components/sections/case-study-visuals.tsx` (`BeforeAfter`, `RoiTrend`).
 
 ### AI tools (graceful, server-only)
-- `app/api/instant-audit/route.ts` fetches a URL, extracts real on-page/tracking signals, then has Claude write the narrative; `app/api/ad-copy/route.ts` generates ad copy. Both use `lib/ai/anthropic.ts` and **fall back to deterministic output when `ANTHROPIC_API_KEY` is absent** — the site is fully functional without keys. API key is server-side only.
-- Contact form: `app/contact/actions.ts` (Server Action + Zod + optional Resend + optional Cloudflare Turnstile). All integrations are optional and degrade gracefully (logs instead of emailing when no key).
+`app/api/instant-audit/route.ts` (real on-page signals + Claude narrative) and `app/api/ad-copy/route.ts`
+via `lib/ai/anthropic.ts` — both **fall back to deterministic output when `ANTHROPIC_API_KEY` is absent**.
+
+### Homepage (`app/page.tsx`, ~540 lines inline + `lib/data/home.ts`)
+2D illustrated `HeroDashboard` (numbers from `heroSampleModel`), `WasteCalculator` (engine-wired),
+`ToolsOs` (merged platforms/tools/AI/credentials — replaced the old `AiOs` + credentials block),
+`TestimonialCarousel` (Marquee, monogram avatars), two-column `FaqList`, `AuditForm`.
 
 ### Reusable UI
-- `components/sections/*` — composable page sections shared across the homepage and inner pages.
-- `components/ui/*` — primitives (`Button`, `Section`, `Counter`, `Reveal`, etc.).
-- `components/shared/*` — `page-hero`, `partner-badges`, `legal-layout`, `social-icons`.
+- `components/ui/*` — `Button`, `Section` (tonal `tone` system), `Reveal`, `Counter`, `Eyebrow`/`Badge`,
+  and `interactive.tsx` (`CursorGlow` trailing cursor, `Magnetic`, `SpotlightCard` — all degrade on touch /
+  reduced-motion). Styled with `cva` + `cn()` (`lib/utils.ts`).
+- `components/sections/*` — shared blocks (service-proof, estimate-band, lead-band, faq-accordion,
+  service-deep, industry-deep, case-study-visuals, cta-block, service-grid, industry-grid, …).
+- `components/illustrations/*` — bespoke SVG hero art + `dashboard-mock.tsx` (a sample dashboard whose every
+  number derives from one spend input via the calculator math, labelled "Sample" — never hand-fudge it).
+- `components/reactbits/*` + `components/magicui/*` — vendored effects (e.g. `Marquee`), edited in place.
+  Animation uses **`motion`** (not `framer-motion`).
+- **Signature motif — "the leak, sealed":** the `Eyebrow` (`components/ui/badge.tsx`) leads every section
+  label with the dashed-coral-leak → ink-node → olive→lime SVG mark. Keep it; don't add competing flourishes.
 
 ## Conventions & gotchas
-
-- **Tailwind v4, no config file.** Design tokens are defined in `app/globals.css` under `@theme`; reference them as arbitrary values, e.g. `text-[--color-ink-dim]`, `bg-[--color-surface]`. The theme is a dark base + violet→cyan accent.
-- **React is pinned to 19.2.0** because `@react-three/fiber` v9 requires `react <19.3`. Do not bump React past 19.2.
-- **lucide-react has no brand icons** (Instagram/LinkedIn/Facebook) — use the inline SVGs in `components/shared/social-icons.tsx`.
-- **Representative content & honesty:** case studies and testimonials are anonymized, clearly-labeled *representative* scenarios — do **not** fabricate named-client results or fake testimonials (legal/FTC). Ad benchmarks are industry averages, not guarantees. `CONTENT-TODO.md` lists the real data to swap in before launch.
-- Env vars are documented in `.env.example` / README and are all optional for local/dev.
+- **Tailwind v4, no config file.** Tokens live in `app/globals.css` `@theme`; reference as arbitrary values
+  (`text-[--color-ink-dim]`). Light cream base; `--color-lime` signature fill, `--color-ink` text,
+  `--color-coral` = "waste/leak" accent only. **Legacy:** `--color-violet*`/`--color-cyan*` are remapped to
+  olive — don't "fix" them to purple/blue. `body { overflow-x: hidden }` already contains decorative-blob
+  spill; mobile is a hard requirement — use Tailwind breakpoints, never `window.innerWidth` (SSR).
+- **Typefaces** (`app/layout.tsx`): Archivo (display/body), DM Serif Display (italic emphasis), JetBrains Mono.
+- **lucide-react ships NO brand icons** — Instagram/LinkedIn/Facebook (use `components/shared/social-icons.tsx`)
+  AND `Linkedin`/`Youtube`/`Music2` don't exist either; use generic glyphs (Briefcase/Play/Video) for the
+  new service icons. A bad brand-icon import fails the build.
+- **React pinned to 19.2.0** (`@react-three/fiber` v9 needs `<19.3`), even though the 3D hero is dormant.
+- **Honesty / FTC:** the client confirmed the founder + aggregate trust stats as **real** (publish them).
+  But do **NOT** fabricate named third-party reviews or named case-study clients — testimonials stay
+  editable/representative; case studies stay anonymized + disclosed (`REPRESENTATIVE_DISCLOSURE`). Sample
+  dashboards/benchmarks are labelled and math-consistent, never guarantees. `CONTENT-TODO.md` + `[VERIFY]`
+  markers list what to swap before launch.
+- Env vars (`ANTHROPIC_API_KEY`, `RESEND_API_KEY`, Turnstile, …) are all optional; everything degrades gracefully.
 
 ## Git / deploy
-
-- `main` is the deployed production branch (Vercel auto-deploys on push to `main`). Feature work happens on `claude/*` branches and merges into `main` via PR.
+`main` is production (Vercel auto-deploys). Active revamp work is on `claude/revamp` (PR #7, still a draft);
+each push rebuilds the PR preview. Feature work on `claude/*` → PR → `main`.

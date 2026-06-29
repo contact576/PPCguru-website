@@ -12,6 +12,8 @@ export const siteConfig = {
   domain: "ppcguru.ca",
   url: "https://ppcguru.ca",
   tagline: "Ad spend, turned into booked jobs.",
+  // Defensible-confident trust line (avoid unqualified "#1/best" claims).
+  trustLine: "Toronto's AI-first performance marketing agency — Google-trained, AI-powered, GTA-based.",
   description:
     "PPC Guru is a Google Partner & Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA. AI-augmented Google Ads, Meta Ads, SEO and creative.",
 
@@ -36,16 +38,17 @@ export const siteConfig = {
     hours: "Mon–Fri, 9:00 AM – 6:00 PM ET",
   },
 
-  // Trust signals — TODO(client): keep current
+  // Trust signals — client-confirmed figures (published as real). See
+  // lib/data/performance-stats.ts for the full headline-stat source of truth.
   trust: {
     googlePartner: true,
     metaBusinessPartner: true,
     activeClients: "35+",
-    adSpendManaged: "$10M+", // representative aggregate — TODO(client) confirm figure
-    avgRoas: "4.2x", // representative aggregate — TODO(client) confirm
-    leadsGenerated: "120,000+", // representative aggregate — TODO(client) confirm
-    googleReviewRating: "4.9", // TODO(client) confirm real rating
-    googleReviewCount: "60+", // TODO(client) confirm real count
+    adSpendManaged: "$10M+",
+    avgRoas: "4.2x",
+    leadsGenerated: "120,000+",
+    googleReviewRating: "4.9",
+    googleReviewCount: "60+",
     serviceArea: "Canada & the USA",
   },
 
@@ -76,5 +79,79 @@ export const mainNav: { label: string; href: string }[] = [
   { label: "Free Tools", href: "/tools" },
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
+];
+
+// Dropdown-aware navigation used by the header + mobile menu. Children list only
+// routes that exist (new service pages get added to the Services group when they
+// ship). The parent `href` is always a real hub page.
+export type NavChild = { label: string; href: string; heading?: boolean };
+export type NavItem = { label: string; href: string; children?: NavChild[] };
+
+export const nav: NavItem[] = [
+  {
+    label: "Services",
+    href: "/services",
+    children: [
+      { label: "Paid search & shopping", href: "", heading: true },
+      { label: "Google Ads", href: "/services/google-ads" },
+      { label: "Microsoft (Bing) Ads", href: "/services/microsoft-ads" },
+      { label: "Paid social", href: "", heading: true },
+      { label: "Meta Ads", href: "/services/meta-ads" },
+      { label: "LinkedIn Ads", href: "/services/linkedin-ads" },
+      { label: "TikTok Ads", href: "/services/tiktok-ads" },
+      { label: "Pinterest Ads", href: "/services/pinterest-ads" },
+      { label: "YouTube Ads", href: "/services/youtube-ads" },
+      { label: "SEO, web & conversion", href: "", heading: true },
+      { label: "SEO & Local Search", href: "/services/seo" },
+      { label: "Websites & Landing Pages", href: "/services/web-design" },
+      { label: "Landing Pages & CRO", href: "/services/cro-landing-pages" },
+      { label: "Creative Production", href: "/services/creative" },
+      { label: "AI & operations", href: "", heading: true },
+      { label: "AI Automation", href: "/services/ai-automation" },
+      { label: "CRM & Marketing Ops", href: "/services/crm" },
+      { label: "All services →", href: "/services" },
+    ],
+  },
+  {
+    label: "Industries",
+    href: "/industries",
+    children: [
+      { label: "Physiotherapy & Rehab", href: "/industries/physiotherapy" },
+      { label: "Dental & Orthodontics", href: "/industries/dental" },
+      { label: "HVAC & Home Comfort", href: "/industries/hvac" },
+      { label: "Construction & Renovation", href: "/industries/construction-renovation" },
+      { label: "Immigration", href: "/industries/immigration" },
+      { label: "Real Estate", href: "/industries/real-estate" },
+      { label: "Law Firms", href: "/industries/law-firms" },
+      { label: "All industries →", href: "/industries" },
+    ],
+  },
+  {
+    label: "Locations",
+    href: "/locations",
+    children: [
+      { label: "Toronto", href: "/toronto/google-ads" },
+      { label: "Mississauga", href: "/mississauga/google-ads" },
+      { label: "Brampton", href: "/brampton/google-ads" },
+      { label: "Vaughan", href: "/vaughan/google-ads" },
+      { label: "Markham", href: "/markham/google-ads" },
+      { label: "Ottawa", href: "/ottawa/google-ads" },
+      { label: "All locations →", href: "/locations" },
+    ],
+  },
+  {
+    label: "Tools",
+    href: "/tools",
+    children: [
+      { label: "Google Ads Calculator", href: "/tools/google-ads-calculator" },
+      { label: "Meta Ads Calculator", href: "/tools/meta-ads-calculator" },
+      { label: "Instant AI Audit", href: "/tools/instant-audit" },
+      { label: "Ad Copy Generator", href: "/tools/ad-copy-generator" },
+      { label: "All free tools →", href: "/tools" },
+    ],
+  },
+  { label: "Results", href: "/results" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

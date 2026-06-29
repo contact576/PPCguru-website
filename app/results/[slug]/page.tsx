@@ -7,8 +7,11 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Button } from "@/components/ui/button";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { BeforeAfter, RoiTrend } from "@/components/sections/case-study-visuals";
+import { LeadBand } from "@/components/sections/lead-band";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { getAccent } from "@/lib/data/themes";
 
 export function generateStaticParams() {
   return caseStudies.map((c) => ({ slug: c.slug }));
@@ -43,8 +46,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       <PageHero
         eyebrow={`${c.industry} · ${c.location}`}
         title={c.client}
-        intro={`${c.service} · ${c.timeframe}`}
+        intro={c.executiveSummary ?? `${c.service} · ${c.timeframe}`}
         breadcrumbs={crumbs}
+        accent={getAccent(c.industrySlug)}
       />
 
       {/* Metrics band */}
@@ -62,6 +66,17 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           ))}
         </div>
       </Section>
+
+      {/* Before/after + ROI trend visuals */}
+      {(c.beforeAfter || c.roiProgression) && (
+        <Section className="!pt-4">
+          <SectionHeading align="left" eyebrow="The shift" title={<>Before <span className="text-gradient">vs after</span></>} />
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+            {c.beforeAfter && <BeforeAfter rows={c.beforeAfter} />}
+            {c.roiProgression && <RoiTrend data={c.roiProgression} />}
+          </div>
+        </Section>
+      )}
 
       <Section className="!pt-4">
         <div className="grid gap-12 lg:grid-cols-[1fr_320px]">
@@ -86,6 +101,34 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               <p className="mt-5 text-[var(--color-ink-dim)]">{c.results}</p>
             </div>
 
+            {c.keyDecisions && c.keyDecisions.length > 0 && (
+              <div>
+                <SectionHeading align="left" eyebrow="Turning points" title="Key decisions" />
+                <div className="mt-6 space-y-4">
+                  {c.keyDecisions.map((d) => (
+                    <div key={d.title} className="rounded-[16px] border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+                      <p className="head text-[16px] text-[var(--color-ink)]">{d.title}</p>
+                      <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{d.body}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {c.keyTakeaways && c.keyTakeaways.length > 0 && (
+              <div>
+                <SectionHeading align="left" eyebrow="What it teaches" title="Key takeaways" />
+                <ul className="mt-6 space-y-3">
+                  {c.keyTakeaways.map((t) => (
+                    <li key={t} className="flex items-start gap-3 text-[15px] text-[var(--color-ink)]">
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#eef2dd] text-[#5f6f17]"><Check size={13} /></span>
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <figure className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-7">
               <Quote size={24} className="text-[var(--color-violet-bright)]" />
               <blockquote className="mt-3 text-lg text-[var(--color-ink)]">{c.quote.text}</blockquote>
@@ -108,6 +151,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           </aside>
         </div>
       </Section>
+
+      <LeadBand source={`case:${slug}`} title={`Get results like ${c.industry}`} />
 
       <Section className="bg-[var(--color-base-2)]">
         <SectionHeading align="left" eyebrow="More proof" title="Other case studies" />

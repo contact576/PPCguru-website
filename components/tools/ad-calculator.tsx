@@ -4,50 +4,50 @@ import { useMemo, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, Info, TrendingUp } from "lucide-react";
 import {
-  industryBenchmarks,
-  getBenchmark,
-  projectResults,
+  industryEconomics,
+  getEconomics,
+  getPlatform,
+  resolveCell,
+  projectFunnel,
+  PLATFORMS,
   BENCHMARK_DISCLAIMER,
   BENCHMARK_SOURCES,
-  type Platform,
+  type PlatformId,
+  type FunnelStage,
 } from "@/lib/data/benchmarks";
 import { formatCurrency, formatNumber } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { ResultGate } from "@/components/tools/result-gate";
 
-const PLATFORM_LABEL: Record<Platform, string> = {
-  google: "Google Ads (Search)",
-  meta: "Meta Ads (Facebook & Instagram)",
-};
+const GROUP_LABEL: Record<string, string> = { search: "Search", social: "Social", video: "Video", display: "Display" };
 
-export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform }) {
-  const [platform, setPlatform] = useState<Platform>(fixedPlatform ?? "google");
-  const [industrySlug, setIndustrySlug] = useState(industryBenchmarks[3].slug); // HVAC default
+export function AdCalculator({ platform: fixedPlatform, defaultIndustry }: { platform?: PlatformId; defaultIndustry?: string }) {
+  const [platform, setPlatform] = useState<PlatformId>(fixedPlatform ?? "google-search");
+  const [industrySlug, setIndustrySlug] = useState(defaultIndustry ?? "hvac");
   const [budget, setBudget] = useState(3000);
-  const benchmark = getBenchmark(industrySlug);
-  const [avgTicket, setAvgTicket] = useState<number>(benchmark.avgTicket);
-  const [closeRate, setCloseRate] = useState<number>(Math.round(benchmark.closeRate * 100));
+  const econ = getEconomics(industrySlug);
+  const [avgTicket, setAvgTicket] = useState<number>(econ.avgTicket);
+  const [closeRate, setCloseRate] = useState<number>(Math.round(econ.closeRate * 100));
 
-  // when industry changes, reset ticket/close to that industry's defaults
   function onIndustryChange(slug: string) {
     setIndustrySlug(slug);
-    const b = getBenchmark(slug);
-    setAvgTicket(b.avgTicket);
-    setCloseRate(Math.round(b.closeRate * 100));
+    const e = getEconomics(slug);
+    setAvgTicket(e.avgTicket);
+    setCloseRate(Math.round(e.closeRate * 100));
   }
 
   const result = useMemo(
-    () =>
-      projectResults({
-        budget,
-        platform,
-        benchmark,
-        avgTicket,
-        closeRate: closeRate / 100,
-      }),
-    [budget, platform, benchmark, avgTicket, closeRate]
+    () => projectFunnel({ budget, platform, industrySlug, avgTicket, closeRate: closeRate / 100 }),
+    [budget, platform, industrySlug, avgTicket, closeRate]
   );
 
-  const metrics = benchmark[platform];
+  const cell = resolveCell(econ, getPlatform(platform));
+  const platformLabel = getPlatform(platform).label;
+  const grouped = useMemo(() => {
+    const g: Record<string, typeof PLATFORMS> = {};
+    for (const p of PLATFORMS) (g[p.group] ||= []).push(p);
+    return g;
+  }, []);
 
   return (
     <div className="overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)]">
@@ -58,21 +58,17 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
 
           {!fixedPlatform && (
             <Field label="Platform">
-              <div className="grid grid-cols-2 gap-2">
-                {(["google", "meta"] as Platform[]).map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => setPlatform(p)}
-                    className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors ${
-                      platform === p
-                        ? "border-[var(--color-violet)] bg-[color-mix(in_srgb,var(--color-violet)_14%,transparent)] text-[var(--color-ink)]"
-                        : "border-[var(--color-border)] text-[var(--color-ink-dim)] hover:border-[var(--color-border-bright)]"
-                    }`}
-                  >
-                    {p === "google" ? "Google" : "Meta"}
-                  </button>
+              <select
+                value={platform}
+                onChange={(e) => setPlatform(e.target.value as PlatformId)}
+                className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-violet)]"
+              >
+                {Object.entries(grouped).map(([group, items]) => (
+                  <optgroup key={group} label={GROUP_LABEL[group] ?? group}>
+                    {items.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+                  </optgroup>
                 ))}
-              </div>
+              </select>
             </Field>
           )}
 
@@ -82,59 +78,33 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
               onChange={(e) => onIndustryChange(e.target.value)}
               className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-violet)]"
             >
-              {industryBenchmarks.map((b) => (
-                <option key={b.slug} value={b.slug}>{b.label}</option>
-              ))}
+              {industryEconomics.map((b) => <option key={b.slug} value={b.slug}>{b.label}</option>)}
             </select>
           </Field>
 
           <Field label={`Monthly ad budget: ${formatCurrency(budget)}`}>
-            <input
-              type="range"
-              min={500}
-              max={50000}
-              step={250}
-              value={budget}
-              onChange={(e) => setBudget(Number(e.target.value))}
-              className="w-full accent-[var(--color-violet)]"
-            />
-            <div className="mt-1 flex justify-between text-xs text-[var(--color-ink-faint)]">
-              <span>$500</span><span>$50,000</span>
-            </div>
+            <input type="range" min={500} max={50000} step={250} value={budget} onChange={(e) => setBudget(Number(e.target.value))} className="w-full accent-[var(--color-violet)]" />
+            <div className="mt-1 flex justify-between text-xs text-[var(--color-ink-faint)]"><span>$500</span><span>$50,000</span></div>
           </Field>
 
           <div className="grid grid-cols-2 gap-4">
             <Field label="Avg. customer value">
               <div className="flex items-center rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-3">
                 <span className="text-[var(--color-ink-faint)]">$</span>
-                <input
-                  type="number"
-                  value={avgTicket}
-                  min={0}
-                  onChange={(e) => setAvgTicket(Number(e.target.value))}
-                  className="w-full bg-transparent px-2 py-3 text-sm text-[var(--color-ink)] outline-none"
-                />
+                <input type="number" value={avgTicket} min={0} onChange={(e) => setAvgTicket(Number(e.target.value))} className="w-full bg-transparent px-2 py-3 text-sm text-[var(--color-ink)] outline-none" />
               </div>
             </Field>
             <Field label={`Lead→customer rate: ${closeRate}%`}>
-              <input
-                type="range"
-                min={2}
-                max={80}
-                step={1}
-                value={closeRate}
-                onChange={(e) => setCloseRate(Number(e.target.value))}
-                className="mt-3 w-full accent-[var(--color-cyan)]"
-              />
+              <input type="range" min={2} max={80} step={1} value={closeRate} onChange={(e) => setCloseRate(Number(e.target.value))} className="mt-3 w-full accent-[var(--color-cyan)]" />
             </Field>
           </div>
 
           <div className="mt-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] p-4 text-xs text-[var(--color-ink-faint)]">
-            <p className="mb-2 flex items-center gap-1.5 font-medium text-[var(--color-ink-dim)]"><Info size={13} /> {benchmark.label} · {PLATFORM_LABEL[platform]} benchmarks{metrics.estimate ? " (estimated)" : ""}</p>
+            <p className="mb-2 flex items-center gap-1.5 font-medium text-[var(--color-ink-dim)]"><Info size={13} /> {econ.label} · {platformLabel} benchmarks{cell.estimate ? " (estimated)" : ""}</p>
             <div className="grid grid-cols-3 gap-2">
-              <Bench label="Avg CPC" value={formatCurrency(metrics.cpc, { maximumFractionDigits: 2 })} />
-              <Bench label="Avg CTR" value={`${(metrics.ctr * 100).toFixed(2)}%`} />
-              <Bench label="Conv. rate" value={`${(metrics.cvr * 100).toFixed(1)}%`} />
+              <Bench label="Avg CPC" value={formatCurrency(cell.cpc, { maximumFractionDigits: 2 })} />
+              <Bench label="Avg CTR" value={`${(cell.ctr * 100).toFixed(2)}%`} />
+              <Bench label="Conv. rate" value={`${(cell.cvr * 100).toFixed(1)}%`} />
             </div>
           </div>
         </div>
@@ -144,34 +114,41 @@ export function AdCalculator({ platform: fixedPlatform }: { platform?: Platform 
           <div className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-[color-mix(in_srgb,var(--color-violet)_16%,transparent)] blur-3xl" />
           <h3 className="relative text-lg font-semibold">Projected monthly results</h3>
 
+          {/* Free preview: top of funnel */}
           <div className="relative mt-6 space-y-3">
-            <FunnelRow label="Clicks" sub="people to your site" value={formatNumber(result.clicks)} color="#5ee7f7" pct={1} />
-            <FunnelRow label="Leads" sub="enquiries & calls" value={formatNumber(result.leads)} color="#9b7bff" pct={0.62} />
-            <FunnelRow label="New customers" sub={`at ${closeRate}% close`} value={formatNumber(result.customers)} color="#ffce5c" pct={0.32} />
+            <FunnelRow label="Clicks" sub="visitors to your site" stage={result.clicks} color="#5ee7f7" pct={1} />
+            <FunnelRow label="Leads" sub="enquiries & calls" stage={result.leads} color="#9b7bff" pct={0.78} />
+            <FunnelRow label="Qualified leads" sub="real prospects" stage={result.qualifiedLeads} color="#8fbf24" pct={0.6} />
+            <FunnelRow label="Booked calls" sub="on the calendar" stage={result.bookedCalls} color="#ffce5c" pct={0.46} />
           </div>
 
-          <div className="relative mt-6 grid grid-cols-2 gap-3">
-            <Big label="Cost per lead" value={formatCurrency(result.costPerLead, { maximumFractionDigits: 2 })} />
-            <Big label="Projected revenue" value={formatCurrency(result.revenue)} highlight />
-            <Big label="Return on ad spend" value={`${result.roas.toFixed(1)}x`} highlight />
-            <Big label="Monthly spend" value={formatCurrency(budget)} />
+          {/* Gated: revenue economics */}
+          <div className="relative mt-6">
+            <ResultGate source={`tool:${platform}-calculator`}>
+              <div className="grid grid-cols-2 gap-3">
+                <Big label="New customers" value={formatNumber(result.customers.mid)} />
+                <Big label="Cost per lead" value={formatCurrency(result.costPerLead, { maximumFractionDigits: 2 })} />
+                <Big label="Cost per acquisition" value={formatCurrency(result.cac, { maximumFractionDigits: 0 })} />
+                <Big label="Projected revenue" value={formatCurrency(result.revenue.mid)} highlight />
+                <Big label="Return on ad spend" value={`${result.roas.toFixed(1)}x`} highlight />
+                <Big label="Monthly spend" value={formatCurrency(budget)} />
+              </div>
+              <motion.div
+                key={result.roas.toFixed(1)}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-4 flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm"
+              >
+                <TrendingUp size={16} className="text-[var(--color-success)]" />
+                <span className="text-[var(--color-ink-dim)]">
+                  At {formatCurrency(budget)}/mo in <strong className="text-[var(--color-ink)]">{econ.label}</strong>, a typical {platformLabel} account could see roughly <strong className="text-[var(--color-ink)]">{formatNumber(result.leads.mid)} leads</strong> and <strong className="text-[var(--color-ink)]">{formatCurrency(result.revenue.mid)}</strong> in revenue.
+                </span>
+              </motion.div>
+              <Button href="/contact" className="mt-5 w-full" size="lg">
+                Get a free audit to hit these numbers <ArrowRight size={18} />
+              </Button>
+            </ResultGate>
           </div>
-
-          <motion.div
-            key={result.roas.toFixed(1)}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative mt-5 flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm"
-          >
-            <TrendingUp size={16} className="text-[var(--color-success)]" />
-            <span className="text-[var(--color-ink-dim)]">
-              At {formatCurrency(budget)}/mo in <strong className="text-[var(--color-ink)]">{benchmark.label}</strong>, a typical account could see roughly <strong className="text-[var(--color-ink)]">{formatNumber(result.leads)} leads</strong> and <strong className="text-[var(--color-ink)]">{formatCurrency(result.revenue)}</strong> in revenue.
-            </span>
-          </motion.div>
-
-          <Button href="/contact" className="relative mt-6 w-full" size="lg">
-            Get a free audit to hit these numbers <ArrowRight size={18} />
-          </Button>
         </div>
       </div>
 
@@ -199,7 +176,7 @@ function Bench({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-function FunnelRow({ label, sub, value, color, pct }: { label: string; sub: string; value: string; color: string; pct: number }) {
+function FunnelRow({ label, sub, stage, color, pct }: { label: string; sub: string; stage: FunnelStage; color: string; pct: number }) {
   return (
     <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] p-3" style={{ width: `${Math.max(60, pct * 100)}%`, marginLeft: `${(1 - Math.max(0.6, pct)) * 50}%` }}>
       <div className="flex items-center justify-between">
@@ -208,7 +185,10 @@ function FunnelRow({ label, sub, value, color, pct }: { label: string; sub: stri
           <span className="text-sm font-medium text-[var(--color-ink)]">{label}</span>
           <span className="hidden text-xs text-[var(--color-ink-faint)] sm:inline">{sub}</span>
         </div>
-        <span className="font-display text-lg font-bold" style={{ color }}>{value}</span>
+        <div className="text-right">
+          <span className="font-display text-lg font-bold" style={{ color }}>{formatNumber(stage.mid)}</span>
+          <span className="ml-1 text-[10px] text-[var(--color-ink-faint)]">{formatNumber(stage.low)}–{formatNumber(stage.high)}</span>
+        </div>
       </div>
     </div>
   );
