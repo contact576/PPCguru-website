@@ -21,6 +21,8 @@ import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
 import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
 import { getServiceContent } from "@/lib/data/service-content";
+import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
+import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
 
 // Which ad platform each service's calculator should default to.
 const SERVICE_PLATFORM: Record<string, PlatformId> = {
@@ -78,6 +80,10 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const firstWord = service.name.split(" ")[0];
   const content = getServiceContent(slug);
   const schemaDesc = content?.definition ?? service.description;
+  const siRows = industriesForService(slug).flatMap((iSlug) => {
+    const a = getServiceIndustryAngle(slug, iSlug);
+    return a ? [{ industrySlug: iSlug, label: serviceIndustryLabel(slug, iSlug), href: `/services/${slug}/${iSlug}`, angle: a }] : [];
+  });
 
   // Bespoke flagship layout for the Google Ads showcase service.
   if (slug === "google-ads") {
@@ -278,8 +284,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         intro={`Pick your industry and budget — we'll model the leads, booked calls and revenue ${service.name.toLowerCase()} could produce, using real benchmarks and your average ticket.`}
       />
 
-      {/* Related industries */}
-      {relatedIndustries.length > 0 && (
+      {/* Industry playbooks — "[Service] for [Industry]" accordion + dedicated pages */}
+      {siRows.length > 0 ? (
+        <Section>
+          <SectionHeading align="left" eyebrow="Industry playbooks" title={<>{firstWord} for <span className="text-gradient">your industry</span></>} intro={`Tap an industry to see how we run ${service.name} for it — what good looks like, best practices, typical benchmarks and what to expect.`} />
+          <ServiceIndustryAccordion rows={siRows} />
+        </Section>
+      ) : relatedIndustries.length > 0 ? (
         <Section>
           <SectionHeading align="left" eyebrow="Where it works" title="Industries we run this for" />
           <div className="mt-8 flex flex-wrap gap-3">
@@ -290,7 +301,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
             ))}
           </div>
         </Section>
-      )}
+      ) : null}
 
       <CityCallout serviceName={service.name} />
 

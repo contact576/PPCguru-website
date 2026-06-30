@@ -15,6 +15,8 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import { accentVarsFor } from "@/lib/data/themes";
 import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable } from "@/components/sections/service-aeo";
 import { getServiceContent } from "@/lib/data/service-content";
+import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
+import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
 
 const ACCENT = "#2f6db0";
 const INK = "#14170e";
@@ -29,6 +31,10 @@ const ANATOMY = [
  *  account", audit-first design distinct from the generic service template. */
 export function GoogleAdsFlagship({ service }: { service: Service }) {
   const content = getServiceContent("google-ads");
+  const siRows = industriesForService("google-ads").flatMap((iSlug) => {
+    const a = getServiceIndustryAngle("google-ads", iSlug);
+    return a ? [{ industrySlug: iSlug, label: serviceIndustryLabel("google-ads", iSlug), href: `/services/google-ads/${iSlug}`, angle: a }] : [];
+  });
   return (
     <div style={accentVarsFor(ACCENT)}>
       <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
@@ -92,6 +98,12 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
       <ServiceProof serviceName={service.name} proofStats={service.proofStats} caseStudySlugs={service.caseStudySlugs} />
       <EstimateBand platform="google-search" title={<>Estimate your <span style={{ color: ACCENT }}>Google Ads</span> potential</>} intro="Pick your industry and budget — we'll model the leads, booked calls and revenue your Google Ads could produce." />
       <LeadBand source="flagship:google-ads" title="Get a free Google Ads audit" />
+      {siRows.length > 0 && (
+        <Section>
+          <SectionHeading align="left" eyebrow="Industry playbooks" title={<>Google Ads for <span style={{ color: ACCENT }}>your industry</span></>} intro="Tap an industry to see how we run Google Ads for it — what good looks like, best practices, typical benchmarks and what to expect." />
+          <ServiceIndustryAccordion rows={siRows} />
+        </Section>
+      )}
       {content?.comparison && <ComparisonTable rows={content.comparison} serviceName="Google Ads management" />}
       <FaqAccordion faqs={content?.faqs ?? service.faqs} title="Google Ads Management — questions" />
       <CtaBlock />
