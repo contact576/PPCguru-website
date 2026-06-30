@@ -19,6 +19,8 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
+import { TrustBadgeBar, ServiceIntro, ServiceStatBand } from "@/components/sections/service-aeo";
+import { getServiceContent } from "@/lib/data/service-content";
 
 // Which ad platform each service's calculator should default to.
 const SERVICE_PLATFORM: Record<string, PlatformId> = {
@@ -74,12 +76,14 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     { name: service.name, path: `/services/${slug}` },
   ];
   const firstWord = service.name.split(" ")[0];
+  const content = getServiceContent(slug);
+  const schemaDesc = content?.definition ?? service.description;
 
   // Bespoke flagship layout for the Google Ads showcase service.
   if (slug === "google-ads") {
     return (
       <>
-        <JsonLd data={serviceSchema({ name: service.name, description: service.description, path: `/services/${slug}` })} />
+        <JsonLd data={serviceSchema({ name: service.name, description: schemaDesc, path: `/services/${slug}` })} />
         <JsonLd data={breadcrumbSchema(crumbs)} />
         <GoogleAdsFlagship service={service} />
       </>
@@ -88,7 +92,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   return (
     <div style={accentVars(slug)}>
-      <JsonLd data={serviceSchema({ name: service.name, description: service.description, path: `/services/${slug}` })} />
+      <JsonLd data={serviceSchema({ name: service.name, description: schemaDesc, path: `/services/${slug}` })} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
       <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={SERVICE_ART[slug] ?? <ServicesArt />}>
@@ -96,6 +100,11 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
         </Magnetic>
       </PageHero>
+
+      {/* Trust strip + answer-first definition + per-service stats (AEO / E-E-A-T) */}
+      <TrustBadgeBar />
+      {content?.definition && <ServiceIntro name={service.name} definition={content.definition} heading={content.definitionHeading} />}
+      <ServiceStatBand slug={slug} />
 
       {/* Outcomes strip */}
       <Section className="!pb-0">

@@ -13,6 +13,8 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { accentVarsFor } from "@/lib/data/themes";
+import { TrustBadgeBar, ServiceIntro, ServiceStatBand } from "@/components/sections/service-aeo";
+import { getServiceContent } from "@/lib/data/service-content";
 
 const ACCENT = "#2f6db0";
 const INK = "#14170e";
@@ -26,6 +28,7 @@ const ANATOMY = [
 /** BESPOKE flagship layout for the Google Ads service — an "anatomy of a rebuilt
  *  account", audit-first design distinct from the generic service template. */
 export function GoogleAdsFlagship({ service }: { service: Service }) {
+  const content = getServiceContent("google-ads");
   return (
     <div style={accentVarsFor(ACCENT)}>
       <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
@@ -56,6 +59,10 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
           <Reveal className="relative">{service.dashboardMock ? <DashboardMock data={service.dashboardMock} /> : null}</Reveal>
         </div>
       </section>
+
+      <TrustBadgeBar />
+      {content?.definition && <ServiceIntro name="Google Ads management" definition={content.definition} heading={content.definitionHeading} />}
+      <ServiceStatBand slug="google-ads" />
 
       {/* Anatomy of a rebuilt account (bespoke) */}
       <Section>

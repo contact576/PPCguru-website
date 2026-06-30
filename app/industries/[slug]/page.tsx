@@ -25,6 +25,8 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { TrustBadgeBar, ServiceIntro } from "@/components/sections/service-aeo";
+import { getIndustryContent } from "@/lib/data/industry-content";
 
 const INDUSTRY_ICONS: Record<string, LucideIcon> = {
   physiotherapy: Activity,
@@ -62,6 +64,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
 
   const relatedServices = ind.services.map(getService).filter(Boolean);
   const cases = caseStudiesByIndustry(slug);
+  const intro = getIndustryContent(slug);
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Industries", path: "/industries" },
@@ -80,6 +83,10 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
           <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free audit <ArrowRight size={18} /></Button>
         </Magnetic>
       </PageHero>
+
+      {/* Trust strip + answer-first definition (AEO / E-E-A-T) */}
+      <TrustBadgeBar />
+      {intro?.definition && <ServiceIntro name={ind.name} definition={intro.definition} heading={intro.definitionHeading} />}
 
       {/* Pain points → approach */}
       <Section>
