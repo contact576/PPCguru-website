@@ -70,6 +70,7 @@ We publish dedicated pages on running a specific service for a specific vertical
 ## Learn more
 - About PPC Guru: https://ppcguru.ca/about
 - Industry benchmarks (free, sourced data): https://ppcguru.ca/benchmarks
+- Compare (Google Ads vs Meta, agency vs in-house vs DIY, PPC vs SEO): https://ppcguru.ca/compare
 - Results / case studies: https://ppcguru.ca/results
 - Blog: https://ppcguru.ca/blog
 - Contact: https://ppcguru.ca/contact
