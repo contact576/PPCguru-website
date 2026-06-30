@@ -9,10 +9,10 @@ Canada / USA). Next.js 16 (App Router) + React 19 + TypeScript + Tailwind v4. It
 (programmatic service/industry/location pages + blog) and a **lead-generation funnel** (gated calculators,
 two-step pop-up, per-page contact bands). Deployed on Vercel; `main` is production (`vercel.json` pins Next.js).
 
-> **Design state:** `main` ships the original dark violet→cyan theme with a Three.js hero. The `claude/*`
-> revamp branches (PR #7) ship the current **cream/lime/ink** light design — that's what merges to `main`.
-> If something reads as "legacy" (Three.js funnel, `components/home/hero.tsx`, `components/home/ai-os.tsx`),
-> it's orphaned on the revamp branch — grep for imports before assuming it renders.
+> **Design state:** the **cream/lime/ink** light revamp is now **LIVE on `main` / production** (PR #7 merged
+> Jun 2026). The original dark violet→cyan theme + Three.js hero is retired; some legacy files
+> (`components/home/hero.tsx`, `components/home/ai-os.tsx`) may still exist unimported — grep for imports
+> before assuming anything renders. New feature work: branch → PR → `main`.
 
 ## Commands
 
@@ -41,7 +41,12 @@ Edit the typed data modules, not the JSX. Pages render via `generateStaticParams
   client/credential logos (text-pill fallback; drop real assets in `/public`, set `src`).
 - `lib/data/tools.ts` — free-tools registry consumed by BOTH `app/tools/page.tsx` AND `app/sitemap.ts`
   (add a tool here or it drops from the sitemap).
-- `lib/data/performance-stats.ts` — headline stats + `heroSampleModel` (one consistent set of hero numbers).
+- `lib/data/performance-stats.ts` — `performanceStats` (rendered as a 3-up **agency_aggregate** band on the
+  homepage: $100M+ managed · 1M+ leads · 6.3x ROAS; the `founder_experience` rows power the About page) +
+  `heroSampleModel` (one consistent set of hero numbers). Client-directed figures — keep them consistent.
+- `lib/data/team.ts` — team roster for the About "Meet the team" section (`components/sections/team.tsx`);
+  the two real founders are seeded, it scales to N (headshot-or-monogram, focus chips, optional LinkedIn).
+  Only add **real** people.
 - `lib/data/offers.ts` — pop-up funnel copy ($600 credit, free audit).
 - `content/blog/*.md` — posts read at build by `lib/blog.ts`.
 
@@ -98,6 +103,12 @@ via `lib/ai/anthropic.ts` — both **fall back to deterministic output when `ANT
 - `components/ui/*` — `Button`, `Section` (tonal `tone` system), `Reveal`, `Counter`, `Eyebrow`/`Badge`,
   and `interactive.tsx` (`CursorGlow` trailing cursor, `Magnetic`, `SpotlightCard` — all degrade on touch /
   reduced-motion). Styled with `cva` + `cn()` (`lib/utils.ts`).
+  - **Scroll-reveal has two mechanisms — both fail-safe:** the homepage uses inline `[data-reveal]` +
+    `components/home/reveal-init.tsx` (IntersectionObserver, 2.5s blanket fallback); inner pages use the
+    `Reveal` motion component (`whileInView` + a 2.2s mount fallback so a section can never stay `opacity:0`).
+    If you add reveal-based content, keep a fallback — stuck-hidden sections read as "broken."
+- Global chrome mounted in `app/layout.tsx`: `AnnouncementBar`, `SiteHeader`, `SiteFooter`, `FloatingCta`,
+  `OfferPopup` (pathname-gated off `/contact`,`/results`,`/tools/*`; 12s dwell), `CookieConsent`.
 - `components/sections/*` — shared blocks (service-proof, estimate-band, lead-band, faq-accordion,
   service-deep, industry-deep, case-study-visuals, cta-block, service-grid, industry-grid, …).
 - `components/illustrations/*` — bespoke SVG hero art + `dashboard-mock.tsx` (a sample dashboard whose every
@@ -126,5 +137,19 @@ via `lib/ai/anthropic.ts` — both **fall back to deterministic output when `ANT
 - Env vars (`ANTHROPIC_API_KEY`, `RESEND_API_KEY`, Turnstile, …) are all optional; everything degrades gracefully.
 
 ## Git / deploy
-`main` is production (Vercel auto-deploys). Active revamp work is on `claude/revamp` (PR #7, still a draft);
-each push rebuilds the PR preview. Feature work on `claude/*` → PR → `main`.
+`main` is production (Vercel auto-deploys it). The revamp (PR #7, branch `claude/revamp`) is **merged**.
+Feature work: branch → PR → `main`; each PR push builds a Vercel **preview**, merging to `main` deploys
+**production** (`https://pp-cguru-website.vercel.app`, Vercel team `dhaval-patel`).
+
+- **⚠ Vercel blocks a production build when the tip commit's author email isn't matched to a GitHub
+  account.** A GitHub UI "merge" can author the merge commit with an unverified email (e.g.
+  `contact@ppcguru.ca`) → deployment shows **"Deployment Blocked – commit email could not be matched."**
+  Fix: ensure the tip commit is authored with a GitHub-verified email (the account's
+  `…@users.noreply.github.com` always matches), then push — Vercel rebuilds. (`noreply@anthropic.com`
+  commits built every preview, so re-tipping `main` with one is a quick unblock.)
+- The repo lives at `contact576/PPCguru-website`; the Vercel project is under team `dhaval-patel`. If a
+  push doesn't deploy, check **Vercel → Settings → Git → Production Branch = `main`** and the Deployments
+  tab for a Blocked/Error status.
+- Audit docs in repo root: `WEBSITE-AUDIT.md` (page-by-page trust/credibility audit + fixes, all shipped)
+  and `ENTERPRISE-AUDIT.md` (enterprise-B2B readiness audit + ranked plan). `CONTENT-TODO.md` lists the
+  real assets still to swap in (phone/WhatsApp, founder photos, named client proof, GA4/Pixel/Resend keys).
