@@ -14,6 +14,34 @@ two-step pop-up, per-page contact bands). Deployed on Vercel; `main` is producti
 > (`components/home/hero.tsx`, `components/home/ai-os.tsx`) may still exist unimported — grep for imports
 > before assuming anything renders. New feature work: branch → PR → `main`.
 
+## AEO/GEO, schema & content hubs (2026 — on branches `claude/relaxed-rubin-8h2lvp` + `claude/site-optimization-session`, not yet merged)
+
+A 7-wave AEO/GEO/E-E-A-T overhaul + an optimization session took LLM-readiness from 49 → **93/100**. Durable rules:
+- **One trust-number source:** `lib/data/performance-stats.ts` `trustFacts` ($100M+ managed · 1M+ leads ·
+  6.3× ROAS · 150+ clients · 10+ yrs founder experience). `siteConfig.trust` holds only booleans + `serviceArea`
+  — NEVER re-add numeric figures there (the old $10M+/4.2x/120k set was deleted; a divergent set tanks E-E-A-T).
+- **AEO content layer (kept separate from core data so it's extendable):** `lib/data/service-content.ts`
+  (answer-first service definitions + comparison rows), `industry-content.ts` (industry definitions),
+  `service-faq.ts` + `industry-faq.ts` (**AUTO-GENERATED** 130 + 90 FAQs — regenerate from the content
+  workflow, don't hand-edit), `service-industry.ts` + `service-industry-content.ts` (the 45
+  "[service] for [industry]" combos), `service-stats.ts` (per-service stat bands), `comparisons.ts`
+  (/compare), `glossary.ts` (/glossary). `getServiceContent`/`getIndustryContent` MERGE the hand-written
+  + generated layers.
+- **Schema (`lib/seo.ts`):** sitewide `graphSchema()` (Organization + WebSite in one `@graph`, rendered via
+  `SiteGraphJsonLd` in layout); `personSchema()` (founders on /about + matched blog authors); `serviceSchema`
+  carries `dateModified` (`CONTENT_UPDATED_ISO`); `faqSchema`/FAQPage on every Q&A surface; `DefinedTermSet`
+  (/glossary); `Dataset` (/benchmarks); `itemListSchema` (hubs). Org `sameAs` filters placeholder roots.
+  **Keep Review/AggregateRating OFF until verified** (honesty hold).
+- **New routes:** `/benchmarks` (ungated sourced data + Dataset schema), `/compare`, `/glossary`, `/pricing`
+  (explains fee models — NO invented prices), `app/services/[slug]/[industry]` (45 combo pages,
+  `dynamicParams=false`), `app/opengraph-image.tsx` (dynamic OG card). `public/llms.txt` lists entity + key URLs.
+- **AEO components:** `components/sections/service-aeo.tsx` (ServiceIntro, TrustBadgeBar, ServiceStatBand,
+  ComparisonTable, CityCallout, LastReviewed) + `service-industry-accordion.tsx`. Comparison tables use
+  `scope`/`<caption>`.
+- **Review workflow:** branch → PR → human review → merge. The optimization session lives on
+  `claude/site-optimization-session` (PR base = the AEO branch); progress in `OPTIMIZATION_LOG.md`. NEVER push
+  to `main` without approval. After large content changes, re-run the AEO audit (a Workflow) to re-confirm the score.
+
 ## Commands
 
 ```bash
