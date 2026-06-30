@@ -6,6 +6,8 @@
  * core Industry objects. `faqs` is populated in a later wave; optional.
  */
 
+import { industryFaq } from "./industry-faq";
+
 export type IndustryContent = {
   definition: string;
   /** Question-shaped H2 for the definition block. */
@@ -92,5 +94,8 @@ export const industryContent: Record<string, IndustryContent> = {
 };
 
 export function getIndustryContent(slug: string): IndustryContent | undefined {
-  return industryContent[slug];
+  const base = industryContent[slug];
+  if (!base) return undefined;
+  const faqData = industryFaq[slug];
+  return faqData ? { ...base, ...faqData } : base;
 }

@@ -161,7 +161,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
 
       <LeadBand source={`industry:${ind.slug}`} title={`Grow your ${ind.name.split(" ")[0].toLowerCase()} business`} />
 
-      <FaqAccordion faqs={ind.faqs} title={`${ind.name} — questions`} />
+      <FaqAccordion faqs={intro?.faqs ?? ind.faqs} title={`${ind.name} — questions`} />
       <CtaBlock title={`Ready to grow your ${ind.name.toLowerCase()} business?`} />
     </div>
   );

@@ -10,6 +10,8 @@
  * comparison / geoBlurb / faqs are populated in later waves; all optional.
  */
 
+import { serviceFaq } from "./service-faq";
+
 export type ServiceContent = {
   definition: string;
   /** Question-shaped H2 for the definition block. Defaults to "What is {name}?" */
@@ -91,5 +93,8 @@ export const serviceContent: Record<string, ServiceContent> = {
 };
 
 export function getServiceContent(slug: string): ServiceContent | undefined {
-  return serviceContent[slug];
+  const base = serviceContent[slug];
+  if (!base) return undefined;
+  const faqData = serviceFaq[slug];
+  return faqData ? { ...base, ...faqData } : base;
 }

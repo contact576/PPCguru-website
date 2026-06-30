@@ -19,7 +19,7 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
-import { TrustBadgeBar, ServiceIntro, ServiceStatBand } from "@/components/sections/service-aeo";
+import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable } from "@/components/sections/service-aeo";
 import { getServiceContent } from "@/lib/data/service-content";
 
 // Which ad platform each service's calculator should default to.
@@ -268,6 +268,9 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
+      {/* Comparison table — decision content (PPC Guru vs typical agency) */}
+      {content?.comparison && <ComparisonTable rows={content.comparison} serviceName={service.name} />}
+
       {/* Per-service calculator */}
       <EstimateBand
         platform={SERVICE_PLATFORM[slug] ?? "google-search"}
@@ -291,7 +294,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
       <LeadBand source={`service:${slug}`} title={`Get a free ${firstWord} audit`} />
 
-      <FaqAccordion faqs={service.faqs} title={`${service.name} — questions`} />
+      <FaqAccordion faqs={content?.faqs ?? service.faqs} title={`${service.name} — questions`} />
       <CtaBlock />
     </div>
   );

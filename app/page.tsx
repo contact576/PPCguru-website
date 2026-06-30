@@ -6,7 +6,7 @@ import { FaqList } from "@/components/home/faq-list";
 import { AuditForm } from "@/components/home/audit-form";
 import {
   tickerLoop, proofItems, proofPoints, sprintWeeks, homeServices, growthLoop, aiTasks, humanTasks,
-  cmpBad, cmpGood, rptDeliverables, rptKpis, homeCases, homeIndustries,
+  comparisonRows, rptDeliverables, rptKpis, homeCases, homeIndustries,
   homePricing,
 } from "@/lib/data/home";
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
@@ -299,21 +299,27 @@ export default function HomePage() {
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Typical agency vs <Em>the Guru way</Em></h2>
             <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>The difference isn&rsquo;t just better bidding — it&rsquo;s transparency, ownership, and optimizing for revenue.</p>
           </div>
-          <div className="grid gap-[18px] md:grid-cols-2">
-            <div data-reveal style={{ background: "#fff", border: "1px solid #f0d4c4", borderRadius: 24, padding: 30 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 22 }}><span style={{ width: 40, height: 40, borderRadius: 11, background: "rgba(242,106,43,.16)", color: coral, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>✕</span><span className="head" style={{ fontSize: 19 }}>Typical agency</span></div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {cmpBad.map((b) => <div key={b} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 14.5, color: "#54564a", lineHeight: 1.5 }}><span style={{ color: coral, fontWeight: 700, flexShrink: 0 }}>✕</span>{b}</div>)}
-              </div>
-            </div>
-            <div data-reveal style={{ background: "#eef2dd", border: "1px solid #cfe39a", borderRadius: 24, padding: 30, boxShadow: "0 18px 44px rgba(111,125,34,.12)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 22 }}><span style={{ width: 40, height: 40, borderRadius: 11, background: lime, color: ink, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>✓</span><span className="head" style={{ fontSize: 19 }}>The PPC Guru way</span></div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {cmpGood.map((g) => <div key={g} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 14.5, color: "#2c2e22", lineHeight: 1.5, fontWeight: 500 }}><span style={{ color: olive, fontWeight: 700, flexShrink: 0 }}>✓</span>{g}</div>)}
-              </div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 22, paddingTop: 20, borderTop: "1px solid #cfe39a" }}>
-                {["📄 Weekly report", "✅ Tracking checklist", "🔑 Account ownership"].map((c) => <span key={c} className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#4f5f14", border: "1px solid #cfe39a", padding: "6px 10px", borderRadius: 8, letterSpacing: ".05em", textTransform: "uppercase" }}>{c}</span>)}
-              </div>
+          <div data-reveal style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", minWidth: 560, borderCollapse: "collapse", textAlign: "left" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid #e3e0d0" }}>
+                  <th className="mono" style={{ padding: "12px 16px 12px 0", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>What matters</th>
+                  <th className="mono" style={{ padding: "12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: olive, fontWeight: 700 }}>The PPC Guru way</th>
+                  <th className="mono" style={{ padding: "12px 0 12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>Typical agency</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonRows.map((r) => (
+                  <tr key={r.dimension} style={{ borderBottom: "1px solid #e3e0d0", verticalAlign: "top" }}>
+                    <td className="head" style={{ padding: "16px 16px 16px 0", fontSize: 14.5, color: ink }}>{r.dimension}</td>
+                    <td style={{ padding: 16, fontSize: 14, color: "#2c2e22", fontWeight: 500 }}><span style={{ color: olive, fontWeight: 700, marginRight: 8 }}>✓</span>{r.guru}</td>
+                    <td style={{ padding: "16px 0 16px 16px", fontSize: 14, color: "#54564a" }}><span style={{ color: coral, fontWeight: 700, marginRight: 8 }}>✕</span>{r.typical}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 22 }}>
+              {["📄 Weekly report", "✅ Tracking checklist", "🔑 Account ownership"].map((c) => <span key={c} className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#4f5f14", border: "1px solid #cfe39a", padding: "6px 10px", borderRadius: 8, letterSpacing: ".05em", textTransform: "uppercase" }}>{c}</span>)}
             </div>
           </div>
         </div>

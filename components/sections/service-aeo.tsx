@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Section } from "@/components/ui/section";
+import { Check, X } from "lucide-react";
+import { Section, SectionHeading } from "@/components/ui/section";
 import { getServiceStats, serviceCredentials } from "@/lib/data/service-stats";
 import { trustFacts } from "@/lib/data/performance-stats";
 
@@ -87,6 +88,47 @@ export function CityCallout({ serviceName }: { serviceName?: string }) {
           ))}
           <Link href="/locations" className="mono rounded-full border border-[var(--accent-line)] bg-[var(--accent-tint)] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[.04em] text-[var(--accent-strong)]">All locations →</Link>
         </div>
+      </div>
+    </Section>
+  );
+}
+
+/** Decision content — a semantic comparison table (PPC Guru vs a typical agency). */
+export function ComparisonTable({ rows, serviceName }: { rows?: { dimension: string; us: string; typical: string }[]; serviceName: string }) {
+  if (!rows?.length) return null;
+  return (
+    <Section tone="cream">
+      <SectionHeading
+        align="left"
+        eyebrow="How we compare"
+        title={<>PPC Guru vs a <span className="text-gradient">typical agency</span></>}
+        intro={`What you actually get with ${serviceName} at PPC Guru — line by line.`}
+      />
+      <div className="mt-10 overflow-x-auto">
+        <table className="w-full min-w-[640px] border-collapse text-left">
+          <thead>
+            <tr className="border-b border-[var(--color-border)]">
+              <th className="mono py-3 pr-4 text-[11px] uppercase tracking-[.06em] text-[var(--color-ink-faint)]">What matters</th>
+              <th className="mono px-4 py-3 text-[11px] uppercase tracking-[.06em] text-[var(--accent-strong)]">PPC Guru</th>
+              <th className="mono py-3 pl-4 text-[11px] uppercase tracking-[.06em] text-[var(--color-ink-faint)]">Typical agency</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.dimension} className="border-b border-[var(--color-border)] align-top">
+                <td className="py-4 pr-4 text-sm font-semibold text-[var(--color-ink)]">{r.dimension}</td>
+                <td className="px-4 py-4 text-sm text-[var(--color-ink)]">
+                  <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent-soft)] align-middle text-[var(--accent-strong)]"><Check size={12} /></span>
+                  {r.us}
+                </td>
+                <td className="py-4 pl-4 text-sm text-[var(--color-ink-dim)]">
+                  <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[rgba(242,106,43,.12)] align-middle text-[var(--color-coral)]"><X size={12} /></span>
+                  {r.typical}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </Section>
   );

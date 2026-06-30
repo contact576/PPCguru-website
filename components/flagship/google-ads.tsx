@@ -13,7 +13,7 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { accentVarsFor } from "@/lib/data/themes";
-import { TrustBadgeBar, ServiceIntro, ServiceStatBand } from "@/components/sections/service-aeo";
+import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable } from "@/components/sections/service-aeo";
 import { getServiceContent } from "@/lib/data/service-content";
 
 const ACCENT = "#2f6db0";
@@ -92,7 +92,8 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
       <ServiceProof serviceName={service.name} proofStats={service.proofStats} caseStudySlugs={service.caseStudySlugs} />
       <EstimateBand platform="google-search" title={<>Estimate your <span style={{ color: ACCENT }}>Google Ads</span> potential</>} intro="Pick your industry and budget — we'll model the leads, booked calls and revenue your Google Ads could produce." />
       <LeadBand source="flagship:google-ads" title="Get a free Google Ads audit" />
-      <FaqAccordion faqs={service.faqs} title="Google Ads Management — questions" />
+      {content?.comparison && <ComparisonTable rows={content.comparison} serviceName="Google Ads management" />}
+      <FaqAccordion faqs={content?.faqs ?? service.faqs} title="Google Ads Management — questions" />
       <CtaBlock />
     </div>
   );

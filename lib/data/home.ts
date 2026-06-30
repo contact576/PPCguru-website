@@ -57,6 +57,16 @@ export const humanTasks = ["Strategy & positioning", "Budget decisions", "Offer 
 export const cmpBad = ["You only see reports after the money is already spent", "Campaigns optimized for clicks, not revenue", "Landing pages and conversion paths ignored", "Tracking is unclear, broken, or untrusted", "Long contracts before any trust is earned", "No clear explanation of what changed and why"];
 export const cmpGood = ["Weekly action summaries — see what changed every week", "Optimization around leads, CAC, ROAS and sales", "Landing-page and CRO recommendations included", "GA4 / GTM / conversion-tracking review built in", "No long-term lock-in — month to month", "Clear explanation of every change — you own your account"];
 
+/** Paired comparison rows — rendered as a semantic <table> on the homepage (LLM-extractable). */
+export const comparisonRows = [
+  { dimension: "Reporting", guru: "Weekly action summaries — see what changed every week", typical: "You only see reports after the money is already spent" },
+  { dimension: "What we optimize for", guru: "Optimization around leads, CAC, ROAS and sales", typical: "Campaigns optimized for clicks, not revenue" },
+  { dimension: "Landing pages & CRO", guru: "Landing-page and CRO recommendations included", typical: "Landing pages and conversion paths ignored" },
+  { dimension: "Tracking", guru: "GA4 / GTM / conversion-tracking review built in", typical: "Tracking is unclear, broken, or untrusted" },
+  { dimension: "Commitment", guru: "No long-term lock-in — month to month", typical: "Long contracts before any trust is earned" },
+  { dimension: "Transparency & ownership", guru: "Clear explanation of every change — you own your account", typical: "No clear explanation of what changed and why" },
+];
+
 export const rptDeliverables = ["Weekly optimization summary", "Monthly strategy review", "Budget reallocation notes", "Search-term waste report", "Conversion-tracking health check", "Landing-page recommendations"];
 export const rptKpis = [
   { label: "Cost / lead", val: "$42", c: "#f1efe3", delta: "↓ 31%" },
