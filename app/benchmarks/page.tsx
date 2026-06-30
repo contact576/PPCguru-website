@@ -5,7 +5,7 @@ import { PageHero } from "@/components/shared/page-hero";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { JsonLd } from "@/components/seo/json-ld";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { buildMetadata, breadcrumbSchema, CONTENT_UPDATED_ISO } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 import { industryEconomics, BENCHMARK_SOURCES, BENCHMARK_DISCLAIMER } from "@/lib/data/benchmarks";
 
@@ -55,6 +55,9 @@ const datasetSchema = {
   isAccessibleForFree: true,
   license: "https://creativecommons.org/licenses/by/4.0/",
   url: `${siteConfig.url}/benchmarks`,
+  dateModified: CONTENT_UPDATED_ISO,
+  temporalCoverage: "2024/2025",
+  spatialCoverage: "Canada",
   variableMeasured: ["Cost per click", "Lead conversion rate", "Cost per lead", "Average customer value", "Close rate", "Cost per customer"],
 };
 

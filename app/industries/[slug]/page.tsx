@@ -27,6 +27,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { TrustBadgeBar, ServiceIntro, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
 import { getIndustryContent } from "@/lib/data/industry-content";
+import { getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
 
 const INDUSTRY_ICONS: Record<string, LucideIcon> = {
   physiotherapy: Activity,
@@ -65,6 +66,9 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
   const relatedServices = ind.services.map(getService).filter(Boolean);
   const cases = caseStudiesByIndustry(slug);
   const intro = getIndustryContent(slug);
+  const comboLinks = ind.services
+    .filter((sv) => getServiceIndustryAngle(sv, slug))
+    .map((sv) => ({ href: `/services/${sv}/${slug}`, label: serviceIndustryLabel(sv, slug) }));
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Industries", path: "/industries" },
@@ -140,6 +144,18 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
           })}
         </div>
       </Section>
+
+      {/* Service-for-industry playbooks — reciprocal links into the combo pages */}
+      {comboLinks.length > 0 && (
+        <Section className="!pt-0">
+          <SectionHeading align="left" eyebrow="Playbooks" title={<>How we run each service for <span className="text-gradient">{ind.name.toLowerCase()}</span></>} />
+          <div className="mt-8 flex flex-wrap gap-3">
+            {comboLinks.map((c) => (
+              <Link key={c.href} href={c.href} className="mono rounded-full border border-[var(--accent-line)] bg-[var(--accent-tint)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[.05em] text-[var(--accent-strong)] transition-colors hover:border-[var(--accent)]">{c.label} →</Link>
+            ))}
+          </div>
+        </Section>
+      )}
 
       {/* Per-channel playbook */}
       {ind.playbook && <IndustryPlaybook name={ind.name} playbook={ind.playbook} />}

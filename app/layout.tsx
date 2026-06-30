@@ -10,7 +10,7 @@ import { FloatingCta } from "@/components/shared/floating-cta";
 import { OfferPopup } from "@/components/shared/offer-popup";
 import { CookieConsent } from "@/components/shared/cookie-consent";
 import { CursorGlow } from "@/components/ui/interactive";
-import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/json-ld";
+import { SiteGraphJsonLd } from "@/components/seo/json-ld";
 
 // Display + body workhorse — Archivo (the design's primary grotesk).
 const archivo = Archivo({
@@ -77,8 +77,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${archivo.variable} ${dmSerif.variable} ${jetbrains.variable}`}>
       <body className="min-h-screen antialiased">
-        <OrganizationJsonLd />
-        <WebSiteJsonLd />
+        <SiteGraphJsonLd />
         <CursorGlow />
         <SmoothScrollProvider>
           <AnnouncementBar />

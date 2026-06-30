@@ -10,7 +10,8 @@ import { allServiceIndustryPairs } from "@/lib/data/service-industry";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
-  const now = new Date();
+  // Stable content-updated stamp (not new Date()) so lastModified isn't "always now" each build.
+  const now = new Date("2026-06-30T00:00:00Z");
 
   const staticRoutes = [
     "", "/services", "/industries", "/locations", "/results", "/about",

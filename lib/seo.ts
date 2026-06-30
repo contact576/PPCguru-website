@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { siteConfig } from "./site-config";
 
+/** Content-freshness stamp for schema dateModified + visible "last reviewed". [VERIFY-client] bump on material revisions. */
+export const CONTENT_UPDATED_ISO = "2026-06-30";
+
 /** Build per-page metadata with sensible canonical + OG defaults. */
 export function buildMetadata(opts: {
   title: string;
@@ -42,6 +45,8 @@ export function organizationSchema() {
     "@id": `${siteConfig.url}/#organization`,
     name: siteConfig.name,
     url: siteConfig.url,
+    logo: `${siteConfig.url}/logo.svg`,
+    image: `${siteConfig.url}/logo.svg`,
     description: siteConfig.description,
     email: siteConfig.contact.email,
     ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phone } : {}),
@@ -79,7 +84,7 @@ export function breadcrumbSchema(items: { name: string; path: string }[]) {
   };
 }
 
-export function serviceSchema(opts: { name: string; description: string; path: string }) {
+export function serviceSchema(opts: { name: string; description: string; path: string; dateModified?: string }) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -88,7 +93,18 @@ export function serviceSchema(opts: { name: string; description: string; path: s
     url: `${siteConfig.url}${opts.path}`,
     provider: { "@id": `${siteConfig.url}/#organization` },
     areaServed: ["Canada", "United States"],
+    dateModified: opts.dateModified ?? CONTENT_UPDATED_ISO,
   };
+}
+
+/** Sitewide entity graph — Organization + WebSite in one @graph for clean LLM/parser ingestion. */
+export function graphSchema() {
+  const strip = (n: Record<string, unknown>) => {
+    const copy = { ...n };
+    delete copy["@context"];
+    return copy;
+  };
+  return { "@context": "https://schema.org", "@graph": [strip(organizationSchema()), strip(websiteSchema())] };
 }
 
 export function faqSchema(faqs: { q: string; a: string }[]) {
