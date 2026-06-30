@@ -3,7 +3,7 @@ title: "The HVAC Marketing Playbook for GTA Contractors (2026)"
 description: "A practical HVAC marketing guide for Toronto and GTA contractors - handling seasonal demand, emergency leads, Google Ads, reviews, and cost per booked job."
 date: "2026-02-18"
 category: "Lead Generation"
-author: "PPC Guru"
+author: "Jaydeep Patel"  # [VERIFY-client] confirm real byline
 ---
 
 HVAC marketing is different from almost every other service business, and the reason is one word: seasonality. Your phone goes quiet in the shoulder seasons and explodes during the first heat wave and the first deep freeze. If your marketing doesn't account for that rhythm, you either overspend in slow months or get buried when demand spikes.

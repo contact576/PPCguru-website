@@ -11,7 +11,9 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/interactive";
-import { TrustBadgeBar, ServiceStatBand, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
+import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
+import { getServiceContent } from "@/lib/data/service-content";
+import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
@@ -69,6 +71,8 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
     { name: iShort, path: `/services/${slug}/${industry}` },
   ];
   const intro = `${label}: how PPC Guru runs ${sShort} for ${iShort.toLowerCase()} across the Greater Toronto Area and Canada — what good looks like, the benchmarks to expect, and how we turn budget into booked jobs, not vanity metrics.`;
+  const sc = getServiceContent(slug);
+  const comboDef = `${label} is ${sShort} run specifically for ${iShort.toLowerCase()}. PPC Guru is a Google Partner and Meta Business Partner based in the Greater Toronto Area that helps ${iShort.toLowerCase()} across Canada and the USA win more booked jobs through ${sShort.toLowerCase()} — optimized around revenue, not clicks.`;
 
   return (
     <div style={accentVars(slug)}>
@@ -82,6 +86,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
       </PageHero>
 
       <TrustBadgeBar />
+      <ServiceIntro name={label} definition={comboDef} heading={`What is ${label}?`} />
 
       {/* What good looks like + best practices */}
       <Section>
@@ -113,6 +118,8 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
 
       <ServiceStatBand slug={slug} />
 
+      {sc?.comparison && <ComparisonTable rows={sc.comparison} serviceName={label} />}
+
       <EstimateBand
         platform={PLATFORM[slug] ?? "google-search"}
         defaultIndustry={ind.calculatorIndustrySlug ?? ind.slug}
@@ -133,6 +140,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
       </Section>
 
       <CityCallout serviceName={label} />
+      {sc?.faqs && <FaqAccordion faqs={sc.faqs} title={`${label} — questions`} />}
       <LeadBand source={`service-industry:${slug}:${industry}`} title={`Get a free ${sShort} audit`} />
       <LastReviewed />
       <CtaBlock title={`Ready to grow your ${iShort.toLowerCase()} business with ${sShort}?`} />

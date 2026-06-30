@@ -3,7 +3,7 @@ title: "How AI Is Really Changing Marketing Agencies (And What It Means for You)
 description: "An honest look at how AI is changing marketing agencies in 2026 - what it does well, where it fails, and what local service businesses should expect."
 date: "2026-01-27"
 category: "Strategy"
-author: "PPC Guru"
+author: "Dhaval Patel"  # [VERIFY-client] confirm real byline
 ---
 
 There are two stories you'll hear about AI and marketing. One says AI will replace agencies entirely and ads will run themselves. The other says AI is overhyped and nothing's really changed. Both are wrong.

@@ -72,6 +72,29 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </article>
       </Section>
 
+      {authorMember && (
+        <Section className="!pt-0">
+          <div className="mx-auto flex max-w-3xl items-start gap-4 rounded-[18px] border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6">
+            {authorMember.photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={authorMember.photo} alt={authorMember.name} className="h-14 w-14 shrink-0 rounded-[14px] object-cover" />
+            ) : (
+              <span className="head flex h-14 w-14 shrink-0 items-center justify-center rounded-[14px] bg-[var(--color-ink)] text-lg text-[var(--color-lime)]">
+                {authorMember.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+              </span>
+            )}
+            <div>
+              <p className="mono text-[11px] uppercase tracking-[.08em] text-[#5f6f17]">About the author</p>
+              <p className="head mt-1 text-[17px] text-[var(--color-ink)]">{authorMember.name} · <span className="text-[var(--color-ink-dim)]">{authorMember.role}</span></p>
+              <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{authorMember.bio}</p>
+              {authorMember.linkedin && (
+                <a href={authorMember.linkedin} target="_blank" rel="noopener noreferrer" className="mono mt-3 inline-block text-[11px] font-bold uppercase tracking-[.06em] text-[var(--color-ink)] hover:text-[#5f6f17]">Connect on LinkedIn →</a>
+              )}
+            </div>
+          </div>
+        </Section>
+      )}
+
       <Section className="!pt-0">
         <div className="mx-auto max-w-3xl border-t border-[var(--color-border)] pt-10">
           <h2 className="text-xl font-semibold">Keep reading</h2>

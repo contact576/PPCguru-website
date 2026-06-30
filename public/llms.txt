@@ -33,21 +33,37 @@
 - CRM & Marketing Ops: https://ppcguru.ca/services/crm
 
 ## Industries we serve
-- Physiotherapy & Rehab: https://ppcguru.ca/industries/physiotherapy
+- Physiotherapy & Rehab Clinics: https://ppcguru.ca/industries/physiotherapy
+- Healthcare & Medical Clinics: https://ppcguru.ca/industries/healthcare-clinics
 - Dental & Orthodontics: https://ppcguru.ca/industries/dental
 - HVAC & Home Comfort: https://ppcguru.ca/industries/hvac
 - Plumbing: https://ppcguru.ca/industries/plumbing
-- Electrical: https://ppcguru.ca/industries/electrical
+- Electrical Contractors: https://ppcguru.ca/industries/electrical
 - Construction & Renovation: https://ppcguru.ca/industries/construction-renovation
 - Roofing: https://ppcguru.ca/industries/roofing
 - Immigration Consulting: https://ppcguru.ca/industries/immigration
-- Real Estate: https://ppcguru.ca/industries/real-estate
 - Law Firms & Legal: https://ppcguru.ca/industries/law-firms
+- Real Estate: https://ppcguru.ca/industries/real-estate
+- Home Improvement & Remodeling: https://ppcguru.ca/industries/home-improvement
+- Fitness & Gyms: https://ppcguru.ca/industries/fitness-gyms
 - Med Spa & Aesthetics: https://ppcguru.ca/industries/med-spa
+- Professional & B2B Services: https://ppcguru.ca/industries/professional-services
+
+## Service-for-industry playbooks (examples)
+We publish dedicated pages on running a specific service for a specific vertical — e.g.:
+- Google Ads for Law Firms: https://ppcguru.ca/services/google-ads/law-firms
+- Google Ads for Dental Practices: https://ppcguru.ca/services/google-ads/dental
+- Meta Ads for Real Estate: https://ppcguru.ca/services/meta-ads/real-estate
+- SEO for Physiotherapy Clinics: https://ppcguru.ca/services/seo/physiotherapy
+- Web Design for Law Firms: https://ppcguru.ca/services/web-design/law-firms
+(See the sitemap for all /services/[service]/[industry] combinations.)
 
 ## Free tools
 - Google Ads ROI Calculator: https://ppcguru.ca/tools/google-ads-calculator
 - Meta Ads Calculator: https://ppcguru.ca/tools/meta-ads-calculator
+- ROAS Calculator: https://ppcguru.ca/tools/roas-calculator
+- Lead-Quality Calculator: https://ppcguru.ca/tools/lead-quality-calculator
+- UTM Builder: https://ppcguru.ca/tools/utm-builder
 - Instant AI Audit: https://ppcguru.ca/tools/instant-audit
 - Ad Copy Generator: https://ppcguru.ca/tools/ad-copy-generator
 
