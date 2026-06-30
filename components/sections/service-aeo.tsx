@@ -118,17 +118,18 @@ export function ComparisonTable({ rows, serviceName }: { rows?: { dimension: str
       />
       <div className="mt-10 overflow-x-auto">
         <table className="w-full min-w-[640px] border-collapse text-left">
+          <caption className="sr-only">{serviceName}: PPC Guru vs a typical agency, compared</caption>
           <thead>
             <tr className="border-b border-[var(--color-border)]">
-              <th className="mono py-3 pr-4 text-[11px] uppercase tracking-[.06em] text-[var(--color-ink-faint)]">What matters</th>
-              <th className="mono px-4 py-3 text-[11px] uppercase tracking-[.06em] text-[var(--accent-strong)]">PPC Guru</th>
-              <th className="mono py-3 pl-4 text-[11px] uppercase tracking-[.06em] text-[var(--color-ink-faint)]">Typical agency</th>
+              <th scope="col" className="mono py-3 pr-4 text-[11px] uppercase tracking-[.06em] text-[var(--color-ink-faint)]">What matters</th>
+              <th scope="col" className="mono px-4 py-3 text-[11px] uppercase tracking-[.06em] text-[var(--accent-strong)]">PPC Guru</th>
+              <th scope="col" className="mono py-3 pl-4 text-[11px] uppercase tracking-[.06em] text-[var(--color-ink-faint)]">Typical agency</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
               <tr key={r.dimension} className="border-b border-[var(--color-border)] align-top">
-                <td className="py-4 pr-4 text-sm font-semibold text-[var(--color-ink)]">{r.dimension}</td>
+                <th scope="row" className="py-4 pr-4 text-left text-sm font-semibold text-[var(--color-ink)]">{r.dimension}</th>
                 <td className="px-4 py-4 text-sm text-[var(--color-ink)]">
                   <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent-soft)] align-middle text-[var(--accent-strong)]"><Check size={12} /></span>
                   {r.us}

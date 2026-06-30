@@ -73,4 +73,10 @@ images (next/og) · CTA/CRO polish · deeper internal linking · blog touch-ups.
   benchmarks, compare, glossary, pricing, instant audit) — internal-linking + CRO + "useful even if we
   never work together" trust framing. Build green.
 
-### Phase 6 — content polish + blog internal links + QA (next)
+### Phase 6 — a11y/AEO table polish + blog internal links ✅
+- Retrofitted `scope="col"`/`scope="row"` + `<caption>` onto the existing `ComparisonTable` (~58 pages)
+  and the homepage comparison table — closes the a11y/semantic-extraction gap the audit flagged.
+- Blog posts: added a category-aware "Related services" + glossary + free-audit internal-link block
+  below every post (e.g. a Google Ads post links to /services/google-ads). Build green.
+
+### Phase 7 — QA review + CLAUDE.md + final report (next)

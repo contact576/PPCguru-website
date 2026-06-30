@@ -301,17 +301,18 @@ export default function HomePage() {
           </div>
           <div data-reveal style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", minWidth: 560, borderCollapse: "collapse", textAlign: "left" }}>
+              <caption style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>PPC Guru vs a typical agency, compared</caption>
               <thead>
                 <tr style={{ borderBottom: "1px solid #e3e0d0" }}>
-                  <th className="mono" style={{ padding: "12px 16px 12px 0", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>What matters</th>
-                  <th className="mono" style={{ padding: "12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: olive, fontWeight: 700 }}>The PPC Guru way</th>
-                  <th className="mono" style={{ padding: "12px 0 12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>Typical agency</th>
+                  <th scope="col" className="mono" style={{ padding: "12px 16px 12px 0", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>What matters</th>
+                  <th scope="col" className="mono" style={{ padding: "12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: olive, fontWeight: 700 }}>The PPC Guru way</th>
+                  <th scope="col" className="mono" style={{ padding: "12px 0 12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>Typical agency</th>
                 </tr>
               </thead>
               <tbody>
                 {comparisonRows.map((r) => (
                   <tr key={r.dimension} style={{ borderBottom: "1px solid #e3e0d0", verticalAlign: "top" }}>
-                    <td className="head" style={{ padding: "16px 16px 16px 0", fontSize: 14.5, color: ink }}>{r.dimension}</td>
+                    <th scope="row" className="head" style={{ padding: "16px 16px 16px 0", fontSize: 14.5, color: ink, textAlign: "left", fontWeight: 400 }}>{r.dimension}</th>
                     <td style={{ padding: 16, fontSize: 14, color: "#2c2e22", fontWeight: 500 }}><span style={{ color: olive, fontWeight: 700, marginRight: 8 }}>✓</span>{r.guru}</td>
                     <td style={{ padding: "16px 0 16px 16px", fontSize: 14, color: "#54564a" }}><span style={{ color: coral, fontWeight: 700, marginRight: 8 }}>✕</span>{r.typical}</td>
                   </tr>
