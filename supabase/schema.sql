@@ -53,12 +53,22 @@ create table if not exists public.leads (
 
 create index if not exists leads_created_idx on public.leads (created_at desc);
 
+-- ── CMS settings (single-row JSON blob, edited at /admin/settings) ───────────
+create table if not exists public.app_settings (
+  id         int primary key default 1,
+  data       jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now(),
+  constraint app_settings_singleton check (id = 1)
+);
+
 -- ── Row Level Security ───────────────────────────────────────────────────────
 -- The app only ever talks to these tables with the SERVICE ROLE key (server
 -- side), which bypasses RLS. We still enable RLS and add a public read policy
 -- for published posts in case you later read from the browser with the anon key.
 alter table public.posts enable row level security;
 alter table public.leads enable row level security;
+-- No anon policies on app_settings → only the service role can read/write it.
+alter table public.app_settings enable row level security;
 
 drop policy if exists "public can read published posts" on public.posts;
 create policy "public can read published posts"

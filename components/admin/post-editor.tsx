@@ -9,7 +9,14 @@ import { ArrowLeft, ImagePlus, Eye, Pencil, Loader2 } from "lucide-react";
 import { slugify } from "@/lib/slug";
 import type { DbPost } from "@/lib/supabase";
 
-export function PostEditor({ post }: { post?: DbPost }) {
+export function PostEditor({
+  post,
+  defaults,
+}: {
+  post?: DbPost;
+  /** Used to pre-fill a NEW post's author/category from CMS settings. */
+  defaults?: { author: string; category: string };
+}) {
   const router = useRouter();
   const isNew = !post;
 
@@ -17,8 +24,8 @@ export function PostEditor({ post }: { post?: DbPost }) {
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [slugDirty, setSlugDirty] = useState(!isNew);
   const [description, setDescription] = useState(post?.description ?? "");
-  const [category, setCategory] = useState(post?.category ?? "Marketing");
-  const [author, setAuthor] = useState(post?.author ?? "PPC Guru");
+  const [category, setCategory] = useState(post?.category ?? defaults?.category ?? "Marketing");
+  const [author, setAuthor] = useState(post?.author ?? defaults?.author ?? "PPC Guru");
   const [content, setContent] = useState(post?.content ?? "");
   const [coverImage, setCoverImage] = useState(post?.cover_image ?? "");
   const [published, setPublished] = useState(post?.published ?? false);

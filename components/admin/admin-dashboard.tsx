@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, Pencil, Trash2, ExternalLink, LogOut } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, LogOut, Settings } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 
 export type AdminPostRow = {
@@ -46,6 +46,9 @@ export function AdminDashboard({ posts, dbConfigured }: { posts: AdminPostRow[];
           <div className="flex items-center gap-3">
             <Link href="/blog" target="_blank" className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
               <ExternalLink size={14} /> View blog
+            </Link>
+            <Link href="/admin/settings" className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
+              <Settings size={14} /> Settings
             </Link>
             <button onClick={logout} className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
               <LogOut size={14} /> Log out

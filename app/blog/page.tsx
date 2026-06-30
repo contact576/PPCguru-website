@@ -7,18 +7,17 @@ import { Section } from "@/components/ui/section";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { BlogArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
+import { getSettings } from "@/lib/settings";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Blog & Resources",
-  description:
-    "Practical guides on Google Ads, Meta Ads, SEO and lead generation for local service businesses — from the PPC Guru team.",
-  path: "/blog",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getSettings();
+  return buildMetadata({ title: s.blogTitle, description: s.blogDescription, path: "/blog" });
+}
 
 export const revalidate = 60;
 
 export default async function BlogPage() {
-  const posts = await getAllPosts();
+  const [posts, settings] = await Promise.all([getAllPosts(), getSettings()]);
   const [featured, ...rest] = posts;
 
   return (
@@ -26,7 +25,7 @@ export default async function BlogPage() {
       <PageHero
         eyebrow="Blog & resources"
         title={<>Marketing that <span className="text-gradient">actually moves the needle</span></>}
-        intro="No fluff. Practical guides on paid ads, SEO and lead generation for service businesses — written by the team running the campaigns."
+        intro={settings.blogDescription}
         breadcrumbs={[{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }]}
         art={<BlogArt />}
       />
