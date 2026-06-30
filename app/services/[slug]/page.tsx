@@ -262,6 +262,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <div>
             <SectionHeading align="left" eyebrow="Transparent pricing" title={<>What shapes your <span className="text-gradient">investment</span></>} />
             <p className="mt-4 text-[var(--color-ink-dim)]">Management fees depend on scope. Ad spend is separate and paid directly to the platforms. We confirm your exact scope after a review — no surprises.</p>
+            <Link href="/pricing" className="mono mt-4 inline-block text-xs font-bold uppercase tracking-[.06em] text-[var(--accent-strong)] hover:text-[var(--color-ink)]">See exactly how our pricing works →</Link>
             <ul className="mt-7 space-y-3">
               {service.pricingFactors.map((f) => (
                 <li key={f} className="flex items-start gap-3 rounded-[12px] border border-[#dddbc9] bg-white px-4 py-3.5 text-sm text-[var(--color-ink-dim)]">

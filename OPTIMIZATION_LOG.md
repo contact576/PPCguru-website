@@ -66,4 +66,11 @@ images (next/og) · CTA/CRO polish · deeper internal linking · blog touch-ups.
   3 fee models explained, what's-included list, lead band, FAQ (FAQPage schema), CTA. **No invented
   prices**; exact model flagged `[VERIFY-client]`. Added to **header nav** (high-intent) + footer + sitemap + llms.txt.
 
-### Phase 5 — CRO / CTA polish + deeper internal linking (next)
+### Phase 5 — CRO + deeper internal linking ✅
+- Service pages: added a "See exactly how our pricing works →" link in the pricing section (→ `/pricing`).
+- `ComparisonTable` (renders on ~58 service + combo pages): added a "See more comparisons →" link (→ `/compare`).
+- Homepage: new **"Free resources"** strip linking the 6 lead-magnet/decision assets (calculators,
+  benchmarks, compare, glossary, pricing, instant audit) — internal-linking + CRO + "useful even if we
+  never work together" trust framing. Build green.
+
+### Phase 6 — content polish + blog internal links + QA (next)

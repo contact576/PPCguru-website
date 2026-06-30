@@ -142,6 +142,9 @@ export function ComparisonTable({ rows, serviceName }: { rows?: { dimension: str
           </tbody>
         </table>
       </div>
+      <Link href="/compare" className="mono mt-6 inline-block text-xs font-bold uppercase tracking-[.06em] text-[var(--accent-strong)] hover:text-[var(--color-ink)]">
+        See more comparisons — Google Ads vs Meta, agency vs DIY, PPC vs SEO →
+      </Link>
     </Section>
   );
 }

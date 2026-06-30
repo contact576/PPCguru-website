@@ -479,6 +479,31 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── FREE RESOURCES ─────────────────────────────────────────────────── */}
+      <section style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0" }}>
+        <div className="mx-auto max-w-[1080px] px-5 py-16 md:px-8 md:py-20">
+          <div data-reveal style={{ textAlign: "center", marginBottom: 36 }}>
+            <Eyebrow>Free resources</Eyebrow>
+            <h2 className="head" style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)" }}>Useful even if we never <Em>work together</Em></h2>
+          </div>
+          <div data-reveal className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { href: "/tools/google-ads-calculator", t: "ROI calculators", d: "Model leads, cost-per-lead and ROAS by industry and budget." },
+              { href: "/benchmarks", t: "Industry benchmarks", d: "Typical CPC, conversion rate and cost-per-lead for ~35 industries." },
+              { href: "/compare", t: "Compare guides", d: "Google Ads vs Meta, agency vs in-house vs DIY, PPC vs SEO." },
+              { href: "/glossary", t: "Marketing glossary", d: "Every PPC, Meta and SEO term in plain English." },
+              { href: "/pricing", t: "How pricing works", d: "Transparent fee models — your ad spend stays 100% yours." },
+              { href: "/tools/instant-audit", t: "Instant AI audit", d: "On-page and tracking signals for any site in seconds." },
+            ].map((r) => (
+              <Link key={r.href} href={r.href} style={{ display: "block", background: "#fff", border: "1px solid #dddbc9", borderRadius: 18, padding: 22 }} className="transition-colors hover:border-[#14170e]">
+                <div className="head" style={{ fontSize: 16, color: ink }}>{r.t} <span style={{ color: olive }}>→</span></div>
+                <p style={{ fontSize: 13.5, color: "#54564a", marginTop: 6, lineHeight: 1.5 }}>{r.d}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── AUDIT FORM ─────────────────────────────────────────────────────── */}
       <section id="audit" style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: -120, right: -90, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.2),transparent 65%)" }} />
