@@ -43,13 +43,11 @@ export const siteConfig = {
   trust: {
     googlePartner: true,
     metaBusinessPartner: true,
-    activeClients: "35+",
-    adSpendManaged: "$10M+",
-    avgRoas: "4.2x",
-    leadsGenerated: "120,000+",
-    googleReviewRating: "4.9",
-    googleReviewCount: "60+",
     serviceArea: "Canada & the USA",
+    // Headline aggregate numbers ($100M+ managed · 1M+ leads · 6.3x ROAS · 150+ clients ·
+    // 10+ yrs founder experience) live in lib/data/performance-stats.ts (`trustFacts`) — the
+    // single source of truth. The old divergent $10M+/4.2x/120k set was removed so it can
+    // never render. Review rating/count stay out of copy + schema until verified. [VERIFY-client]
   },
 
   // Primary conversion offer (used by all CTAs)
@@ -60,11 +58,13 @@ export const siteConfig = {
     secondaryHref: "/tools/google-ads-calculator",
   },
 
-  // Social — TODO(client): add real profile URLs
+  // Social — TODO(client): add real profile URLs. Left EMPTY on purpose — placeholder
+  // platform-root URLs must never ship into schema `sameAs` (a broken entity signal);
+  // organizationSchema() filters empties + bare roots, so real URLs here light up sameAs.
   social: {
-    instagram: "https://instagram.com/", // TODO(client)
-    linkedin: "https://linkedin.com/company/", // TODO(client)
-    facebook: "https://facebook.com/", // TODO(client)
+    instagram: "", // TODO(client) e.g. https://www.instagram.com/ppcguru
+    linkedin: "", // TODO(client) e.g. https://www.linkedin.com/company/ppcguru
+    facebook: "", // TODO(client) e.g. https://www.facebook.com/ppcguru
   },
 } as const;
 

@@ -8,8 +8,10 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { PartnerBadges } from "@/components/shared/partner-badges";
 import { companyFaqs } from "@/lib/data/company";
+import { services } from "@/lib/data/services";
 import { ServicesArt } from "@/components/illustrations/hero-art";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { buildMetadata, itemListSchema } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Services — Google Ads, Meta Ads, SEO & more",
@@ -21,6 +23,7 @@ export const metadata: Metadata = buildMetadata({
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd data={itemListSchema("PPC Guru Services", services.map((s) => ({ name: s.name, path: `/services/${s.slug}` })))} />
       <PageHero
         eyebrow="Services"
         title={<>Everything you need to turn ad spend into <span className="text-gradient">booked jobs</span></>}

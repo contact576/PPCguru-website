@@ -6,8 +6,10 @@ import { WhyUs } from "@/components/sections/why-us";
 import { CaseStudyCards } from "@/components/sections/case-study-cards";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { PartnerBadges } from "@/components/shared/partner-badges";
+import { industries } from "@/lib/data/industries";
 import { IndustriesArt } from "@/components/illustrations/hero-art";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { buildMetadata, itemListSchema } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
   title: "Industries We Help — Local Service Business Marketing",
@@ -19,6 +21,7 @@ export const metadata: Metadata = buildMetadata({
 export default function IndustriesPage() {
   return (
     <>
+      <JsonLd data={itemListSchema("Industries PPC Guru Serves", industries.map((i) => ({ name: i.name, path: `/industries/${i.slug}` })))} />
       <PageHero
         eyebrow="Who we help"
         title={<>Marketing built around <span className="text-gradient">your industry</span></>}

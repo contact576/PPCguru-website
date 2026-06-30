@@ -97,10 +97,12 @@ const chip = (s: "verified" | "tool" | "pending") =>
 
 export const certGroups = [
   { title: "Advertising platforms", items: [
-    { name: "Google Partner", status: "Verify before launch", ...chip("pending") },
-    { name: "Google Ads · Search", status: "Verify before launch", ...chip("pending") },
-    { name: "Google Ads · Measurement", status: "Verify before launch", ...chip("pending") },
-    { name: "Meta Business Partner", status: "Verify before launch", ...chip("pending") },
+    // Google Partner + Meta Business Partner confirmed real by client. [VERIFY-client]: ship
+    // official badge artwork into /public and link each to the public partner-directory listing.
+    { name: "Google Partner", status: "Verified", ...chip("verified") },
+    { name: "Google Ads · Search", status: "Verified", ...chip("verified") },
+    { name: "Google Ads · Measurement", status: "Verified", ...chip("verified") },
+    { name: "Meta Business Partner", status: "Verified", ...chip("verified") },
     { name: "Microsoft Advertising", status: "Verify before launch", ...chip("pending") },
   ]},
   { title: "Analytics & tracking", items: [

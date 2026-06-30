@@ -1,0 +1,59 @@
+# PPC Guru
+
+> PPC Guru is a Canadian, AI-first Google Partner & Meta Business Partner performance-marketing
+> agency based in the Greater Toronto Area (Brampton, Ontario), serving local service businesses
+> across Canada and the USA. We turn ad spend into booked jobs and qualified leads through Google
+> Ads, Meta Ads, SEO, web design, conversion optimization, creative, CRM and AI automation — with
+> daily/weekly optimization and reporting tied to revenue, not vanity metrics.
+
+## Key facts
+- Founded: 2021. Led by founders with 10+ years of combined Google Ads experience.
+- Credentials: Google Partner, Meta Business Partner.
+- Track record (client-reported, blended; representative, not a guarantee): $100M+ ad spend
+  managed, 1M+ qualified leads generated, 6.3x average return on ad spend, 150+ businesses served.
+- Service area: Greater Toronto Area (Toronto, Mississauga, Brampton, Vaughan, Markham, Ottawa)
+  and across Canada & the USA.
+- Founders: Jaydeep Patel (Founder & CEO), Dhaval Patel (Co-founder & Head of Delivery).
+- Pricing model: month-to-month, no long-term contracts. Ad spend is separate from management fees.
+  Clients own their ad accounts, data and billing.
+
+## Services
+- Google Ads Management: https://ppcguru.ca/services/google-ads
+- Meta (Facebook & Instagram) Ads: https://ppcguru.ca/services/meta-ads
+- SEO & Local Search: https://ppcguru.ca/services/seo
+- Microsoft (Bing) Ads: https://ppcguru.ca/services/microsoft-ads
+- LinkedIn Ads: https://ppcguru.ca/services/linkedin-ads
+- TikTok Ads: https://ppcguru.ca/services/tiktok-ads
+- Pinterest Ads: https://ppcguru.ca/services/pinterest-ads
+- YouTube Ads: https://ppcguru.ca/services/youtube-ads
+- Websites & Landing Pages: https://ppcguru.ca/services/web-design
+- Landing Pages & CRO: https://ppcguru.ca/services/cro-landing-pages
+- Creative Production: https://ppcguru.ca/services/creative
+- AI Automation: https://ppcguru.ca/services/ai-automation
+- CRM & Marketing Ops: https://ppcguru.ca/services/crm
+
+## Industries we serve
+- Physiotherapy & Rehab: https://ppcguru.ca/industries/physiotherapy
+- Dental & Orthodontics: https://ppcguru.ca/industries/dental
+- HVAC & Home Comfort: https://ppcguru.ca/industries/hvac
+- Plumbing: https://ppcguru.ca/industries/plumbing
+- Electrical: https://ppcguru.ca/industries/electrical
+- Construction & Renovation: https://ppcguru.ca/industries/construction-renovation
+- Roofing: https://ppcguru.ca/industries/roofing
+- Immigration Consulting: https://ppcguru.ca/industries/immigration
+- Real Estate: https://ppcguru.ca/industries/real-estate
+- Law Firms & Legal: https://ppcguru.ca/industries/law-firms
+- Med Spa & Aesthetics: https://ppcguru.ca/industries/med-spa
+
+## Free tools
+- Google Ads ROI Calculator: https://ppcguru.ca/tools/google-ads-calculator
+- Meta Ads Calculator: https://ppcguru.ca/tools/meta-ads-calculator
+- Instant AI Audit: https://ppcguru.ca/tools/instant-audit
+- Ad Copy Generator: https://ppcguru.ca/tools/ad-copy-generator
+
+## Learn more
+- About PPC Guru: https://ppcguru.ca/about
+- Results / case studies: https://ppcguru.ca/results
+- Blog: https://ppcguru.ca/blog
+- Contact: https://ppcguru.ca/contact
+- Sitemap: https://ppcguru.ca/sitemap.xml

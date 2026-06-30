@@ -7,9 +7,11 @@ import { WhyUs } from "@/components/sections/why-us";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { TeamSection } from "@/components/sections/team";
 import { AboutArt } from "@/components/illustrations/hero-art";
-import { buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/json-ld";
+import { buildMetadata, breadcrumbSchema, personSchema } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 import { performanceStats } from "@/lib/data/performance-stats";
+import { team } from "@/lib/data/team";
 
 const founderStats = performanceStats.filter((s) => s.proofType === "founder_experience");
 const whyAgenciesFail = [
@@ -27,8 +29,13 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function AboutPage() {
+  const crumbs = [{ name: "Home", path: "/" }, { name: "About", path: "/about" }];
   return (
     <>
+      <JsonLd data={breadcrumbSchema(crumbs)} />
+      {team.map((m) => (
+        <JsonLd key={m.name} data={personSchema(m)} />
+      ))}
       <PageHero
         eyebrow="About us"
         title={<>A results-first agency for <span className="text-gradient">service businesses</span></>}

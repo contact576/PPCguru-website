@@ -56,6 +56,22 @@ export const performanceStats: PerfStat[] = [
 ];
 
 /**
+ * Canonical aggregate trust facts — the SINGLE source of truth for headline numbers used
+ * by trust badges, per-service stat bands and schema. Mirrors the agency_aggregate rows
+ * above; client-confirmed (published as real). Keep site-config + copy in sync with these —
+ * never hard-code a second, divergent set (the old $10M+/4.2x/120k set was removed).
+ */
+export const trustFacts = {
+  adSpendManaged: "$100M+",
+  qualifiedLeads: "1M+",
+  avgRoas: "6.3x",
+  clientsServed: "150+",
+  founderExperienceYears: "10+",
+  googlePartner: true,
+  metaBusinessPartner: true,
+} as const;
+
+/**
  * The hero "sample dashboard" model — ONE source so every number is internally
  * consistent (CPL = spend / leads, revenue = booked × ticket, ROAS = revenue /
  * spend). Always rendered behind a visible "Sample · illustrative" label.
