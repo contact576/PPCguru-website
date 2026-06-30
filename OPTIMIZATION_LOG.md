@@ -79,4 +79,44 @@ images (next/og) · CTA/CRO polish · deeper internal linking · blog touch-ups.
 - Blog posts: added a category-aware "Related services" + glossary + free-audit internal-link block
   below every post (e.g. a Google Ads post links to /services/google-ads). Build green.
 
-### Phase 7 — QA review + CLAUDE.md + final report (next)
+### Phase 7 — QA review + CLAUDE.md + final report ✅
+- Ran a focused QA agent over all new pages: **clean** — all internal links valid, no fabricated content,
+  schema well-formed, tables a11y-correct, content quality strong. One pre-existing defect fixed (blog
+  "Keep reading" cards used retired `--color-violet`/`--color-cyan-bright` tokens → ink/olive).
+- Confirmed `buildMetadata` sets no `openGraph.images`, so the dynamic OG card cascades sitewide.
+- Updated `CLAUDE.md` with durable AEO/content-hub rules + review workflow.
+
+---
+
+## FINAL REPORT — optimization session
+
+**Branch:** `claude/site-optimization-session` · **PR #9** (draft, base = AEO branch `claude/relaxed-rubin-8h2lvp`).
+Nothing pushed to `main`. `npm run build` + `npm run typecheck` green on every commit.
+
+**AEO/GEO/LLM-readiness:** confirmed **93/100** (from the prior overhaul; journey 49→79→89→93).
+
+**Pages created (this session):** `/compare`, `/glossary`, `/pricing`, `app/opengraph-image.tsx` (dynamic OG).
+**Pages updated:** homepage (Free Resources strip + comparison-table a11y), all service pages (pricing +
+compare links), `ComparisonTable` (a11y, ~58 pages), blog post template (Related-services block + token fix),
+footer, sitemap, robots-adjacent (llms.txt), site-config nav, CLAUDE.md.
+
+**SEO:** geo-aware titles already in place; new indexable hubs (+ sitemap + llms.txt); semantic tables.
+**GEO/AEO:** `/glossary` `DefinedTermSet`, `/compare` FAQPage + verdicts, `/benchmarks` already Dataset-schema'd.
+**Schema:** DefinedTermSet, FAQPage (compare/pricing), all validated by QA.
+**Content:** 3 research-informed hubs + 30 glossary terms, all human-written, honesty-safe.
+**Trust/CRO:** pricing-transparency page (the #1 prospect trust lever), Free Resources strip, cross-links.
+**UX/a11y:** `scope`/`<caption>` on all comparison tables; consistent components; mobile `overflow-x-auto` tables.
+**Research:** Google-vs-Meta (intent vs demand-gen) + PPC pricing-transparency best practices → used in /compare + /pricing.
+
+**Build/lint/typecheck:** build green; typecheck clean; `npm run lint` is broken on Next 16 (documented).
+
+**Blockers:** none. `send_later` self-check-in tool needs an approval unavailable in this non-interactive
+session — relied on push-triggered Vercel webhooks for CI instead (all green).
+
+**Needs manual review / client to supply (all `[VERIFY-client]`):** real per-service stat numbers; exact
+pricing model + any starting fee on `/pricing`; founder LinkedIn + headshots; official Partner badge art +
+directory links; real social URLs (lights up `sameAs`); phone/postal (NAP). None block the build.
+
+**Recommended next before merging:** (1) review PR #9 (+ the AEO PR #8 it stacks on); (2) swap the
+`[VERIFY-client]` items; (3) off-site GEO the audit flagged (GBP, Clutch/G2, directories, digital PR) — the
+on-site work is best-in-class but ~82–89% of LLM citations are earned/off-site.

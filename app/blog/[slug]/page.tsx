@@ -108,8 +108,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <h2 className="text-xl font-semibold">Keep reading</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-3">
             {related.map((p) => (
-              <Link key={p.slug} href={`/blog/${p.slug}`} className="group rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 transition-colors hover:border-[var(--color-violet)]">
-                <span className="text-xs text-[var(--color-cyan-bright)]">{p.category}</span>
+              <Link key={p.slug} href={`/blog/${p.slug}`} className="group rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 transition-colors hover:border-[var(--color-ink)]">
+                <span className="mono text-[11px] uppercase tracking-[.06em] text-[#5f6f17]">{p.category}</span>
                 <h3 className="mt-1.5 font-semibold leading-snug group-hover:text-[var(--color-ink)]">{p.title}</h3>
               </Link>
             ))}
