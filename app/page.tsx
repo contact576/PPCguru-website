@@ -20,6 +20,11 @@ import { ScrollParallax } from "@/components/shared/scroll-parallax";
 import { GsapHeroReveal } from "@/components/home/gsap-hero";
 import { GrowthLoopPinned } from "@/components/home/growth-loop-pinned";
 import { GsapText } from "@/components/shared/gsap-text";
+import { BlogPosts } from "@/components/home/blog-section";
+
+// ISR: refresh the homepage (incl. the dynamic blog teaser) at most once a minute
+// so newly published posts surface without a redeploy.
+export const revalidate = 60;
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
@@ -439,6 +444,21 @@ export default function HomePage() {
           </div>
         </div>
         <TestimonialCarousel />
+      </section>
+
+      {/* ── FROM THE BLOG (dynamic — latest published posts) ───────────────── */}
+      <section id="blog" style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
+        <div className={WRAP}>
+          <div data-reveal style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 18, marginBottom: 40 }}>
+            <div style={{ maxWidth: 640 }}>
+              <Eyebrow>From the blog</Eyebrow>
+              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Playbooks that <Em>compound</Em></h2>
+              <p style={{ fontSize: 15, color: "#54564a", lineHeight: 1.6, marginTop: 14 }}>Practical guides on paid ads, SEO and lead generation — written by the team running the campaigns.</p>
+            </div>
+            <Link href="/blog" className="mono" style={{ color: olive, fontWeight: 700, fontSize: 12, letterSpacing: ".06em", textTransform: "uppercase", whiteSpace: "nowrap" }}>View all →</Link>
+          </div>
+          <BlogPosts />
+        </div>
       </section>
 
       {/* ── FAQ ────────────────────────────────────────────────────────────── */}
