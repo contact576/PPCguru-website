@@ -11,6 +11,7 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
+import { team } from "@/lib/data/team";
 
 export function generateStaticParams() {
   return getAllPostSlugs().map((slug) => ({ slug }));
@@ -35,13 +36,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     { name: post.title, path: `/blog/${slug}` },
   ];
 
+  // Attribute to a real person ONLY when the frontmatter author matches a team member;
+  // otherwise keep Organization (honest — the post is bylined "PPC Guru"). [VERIFY-client]:
+  // assign real individual authors in content/blog/*.md frontmatter for stronger E-E-A-T.
+  const authorMember = team.find((m) => m.name === post.author);
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    author: { "@type": "Organization", name: siteConfig.name },
+    dateModified: post.date,
+    author: authorMember
+      ? { "@type": "Person", "@id": `${siteConfig.url}/about#${authorMember.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, name: authorMember.name }
+      : { "@type": "Organization", "@id": `${siteConfig.url}/#organization`, name: siteConfig.name },
     publisher: { "@id": `${siteConfig.url}/#organization` },
     mainEntityOfPage: `${siteConfig.url}/blog/${slug}`,
   };

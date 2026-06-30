@@ -19,7 +19,7 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
-import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable } from "@/components/sections/service-aeo";
+import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
 import { getServiceContent } from "@/lib/data/service-content";
 
 // Which ad platform each service's calculator should default to.
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  return buildMetadata({ title: service.name, description: service.description, path: `/services/${slug}` });
+  return buildMetadata({ title: `${service.name} in the GTA & Canada`, description: service.description, path: `/services/${slug}` });
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -292,9 +292,12 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </Section>
       )}
 
+      <CityCallout serviceName={service.name} />
+
       <LeadBand source={`service:${slug}`} title={`Get a free ${firstWord} audit`} />
 
       <FaqAccordion faqs={content?.faqs ?? service.faqs} title={`${service.name} — questions`} />
+      <LastReviewed />
       <CtaBlock />
     </div>
   );

@@ -25,7 +25,7 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
-import { TrustBadgeBar, ServiceIntro } from "@/components/sections/service-aeo";
+import { TrustBadgeBar, ServiceIntro, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
 import { getIndustryContent } from "@/lib/data/industry-content";
 
 const INDUSTRY_ICONS: Record<string, LucideIcon> = {
@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const ind = getIndustry(slug);
   if (!ind) return {};
-  return buildMetadata({ title: `${ind.name} Marketing`, description: ind.description, path: `/industries/${slug}` });
+  return buildMetadata({ title: `${ind.name} Marketing in the GTA & Canada`, description: ind.description, path: `/industries/${slug}` });
 }
 
 export default async function IndustryPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -159,9 +159,12 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
         intro={`Model the leads, booked calls and revenue your ${ind.name.toLowerCase()} marketing budget could produce — by platform, with real benchmarks.`}
       />
 
+      <CityCallout serviceName={`${ind.name} marketing`} />
+
       <LeadBand source={`industry:${ind.slug}`} title={`Grow your ${ind.name.split(" ")[0].toLowerCase()} business`} />
 
       <FaqAccordion faqs={intro?.faqs ?? ind.faqs} title={`${ind.name} — questions`} />
+      <LastReviewed />
       <CtaBlock title={`Ready to grow your ${ind.name.toLowerCase()} business?`} />
     </div>
   );

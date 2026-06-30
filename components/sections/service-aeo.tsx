@@ -93,6 +93,18 @@ export function CityCallout({ serviceName }: { serviceName?: string }) {
   );
 }
 
+// Honest content-freshness signal. [VERIFY-client]: bump when content is materially revised.
+const CONTENT_UPDATED = "June 2026";
+
+/** Small visible "Last reviewed" line — a freshness signal for search + LLMs. */
+export function LastReviewed() {
+  return (
+    <p className="container-page pb-3 text-center text-[11px] text-[var(--color-ink-faint)]">
+      Last reviewed {CONTENT_UPDATED} by the PPC Guru team.
+    </p>
+  );
+}
+
 /** Decision content — a semantic comparison table (PPC Guru vs a typical agency). */
 export function ComparisonTable({ rows, serviceName }: { rows?: { dimension: string; us: string; typical: string }[]; serviceName: string }) {
   if (!rows?.length) return null;
