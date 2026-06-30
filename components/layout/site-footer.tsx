@@ -56,6 +56,7 @@ export function SiteFooter() {
             { label: "Creative Production", href: "/services/creative" },
             { label: "Websites & Landing Pages", href: "/services/web-design" },
             { label: "CRM & Marketing Ops", href: "/services/crm" },
+            { label: "Industry benchmarks", href: "/benchmarks" },
           ]} />
           <FCol title="Industries" links={[
             { label: "Physiotherapy", href: "/industries/physiotherapy" },
