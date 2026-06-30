@@ -88,15 +88,12 @@ export default function HomePage() {
               <Link href="#audit" className="mono btn-shine transition-transform hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Get Free PPC Audit →</Link>
               <Link href="#calculator" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 26px", borderRadius: 14 }}>Try ROI Calculator</Link>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 40, flexWrap: "wrap" }}>
-              <svg width="46" height="46" viewBox="0 0 48 48" fill="none" aria-hidden style={{ flexShrink: 0 }}>
-                <path d="M10 30 C 6 22, 8 12, 12 8" stroke={ink} strokeWidth="1.5" fill="none" />
-                <path d="M38 30 C 42 22, 40 12, 36 8" stroke={ink} strokeWidth="1.5" fill="none" />
-                <path d="M12 8 L 16 12 M12 8 L 8 12 M36 8 L 40 12 M36 8 L 32 12" stroke={ink} strokeWidth="1.5" />
-                <circle cx="24" cy="22" r="9" stroke={ink} strokeWidth="1.5" fill="none" />
-                <path d="M24 17 L24 22 L28 25" stroke={ink} strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-              <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.7 }}>Google &amp; Meta Partner<br />Performance marketing · GTA</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 40, flexWrap: "wrap" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+              <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.6 }}>Performance marketing · GTA</div>
             </div>
           </GsapHeroReveal>
           <HeroDashboard />

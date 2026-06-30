@@ -28,7 +28,7 @@ export default function PrivacyPage() {
       <h2>Legal basis &amp; consent</h2>
       <p>We collect and use your personal information with your consent, which you provide by submitting a form or otherwise contacting us. You may withdraw consent at any time, subject to legal or contractual restrictions, by contacting us using the details below.</p>
 
-      <h2>Cookies &amp; analytics</h2>
+      <h2 id="cookies">Cookies &amp; analytics</h2>
       <p>We use cookies and similar technologies to operate the site and measure performance. You can control cookies through your browser settings. Where we run advertising pixels (e.g. Google or Meta), they may set cookies to measure ad performance; you can opt out via your ad-platform and browser settings.</p>
 
       <h2>Sharing your information</h2>

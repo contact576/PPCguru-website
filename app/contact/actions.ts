@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { siteConfig } from "@/lib/site-config";
-import { saveLead } from "@/lib/supabase";
+import { saveLead, hasSupabase } from "@/lib/supabase";
 
 const schema = z.object({
   name: z.string().min(2, "Please enter your name.").max(100),
@@ -25,7 +25,11 @@ export type ContactState = {
 
 async function verifyTurnstile(token?: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true; // not configured → skip
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  // Enforce only when BOTH keys are present. If the secret is set but the public
+  // site key is missing, the widget never renders (no token is ever produced) —
+  // requiring a token then would block every legitimate submission.
+  if (!secret || !siteKey) return true;
   if (!token) return false;
   try {
     const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
@@ -72,7 +76,6 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
 
   // Deliver via Resend if configured; otherwise log (dev/no-key fallback).
   let emailed = false;
-  let emailError = false;
   const resendKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL || siteConfig.contact.email;
   if (resendKey) {
@@ -97,11 +100,13 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
       });
       emailed = true;
     } catch {
-      emailError = true;
+      // Email delivery failed — the Supabase row (if any) is still the safety net.
     }
   }
 
-  if (emailError && !stored) {
+  // If a delivery channel is configured but nothing got through, don't pretend it worked.
+  const anyConfigured = Boolean(resendKey) || hasSupabase();
+  if (anyConfigured && !emailed && !stored) {
     return { ok: false, message: "We couldn't send your message right now. Please email us directly." };
   }
   if (!emailed && !stored) {

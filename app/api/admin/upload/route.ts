@@ -7,7 +7,9 @@ export const runtime = "nodejs";
 export const maxDuration = 30;
 
 const MAX_BYTES = 8 * 1024 * 1024; // 8 MB
-const ALLOWED = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/avif", "image/svg+xml"];
+// Raster formats only. SVG is intentionally excluded — it can carry inline
+// <script>/onload XSS that would execute when the image is opened directly.
+const ALLOWED = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/avif"];
 
 /** POST multipart/form-data with `file` → uploads to Supabase Storage, returns public URL. */
 export async function POST(req: Request) {

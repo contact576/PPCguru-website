@@ -92,7 +92,7 @@ export function SiteFooter() {
           <div style={{ display: "flex", gap: 22 }}>
             <Link href="/privacy" style={{ letterSpacing: ".05em", textTransform: "uppercase", fontSize: 11 }} className="hover:text-[#f1efe3]">Privacy</Link>
             <Link href="/terms" style={{ letterSpacing: ".05em", textTransform: "uppercase", fontSize: 11 }} className="hover:text-[#f1efe3]">Terms</Link>
-            <Link href="/privacy" style={{ letterSpacing: ".05em", textTransform: "uppercase", fontSize: 11 }} className="hover:text-[#f1efe3]">Cookies</Link>
+            <Link href="/privacy#cookies" style={{ letterSpacing: ".05em", textTransform: "uppercase", fontSize: 11 }} className="hover:text-[#f1efe3]">Cookies</Link>
           </div>
         </div>
       </div>

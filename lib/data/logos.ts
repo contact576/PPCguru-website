@@ -67,8 +67,11 @@ export const logos: Logo[] = [
   { name: "HeyGen", group: "ai" },
 
   // ---- Credentials / accreditation (badge shows only when `src` is set) ----
-  { name: "Google Partner", group: "credential", sub: "Partner program" },
-  { name: "Meta Business Partner", group: "credential", sub: "Partner program" },
+  // [VERIFY] Swap these for the OFFICIAL badge artwork downloaded from your
+  // Google Partners / Meta Business Partner dashboards before launch — only
+  // display them while you hold active partner status.
+  { name: "Google Partner", group: "credential", sub: "Partner program", src: "/badges/google-partner.svg" },
+  { name: "Meta Business Partner", group: "credential", sub: "Partner program", src: "/badges/meta-business-partner.svg" },
   { name: "BBB Accredited", group: "credential", sub: "Accredited business" },
 
   // ---- Industries we serve (footer carousel) ----

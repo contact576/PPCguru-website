@@ -7,6 +7,10 @@ import { caseStudies } from "@/lib/data/case-studies";
 import { tools } from "@/lib/data/tools";
 import { getAllPostSlugs } from "@/lib/blog";
 
+// Re-generate at most once a minute so newly published blog posts (read from
+// Supabase / markdown at request time) appear in the sitemap without a redeploy.
+export const revalidate = 60;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteConfig.url;
   const now = new Date();

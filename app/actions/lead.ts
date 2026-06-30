@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { siteConfig } from "@/lib/site-config";
-import { saveLead } from "@/lib/supabase";
+import { saveLead, hasSupabase } from "@/lib/supabase";
 
 /**
  * Shared lead-capture action used by the pop-up funnel and the gated tools.
@@ -55,7 +55,6 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
   });
 
   let emailed = false;
-  let emailError = false;
   const resendKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL || siteConfig.contact.email;
   if (resendKey) {
@@ -78,12 +77,15 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
       });
       emailed = true;
     } catch {
-      emailError = true;
+      // Email delivery failed — the Supabase row (if any) is still the safety net.
     }
   }
 
-  // Only surface an error if we both failed to email AND failed to store it.
-  if (emailError && !stored) {
+  // A delivery channel is "configured" if it has keys. If at least one channel is
+  // configured but nothing actually got through (no email AND no DB row), the lead
+  // would be silently lost — surface an error so the visitor can reach us another way.
+  const anyConfigured = Boolean(resendKey) || hasSupabase();
+  if (anyConfigured && !emailed && !stored) {
     return { ok: false, message: "We couldn't submit that right now. Please email us directly." };
   }
   if (!emailed && !stored) {
