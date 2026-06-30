@@ -47,7 +47,15 @@ schema, blog, internal linking, positioning. Review-first; nothing merged withou
 images (next/og) · CTA/CRO polish · deeper internal linking · blog touch-ups. All content hand-written
 (no big workflows) for credit efficiency; honesty guardrails intact.
 
-### Phase 2 — `/compare` decision hub (in progress)
-- Building `lib/data/comparisons.ts` + `app/compare/page.tsx`: Google Ads vs Meta, Agency vs in-house vs
-  DIY, Google Ads vs SEO. Semantic tables w/ `scope`/`caption` (closes an a11y/AEO gap the audit flagged),
-  answer-first verdicts, FAQPage schema, internal links.
+### Phase 2 — `/compare` decision hub ✅
+- `lib/data/comparisons.ts` + `app/compare/page.tsx`: Google Ads vs Meta, agency vs in-house vs DIY,
+  Google Ads vs SEO. Semantic tables w/ `scope="col"/"row"` + `<caption>` (closes the a11y/AEO gap the
+  audit flagged), answer-first verdicts, FAQPage schema, internal links. Wired into sitemap/footer/llms.txt.
+- Build green. Committed + pushed; draft PR #9 opened (base = AEO branch → clean session-only diff).
+
+### Phase 3 — `/glossary` (DefinedTerm hub) ✅
+- `lib/data/glossary.ts` (30 terms across 4 categories) + `app/glossary/page.tsx` with `DefinedTermSet`/
+  `DefinedTerm` schema, anchor IDs, category jump-nav, `<dl>` semantics. Strong "what is X?" AEO surface.
+- Wired into sitemap/footer/llms.txt. Build green.
+
+### Phase 4 — pricing transparency + OG images (next)

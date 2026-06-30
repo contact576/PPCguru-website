@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes = [
     "", "/services", "/industries", "/locations", "/results", "/about",
-    "/blog", "/contact", "/tools", "/benchmarks", "/compare", "/privacy", "/terms",
+    "/blog", "/contact", "/tools", "/benchmarks", "/compare", "/glossary", "/privacy", "/terms",
   ].map((path) => ({
     url: `${base}${path}`,
     lastModified: now,

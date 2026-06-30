@@ -58,6 +58,7 @@ export function SiteFooter() {
             { label: "CRM & Marketing Ops", href: "/services/crm" },
             { label: "Industry benchmarks", href: "/benchmarks" },
             { label: "Compare guides", href: "/compare" },
+            { label: "Marketing glossary", href: "/glossary" },
           ]} />
           <FCol title="Industries" links={[
             { label: "Physiotherapy", href: "/industries/physiotherapy" },
