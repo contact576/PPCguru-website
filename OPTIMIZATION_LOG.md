@@ -58,4 +58,12 @@ images (next/og) · CTA/CRO polish · deeper internal linking · blog touch-ups.
   `DefinedTerm` schema, anchor IDs, category jump-nav, `<dl>` semantics. Strong "what is X?" AEO surface.
 - Wired into sitemap/footer/llms.txt. Build green.
 
-### Phase 4 — pricing transparency + OG images (next)
+### Phase 4 — pricing transparency + OG images ✅
+- `app/opengraph-image.tsx`: dynamic 1200×630 branded social card via `next/og` (no static asset
+  needed; cascades as the default `og:image` sitewide). Build green.
+- `app/pricing/page.tsx`: honest pricing-transparency page (the #1 prospect trust lever per research) —
+  4 principles ("ad spend is 100% yours", "you own everything", "month-to-month", "no surprises"), the
+  3 fee models explained, what's-included list, lead band, FAQ (FAQPage schema), CTA. **No invented
+  prices**; exact model flagged `[VERIFY-client]`. Added to **header nav** (high-intent) + footer + sitemap + llms.txt.
+
+### Phase 5 — CRO / CTA polish + deeper internal linking (next)

@@ -57,6 +57,7 @@ export function SiteFooter() {
             { label: "Websites & Landing Pages", href: "/services/web-design" },
             { label: "CRM & Marketing Ops", href: "/services/crm" },
             { label: "Industry benchmarks", href: "/benchmarks" },
+            { label: "Pricing", href: "/pricing" },
             { label: "Compare guides", href: "/compare" },
             { label: "Marketing glossary", href: "/glossary" },
           ]} />
