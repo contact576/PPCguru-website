@@ -21,7 +21,7 @@
   /* Text — near-black olive hierarchy */
   --color-ink: #14170e;
   --color-ink-dim: #54564a;
-  --color-ink-faint: #83856f;
+  --color-ink-faint: #6c6e5a;    /* darkened for WCAG-AA contrast on cream (~4.6:1) */
 
   /* Brand accent — olive green for accent TEXT (readable on cream); lime for
      fills. Legacy violet/cyan names remapped to olive so old classes stay on-brand. */
