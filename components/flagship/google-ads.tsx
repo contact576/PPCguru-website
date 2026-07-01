@@ -17,6 +17,9 @@ import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable } from "@
 import { getServiceContent } from "@/lib/data/service-content";
 import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
 import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
+import { HeroOffer } from "@/components/shared/hero-offer";
+import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { getServiceOffer, genericOffer } from "@/lib/data/service-offers";
 
 const ACCENT = "#2f6db0";
 const INK = "#14170e";
@@ -31,6 +34,7 @@ const ANATOMY = [
  *  account", audit-first design distinct from the generic service template. */
 export function GoogleAdsFlagship({ service }: { service: Service }) {
   const content = getServiceContent("google-ads");
+  const offer = getServiceOffer("google-ads") ?? genericOffer;
   const siRows = industriesForService("google-ads").flatMap((iSlug) => {
     const a = getServiceIndustryAngle("google-ads", iSlug);
     return a ? [{ industrySlug: iSlug, label: serviceIndustryLabel("google-ads", iSlug), href: `/services/google-ads/${iSlug}`, angle: a }] : [];
@@ -52,8 +56,11 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
             </span>
             <h1 className="head mt-5 text-[clamp(2.6rem,5.6vw,4.6rem)]">Google Ads, rebuilt around <span style={{ color: ACCENT }}>booked jobs</span></h1>
             <p className="mt-6 max-w-xl text-lg text-[var(--color-ink-dim)]">{service.hero}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Magnetic><Button href="/contact" size="lg" style={{ background: ACCENT, color: "#fff" }}>Get a free Google Ads audit <ArrowRight size={18} /></Button></Magnetic>
+            <HeroOffer className="mt-7 max-w-xl" badge="30-day free trial" line="Switching agencies? Try our Google Ads management free for 30 days — no contract, no setup fee, no obligation." credit />
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Magnetic>
+                <LeadCtaButton label={<>Start my free trial <ArrowRight size={18} /></>} source="offer:google-ads:flagship-hero" title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className="inline-flex items-center justify-center gap-2 rounded-[14px] px-6 py-3.5 text-[15px] font-bold text-white" style={{ background: ACCENT }} />
+              </Magnetic>
               <Button href="#estimate" variant="outline">Estimate your results</Button>
             </div>
             <div className="mt-9 grid grid-cols-3 gap-3 max-w-md">

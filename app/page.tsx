@@ -12,6 +12,7 @@ import {
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { ToolsOs } from "@/components/home/tools-os";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { HeroOffer } from "@/components/shared/hero-offer";
 import { performanceStats } from "@/lib/data/performance-stats";
 import { StatCounter } from "@/components/ui/stat-counter";
 import type { Metadata } from "next";
@@ -97,11 +98,7 @@ export default function HomePage() {
               <Link href="#audit" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Get Free PPC Audit →</Link>
               <Link href="#calculator" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 26px", borderRadius: 14 }}>Try ROI Calculator</Link>
             </div>
-            <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 20, fontSize: 11, letterSpacing: ".03em", textTransform: "uppercase" }}>
-              {["30-day free trial", "No contract", "No setup fee", "Up to $3,600 Google Ads credit"].map((t) => (
-                <span key={t} style={{ background: "#eef2dd", border: "1px solid #cfe39a", color: "#4f5f14", padding: "6px 11px", borderRadius: 999, fontWeight: 600 }}>{t}</span>
-              ))}
-            </div>
+            <HeroOffer className="mt-7 max-w-lg" badge="30-day free trial" line="Try our Google or Meta ad management free for 30 days — no contract, no setup fee, no obligation." credit />
             <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 40, flexWrap: "wrap" }}>
               <svg width="46" height="46" viewBox="0 0 48 48" fill="none" aria-hidden style={{ flexShrink: 0 }}>
                 <path d="M10 30 C 6 22, 8 12, 12 8" stroke={ink} strokeWidth="1.5" fill="none" />

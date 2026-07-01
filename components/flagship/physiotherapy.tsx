@@ -13,6 +13,9 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { accentVarsFor } from "@/lib/data/themes";
+import { HeroOffer } from "@/components/shared/hero-offer";
+import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { genericOffer } from "@/lib/data/service-offers";
 
 const ACCENT = "#2f8f6b";
 const INK = "#14170e";
@@ -47,8 +50,9 @@ export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: Ca
             </span>
             <h1 className="head mt-5 text-[clamp(2.6rem,5.6vw,4.6rem)]">Fill your <span style={{ color: ACCENT }}>clinic calendar</span> with high-intent patients</h1>
             <p className="mt-6 max-w-xl text-lg text-[var(--color-ink-dim)]">We turn search and social into booked assessments — not clicks — for physiotherapy & rehab clinics across the GTA, measured to the patient.</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Magnetic><Button href="/contact" size="lg" style={{ background: ACCENT, color: "#fff" }}>Get a free clinic audit <ArrowRight size={18} /></Button></Magnetic>
+            <HeroOffer className="mt-7 max-w-xl" badge="30-day free trial" line="Try our Google or Meta ad management free for 30 days — no contract, no setup fee, no obligation." credit />
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Magnetic><LeadCtaButton label={<>Start my free trial <ArrowRight size={18} /></>} source="offer:physiotherapy:flagship-hero" title="Get your free clinic audit" blurb={genericOffer.popupBody} submitLabel="Get my free clinic audit" className="inline-flex items-center justify-center gap-2 rounded-[14px] px-6 py-3.5 text-[15px] font-bold text-white" style={{ background: ACCENT }} /></Magnetic>
               <Button href="#estimate" variant="outline">Estimate new patients</Button>
             </div>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--color-ink-dim)]">

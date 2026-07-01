@@ -15,7 +15,8 @@ import { DashboardMock } from "@/components/illustrations/dashboard-mock";
 import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
-import { getServiceOffer, genericOffer, masterOffer } from "@/lib/data/service-offers";
+import { getServiceOffer, genericOffer } from "@/lib/data/service-offers";
+import { HeroOffer } from "@/components/shared/hero-offer";
 import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
@@ -88,16 +89,15 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
       <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={serviceArt(slug)}>
         <div>
+          <HeroOffer
+            className="mb-6 max-w-xl"
+            badge={offer.trial ? "30-day free trial" : "Free audit · no obligation"}
+            line={offer.trial ? `Try our ${service.name} management free for 30 days — no contract, no setup fee, no obligation.` : offer.subhook}
+            credit={offer.credit}
+          />
           <Magnetic>
             <LeadCtaButton label={<>{offer.ctaLabel} <ArrowRight size={18} /></>} source={offer.formSource} title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className={ctaCls} />
           </Magnetic>
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            {offer.trial && <span className="mono rounded-full border border-[var(--accent-line)] bg-[var(--accent-tint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.04em] text-[var(--accent-strong)]">30-day free trial</span>}
-            {offer.credit && <span className="mono rounded-full border border-[var(--accent-line)] bg-[var(--accent-tint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.04em] text-[var(--accent-strong)]">Up to $3,600 Google Ads credit</span>}
-            {masterOffer.riskReversal.map((r) => (
-              <span key={r} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-3 py-1.5 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{r}</span>
-            ))}
-          </div>
         </div>
       </PageHero>
 

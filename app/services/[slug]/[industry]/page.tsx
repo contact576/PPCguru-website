@@ -20,7 +20,8 @@ import { getAccent, accentVars } from "@/lib/data/themes";
 import { serviceArt } from "@/components/illustrations/service-art";
 import { BigQuote, AccentCard } from "@/components/ui/layout";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
-import { getServiceOffer, genericOffer, masterOffer } from "@/lib/data/service-offers";
+import { getServiceOffer, genericOffer } from "@/lib/data/service-offers";
+import { HeroOffer } from "@/components/shared/hero-offer";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import type { PlatformId } from "@/lib/data/benchmarks";
@@ -95,12 +96,12 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
               className="inline-flex items-center justify-center gap-2 rounded-[14px] bg-[var(--accent)] px-6 py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[var(--accent-strong)]"
             />
           </Magnetic>
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            {offer.trial && <span className="mono rounded-full border border-[var(--accent-line)] bg-[var(--accent-tint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.04em] text-[var(--accent-strong)]">30-day free trial</span>}
-            {masterOffer.riskReversal.map((r) => (
-              <span key={r} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-3 py-1.5 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{r}</span>
-            ))}
-          </div>
+          <HeroOffer
+            className="mt-5 max-w-xl"
+            badge={offer.trial ? "30-day free trial" : "Free audit · no obligation"}
+            line={offer.trial ? `Try our ${sShort} management for ${iShort.toLowerCase()} free for 30 days — no contract, no setup fee.` : `${offer.subhook} No obligation, no lock-in.`}
+            credit={offer.credit}
+          />
         </div>
       </PageHero>
 
