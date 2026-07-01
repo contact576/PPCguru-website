@@ -13,6 +13,7 @@ import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { ToolsOs } from "@/components/home/tools-os";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { performanceStats } from "@/lib/data/performance-stats";
+import { StatCounter } from "@/components/ui/stat-counter";
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
@@ -138,7 +139,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-x-8">
               {performanceStats.filter((s) => s.proofType === "agency_aggregate").map((s) => (
                 <div key={s.label} style={{ textAlign: "center" }}>
-                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}>{s.value}</div>
+                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}><StatCounter value={s.value} /></div>
                   <div style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.4, marginTop: 10 }}>{s.label}</div>
                 </div>
               ))}

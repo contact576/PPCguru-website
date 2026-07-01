@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { BlogArt } from "@/components/illustrations/hero-art";
+import { accentAt } from "@/components/ui/layout";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
@@ -55,12 +56,15 @@ export default function GlossaryPage() {
         </nav>
       </Section>
 
-      {glossaryCategories.map((cat) => (
-        <Section key={cat} id={cat.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
-          <SectionHeading align="left" eyebrow="Glossary" title={cat} />
+      {glossaryCategories.map((cat, ci) => (
+        <Section key={cat} id={cat.toLowerCase().replace(/[^a-z0-9]+/g, "-")} tone={ci % 2 === 1 ? "soft" : "white"}>
+          <div className="flex items-center gap-3">
+            <span aria-hidden className="h-6 w-1.5 rounded-full" style={{ background: accentAt(ci) }} />
+            <SectionHeading align="left" eyebrow="Glossary" title={cat} />
+          </div>
           <dl className="mt-8 grid gap-5 md:grid-cols-2">
             {glossary.filter((t) => t.category === cat).map((t) => (
-              <div key={t.slug} id={t.slug} className="scroll-mt-28 rounded-[18px] border border-[#dddbc9] bg-[#fbfaf2] p-6">
+              <div key={t.slug} id={t.slug} className="scroll-mt-28 rounded-[18px] border border-[#dddbc9] bg-[var(--color-surface)] p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-tile" style={{ borderLeft: `3px solid ${accentAt(ci)}` }}>
                 <dt className="head text-[16px] text-[var(--color-ink)]">{t.term}</dt>
                 <dd className="mt-2 text-sm leading-relaxed text-[var(--color-ink-dim)]">{t.definition}</dd>
               </div>

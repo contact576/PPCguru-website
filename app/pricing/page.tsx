@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { ToolsArt } from "@/components/illustrations/hero-art";
+import { AccentCard, accentAt } from "@/components/ui/layout";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
@@ -65,12 +66,12 @@ export default function PricingPage() {
       {/* Core principles */}
       <Section className="!pb-0">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {principles.map(([t, b]) => (
-            <div key={t} className="h-full rounded-[18px] border border-[#dddbc9] bg-[#fbfaf2] p-6">
+          {principles.map(([t, b], i) => (
+            <AccentCard key={t} index={i}>
               <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-[10px] bg-[var(--color-ink)] text-[var(--color-lime)] text-sm font-bold">✓</div>
               <p className="head text-[15px] text-[var(--color-ink)]">{t}</p>
               <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{b}</p>
-            </div>
+            </AccentCard>
           ))}
         </div>
       </Section>
@@ -79,11 +80,12 @@ export default function PricingPage() {
       <Section>
         <SectionHeading align="left" eyebrow="How agency pricing works" title={<>The three ways agencies <span className="text-gradient">charge</span></>} intro="Understanding these helps you evaluate any agency — including us. Each has trade-offs; what matters is that it's transparent and agreed in writing." />
         <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {models.map(([t, b]) => (
-            <div key={t} className="h-full rounded-[22px] border border-[#dddbc9] bg-white p-7">
+          {models.map(([t, b], i) => (
+            <AccentCard key={t} index={i} className="!p-7">
+              <span className="head mb-3 block text-[34px] leading-none" style={{ color: `color-mix(in srgb, ${accentAt(i)} 45%, transparent)` }}>{String(i + 1).padStart(2, "0")}</span>
               <h3 className="head text-[18px]">{t}</h3>
               <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{b}</p>
-            </div>
+            </AccentCard>
           ))}
         </div>
       </Section>
