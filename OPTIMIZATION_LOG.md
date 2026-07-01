@@ -120,3 +120,46 @@ directory links; real social URLs (lights up `sameAs`); phone/postal (NAP). None
 **Recommended next before merging:** (1) review PR #9 (+ the AEO PR #8 it stacks on); (2) swap the
 `[VERIFY-client]` items; (3) off-site GEO the audit flagged (GBP, Clutch/G2, directories, digital PR) — the
 on-site work is best-in-class but ~82–89% of LLM citations are earned/off-site.
+
+---
+
+## SESSION 2 — number updates · creative brief · design overhaul (Jul 2026)
+
+Client-directed follow-up: (A) update per-service paid-ads numbers, (B) produce a designer-ready image
+brief, (C) overhaul the visual design (owner rated it ~65/100; target 90) — "too many boxes; add variety,
+motion, cards, sliders, varied layouts." All on this branch; review-first.
+
+### A. Per-service numbers (client-directed, all `[VERIFY-client]`)
+- Google Ads **500+** businesses / **$65M+** spend · Meta **300+** · YouTube **120+** · Microsoft **40+** /
+  **~$500K** (avg $10–15K/client) · TikTok **25+** · LinkedIn **30+** · Pinterest **25+** · Creative
+  **12,000+** ad creatives.
+- **Reconciled the aggregate** `trustFacts.clientsServed` **150+ → 500+** (Google alone is 500+, so unique
+  businesses served must be ≥500) across performance-stats, service-stats credentials, service-faq /
+  industry-faq answers, `llms.txt`, CLAUDE.md. Paid ad-spend still sums to the **$100M+** aggregate. Commit `e9dc25c`.
+
+### B. Creative / image brief → `CREATIVE-BRIEF.md`
+Full designer handoff: ~144 assets (78 illustrations/textures + 66 logos) with per-asset description,
+colour palette (exact hex), format and **exact `/public` path + page + section**. Covers page heroes (incl.
+the 7 services that reuse another's art), 15 industry heroes, 10 city skylines, in-section spot
+illustrations, textures/watermarks, the full logo set, brand/favicon/OG, blog covers — plus art direction +
+production priority. Illustration-first (owner's call), honesty-safe (client logos consent-gated).
+
+### C. Design overhaul (audited → implemented → re-audited)
+**Baseline audit (agent):** ~**63/100** — craft/typography strong (75–80), but *variety, rhythm, motion,
+imagery* in the 40s–50s; the dominant unit was `Section` + `grid` of bordered `#fbfaf2` boxes repeated
+everywhere; **zero raster imagery** in the repo.
+
+**Built a layout-variant toolkit** (`components/ui/layout.tsx` + `stat-counter.tsx`): `BigQuote`
+(full-bleed editorial break), `AccentCard` (rotating accent-edge card + hover lift), `SplitFeature` (sticky
+asymmetric split), `StepFlow` (connected numbered timeline), `StatStrip`, `StatCounter` (count-up parsing
+"$65M+"/"6.3x").
+
+**Applied across the worst offenders:** service-deep (4 identical grids → AccentCard rotation + AI spotlight
+accents + first-30-days timeline); industry-deep (3 grids → split w/ count-up benchmarks, numbered playbook,
+accent hacks list, 90-day timeline); process-steps → StepFlow; ServiceStatBand + homepage aggregates count
+up on scroll-in; editorial BigQuote breaks on service/combo/industry templates; hero art on the 45 combo
+pages + the 4 hub pages (pricing/compare/glossary/benchmarks); table dataviz (ComparisonTable ~58 pages,
+/compare, /benchmarks — dark header, zebra, hover, a11y scope/caption, inline CPL bar); pricing/glossary
+grids → AccentCard / category-accented cards. Commits `bfed6cc`, `e95c7e1`, `e0f-polish`.
+
+**Re-audit:** _(pending — recorded here once the re-audit agent returns; any parameter < 90 gets another pass.)_
