@@ -13,6 +13,7 @@ import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { ToolsOs } from "@/components/home/tools-os";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { performanceStats } from "@/lib/data/performance-stats";
+import { StatCounter } from "@/components/ui/stat-counter";
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
@@ -138,7 +139,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-x-8">
               {performanceStats.filter((s) => s.proofType === "agency_aggregate").map((s) => (
                 <div key={s.label} style={{ textAlign: "center" }}>
-                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}>{s.value}</div>
+                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}><StatCounter value={s.value} /></div>
                   <div style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.4, marginTop: 10 }}>{s.label}</div>
                 </div>
               ))}
@@ -301,17 +302,18 @@ export default function HomePage() {
           </div>
           <div data-reveal style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", minWidth: 560, borderCollapse: "collapse", textAlign: "left" }}>
+              <caption style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>PPC Guru vs a typical agency, compared</caption>
               <thead>
                 <tr style={{ borderBottom: "1px solid #e3e0d0" }}>
-                  <th className="mono" style={{ padding: "12px 16px 12px 0", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>What matters</th>
-                  <th className="mono" style={{ padding: "12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: olive, fontWeight: 700 }}>The PPC Guru way</th>
-                  <th className="mono" style={{ padding: "12px 0 12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>Typical agency</th>
+                  <th scope="col" className="mono" style={{ padding: "12px 16px 12px 0", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>What matters</th>
+                  <th scope="col" className="mono" style={{ padding: "12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: olive, fontWeight: 700 }}>The PPC Guru way</th>
+                  <th scope="col" className="mono" style={{ padding: "12px 0 12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>Typical agency</th>
                 </tr>
               </thead>
               <tbody>
                 {comparisonRows.map((r) => (
                   <tr key={r.dimension} style={{ borderBottom: "1px solid #e3e0d0", verticalAlign: "top" }}>
-                    <td className="head" style={{ padding: "16px 16px 16px 0", fontSize: 14.5, color: ink }}>{r.dimension}</td>
+                    <th scope="row" className="head" style={{ padding: "16px 16px 16px 0", fontSize: 14.5, color: ink, textAlign: "left", fontWeight: 400 }}>{r.dimension}</th>
                     <td style={{ padding: 16, fontSize: 14, color: "#2c2e22", fontWeight: 500 }}><span style={{ color: olive, fontWeight: 700, marginRight: 8 }}>✓</span>{r.guru}</td>
                     <td style={{ padding: "16px 0 16px 16px", fontSize: 14, color: "#54564a" }}><span style={{ color: coral, fontWeight: 700, marginRight: 8 }}>✕</span>{r.typical}</td>
                   </tr>
@@ -476,6 +478,31 @@ export default function HomePage() {
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Questions, <Em>answered</Em></h2>
           </div>
           <FaqList />
+        </div>
+      </section>
+
+      {/* ── FREE RESOURCES ─────────────────────────────────────────────────── */}
+      <section style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0" }}>
+        <div className="mx-auto max-w-[1080px] px-5 py-16 md:px-8 md:py-20">
+          <div data-reveal style={{ textAlign: "center", marginBottom: 36 }}>
+            <Eyebrow>Free resources</Eyebrow>
+            <h2 className="head" style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)" }}>Useful even if we never <Em>work together</Em></h2>
+          </div>
+          <div data-reveal className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { href: "/tools/google-ads-calculator", t: "ROI calculators", d: "Model leads, cost-per-lead and ROAS by industry and budget." },
+              { href: "/benchmarks", t: "Industry benchmarks", d: "Typical CPC, conversion rate and cost-per-lead for ~35 industries." },
+              { href: "/compare", t: "Compare guides", d: "Google Ads vs Meta, agency vs in-house vs DIY, PPC vs SEO." },
+              { href: "/glossary", t: "Marketing glossary", d: "Every PPC, Meta and SEO term in plain English." },
+              { href: "/pricing", t: "How pricing works", d: "Transparent fee models — your ad spend stays 100% yours." },
+              { href: "/tools/instant-audit", t: "Instant AI audit", d: "On-page and tracking signals for any site in seconds." },
+            ].map((r) => (
+              <Link key={r.href} href={r.href} style={{ display: "block", background: "#fff", border: "1px solid #dddbc9", borderRadius: 18, padding: 22 }} className="transition-colors hover:border-[#14170e]">
+                <div className="head" style={{ fontSize: 16, color: ink }}>{r.t} <span style={{ color: olive }}>→</span></div>
+                <p style={{ fontSize: 13.5, color: "#54564a", marginTop: 6, lineHeight: 1.5 }}>{r.d}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

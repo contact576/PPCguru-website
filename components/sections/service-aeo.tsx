@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Check, X } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
+import { StatCounter } from "@/components/ui/stat-counter";
+import { Reveal } from "@/components/ui/reveal";
 import { getServiceStats, serviceCredentials } from "@/lib/data/service-stats";
 import { trustFacts } from "@/lib/data/performance-stats";
 
@@ -58,11 +60,13 @@ export function ServiceStatBand({ slug }: { slug: string }) {
           Numbers that speak louder than promises
         </h2>
         <div className="mt-9 grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
-          {block.stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="head text-[clamp(2rem,5vw,3rem)] leading-none text-[var(--accent-strong)]">{s.value}</div>
+          {block.stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 0.06} className="text-center">
+              <div className="head text-[clamp(2rem,5vw,3rem)] leading-none text-[var(--accent-strong)]">
+                <StatCounter value={s.value} />
+              </div>
               <div className="mt-2 text-[13px] text-[var(--color-ink-dim)]">{s.label}</div>
-            </div>
+            </Reveal>
           ))}
         </div>
         <p className="mt-8 text-center text-[11px] text-[var(--color-ink-faint)]">{block.basis}</p>
@@ -116,24 +120,26 @@ export function ComparisonTable({ rows, serviceName }: { rows?: { dimension: str
         title={<>PPC Guru vs a <span className="text-gradient">typical agency</span></>}
         intro={`What you actually get with ${serviceName} at PPC Guru — line by line.`}
       />
-      <div className="mt-10 overflow-x-auto">
+      <div className="mt-10 overflow-hidden rounded-[18px] border border-[var(--color-border)] bg-[var(--color-surface)]">
+        <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] border-collapse text-left">
+          <caption className="sr-only">{serviceName}: PPC Guru vs a typical agency, compared</caption>
           <thead>
-            <tr className="border-b border-[var(--color-border)]">
-              <th className="mono py-3 pr-4 text-[11px] uppercase tracking-[.06em] text-[var(--color-ink-faint)]">What matters</th>
-              <th className="mono px-4 py-3 text-[11px] uppercase tracking-[.06em] text-[var(--accent-strong)]">PPC Guru</th>
-              <th className="mono py-3 pl-4 text-[11px] uppercase tracking-[.06em] text-[var(--color-ink-faint)]">Typical agency</th>
+            <tr className="bg-[var(--color-ink)] text-[var(--color-navy-ink)]">
+              <th scope="col" className="mono py-3.5 pl-5 pr-4 text-[10.5px] uppercase tracking-[.06em]">What matters</th>
+              <th scope="col" className="mono px-4 py-3.5 text-[10.5px] uppercase tracking-[.06em] text-[var(--color-lime)]">PPC Guru</th>
+              <th scope="col" className="mono py-3.5 pr-5 pl-4 text-[10.5px] uppercase tracking-[.06em] text-[#b8bda6]">Typical agency</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.dimension} className="border-b border-[var(--color-border)] align-top">
-                <td className="py-4 pr-4 text-sm font-semibold text-[var(--color-ink)]">{r.dimension}</td>
+              <tr key={r.dimension} className="border-b border-[var(--color-border)] align-top transition-colors odd:bg-[#faf9f0] hover:bg-[var(--color-base-2)]">
+                <th scope="row" className="py-4 pl-5 pr-4 text-left text-sm font-semibold text-[var(--color-ink)]">{r.dimension}</th>
                 <td className="px-4 py-4 text-sm text-[var(--color-ink)]">
                   <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--accent-soft)] align-middle text-[var(--accent-strong)]"><Check size={12} /></span>
                   {r.us}
                 </td>
-                <td className="py-4 pl-4 text-sm text-[var(--color-ink-dim)]">
+                <td className="py-4 pr-5 pl-4 text-sm text-[var(--color-ink-dim)]">
                   <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[rgba(242,106,43,.12)] align-middle text-[var(--color-coral)]"><X size={12} /></span>
                   {r.typical}
                 </td>
@@ -141,7 +147,11 @@ export function ComparisonTable({ rows, serviceName }: { rows?: { dimension: str
             ))}
           </tbody>
         </table>
+        </div>
       </div>
+      <Link href="/compare" className="mono mt-6 inline-block text-xs font-bold uppercase tracking-[.06em] text-[var(--accent-strong)] hover:text-[var(--color-ink)]">
+        See more comparisons — Google Ads vs Meta, agency vs DIY, PPC vs SEO →
+      </Link>
     </Section>
   );
 }

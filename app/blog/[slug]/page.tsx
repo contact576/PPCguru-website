@@ -30,6 +30,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!post) notFound();
 
   const related = getAllPosts().filter((p) => p.slug !== slug).slice(0, 3);
+  const catLinks: Record<string, { label: string; href: string }[]> = {
+    "Google Ads": [{ label: "Google Ads management", href: "/services/google-ads" }],
+    "Meta Ads": [{ label: "Meta Ads management", href: "/services/meta-ads" }],
+    SEO: [{ label: "SEO & Local Search", href: "/services/seo" }],
+    Conversion: [{ label: "Landing Pages & CRO", href: "/services/cro-landing-pages" }],
+    AI: [{ label: "AI Automation", href: "/services/ai-automation" }],
+  };
+  const svcLinks = catLinks[post.category] ?? [{ label: "Explore all services", href: "/services" }];
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Blog", path: "/blog" },
@@ -100,11 +108,23 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <h2 className="text-xl font-semibold">Keep reading</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-3">
             {related.map((p) => (
-              <Link key={p.slug} href={`/blog/${p.slug}`} className="group rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 transition-colors hover:border-[var(--color-violet)]">
-                <span className="text-xs text-[var(--color-cyan-bright)]">{p.category}</span>
+              <Link key={p.slug} href={`/blog/${p.slug}`} className="group rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 transition-colors hover:border-[var(--color-ink)]">
+                <span className="mono text-[11px] uppercase tracking-[.06em] text-[#5f6f17]">{p.category}</span>
                 <h3 className="mt-1.5 font-semibold leading-snug group-hover:text-[var(--color-ink)]">{p.title}</h3>
               </Link>
             ))}
+          </div>
+        </div>
+      </Section>
+      <Section className="!pt-0">
+        <div className="mx-auto max-w-3xl rounded-[18px] border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6">
+          <p className="mono text-[11px] uppercase tracking-[.08em] text-[#5f6f17]">Related</p>
+          <div className="mt-3 flex flex-wrap gap-2.5">
+            {svcLinks.map((l) => (
+              <Link key={l.href} href={l.href} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-4 py-2 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]">{l.label} →</Link>
+            ))}
+            <Link href="/glossary" className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-4 py-2 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]">Marketing glossary →</Link>
+            <Link href="/contact" className="mono rounded-full border border-[#cfe39a] bg-[#eef2dd] px-4 py-2 text-[11px] font-bold uppercase tracking-[.04em] text-[#5f6f17] transition-colors hover:border-[#5f6f17]">Get a free audit →</Link>
           </div>
         </div>
       </Section>

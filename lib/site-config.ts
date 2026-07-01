@@ -152,6 +152,7 @@ export const nav: NavItem[] = [
     ],
   },
   { label: "Results", href: "/results" },
+  { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

@@ -141,7 +141,7 @@ export const industryFaq: Record<string, Pick<IndustryContent, "faqs">> = {
       },
       {
         "q": "Why should I choose PPC Guru for my plumbing marketing?",
-        "a": "We're a Google Partner and Meta Business Partner based in the GTA, serving plumbers across Canada and the USA, with vertical-specific playbooks built for trades. You own your accounts and data, contracts are month-to-month, and ad spend stays separate from our fee. AI does the heavy lifting on optimization and follow-up; experienced humans direct and review. Our blended track record: 150+ businesses, $100M+ spend managed, 6.3x average ROAS."
+        "a": "We're a Google Partner and Meta Business Partner based in the GTA, serving plumbers across Canada and the USA, with vertical-specific playbooks built for trades. You own your accounts and data, contracts are month-to-month, and ad spend stays separate from our fee. AI does the heavy lifting on optimization and follow-up; experienced humans direct and review. Our blended track record: 500+ businesses, $100M+ spend managed, 6.3x average ROAS."
       }
     ]
   },

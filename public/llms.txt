@@ -10,7 +10,7 @@
 - Founded: 2021. Led by founders with 10+ years of combined Google Ads experience.
 - Credentials: Google Partner, Meta Business Partner.
 - Track record (client-reported, blended; representative, not a guarantee): $100M+ ad spend
-  managed, 1M+ qualified leads generated, 6.3x average return on ad spend, 150+ businesses served.
+  managed, 1M+ qualified leads generated, 6.3x average return on ad spend, 500+ businesses served.
 - Service area: Greater Toronto Area (Toronto, Mississauga, Brampton, Vaughan, Markham, Ottawa)
   and across Canada & the USA.
 - Founders: Jaydeep Patel (Founder & CEO), Dhaval Patel (Co-founder & Head of Delivery).
@@ -69,7 +69,10 @@ We publish dedicated pages on running a specific service for a specific vertical
 
 ## Learn more
 - About PPC Guru: https://ppcguru.ca/about
+- Pricing (how we charge — ad spend separate, month-to-month): https://ppcguru.ca/pricing
 - Industry benchmarks (free, sourced data): https://ppcguru.ca/benchmarks
+- Compare (Google Ads vs Meta, agency vs in-house vs DIY, PPC vs SEO): https://ppcguru.ca/compare
+- Glossary (PPC/Meta/SEO terms explained): https://ppcguru.ca/glossary
 - Results / case studies: https://ppcguru.ca/results
 - Blog: https://ppcguru.ca/blog
 - Contact: https://ppcguru.ca/contact

@@ -26,6 +26,7 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { TrustBadgeBar, ServiceIntro, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
+import { BigQuote } from "@/components/ui/layout";
 import { getIndustryContent } from "@/lib/data/industry-content";
 import { getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
 
@@ -122,6 +123,13 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
 
       {/* Industry reality + benchmarks */}
       <IndustryReality name={ind.name} reality={ind.reality} benchmarks={ind.benchmarks} />
+
+      {/* Editorial break — vertical expertise */}
+      <BigQuote variant="tint" attribution={`Why ${ind.name.toLowerCase()} is different`}>
+        A generic agency runs the same playbook for a plumber and a law firm.{" "}
+        {ind.name} customers search, compare and book differently — and that difference is exactly
+        where the budget is won or lost.
+      </BigQuote>
 
       {/* Related services */}
       <Section className="bg-[var(--color-base-2)]">

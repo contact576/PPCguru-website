@@ -106,7 +106,7 @@ export const serviceFaq: Record<string, Pick<ServiceContent, "faqs" | "compariso
       },
       {
         "q": "Is PPC Guru a good Meta Ads agency in Toronto or the GTA?",
-        "a": "PPC Guru is a Meta Business Partner and Google Partner based in the Greater Toronto Area, founded in 2021, serving local service businesses across the GTA, Canada and the USA. Our founders bring 10+ years combined Google Ads and paid-social experience. Our blended, client-reported track record spans $100M+ in ad spend managed, 1M+ qualified leads and a 6.3x average ROAS across 150+ businesses. We work month-to-month, no long contracts."
+        "a": "PPC Guru is a Meta Business Partner and Google Partner based in the Greater Toronto Area, founded in 2021, serving local service businesses across the GTA, Canada and the USA. Our founders bring 10+ years combined Google Ads and paid-social experience. Our blended, client-reported track record spans $100M+ in ad spend managed, 1M+ qualified leads and a 6.3x average ROAS across 500+ businesses. We work month-to-month, no long contracts."
       },
       {
         "q": "Which industries do you run Meta Ads for?",
@@ -187,7 +187,7 @@ export const serviceFaq: Record<string, Pick<ServiceContent, "faqs" | "compariso
       },
       {
         "q": "Is PPC Guru a good SEO agency in Toronto and the GTA?",
-        "a": "PPC Guru is a Google Partner and Meta Business Partner based in the Greater Toronto Area (Brampton, Ontario), serving local service businesses across the GTA, Canada, and the USA. Our founders bring 10+ years of combined Google Ads experience, and the firm has served 150+ businesses since 2021. We know the local map pack, Canadian search behaviour, and what it takes to rank service businesses in competitive GTA markets."
+        "a": "PPC Guru is a Google Partner and Meta Business Partner based in the Greater Toronto Area (Brampton, Ontario), serving local service businesses across the GTA, Canada, and the USA. Our founders bring 10+ years of combined Google Ads experience, and the firm has served 500+ businesses since 2021. We know the local map pack, Canadian search behaviour, and what it takes to rank service businesses in competitive GTA markets."
       },
       {
         "q": "Which industries do you run SEO and local search for?",
@@ -268,7 +268,7 @@ export const serviceFaq: Record<string, Pick<ServiceContent, "faqs" | "compariso
       },
       {
         "q": "Is PPC Guru a good creative production agency in Toronto or the GTA?",
-        "a": "PPC Guru is a GTA-based, AI-first agency (Brampton, Ontario) and a Google Partner and Meta Business Partner, serving clients across the GTA, Canada and the USA. Our founders bring 10+ years of combined Google Ads experience, and across our work we've managed $100M+ in ad spend for 150+ businesses. Because we run the ads and the creative together, your assets are built to win in the auction, not just look good."
+        "a": "PPC Guru is a GTA-based, AI-first agency (Brampton, Ontario) and a Google Partner and Meta Business Partner, serving clients across the GTA, Canada and the USA. Our founders bring 10+ years of combined Google Ads experience, and across our work we've managed $100M+ in ad spend for 500+ businesses. Because we run the ads and the creative together, your assets are built to win in the auction, not just look good."
       },
       {
         "q": "Which industries do you produce creative for?",
@@ -430,7 +430,7 @@ export const serviceFaq: Record<string, Pick<ServiceContent, "faqs" | "compariso
       },
       {
         "q": "Is PPC Guru a good CRM and marketing-operations agency in Toronto and the GTA?",
-        "a": "PPC Guru is a Greater Toronto Area agency based in Brampton, Ontario, serving service businesses across the GTA, Canada and the USA. We're a Google Partner and Meta Business Partner with 10+ years of combined founder experience and 150+ businesses served. Our team builds GoHighLevel pipelines, lead routing, speed-to-lead automation and spend-to-revenue reporting, and we work month-to-month with no long-term contracts."
+        "a": "PPC Guru is a Greater Toronto Area agency based in Brampton, Ontario, serving service businesses across the GTA, Canada and the USA. We're a Google Partner and Meta Business Partner with 10+ years of combined founder experience and 500+ businesses served. Our team builds GoHighLevel pipelines, lead routing, speed-to-lead automation and spend-to-revenue reporting, and we work month-to-month with no long-term contracts."
       },
       {
         "q": "Which industries do you build CRM and marketing operations for?",
@@ -997,7 +997,7 @@ export const serviceFaq: Record<string, Pick<ServiceContent, "faqs" | "compariso
       },
       {
         "q": "Is PPC Guru a good landing page and CRO agency in Toronto or the GTA?",
-        "a": "We're a Google Partner and Meta Business Partner based in the Greater Toronto Area (Brampton, Ontario), with 10+ years of combined founder Google Ads experience and 150+ businesses served since 2021. We work with GTA and Toronto businesses in person and serve clients across Canada and the USA remotely. Whether we're a good fit depends on your goals — book a call and we'll tell you straight if we can move your numbers."
+        "a": "We're a Google Partner and Meta Business Partner based in the Greater Toronto Area (Brampton, Ontario), with 10+ years of combined founder Google Ads experience and 500+ businesses served since 2021. We work with GTA and Toronto businesses in person and serve clients across Canada and the USA remotely. Whether we're a good fit depends on your goals — book a call and we'll tell you straight if we can move your numbers."
       },
       {
         "q": "Which industries do you build landing pages and run CRO for?",

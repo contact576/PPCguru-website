@@ -7,7 +7,7 @@
  *   - paid-channel "ad spend managed" sums to ~$100M (the aggregate)
  *   - paid leads (~620K) + SEO organic (~380K) ≈ the 1M+ qualified-leads aggregate
  *   - client counts intentionally OVERLAP (one client uses several services), so they do
- *     NOT sum to the 150+ unique-businesses aggregate — that's expected, not a contradiction.
+ *     NOT sum to the 500+ unique-businesses aggregate — that's expected, not a contradiction.
  *
  * Every figure is [VERIFY-client] — swap for audited numbers before launch in this one file.
  * Basis lines are shown as small print so the numbers read as honest, sourced claims (a key
@@ -29,17 +29,17 @@ export const serviceCredentials = [
   "Google Partner",
   "Meta Business Partner",
   "10+ yrs combined founder experience",
-  "150+ businesses served",
+  "500+ businesses served",
 ] as const;
 
 /** Keyed by service slug. Undefined for an unknown slug → the stat band simply doesn't render. */
 export const serviceStats: Record<string, ServiceStatBlock> = {
   "google-ads": {
     stats: [
-      { value: "$52M+", label: "Google Ads spend managed" },
+      { value: "$65M+", label: "Google Ads spend managed" },
       { value: "320K+", label: "qualified leads generated" },
       { value: "6.8x", label: "average return on ad spend" },
-      { value: "90+", label: "businesses served" },
+      { value: "500+", label: "businesses served" },
     ],
     basis: PAID_BASIS,
   },
@@ -48,7 +48,7 @@ export const serviceStats: Record<string, ServiceStatBlock> = {
       { value: "$26M+", label: "Meta ad spend managed" },
       { value: "180K+", label: "qualified leads generated" },
       { value: "5.9x", label: "average return on ad spend" },
-      { value: "70+", label: "businesses served" },
+      { value: "300+", label: "businesses served" },
     ],
     basis: PAID_BASIS,
   },
@@ -57,16 +57,16 @@ export const serviceStats: Record<string, ServiceStatBlock> = {
       { value: "$6M+", label: "YouTube ad spend managed" },
       { value: "35K+", label: "leads & view-through actions" },
       { value: "5.2x", label: "average return on ad spend" },
-      { value: "25+", label: "businesses served" },
+      { value: "120+", label: "businesses served" },
     ],
     basis: PAID_BASIS,
   },
   "microsoft-ads": {
     stats: [
-      { value: "$5M+", label: "Microsoft Ads spend managed" },
+      { value: "$500K+", label: "Microsoft Ads spend managed" },
       { value: "30K+", label: "qualified leads generated" },
       { value: "6.1x", label: "average return on ad spend" },
-      { value: "20+", label: "businesses served" },
+      { value: "40+", label: "businesses served" },
     ],
     basis: PAID_BASIS,
   },
@@ -75,7 +75,7 @@ export const serviceStats: Record<string, ServiceStatBlock> = {
       { value: "$4M+", label: "TikTok ad spend managed" },
       { value: "25K+", label: "leads generated" },
       { value: "4.8x", label: "average return on ad spend" },
-      { value: "18+", label: "businesses served" },
+      { value: "25+", label: "businesses served" },
     ],
     basis: PAID_BASIS,
   },
@@ -84,7 +84,7 @@ export const serviceStats: Record<string, ServiceStatBlock> = {
       { value: "$4M+", label: "LinkedIn ad spend managed" },
       { value: "14K+", label: "B2B leads generated" },
       { value: "4.5x", label: "average return on ad spend" },
-      { value: "15+", label: "businesses served" },
+      { value: "30+", label: "businesses served" },
     ],
     basis: PAID_BASIS,
   },
@@ -93,7 +93,7 @@ export const serviceStats: Record<string, ServiceStatBlock> = {
       { value: "$3M+", label: "Pinterest ad spend managed" },
       { value: "16K+", label: "leads generated" },
       { value: "4.6x", label: "average return on ad spend" },
-      { value: "12+", label: "businesses served" },
+      { value: "25+", label: "businesses served" },
     ],
     basis: PAID_BASIS,
   },
@@ -126,7 +126,7 @@ export const serviceStats: Record<string, ServiceStatBlock> = {
   },
   creative: {
     stats: [
-      { value: "5,000+", label: "ad creatives produced" },
+      { value: "12,000+", label: "ad creatives produced" },
       { value: "500+", label: "concepts tested against fatigue" },
       { value: "Weekly", label: "fresh creative shipped" },
       { value: "AI + human", label: "production system" },

@@ -20,6 +20,7 @@ import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
 import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
+import { BigQuote, SplitFeature, AccentCard, SealDivider, accentAt } from "@/components/ui/layout";
 import { getServiceContent } from "@/lib/data/service-content";
 import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
 import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
@@ -34,26 +35,7 @@ const SERVICE_PLATFORM: Record<string, PlatformId> = {
 };
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
-import {
-  GoogleAdsArt, MetaAdsArt, SeoArt, CreativeArt, WebDesignArt, CrmArt, ServicesArt,
-} from "@/components/illustrations/hero-art";
-
-const SERVICE_ART: Record<string, React.ReactNode> = {
-  "google-ads": <GoogleAdsArt />,
-  "meta-ads": <MetaAdsArt />,
-  "seo": <SeoArt />,
-  "creative": <CreativeArt />,
-  "web-design": <WebDesignArt />,
-  "crm": <CrmArt />,
-  // New services reuse the closest existing art until bespoke art ships.
-  "linkedin-ads": <MetaAdsArt />,
-  "tiktok-ads": <MetaAdsArt />,
-  "microsoft-ads": <GoogleAdsArt />,
-  "pinterest-ads": <MetaAdsArt />,
-  "youtube-ads": <CreativeArt />,
-  "ai-automation": <CrmArt />,
-  "cro-landing-pages": <WebDesignArt />,
-};
+import { serviceArt } from "@/components/illustrations/service-art";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -101,7 +83,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <JsonLd data={serviceSchema({ name: service.name, description: schemaDesc, path: `/services/${slug}` })} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
-      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={SERVICE_ART[slug] ?? <ServicesArt />}>
+      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={serviceArt(slug)}>
         <Magnetic>
           <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
         </Magnetic>
@@ -112,14 +94,14 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {content?.definition && <ServiceIntro name={service.name} definition={content.definition} heading={content.definitionHeading} />}
       <ServiceStatBand slug={slug} />
 
-      {/* Outcomes strip */}
+      {/* Outcomes strip — accent-edged tiles (distinct from the check-row lists below) */}
       <Section className="!pb-0">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {service.outcomes.map((o) => (
-            <div key={o} className="flex items-center gap-3 rounded-[14px] border border-[var(--accent-line)] bg-[#fbfaf2] px-5 py-4">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] bg-[var(--accent)] text-white"><Check size={15} /></span>
-              <span className="text-sm font-medium">{o}</span>
-            </div>
+          {service.outcomes.map((o, i) => (
+            <AccentCard key={o} index={i} className="!p-5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-[9px] text-white" style={{ background: accentAt(i) }}><Check size={16} /></span>
+              <span className="mt-3 block text-sm font-medium leading-snug text-[var(--color-ink)]">{o}</span>
+            </AccentCard>
           ))}
         </div>
       </Section>
@@ -155,6 +137,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
+      {/* Editorial break — the leak-sealed philosophy (breaks the box rhythm) */}
+      <BigQuote variant="ink" attribution="The PPC Guru approach">
+        Most {firstWord.toLowerCase()} budgets don&apos;t fail from spending too little — they{" "}
+        <span className="text-[var(--color-lime)]">leak</span> from untracked clicks, lazy match types and
+        pages that don&apos;t convert. We find the leak, then seal it.
+      </BigQuote>
+
       {/* What's included + who it's for */}
       <Section tone="cream">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
@@ -183,20 +172,24 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
-      {/* Deliverables — detailed */}
-      <Section>
-        <SectionHeading align="left" eyebrow="What we actually do" title={<>The work behind <span className="text-gradient">the results</span></>} />
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
+      {/* Deliverables — sticky split (breaks the run of card grids) */}
+      <SplitFeature
+        eyebrow="What we actually do"
+        title={<>The work behind <span className="text-gradient">the results</span></>}
+        intro="No fluff, no filler line-items — the concrete work that actually moves your numbers, run every month."
+        aside={<Magnetic><Button href="/contact" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Book a free audit <ArrowRight size={16} /></Button></Magnetic>}
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
           {service.deliverables.map((d, i) => (
             <Reveal key={d.title} delay={(i % 2) * 0.05}>
-              <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
-                <h3 className="head text-[18px]">{d.title}</h3>
+              <AccentCard index={i} className="!p-6">
+                <h3 className="head text-[16px]">{d.title}</h3>
                 <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{d.body}</p>
-              </SpotlightCard>
+              </AccentCard>
             </Reveal>
           ))}
         </div>
-      </Section>
+      </SplitFeature>
 
       {/* Campaign types / platforms */}
       <Section tone="cream">
@@ -213,17 +206,19 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
-      {/* Process */}
+      <SealDivider />
+
+      {/* Process — numbered accent-edged cards (distinct from the 30-day timeline below) */}
       <Section>
         <SectionHeading align="left" eyebrow="The process" title={<>How we run <span className="text-gradient">{service.name}</span></>} />
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {service.process.map((p, i) => (
             <Reveal key={p.step} delay={(i % 4) * 0.05}>
-              <SpotlightCard className="h-full rounded-[22px] border border-[var(--color-border)] bg-white p-6">
-                <span className="head text-[42px]" style={{ color: "color-mix(in srgb, var(--accent) 38%, transparent)" }}>{p.step}</span>
+              <AccentCard index={i} className="!p-6">
+                <span className="head text-[42px] leading-none" style={{ color: `color-mix(in srgb, ${accentAt(i)} 42%, transparent)` }}>{p.step}</span>
                 <h3 className="head mt-3 text-[18px]">{p.title}</h3>
                 <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
-              </SpotlightCard>
+              </AccentCard>
             </Reveal>
           ))}
         </div>
@@ -262,6 +257,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <div>
             <SectionHeading align="left" eyebrow="Transparent pricing" title={<>What shapes your <span className="text-gradient">investment</span></>} />
             <p className="mt-4 text-[var(--color-ink-dim)]">Management fees depend on scope. Ad spend is separate and paid directly to the platforms. We confirm your exact scope after a review — no surprises.</p>
+            <Link href="/pricing" className="mono mt-4 inline-block text-xs font-bold uppercase tracking-[.06em] text-[var(--accent-strong)] hover:text-[var(--color-ink)]">See exactly how our pricing works →</Link>
             <ul className="mt-7 space-y-3">
               {service.pricingFactors.map((f) => (
                 <li key={f} className="flex items-start gap-3 rounded-[12px] border border-[#dddbc9] bg-white px-4 py-3.5 text-sm text-[var(--color-ink-dim)]">
