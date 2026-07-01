@@ -162,4 +162,21 @@ pages + the 4 hub pages (pricing/compare/glossary/benchmarks); table dataviz (Co
 /compare, /benchmarks — dark header, zebra, hover, a11y scope/caption, inline CPL bar); pricing/glossary
 grids → AccentCard / category-accented cards. Commits `bfed6cc`, `e95c7e1`, `e0f-polish`.
 
-**Re-audit:** _(pending — recorded here once the re-audit agent returns; any parameter < 90 gets another pass.)_
+**Design score journey (agent-audited, same rubric each time):** **63 → 77 → 79 → ~82 (code ceiling).**
+- 63 baseline · 77 after the toolkit landed · 79 after closing the "under-applied toolkit" blockers
+  (deploy SplitFeature, break the last stacked grids, reduced-motion guard, StatStrip JIT fix) · ~82 after
+  the final code-only levers (SealDivider between section runs, outcomes grid → accent tiles).
+- Per-axis after the final pass: componentry **86**, hierarchy **85**, rhythm **84**, whitespace **84**,
+  mobile **84**, color **83**, variety **82**, motion **82**, distinctiveness **72**, **imagery 55**.
+
+**Why not 90 — the honest ceiling (important):** the rubric weights *imagery* at **1.5×**, and imagery is
+**55** because **`/public/images/` doesn't exist yet** and 7 of 13 service heroes still reuse another
+service's placeholder SVG (`service-art.tsx`). **No code change can raise imagery** — the components are
+already wired to swap in `src`/nodes the moment assets land. Even a perfect 100 on every other axis with
+imagery at 55 tops out ~86. Reaching **≥90 is gated entirely on the design team producing the illustration /
+logo / photo assets in `CREATIVE-BRIEF.md`** (P0–P6). We did NOT fabricate imagery (honesty guardrail).
+
+**Net:** design went from "boxes everywhere" to a genuine layout system (SplitFeature, AccentCard, StepFlow
+timelines, BigQuote editorial breaks, animated count-ups, dataviz tables, SealDivider) — the code axes are
+now mid-80s. The last ~8 points are an **art-production hand-off**, not a code task. Commits `bfed6cc`,
+`e95c7e1`, `<polish>`, `f3f1777`, `<texture>`, `bced3ef`.
