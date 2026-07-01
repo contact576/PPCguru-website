@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
+import { ResultsArt } from "@/components/illustrations/hero-art";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -74,6 +75,7 @@ export default function BenchmarksPage() {
         title={<>Digital marketing benchmarks by <span className="text-gradient">industry</span></>}
         intro="Typical Google Ads cost-per-click, lead conversion rate, cost-per-lead and cost-per-customer for Canadian service businesses — a free, sourced reference set you can use to sanity-check your own numbers. All figures are 2024–2025 industry averages, not guarantees."
         breadcrumbs={crumbs}
+        art={<ResultsArt />}
       />
 
       <Section>

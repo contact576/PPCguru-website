@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
+import { BlogArt } from "@/components/illustrations/hero-art";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
@@ -41,6 +42,7 @@ export default function GlossaryPage() {
         title={<>Marketing terms, in <span className="text-gradient">plain English</span></>}
         intro="No jargon, no fluff — just clear definitions of the Google Ads, Meta Ads and SEO terms you'll actually hear from us. Skim it, or use it to decode any agency report."
         breadcrumbs={crumbs}
+        art={<BlogArt />}
       />
 
       <Section className="!pb-0">

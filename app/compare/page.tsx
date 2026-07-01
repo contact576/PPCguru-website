@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
+import { ServicesArt } from "@/components/illustrations/hero-art";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema, faqSchema } from "@/lib/seo";
@@ -26,6 +27,7 @@ export default function ComparePage() {
         title={<>Straight answers to the <span className="text-gradient">tough marketing calls</span></>}
         intro="Google Ads or Meta? Hire an agency, build in-house, or DIY? PPC or SEO? Here's how we'd actually advise a Canadian service business — no sales spin, just the trade-offs."
         breadcrumbs={crumbs}
+        art={<ServicesArt />}
       />
 
       {comparisons.map((c, i) => (
@@ -33,28 +35,30 @@ export default function ComparePage() {
           <SectionHeading align="left" eyebrow={c.title} title={c.question} />
           <p className="mt-5 max-w-3xl text-[17px] leading-relaxed text-[var(--color-ink-dim)]">{c.verdict}</p>
 
-          <div className="mt-8 overflow-x-auto">
+          <div className="mt-8 overflow-hidden rounded-[18px] border border-[var(--color-border)] bg-[var(--color-surface)]">
+            <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] border-collapse text-left text-sm">
               <caption className="sr-only">{c.title} comparison</caption>
               <thead>
-                <tr className="border-b border-[var(--color-border)]">
-                  <th scope="col" className="mono py-3 pr-4 text-[11px] uppercase tracking-[.05em] text-[var(--color-ink-faint)]">What matters</th>
-                  {c.headers.map((h) => (
-                    <th key={h} scope="col" className="mono px-4 py-3 text-[11px] uppercase tracking-[.05em] text-[var(--color-ink)]">{h}</th>
+                <tr className="bg-[var(--color-ink)] text-[var(--color-navy-ink)]">
+                  <th scope="col" className="mono py-3.5 pl-5 pr-4 text-[10.5px] uppercase tracking-[.05em]">What matters</th>
+                  {c.headers.map((h, j) => (
+                    <th key={h} scope="col" className={`mono px-4 py-3.5 text-[10.5px] uppercase tracking-[.05em] ${j === 0 ? "text-[var(--color-lime)]" : ""}`}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {c.rows.map((r) => (
-                  <tr key={r.dimension} className="border-b border-[var(--color-border)] align-top">
-                    <th scope="row" className="py-4 pr-4 text-left text-sm font-semibold text-[var(--color-ink)]">{r.dimension}</th>
+                  <tr key={r.dimension} className="border-b border-[var(--color-border)] align-top transition-colors odd:bg-[#faf9f0] hover:bg-[var(--color-base-2)]">
+                    <th scope="row" className="py-4 pl-5 pr-4 text-left text-sm font-semibold text-[var(--color-ink)]">{r.dimension}</th>
                     {r.cells.map((cell, j) => (
-                      <td key={j} className="px-4 py-4 text-[var(--color-ink-dim)]">{cell}</td>
+                      <td key={j} className={`px-4 py-4 ${j === 0 ? "font-medium text-[var(--color-ink)]" : "text-[var(--color-ink-dim)]"}`}>{cell}</td>
                     ))}
                   </tr>
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
           <div className="mt-7 rounded-[16px] border border-[#cfe39a] bg-[#eef2dd] p-5">

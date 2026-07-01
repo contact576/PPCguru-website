@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Check } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
+import { ToolsArt } from "@/components/illustrations/hero-art";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
@@ -58,6 +59,7 @@ export default function PricingPage() {
         title={<>Transparent pricing, <span className="text-gradient">no games</span></>}
         intro="The fastest way to spot a risky agency is one that won't talk about money. Here's exactly how marketing-agency pricing works — and how we charge — before you ever get on a call."
         breadcrumbs={crumbs}
+        art={<ToolsArt />}
       />
 
       {/* Core principles */}
