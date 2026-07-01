@@ -7,7 +7,6 @@ import { industries } from "@/lib/data/industries";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Reveal } from "@/components/ui/reveal";
-import { Button } from "@/components/ui/button";
 import { Magnetic, SpotlightCard } from "@/components/ui/interactive";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { ServiceProof } from "@/components/sections/service-proof";
@@ -15,6 +14,8 @@ import { AuditChecklist, AiAutomation, OptimizationCadence, Timeline30Day, ToolS
 import { DashboardMock } from "@/components/illustrations/dashboard-mock";
 import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
+import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { getServiceOffer, genericOffer, masterOffer } from "@/lib/data/service-offers";
 import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
@@ -60,6 +61,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     { name: service.name, path: `/services/${slug}` },
   ];
   const firstWord = service.name.split(" ")[0];
+  const offer = getServiceOffer(slug) ?? genericOffer;
+  const ctaCls = "inline-flex items-center justify-center gap-2 rounded-[14px] bg-[var(--accent)] px-6 py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[var(--accent-strong)]";
   const content = getServiceContent(slug);
   const schemaDesc = content?.definition ?? service.description;
   const siRows = industriesForService(slug).flatMap((iSlug) => {
@@ -84,9 +87,18 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
       <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={serviceArt(slug)}>
-        <Magnetic>
-          <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
-        </Magnetic>
+        <div>
+          <Magnetic>
+            <LeadCtaButton label={<>{offer.ctaLabel} <ArrowRight size={18} /></>} source={offer.formSource} title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className={ctaCls} />
+          </Magnetic>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {offer.trial && <span className="mono rounded-full border border-[var(--accent-line)] bg-[var(--accent-tint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.04em] text-[var(--accent-strong)]">30-day free trial</span>}
+            {offer.credit && <span className="mono rounded-full border border-[var(--accent-line)] bg-[var(--accent-tint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.04em] text-[var(--accent-strong)]">Up to $3,600 Google Ads credit</span>}
+            {masterOffer.riskReversal.map((r) => (
+              <span key={r} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-3 py-1.5 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{r}</span>
+            ))}
+          </div>
+        </div>
       </PageHero>
 
       {/* Trust strip + answer-first definition + per-service stats (AEO / E-E-A-T) */}
@@ -112,7 +124,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
             <div>
               <SectionHeading align="left" eyebrow="What you'll see" title={<>Everything ties back to <span className="text-gradient">revenue</span></>} intro="No vanity metrics. Your reporting connects spend to leads, customers and revenue — here's a sample of the kind of dashboard we run." />
-              <div className="mt-7"><Magnetic><Button href="/contact" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get your real numbers <ArrowRight size={16} /></Button></Magnetic></div>
+              <div className="mt-7"><Magnetic><LeadCtaButton label={<>Get your real numbers <ArrowRight size={16} /></>} source={`${offer.formSource}:dashboard`} title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className={ctaCls} /></Magnetic></div>
             </div>
             <DashboardMock data={service.dashboardMock} />
           </div>
@@ -143,6 +155,17 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <span className="text-[var(--color-lime)]">leak</span> from untracked clicks, lazy match types and
         pages that don&apos;t convert. We find the leak, then seal it.
       </BigQuote>
+
+      {/* Mid-page conversion strip — page-specific offer at the decision point */}
+      <Section className="!pt-0">
+        <div className="flex flex-col items-center gap-5 rounded-[var(--radius-lg)] border border-[var(--accent-line)] bg-[var(--accent-tint)] px-6 py-8 text-center md:flex-row md:items-center md:justify-between md:text-left">
+          <div>
+            <p className="head text-[clamp(1.15rem,2.4vw,1.5rem)] text-[var(--color-ink)]">{offer.hook}</p>
+            <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{offer.subhook}{offer.trial ? " No contract, no setup fee — walk away anytime." : " No obligation, no lock-in."}</p>
+          </div>
+          <Magnetic><LeadCtaButton label={<>{offer.ctaLabel} <ArrowRight size={16} /></>} source={`${offer.formSource}:mid`} title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className={`${ctaCls} shrink-0`} /></Magnetic>
+        </div>
+      </Section>
 
       {/* What's included + who it's for */}
       <Section tone="cream">
@@ -177,7 +200,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         eyebrow="What we actually do"
         title={<>The work behind <span className="text-gradient">the results</span></>}
         intro="No fluff, no filler line-items — the concrete work that actually moves your numbers, run every month."
-        aside={<Magnetic><Button href="/contact" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Book a free audit <ArrowRight size={16} /></Button></Magnetic>}
+        aside={<Magnetic><LeadCtaButton label={<>{offer.ctaLabel} <ArrowRight size={16} /></>} source={`${offer.formSource}:included`} title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className={ctaCls} /></Magnetic>}
       >
         <div className="grid gap-4 sm:grid-cols-2">
           {service.deliverables.map((d, i) => (
@@ -301,7 +324,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
       <CityCallout serviceName={service.name} />
 
-      <LeadBand source={`service:${slug}`} title={`Get a free ${firstWord} audit`} />
+      <LeadBand source={offer.formSource} title={offer.ctaLabel.replace(/^Get my /, "Get your ")} blurb={offer.popupBody} ctaLabel={offer.ctaLabel} />
 
       <FaqAccordion faqs={content?.faqs ?? service.faqs} title={`${service.name} — questions`} />
       <LastReviewed />

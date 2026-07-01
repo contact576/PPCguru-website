@@ -9,7 +9,6 @@ import {
 } from "@/lib/data/service-industry";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
-import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/interactive";
 import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
 import { getServiceContent } from "@/lib/data/service-content";
@@ -20,6 +19,8 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { serviceArt } from "@/components/illustrations/service-art";
 import { BigQuote, AccentCard } from "@/components/ui/layout";
+import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { getServiceOffer, genericOffer, masterOffer } from "@/lib/data/service-offers";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import type { PlatformId } from "@/lib/data/benchmarks";
@@ -64,6 +65,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
   if (!service || !ind || !angle) notFound();
 
   const sShort = serviceShortName[slug] ?? service.name;
+  const offer = getServiceOffer(slug) ?? genericOffer;
   const iShort = industryShortName[industry] ?? ind.name;
   const label = serviceIndustryLabel(slug, industry);
   const crumbs = [
@@ -82,9 +84,24 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
       <PageHero eyebrow={`${sShort} × ${iShort}`} title={label} intro={intro} breadcrumbs={crumbs} accent={getAccent(slug)} art={serviceArt(slug)}>
-        <Magnetic>
-          <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {sShort} audit <ArrowRight size={18} /></Button>
-        </Magnetic>
+        <div>
+          <Magnetic>
+            <LeadCtaButton
+              label={<>Free {sShort} audit for {iShort.toLowerCase()} <ArrowRight size={18} /></>}
+              source={`offer:${slug}:${industry}`}
+              title={`Free ${sShort} audit for ${iShort.toLowerCase()}`}
+              blurb={offer.popupBody}
+              submitLabel={offer.ctaLabel}
+              className="inline-flex items-center justify-center gap-2 rounded-[14px] bg-[var(--accent)] px-6 py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[var(--accent-strong)]"
+            />
+          </Magnetic>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {offer.trial && <span className="mono rounded-full border border-[var(--accent-line)] bg-[var(--accent-tint)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.04em] text-[var(--accent-strong)]">30-day free trial</span>}
+            {masterOffer.riskReversal.map((r) => (
+              <span key={r} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-3 py-1.5 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{r}</span>
+            ))}
+          </div>
+        </div>
       </PageHero>
 
       <TrustBadgeBar />
@@ -149,7 +166,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
 
       <CityCallout serviceName={label} />
       {sc?.faqs && <FaqAccordion faqs={sc.faqs} title={`${label} — questions`} />}
-      <LeadBand source={`service-industry:${slug}:${industry}`} title={`Get a free ${sShort} audit`} />
+      <LeadBand source={`offer:${slug}:${industry}`} title={`Free ${sShort} audit for ${iShort.toLowerCase()}`} blurb={offer.popupBody} ctaLabel={offer.ctaLabel} />
       <LastReviewed />
       <CtaBlock title={`Ready to grow your ${iShort.toLowerCase()} business with ${sShort}?`} />
     </div>
