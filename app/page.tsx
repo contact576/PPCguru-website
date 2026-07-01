@@ -14,6 +14,15 @@ import { ToolsOs } from "@/components/home/tools-os";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { performanceStats } from "@/lib/data/performance-stats";
 import { StatCounter } from "@/components/ui/stat-counter";
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Google & Meta Ads Agency in the GTA & Canada",
+  description:
+    "PPC Guru is an AI-first Google & Meta Partner agency in the Greater Toronto Area. We audit, rebuild and manage your ads so budget turns into qualified leads, booked jobs and revenue — with a 30-day free trial: no contract, no setup fee.",
+  path: "/",
+});
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
