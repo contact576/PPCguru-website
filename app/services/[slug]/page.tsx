@@ -20,7 +20,7 @@ import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
 import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
-import { BigQuote, SplitFeature, AccentCard, accentAt } from "@/components/ui/layout";
+import { BigQuote, SplitFeature, AccentCard, SealDivider, accentAt } from "@/components/ui/layout";
 import { getServiceContent } from "@/lib/data/service-content";
 import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
 import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
@@ -94,14 +94,14 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {content?.definition && <ServiceIntro name={service.name} definition={content.definition} heading={content.definitionHeading} />}
       <ServiceStatBand slug={slug} />
 
-      {/* Outcomes strip */}
+      {/* Outcomes strip — accent-edged tiles (distinct from the check-row lists below) */}
       <Section className="!pb-0">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {service.outcomes.map((o) => (
-            <div key={o} className="flex items-center gap-3 rounded-[14px] border border-[var(--accent-line)] bg-[#fbfaf2] px-5 py-4">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[8px] bg-[var(--accent)] text-white"><Check size={15} /></span>
-              <span className="text-sm font-medium">{o}</span>
-            </div>
+          {service.outcomes.map((o, i) => (
+            <AccentCard key={o} index={i} className="!p-5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-[9px] text-white" style={{ background: accentAt(i) }}><Check size={16} /></span>
+              <span className="mt-3 block text-sm font-medium leading-snug text-[var(--color-ink)]">{o}</span>
+            </AccentCard>
           ))}
         </div>
       </Section>
@@ -205,6 +205,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           ))}
         </div>
       </Section>
+
+      <SealDivider />
 
       {/* Process — numbered accent-edged cards (distinct from the 30-day timeline below) */}
       <Section>

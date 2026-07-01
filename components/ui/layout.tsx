@@ -15,6 +15,22 @@ import { StatCounter } from "@/components/ui/stat-counter";
 const ACCENTS = ["var(--accent, #6f7d22)", "#6f7d22", "#c4632a", "#2f6db0"] as const;
 export const accentAt = (i: number) => ACCENTS[i % ACCENTS.length];
 
+/* ── SealDivider — the "leak, sealed" motif as a section divider ───────────
+   Code-only version of the brand's signature mark: a dashed coral leak resolving
+   through an ink node into a solid lime "sealed" line. Breaks the rhythm between
+   consecutive card sections and reinforces identity (no asset required). */
+export function SealDivider({ className }: { className?: string }) {
+  return (
+    <div className={cn("container-page flex items-center py-2 md:py-4", className)} aria-hidden>
+      <span className="h-px flex-1 rounded-full" style={{ background: "repeating-linear-gradient(90deg, var(--color-coral) 0 4px, transparent 4px 13px)" }} />
+      <span className="relative mx-2.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-ink)]">
+        <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-lime)]" />
+      </span>
+      <span className="h-[3px] flex-1 rounded-full bg-[var(--color-lime)]" />
+    </div>
+  );
+}
+
 /* ── BigQuote — full-bleed editorial pull-quote break ──────────────────────
    Inserted BETWEEN box-grids on long templates to create rhythm and reuse the
    signature DM-Serif italic at scale. Dark (ink) or tinted variants. */
