@@ -19,7 +19,7 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { serviceArt } from "@/components/illustrations/service-art";
-import { BigQuote } from "@/components/ui/layout";
+import { BigQuote, AccentCard } from "@/components/ui/layout";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import type { PlatformId } from "@/lib/data/benchmarks";
@@ -90,30 +90,36 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
       <TrustBadgeBar />
       <ServiceIntro name={label} definition={comboDef} heading={`What is ${label}?`} />
 
-      {/* What good looks like + best practices */}
+      {/* What good looks like + best practices — accent-edged panels */}
       <Section>
-        <div className="grid gap-10 lg:grid-cols-2">
-          <div>
+        <div className="grid gap-6 lg:grid-cols-2">
+          <AccentCard index={0} className="!p-7 md:!p-9">
             <SectionHeading align="left" eyebrow="What good looks like" title={<>Getting {sShort} right for <span className="text-gradient">{iShort.toLowerCase()}</span></>} />
             <Bullets items={angle.goodPractices} />
-          </div>
-          <div>
+          </AccentCard>
+          <AccentCard index={1} className="!p-7 md:!p-9">
             <SectionHeading align="left" eyebrow="Best practices" title={<>How we run <span className="text-gradient">{sShort}</span> here</>} />
             <Bullets items={angle.bestPractices} />
-          </div>
+          </AccentCard>
         </div>
       </Section>
 
-      {/* Industry standards + what to expect */}
+      {/* Industry standards + what to expect — sticky split for a different rhythm */}
       <Section tone="cream">
-        <div className="grid gap-10 lg:grid-cols-2">
-          <div>
-            <SectionHeading align="left" eyebrow="Industry standards" title={<>Typical <span className="text-gradient">benchmarks</span></>} intro="Representative ranges for this vertical and channel — typical, not guaranteed." />
+        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
+          <div className="lg:sticky lg:top-28">
+            <SectionHeading align="left" eyebrow="Industry standards" title={<>Typical <span className="text-gradient">benchmarks</span></>} intro="Representative ranges for this vertical and channel — typical, not guaranteed. Below: exactly what working with us looks like." />
             <Bullets items={angle.industryStandards} />
           </div>
           <div>
             <SectionHeading align="left" eyebrow="What to expect" title={<>Working with <span className="text-gradient">PPC Guru</span></>} />
-            <Bullets items={angle.whatToExpect} />
+            <div className="mt-4 grid gap-3">
+              {angle.whatToExpect.map((it, i) => (
+                <AccentCard key={it} index={i} className="!p-5">
+                  <p className="text-[14px] leading-relaxed text-[var(--color-ink-dim)]">{it}</p>
+                </AccentCard>
+              ))}
+            </div>
           </div>
         </div>
       </Section>

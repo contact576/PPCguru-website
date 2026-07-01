@@ -20,7 +20,7 @@ import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
 import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
-import { BigQuote } from "@/components/ui/layout";
+import { BigQuote, SplitFeature, AccentCard, accentAt } from "@/components/ui/layout";
 import { getServiceContent } from "@/lib/data/service-content";
 import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
 import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
@@ -172,20 +172,24 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
-      {/* Deliverables — detailed */}
-      <Section>
-        <SectionHeading align="left" eyebrow="What we actually do" title={<>The work behind <span className="text-gradient">the results</span></>} />
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
+      {/* Deliverables — sticky split (breaks the run of card grids) */}
+      <SplitFeature
+        eyebrow="What we actually do"
+        title={<>The work behind <span className="text-gradient">the results</span></>}
+        intro="No fluff, no filler line-items — the concrete work that actually moves your numbers, run every month."
+        aside={<Magnetic><Button href="/contact" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Book a free audit <ArrowRight size={16} /></Button></Magnetic>}
+      >
+        <div className="grid gap-4 sm:grid-cols-2">
           {service.deliverables.map((d, i) => (
             <Reveal key={d.title} delay={(i % 2) * 0.05}>
-              <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
-                <h3 className="head text-[18px]">{d.title}</h3>
+              <AccentCard index={i} className="!p-6">
+                <h3 className="head text-[16px]">{d.title}</h3>
                 <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{d.body}</p>
-              </SpotlightCard>
+              </AccentCard>
             </Reveal>
           ))}
         </div>
-      </Section>
+      </SplitFeature>
 
       {/* Campaign types / platforms */}
       <Section tone="cream">
@@ -202,17 +206,17 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Section>
 
-      {/* Process */}
+      {/* Process — numbered accent-edged cards (distinct from the 30-day timeline below) */}
       <Section>
         <SectionHeading align="left" eyebrow="The process" title={<>How we run <span className="text-gradient">{service.name}</span></>} />
-        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {service.process.map((p, i) => (
             <Reveal key={p.step} delay={(i % 4) * 0.05}>
-              <SpotlightCard className="h-full rounded-[22px] border border-[var(--color-border)] bg-white p-6">
-                <span className="head text-[42px]" style={{ color: "color-mix(in srgb, var(--accent) 38%, transparent)" }}>{p.step}</span>
+              <AccentCard index={i} className="!p-6">
+                <span className="head text-[42px] leading-none" style={{ color: `color-mix(in srgb, ${accentAt(i)} 42%, transparent)` }}>{p.step}</span>
                 <h3 className="head mt-3 text-[18px]">{p.title}</h3>
                 <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
-              </SpotlightCard>
+              </AccentCard>
             </Reveal>
           ))}
         </div>

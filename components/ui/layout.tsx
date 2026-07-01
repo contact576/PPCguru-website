@@ -178,12 +178,15 @@ export function StatStrip({
   className?: string;
 }) {
   const dark = variant === "ink";
+  // Static class per count so Tailwind's JIT always generates it (no interpolation).
+  const cols =
+    stats.length >= 4 ? "grid-cols-2 lg:grid-cols-4" : stats.length === 3 ? "grid-cols-1 sm:grid-cols-3" : stats.length === 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1";
   return (
     <div
       className={cn(
         "grid gap-x-6 gap-y-8 rounded-[var(--radius-lg)] px-6 py-10 md:px-12 md:py-12",
         dark ? "bg-[var(--color-ink)] text-[var(--color-navy-ink)]" : "border border-[var(--accent-line,#dddbc9)] bg-[var(--accent-tint,#f7f5ea)]",
-        stats.length >= 4 ? "grid-cols-2 lg:grid-cols-4" : `grid-cols-1 sm:grid-cols-${stats.length}`,
+        cols,
         className
       )}
     >
