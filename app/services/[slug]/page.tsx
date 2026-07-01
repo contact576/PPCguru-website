@@ -20,6 +20,7 @@ import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
 import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
+import { BigQuote } from "@/components/ui/layout";
 import { getServiceContent } from "@/lib/data/service-content";
 import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
 import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
@@ -34,26 +35,7 @@ const SERVICE_PLATFORM: Record<string, PlatformId> = {
 };
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
-import {
-  GoogleAdsArt, MetaAdsArt, SeoArt, CreativeArt, WebDesignArt, CrmArt, ServicesArt,
-} from "@/components/illustrations/hero-art";
-
-const SERVICE_ART: Record<string, React.ReactNode> = {
-  "google-ads": <GoogleAdsArt />,
-  "meta-ads": <MetaAdsArt />,
-  "seo": <SeoArt />,
-  "creative": <CreativeArt />,
-  "web-design": <WebDesignArt />,
-  "crm": <CrmArt />,
-  // New services reuse the closest existing art until bespoke art ships.
-  "linkedin-ads": <MetaAdsArt />,
-  "tiktok-ads": <MetaAdsArt />,
-  "microsoft-ads": <GoogleAdsArt />,
-  "pinterest-ads": <MetaAdsArt />,
-  "youtube-ads": <CreativeArt />,
-  "ai-automation": <CrmArt />,
-  "cro-landing-pages": <WebDesignArt />,
-};
+import { serviceArt } from "@/components/illustrations/service-art";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -101,7 +83,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <JsonLd data={serviceSchema({ name: service.name, description: schemaDesc, path: `/services/${slug}` })} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
-      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={SERVICE_ART[slug] ?? <ServicesArt />}>
+      <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={serviceArt(slug)}>
         <Magnetic>
           <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {firstWord} audit <ArrowRight size={18} /></Button>
         </Magnetic>
@@ -154,6 +136,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           ))}
         </div>
       </Section>
+
+      {/* Editorial break — the leak-sealed philosophy (breaks the box rhythm) */}
+      <BigQuote variant="ink" attribution="The PPC Guru approach">
+        Most {firstWord.toLowerCase()} budgets don&apos;t fail from spending too little — they{" "}
+        <span className="text-[var(--color-lime)]">leak</span> from untracked clicks, lazy match types and
+        pages that don&apos;t convert. We find the leak, then seal it.
+      </BigQuote>
 
       {/* What's included + who it's for */}
       <Section tone="cream">

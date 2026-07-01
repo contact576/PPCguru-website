@@ -18,6 +18,8 @@ import { EstimateBand } from "@/components/sections/estimate-band";
 import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { getAccent, accentVars } from "@/lib/data/themes";
+import { serviceArt } from "@/components/illustrations/service-art";
+import { BigQuote } from "@/components/ui/layout";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import type { PlatformId } from "@/lib/data/benchmarks";
@@ -79,7 +81,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
       <JsonLd data={serviceSchema({ name: label, description: intro, path: `/services/${slug}/${industry}` })} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
-      <PageHero eyebrow={`${sShort} × ${iShort}`} title={label} intro={intro} breadcrumbs={crumbs} accent={getAccent(slug)}>
+      <PageHero eyebrow={`${sShort} × ${iShort}`} title={label} intro={intro} breadcrumbs={crumbs} accent={getAccent(slug)} art={serviceArt(slug)}>
         <Magnetic>
           <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {sShort} audit <ArrowRight size={18} /></Button>
         </Magnetic>

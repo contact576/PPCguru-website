@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Check, X } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
+import { StatCounter } from "@/components/ui/stat-counter";
+import { Reveal } from "@/components/ui/reveal";
 import { getServiceStats, serviceCredentials } from "@/lib/data/service-stats";
 import { trustFacts } from "@/lib/data/performance-stats";
 
@@ -58,11 +60,13 @@ export function ServiceStatBand({ slug }: { slug: string }) {
           Numbers that speak louder than promises
         </h2>
         <div className="mt-9 grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
-          {block.stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="head text-[clamp(2rem,5vw,3rem)] leading-none text-[var(--accent-strong)]">{s.value}</div>
+          {block.stats.map((s, i) => (
+            <Reveal key={s.label} delay={i * 0.06} className="text-center">
+              <div className="head text-[clamp(2rem,5vw,3rem)] leading-none text-[var(--accent-strong)]">
+                <StatCounter value={s.value} />
+              </div>
               <div className="mt-2 text-[13px] text-[var(--color-ink-dim)]">{s.label}</div>
-            </div>
+            </Reveal>
           ))}
         </div>
         <p className="mt-8 text-center text-[11px] text-[var(--color-ink-faint)]">{block.basis}</p>

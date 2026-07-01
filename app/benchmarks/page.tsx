@@ -30,6 +30,8 @@ const rows = [...industryEconomics]
     return { label: e.label, cpc, cvr, cpl, ticket: e.avgTicket, close: e.closeRate, cpa };
   });
 
+const maxCpl = Math.max(...rows.map((r) => r.cpl));
+
 const faqs = [
   {
     q: "What is a typical cost per lead for Google Ads in Canada?",
@@ -81,33 +83,39 @@ export default function BenchmarksPage() {
           title={<>Benchmark <span className="text-gradient">reference table</span></>}
           intro="Cost-per-lead = cost-per-click ÷ conversion rate. Cost-per-customer = cost-per-lead ÷ close rate. Use these as starting points; your real numbers depend on offer, location and landing page."
         />
-        <div className="mt-8 overflow-x-auto">
+        <div className="mt-8 overflow-hidden rounded-[18px] border border-[var(--color-border)]">
+          <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] border-collapse text-left text-sm">
+            <caption className="sr-only">Typical Google Ads cost-per-click, conversion rate, cost-per-lead, average job value, close rate and cost-per-customer by industry for Canadian service businesses, 2024–2025.</caption>
             <thead>
-              <tr className="border-b border-[var(--color-border)]">
-                <th className="mono py-3 pr-4 text-[11px] uppercase tracking-[.05em] text-[var(--color-ink-faint)]">Industry</th>
-                <th className="mono px-3 py-3 text-[11px] uppercase tracking-[.05em] text-[var(--color-ink-faint)]">Avg CPC</th>
-                <th className="mono px-3 py-3 text-[11px] uppercase tracking-[.05em] text-[var(--color-ink-faint)]">Conv. rate</th>
-                <th className="mono px-3 py-3 text-[11px] uppercase tracking-[.05em] text-[var(--color-ink-faint)]">Cost / lead</th>
-                <th className="mono px-3 py-3 text-[11px] uppercase tracking-[.05em] text-[var(--color-ink-faint)]">Avg job value</th>
-                <th className="mono px-3 py-3 text-[11px] uppercase tracking-[.05em] text-[var(--color-ink-faint)]">Close rate</th>
-                <th className="mono py-3 pl-3 text-[11px] uppercase tracking-[.05em] text-[var(--color-ink-faint)]">Cost / customer</th>
+              <tr className="border-b border-[var(--color-border)] bg-[var(--color-ink)] text-[var(--color-navy-ink)]">
+                <th scope="col" className="mono py-3.5 pl-5 pr-4 text-[10.5px] uppercase tracking-[.05em]">Industry</th>
+                <th scope="col" className="mono px-3 py-3.5 text-[10.5px] uppercase tracking-[.05em]">Avg CPC</th>
+                <th scope="col" className="mono px-3 py-3.5 text-[10.5px] uppercase tracking-[.05em]">Conv. rate</th>
+                <th scope="col" className="mono px-3 py-3.5 text-[10.5px] uppercase tracking-[.05em]">Cost / lead</th>
+                <th scope="col" className="mono px-3 py-3.5 text-[10.5px] uppercase tracking-[.05em]">Avg job value</th>
+                <th scope="col" className="mono px-3 py-3.5 text-[10.5px] uppercase tracking-[.05em]">Close rate</th>
+                <th scope="col" className="mono py-3.5 pr-5 pl-3 text-[10.5px] uppercase tracking-[.05em]">Cost / customer</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.label} className="border-b border-[var(--color-border)]">
-                  <td className="py-3 pr-4 font-semibold text-[var(--color-ink)]">{r.label}</td>
+                <tr key={r.label} className="border-b border-[var(--color-border)] transition-colors odd:bg-[#faf9f0] hover:bg-[var(--color-base-2)]">
+                  <th scope="row" className="py-3 pl-5 pr-4 text-left font-semibold text-[var(--color-ink)]">{r.label}</th>
                   <td className="px-3 py-3 text-[var(--color-ink-dim)]">{usd(r.cpc)}</td>
                   <td className="px-3 py-3 text-[var(--color-ink-dim)]">{pct(r.cvr)}</td>
-                  <td className="px-3 py-3 font-medium text-[var(--color-ink)]">{usd(r.cpl)}</td>
+                  <td className="px-3 py-3 font-medium text-[var(--color-ink)]">
+                    <span className="tabular-nums">{usd(r.cpl)}</span>
+                    <span aria-hidden className="mt-1 block h-1.5 rounded-full bg-[var(--color-lime)]" style={{ width: `${Math.max(8, Math.round((r.cpl / maxCpl) * 100))}%` }} />
+                  </td>
                   <td className="px-3 py-3 text-[var(--color-ink-dim)]">{usd(r.ticket)}</td>
                   <td className="px-3 py-3 text-[var(--color-ink-dim)]">{pct(r.close)}</td>
-                  <td className="py-3 pl-3 font-medium text-[var(--color-ink)]">{usd(r.cpa)}</td>
+                  <td className="py-3 pr-5 pl-3 font-medium text-[var(--color-ink)]">{usd(r.cpa)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         </div>
         <div className="mt-6 space-y-1.5">
           <p className="text-xs text-[var(--color-ink-faint)]">{BENCHMARK_DISCLAIMER}</p>
