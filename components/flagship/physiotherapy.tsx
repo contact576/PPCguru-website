@@ -35,7 +35,7 @@ export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: Ca
   return (
     <div style={accentVarsFor(ACCENT)}>
       {/* ── Bespoke hero: clinical, booking-led, split with a calendar mock ── */}
-      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-24 pb-10 md:pt-28 md:pb-14" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: ACCENT }} />
         <div className="pointer-events-none absolute -right-32 -top-24 h-[440px] w-[440px] rounded-full" style={{ background: `radial-gradient(circle, color-mix(in srgb, ${ACCENT} 22%, transparent), transparent 65%)` }} />
         <div className="container-page relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -87,6 +87,9 @@ export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: Ca
         </div>
       </section>
 
+      {/* Revenue calculator — high on the page (strongest hook) */}
+      <EstimateBand defaultIndustry="physiotherapy" title={<>See how many <span style={{ color: ACCENT }}>new patients</span> your budget could book</>} intro="Pick your platform and monthly budget — we'll model the bookings and revenue your clinic could expect, using real physio benchmarks and your average patient value." />
+
       {/* ── Conditions we target (bespoke) ── */}
       <Section>
         <SectionHeading align="left" eyebrow="Search intent" title={<>Patients search by <span style={{ color: ACCENT }}>problem</span>, not by &ldquo;physio&rdquo;</>} intro="We structure campaigns and pages around the conditions and treatments people actually search for — so your ads match intent and convert." />
@@ -124,7 +127,6 @@ export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: Ca
       {ind.plan90 && <IndustryPlan90 items={ind.plan90} />}
       {cases.length > 0 && <CaseStudyCards items={cases} heading />}
 
-      <EstimateBand defaultIndustry="physiotherapy" title={<>Estimate your <span style={{ color: ACCENT }}>new-patient</span> potential</>} intro="Pick your platform and budget — we'll model the bookings and revenue your clinic could expect, using real physio benchmarks and your average patient value." />
       <LeadBand source="flagship:physiotherapy" title="Get a free clinic audit" />
       <FaqAccordion faqs={ind.faqs} title="Physiotherapy marketing — questions" />
       <CtaBlock title="Ready to fill your physiotherapy schedule?" />

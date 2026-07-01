@@ -41,7 +41,7 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
   });
   return (
     <div style={accentVarsFor(ACCENT)}>
-      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-24 pb-10 md:pt-28 md:pb-14" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: ACCENT }} />
         <div className="pointer-events-none absolute -right-32 -top-24 h-[440px] w-[440px] rounded-full" style={{ background: `radial-gradient(circle, color-mix(in srgb, ${ACCENT} 22%, transparent), transparent 65%)` }} />
         <div className="container-page relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -77,6 +77,9 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
       {content?.definition && <ServiceIntro name="Google Ads management" definition={content.definition} heading={content.definitionHeading} />}
       <ServiceStatBand slug="google-ads" />
 
+      {/* Revenue calculator — high on the page (strongest hook) */}
+      <EstimateBand platform="google-search" title={<>See how much revenue <span style={{ color: ACCENT }}>Google Ads</span> could make you</>} intro="Pick your industry and monthly budget — we'll model the leads, booked calls and revenue your Google Ads could produce, using real benchmarks and your average ticket." />
+
       {/* Anatomy of a rebuilt account (bespoke) */}
       <Section>
         <SectionHeading align="left" eyebrow="What we build" title={<>The anatomy of a <span style={{ color: ACCENT }}>rebuilt account</span></>} intro="Most accounts we inherit waste 20–40% of spend on the wrong searches, weak bidding and broken tracking. Here's the structure we rebuild toward." />
@@ -103,7 +106,6 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
       {service.toolStack && <ToolStack groups={service.toolStack} />}
 
       <ServiceProof serviceName={service.name} proofStats={service.proofStats} caseStudySlugs={service.caseStudySlugs} />
-      <EstimateBand platform="google-search" title={<>Estimate your <span style={{ color: ACCENT }}>Google Ads</span> potential</>} intro="Pick your industry and budget — we'll model the leads, booked calls and revenue your Google Ads could produce." />
       <LeadBand source="flagship:google-ads" title="Get a free Google Ads audit" />
       {siRows.length > 0 && (
         <Section>

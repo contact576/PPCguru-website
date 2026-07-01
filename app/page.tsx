@@ -75,7 +75,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="mx-auto grid max-w-[1480px] items-center gap-11 px-5 py-[88px] md:px-8 md:py-[96px] lg:grid-cols-[1.05fr_1fr] lg:gap-14" style={{ position: "relative" }}>
+        <div className="mx-auto grid max-w-[1480px] items-center gap-11 px-5 py-[56px] md:px-8 md:py-[76px] lg:grid-cols-[1.05fr_1fr] lg:gap-14" style={{ position: "relative" }}>
           <div>
             <div className="eyebrow" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#4f5f14", border: "1px solid rgba(95,111,23,.4)", padding: "8px 14px", borderRadius: 999, marginBottom: 30 }}>
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: lime, display: "inline-block", boxShadow: `0 0 8px ${lime}` }} />

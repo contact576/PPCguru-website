@@ -30,7 +30,7 @@ const FUNNELS = [
 export function RealEstateFlagship({ ind, cases }: { ind: Industry; cases: CaseStudy[] }) {
   return (
     <div style={accentVarsFor(ACCENT)}>
-      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-24 pb-10 md:pt-28 md:pb-14" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: ACCENT }} />
         <div className="pointer-events-none absolute -right-32 -top-24 h-[440px] w-[440px] rounded-full" style={{ background: `radial-gradient(circle, color-mix(in srgb, ${ACCENT} 22%, transparent), transparent 65%)` }} />
         <div className="container-page relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -69,6 +69,9 @@ export function RealEstateFlagship({ ind, cases }: { ind: Industry; cases: CaseS
         </div>
       </section>
 
+      {/* Revenue calculator — high on the page (strongest hook) */}
+      <EstimateBand defaultIndustry="real-estate" platform="meta" title={<>See how many <span style={{ color: ACCENT }}>leads</span> your budget could produce</>} intro="Model the buyer/seller leads and pipeline your budget could produce, using real real-estate benchmarks and your average commission." />
+
       {/* Buyer / seller funnels (bespoke) */}
       <Section>
         <SectionHeading align="left" eyebrow="Two funnels" title={<>Built for <span style={{ color: ACCENT }}>buyers and sellers</span></>} intro="Different intent, different funnels — each engineered around the offer that converts that audience." />
@@ -103,7 +106,6 @@ export function RealEstateFlagship({ ind, cases }: { ind: Industry; cases: CaseS
       {ind.plan90 && <IndustryPlan90 items={ind.plan90} />}
       {cases.length > 0 && <CaseStudyCards items={cases} heading />}
 
-      <EstimateBand defaultIndustry="real-estate" platform="meta" title={<>Estimate your <span style={{ color: ACCENT }}>lead</span> potential</>} intro="Model the buyer/seller leads and pipeline your budget could produce, using real real-estate benchmarks." />
       <LeadBand source="flagship:real-estate" title="Get a free lead-gen audit" />
       <FaqAccordion faqs={ind.faqs} title="Real estate marketing — questions" />
       <CtaBlock title="Ready for a predictable real-estate pipeline?" />

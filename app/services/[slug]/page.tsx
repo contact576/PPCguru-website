@@ -106,6 +106,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {content?.definition && <ServiceIntro name={service.name} definition={content.definition} heading={content.definitionHeading} />}
       <ServiceStatBand slug={slug} />
 
+      {/* Revenue calculator — moved high (the strongest hook: "what could I make?") */}
+      <EstimateBand
+        platform={SERVICE_PLATFORM[slug] ?? "google-search"}
+        title={<>See how much revenue {firstWord} could <span className="text-gradient">make you</span></>}
+        intro={`Pick your industry and monthly budget — we'll model the leads, booked calls and revenue your ${service.name.toLowerCase()} could produce, using real industry benchmarks and your average ticket.`}
+      />
+
       {/* Outcomes strip — accent-edged tiles (distinct from the check-row lists below) */}
       <Section className="!pb-0">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -296,12 +303,6 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {/* Comparison table — decision content (PPC Guru vs typical agency) */}
       {content?.comparison && <ComparisonTable rows={content.comparison} serviceName={service.name} />}
 
-      {/* Per-service calculator */}
-      <EstimateBand
-        platform={SERVICE_PLATFORM[slug] ?? "google-search"}
-        title={<>Estimate your {firstWord.toLowerCase()} <span className="text-gradient">potential</span></>}
-        intro={`Pick your industry and budget — we'll model the leads, booked calls and revenue ${service.name.toLowerCase()} could produce, using real benchmarks and your average ticket.`}
-      />
 
       {/* Industry playbooks — "[Service] for [Industry]" accordion + dedicated pages */}
       {siRows.length > 0 ? (

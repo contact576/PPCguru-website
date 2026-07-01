@@ -149,7 +149,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
       <EstimateBand
         platform={PLATFORM[slug] ?? "google-search"}
         defaultIndustry={ind.calculatorIndustrySlug ?? ind.slug}
-        title={<>Estimate your {sShort.toLowerCase()} <span className="text-gradient">potential</span></>}
+        title={<>See how much revenue {sShort} could <span className="text-gradient">make your {iShort.toLowerCase()} business</span></>}
         intro={`Model the leads, booked calls and revenue ${sShort} could produce for your ${iShort.toLowerCase()} business — with real benchmarks and your average ticket.`}
       />
 
