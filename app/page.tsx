@@ -360,7 +360,7 @@ export default function HomePage() {
                 {rptKpis.map((k) => (
                   <div key={k.label} style={{ background: "rgba(241,239,227,.04)", border: "1px solid rgba(241,239,227,.08)", borderRadius: 13, padding: 13 }}>
                     <div className="mono" style={{ fontSize: 8.5, color: "#8a8b78", fontWeight: 600, letterSpacing: ".05em", textTransform: "uppercase" }}>{k.label}</div>
-                    <div className="head" style={{ fontSize: 19, marginTop: 4, color: k.c }}>{k.val}</div>
+                    <div className="head" style={{ fontSize: 19, marginTop: 4, color: k.c }}><StatCounter value={k.val} /></div>
                     <div className="mono" style={{ fontSize: 9.5, color: "#9bd227", fontWeight: 600, marginTop: 1 }}>{k.delta}</div>
                   </div>
                 ))}

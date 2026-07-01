@@ -20,6 +20,7 @@ import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } f
 import { HeroOffer } from "@/components/shared/hero-offer";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { getServiceOffer, genericOffer } from "@/lib/data/service-offers";
+import { StatCounter } from "@/components/ui/stat-counter";
 
 const ACCENT = "#2f6db0";
 const INK = "#14170e";
@@ -65,7 +66,7 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
             </div>
             <div className="mt-9 grid grid-cols-3 gap-3 max-w-md">
               {service.proofStats.map((s) => (
-                <div key={s.label}><div className="head text-[clamp(1.4rem,3vw,1.9rem)]" style={{ color: INK }}>{s.value}</div><div className="mono mt-1 text-[9.5px] uppercase leading-tight tracking-[.04em] text-[var(--color-ink-dim)]">{s.label}</div></div>
+                <div key={s.label}><div className="head text-[clamp(1.4rem,3vw,1.9rem)]" style={{ color: INK }}><StatCounter value={s.value} /></div><div className="mono mt-1 text-[9.5px] uppercase leading-tight tracking-[.04em] text-[var(--color-ink-dim)]">{s.label}</div></div>
               ))}
             </div>
           </div>
