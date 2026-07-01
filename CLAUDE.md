@@ -18,7 +18,7 @@ two-step pop-up, per-page contact bands). Deployed on Vercel; `main` is producti
 
 A 7-wave AEO/GEO/E-E-A-T overhaul + an optimization session took LLM-readiness from 49 → **93/100**. Durable rules:
 - **One trust-number source:** `lib/data/performance-stats.ts` `trustFacts` ($100M+ managed · 1M+ leads ·
-  6.3× ROAS · 150+ clients · 10+ yrs founder experience). `siteConfig.trust` holds only booleans + `serviceArea`
+  6.3× ROAS · 500+ clients · 10+ yrs founder experience). `siteConfig.trust` holds only booleans + `serviceArea`
   — NEVER re-add numeric figures there (the old $10M+/4.2x/120k set was deleted; a divergent set tanks E-E-A-T).
 - **AEO content layer (kept separate from core data so it's extendable):** `lib/data/service-content.ts`
   (answer-first service definitions + comparison rows), `industry-content.ts` (industry definitions),

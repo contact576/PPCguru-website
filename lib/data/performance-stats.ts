@@ -65,7 +65,7 @@ export const trustFacts = {
   adSpendManaged: "$100M+",
   qualifiedLeads: "1M+",
   avgRoas: "6.3x",
-  clientsServed: "150+",
+  clientsServed: "500+",
   founderExperienceYears: "10+",
   googlePartner: true,
   metaBusinessPartner: true,
