@@ -312,21 +312,21 @@ export default function HomePage() {
             <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>The difference isn&rsquo;t just better bidding — it&rsquo;s transparency, ownership, and optimizing for revenue.</p>
           </div>
           <div data-reveal style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", minWidth: 560, borderCollapse: "collapse", textAlign: "left" }}>
+            <table style={{ width: "100%", minWidth: 560, borderCollapse: "separate", borderSpacing: 0, textAlign: "left", borderRadius: 16, overflow: "hidden", border: "1px solid #dddbc9" }}>
               <caption style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>PPC Guru vs a typical agency, compared</caption>
               <thead>
-                <tr style={{ borderBottom: "1px solid #e3e0d0" }}>
-                  <th scope="col" className="mono" style={{ padding: "12px 16px 12px 0", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>What matters</th>
-                  <th scope="col" className="mono" style={{ padding: "12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: olive, fontWeight: 700 }}>The PPC Guru way</th>
-                  <th scope="col" className="mono" style={{ padding: "12px 0 12px 16px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#8a8c7d", fontWeight: 600 }}>Typical agency</th>
+                <tr style={{ background: ink }}>
+                  <th scope="col" className="mono" style={{ padding: "14px 18px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#b8bda6", fontWeight: 700 }}>What matters</th>
+                  <th scope="col" className="mono" style={{ padding: "14px 18px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: lime, fontWeight: 800 }}>The PPC Guru way</th>
+                  <th scope="col" className="mono" style={{ padding: "14px 18px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#9a9b88", fontWeight: 600 }}>Typical agency</th>
                 </tr>
               </thead>
               <tbody>
-                {comparisonRows.map((r) => (
-                  <tr key={r.dimension} style={{ borderBottom: "1px solid #e3e0d0", verticalAlign: "top" }}>
-                    <th scope="row" className="head" style={{ padding: "16px 16px 16px 0", fontSize: 14.5, color: ink, textAlign: "left", fontWeight: 400 }}>{r.dimension}</th>
-                    <td style={{ padding: 16, fontSize: 14, color: "#2c2e22", fontWeight: 500 }}><span style={{ color: olive, fontWeight: 700, marginRight: 8 }}>✓</span>{r.guru}</td>
-                    <td style={{ padding: "16px 0 16px 16px", fontSize: 14, color: "#54564a" }}><span style={{ color: coral, fontWeight: 700, marginRight: 8 }}>✕</span>{r.typical}</td>
+                {comparisonRows.map((r, i) => (
+                  <tr key={r.dimension} style={{ verticalAlign: "top", background: i % 2 ? "#faf9f0" : "#fff" }}>
+                    <th scope="row" className="head" style={{ padding: "15px 18px", fontSize: 15, color: ink, textAlign: "left", fontWeight: 700, borderTop: "1px solid #ececdd" }}>{r.dimension}</th>
+                    <td style={{ padding: "15px 18px", fontSize: 14, color: ink, fontWeight: 600, background: "rgba(206,255,58,.10)", borderTop: "1px solid #ececdd" }}><span style={{ display: "inline-flex", width: 18, height: 18, marginRight: 8, borderRadius: 999, background: lime, color: ink, alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, verticalAlign: "middle" }}>✓</span>{r.guru}</td>
+                    <td style={{ padding: "15px 18px", fontSize: 13.5, color: "#83856f", borderTop: "1px solid #ececdd" }}><span style={{ color: coral, fontWeight: 700, marginRight: 8 }}>✕</span>{r.typical}</td>
                   </tr>
                 ))}
               </tbody>
@@ -391,31 +391,27 @@ export default function HomePage() {
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Results that show up<br />in the <Em>bank account</Em></h2>
             <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 600 }}>Representative engagements showing how we turn spend into booked jobs. Anonymized — individual results vary.</p>
           </div>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3" style={{ marginTop: 40 }}>
+          <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin]" style={{ marginTop: 36 }}>
             {homeCases.map((c) => (
-              <div key={c.industry} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 26, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-                  <span className="mono" style={{ fontSize: 10, fontWeight: 600, color: ink, background: lime, padding: "5px 10px", borderRadius: 7, letterSpacing: ".05em", textTransform: "uppercase" }}>{c.industry}</span>
-                  <span className="mono" style={{ fontSize: 10, color: "#8a8c72", letterSpacing: ".04em" }}>{c.location}</span>
+              <div key={c.industry} className="w-[236px] shrink-0 snap-start" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 18, padding: 18, display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                  <span className="mono" style={{ fontSize: 9.5, fontWeight: 600, color: ink, background: lime, padding: "4px 9px", borderRadius: 6, letterSpacing: ".04em", textTransform: "uppercase" }}>{c.industry}</span>
+                  <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72" }}>{c.location}</span>
                 </div>
-                <div className="head" style={{ fontSize: 46, color: ink, marginBottom: 6 }}>{c.metric}</div>
-                <div className="mono" style={{ fontSize: 11.5, color: "#54564a", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 18 }}>{c.metricLabel}</div>
-                <div style={{ marginBottom: 18 }}>
-                  <svg viewBox="0 0 200 44" style={{ width: "100%", height: 46, display: "block" }}>
-                    <line x1="10" y1="42.5" x2="190" y2="42.5" stroke="#dddbc9" strokeWidth="1" />
-                    <rect x="24" y={c.barA} width="60" height={c.barAh} rx="4" fill="#cfcdba" />
-                    <rect x="116" y={c.barB} width="60" height={c.barBh} rx="4" fill="#9bd227" />
-                  </svg>
-                  <div style={{ display: "flex", marginTop: 8 }}>
-                    <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 9, letterSpacing: ".08em", textTransform: "uppercase", color: "#83856f" }}>Before</span>
-                    <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 9, letterSpacing: ".08em", textTransform: "uppercase", color: "#5f6f17", fontWeight: 700 }}>After</span>
-                  </div>
+                <div className="head" style={{ fontSize: 40, color: ink, lineHeight: 1 }}><StatCounter value={c.metric} /></div>
+                <div className="mono" style={{ fontSize: 10.5, color: "#54564a", textTransform: "uppercase", letterSpacing: ".03em", marginTop: 4, marginBottom: 12 }}>{c.metricLabel}</div>
+                <svg viewBox="0 0 200 44" style={{ width: "100%", height: 38, display: "block" }}>
+                  <line x1="10" y1="42.5" x2="190" y2="42.5" stroke="#dddbc9" strokeWidth="1" />
+                  <rect x="24" y={c.barA} width="60" height={c.barAh} rx="4" fill="#cfcdba" />
+                  <rect x="116" y={c.barB} width="60" height={c.barBh} rx="4" fill="#9bd227" />
+                </svg>
+                <div style={{ display: "flex", marginTop: 6 }}>
+                  <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 8.5, letterSpacing: ".08em", textTransform: "uppercase", color: "#83856f" }}>Before</span>
+                  <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 8.5, letterSpacing: ".08em", textTransform: "uppercase", color: "#5f6f17", fontWeight: 700 }}>After</span>
                 </div>
-                <div style={{ fontSize: 13, color: "#54564a", lineHeight: 1.5, marginBottom: 8 }}><strong style={{ color: ink }}>Problem:</strong> {c.problem}</div>
-                <div style={{ fontSize: 13, color: "#54564a", lineHeight: 1.5, marginBottom: 18 }}><strong style={{ color: ink }}>Action:</strong> {c.action}</div>
-                <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid #e3e1d2", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span className="mono" style={{ fontSize: 10, color: "#8a8c72", letterSpacing: ".03em" }}>{c.channel} · {c.timeline}</span>
-                  <Link href={`/results/${c.slug}`} className="mono" style={{ fontSize: 11, fontWeight: 700, color: ink, letterSpacing: ".05em", textTransform: "uppercase" }}>View →</Link>
+                <div style={{ marginTop: "auto", paddingTop: 12, borderTop: "1px solid #e3e1d2", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72" }}>{c.channel}</span>
+                  <Link href={`/results/${c.slug}`} className="mono" style={{ fontSize: 10, fontWeight: 700, color: ink, letterSpacing: ".05em", textTransform: "uppercase" }}>View →</Link>
                 </div>
               </div>
             ))}
