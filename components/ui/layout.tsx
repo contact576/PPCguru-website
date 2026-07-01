@@ -41,6 +41,15 @@ export function BigQuote({
       <div className="container-page">
         <Reveal>
           <figure className={cn("relative overflow-hidden rounded-[var(--radius-lg)] px-7 py-14 md:px-16 md:py-20", skin)}>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                backgroundImage: `radial-gradient(circle, ${variant === "ink" ? "rgba(206,255,58,.10)" : "rgba(20,23,14,.05)"} 1px, transparent 1px)`,
+                backgroundSize: "22px 22px",
+                maskImage: "radial-gradient(120% 120% at 50% 0%, #000 30%, transparent 75%)",
+              }}
+            />
             <span aria-hidden className={cn("head absolute -top-6 left-6 select-none text-[120px] leading-none opacity-20 md:text-[180px]", mark)}>&ldquo;</span>
             <blockquote className="relative mx-auto max-w-4xl text-center">
               <p className="text-[clamp(1.5rem,3.6vw,2.6rem)] font-medium leading-[1.25] tracking-[-0.01em]" style={{ fontFamily: "var(--font-serif), Georgia, serif", fontStyle: "italic" }}>
