@@ -224,7 +224,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
             {homeServices.map((s) => (
-              <div key={s.title} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column" }}>
+              <div key={s.title} data-reveal className="hoverlift" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
                   <span style={{ width: 54, height: 54, borderRadius: 15, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>{s.icon}</span>
                   <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72", letterSpacing: ".08em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "5px 9px", borderRadius: 7 }}>{s.bestFor}</span>
@@ -254,7 +254,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {growthLoop.map((l) => (
-              <div key={l.num} data-reveal style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 22, padding: 26 }}>
+              <div key={l.num} data-reveal className="hoverlift" style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 22, padding: 26 }}>
                 <div className="head" style={{ fontSize: 42, color: "rgba(111,125,34,.3)", marginBottom: 14 }}>{l.num}</div>
                 <div style={{ width: 46, height: 46, borderRadius: 12, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 21, marginBottom: 16 }}>{l.icon}</div>
                 <div className="head" style={{ fontSize: 19, marginBottom: 9 }}>{l.title}</div>
@@ -449,7 +449,7 @@ export default function HomePage() {
           </div>
           <div className="grid items-stretch gap-[18px] lg:grid-cols-3">
             {homePricing.map((p) => (
-              <div key={p.name} data-reveal style={{ background: p.dark ? ink : "#fbfaf2", color: p.dark ? cream : ink, border: `1px solid ${p.dark ? ink : "#dddbc9"}`, borderRadius: 24, padding: 32, display: "flex", flexDirection: "column", position: "relative", boxShadow: p.dark ? "0 24px 60px rgba(20,23,14,.25)" : "none" }}>
+              <div key={p.name} data-reveal className="hoverlift" style={{ background: p.dark ? ink : "#fbfaf2", color: p.dark ? cream : ink, border: `1px solid ${p.dark ? ink : "#dddbc9"}`, borderRadius: 24, padding: 32, display: "flex", flexDirection: "column", position: "relative", boxShadow: p.dark ? "0 24px 60px rgba(20,23,14,.25)" : "none" }}>
                 {p.dark && <span className="mono" style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: lime, color: ink, fontSize: 10, fontWeight: 700, padding: "7px 14px", borderRadius: 999, whiteSpace: "nowrap", letterSpacing: ".08em", textTransform: "uppercase" }}>Most popular</span>}
                 <div className="head" style={{ fontSize: 20 }}>{p.name}</div>
                 <div style={{ fontSize: 13, color: p.dark ? "#9a9b88" : "#54564a", marginTop: 7, lineHeight: 1.4 }}>{p.bestFor}</div>

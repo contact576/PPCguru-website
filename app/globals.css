@@ -320,6 +320,13 @@
 }
 @media (prefers-reduced-motion: reduce) { .ppc-shake { animation: none !important; } }
 
+/* Reusable hover-lift for inline-styled cards (homepage grids) — reactive feel. */
+.hoverlift { transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease; }
+@media (hover: hover) and (pointer: fine) {
+  .hoverlift:hover { transform: translateY(-4px); box-shadow: 0 20px 44px rgba(20,23,14,.12); border-color: #14170e !important; }
+}
+@media (prefers-reduced-motion: reduce) { .hoverlift:hover { transform: none; } }
+
 .mq { display: inline-flex; white-space: nowrap; animation: ppcMarquee 28s linear infinite; }
 .mq-rev { animation-direction: reverse; }
 
