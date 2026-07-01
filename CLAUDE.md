@@ -47,7 +47,8 @@ A 7-wave AEO/GEO/E-E-A-T overhaul + an optimization session took LLM-readiness f
 ```bash
 npm install
 npm run dev        # local dev (http://localhost:3000)
-npm run build      # PRIMARY validation gate — full type-check + prerenders all ~90 routes
+npm run build      # PRIMARY validation gate — full type-check + prerenders ~150 routes
+                   # (13 services + 45 service×industry combos + 15 industries + 30 location + hubs + blog)
 npm run start      # serve the production build
 npm run typecheck  # tsc --noEmit
 ```
@@ -77,6 +78,10 @@ Edit the typed data modules, not the JSX. Pages render via `generateStaticParams
   Only add **real** people.
 - `lib/data/offers.ts` — pop-up funnel copy ($600 credit, free audit).
 - `content/blog/*.md` — posts read at build by `lib/blog.ts`.
+- **AEO content layer** (`service-content.ts`, `industry-content.ts`, `service-faq.ts`, `industry-faq.ts`,
+  `service-industry.ts` + `service-industry-content.ts`, `service-stats.ts`, `comparisons.ts`, `glossary.ts`)
+  — detailed in the **AEO/GEO, schema & content hubs** section above. `getServiceContent`/`getIndustryContent`
+  MERGE these with the base `services.ts`/`industries.ts`, so a service page's real content is spread across both.
 
 ### Calculator / benchmark engine (`lib/data/benchmarks.ts`)
 Deterministic math, no AI. **Separable model**: `industryEconomics` (~36 verticals: avgTicket, closeRate,
@@ -110,8 +115,13 @@ via `components/sections/estimate-band.tsx`.
 - **Per-vertical theming**: `PageHero` takes an `accent` prop (hero wash + top rule + glow); the parametric
   `IndustryArt`/`CityServiceArt` take `accent`. Pages pass `getAccent(slug)`. Accents are a secondary layer —
   the cream/lime/ink system stays primary.
+- **AEO routes** (see the AEO/GEO section): `app/services/[slug]/[industry]` (45 combos, `dynamicParams=false`,
+  params from `allServiceIndustryPairs()`), plus static hubs `/benchmarks` `/compare` `/glossary` `/pricing` and
+  `app/opengraph-image.tsx`. A new static hub must be added to `app/sitemap.ts` `staticRoutes`, the footer, and
+  `public/llms.txt` — none of those are auto-discovered from the filesystem.
 - SEO: `buildMetadata()` + JSON-LD builders in `lib/seo.ts` via `components/seo/json-ld.tsx`;
-  `app/sitemap.ts` + `app/robots.ts` enumerate routes.
+  `app/sitemap.ts` + `app/robots.ts` enumerate routes. `robots.ts` explicitly allows AI crawlers (GPTBot,
+  PerplexityBot, ClaudeBot, Google-Extended, …).
 
 ### Results / case studies
 `app/results/[slug]/page.tsx` renders storytelling sections from optional `CaseStudy` fields
