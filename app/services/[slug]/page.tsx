@@ -21,7 +21,7 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
-import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
+import { TrustBadgeBar, ServiceIntro, ServiceGeo, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
 import { BigQuote, SplitFeature, AccentCard, SealDivider, accentAt } from "@/components/ui/layout";
 import { getServiceContent } from "@/lib/data/service-content";
 import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
@@ -104,6 +104,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {/* Trust strip + answer-first definition + per-service stats (AEO / E-E-A-T) */}
       <TrustBadgeBar />
       {content?.definition && <ServiceIntro name={service.name} definition={content.definition} heading={content.definitionHeading} />}
+      {content?.geoBlurb && <ServiceGeo blurb={content.geoBlurb} />}
       <ServiceStatBand slug={slug} />
 
       {/* Revenue calculator — moved high (the strongest hook: "what could I make?") */}

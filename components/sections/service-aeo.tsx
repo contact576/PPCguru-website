@@ -24,6 +24,23 @@ export function ServiceIntro({ name, definition, heading }: { name: string; defi
   );
 }
 
+/**
+ * Geo / local-relevance body paragraph. Weaves Canadian city + citation signals into
+ * the page body so Google's local algorithm reads geographic relevance from real copy,
+ * not just footer links. Renders ONLY when a `geoBlurb` is authored for the service,
+ * so pages without one are unchanged (no layout/design impact).
+ */
+export function ServiceGeo({ blurb }: { blurb: string }) {
+  return (
+    <Section className="!pt-8 !pb-0">
+      <div className="mx-auto max-w-3xl text-center">
+        <p className="mono text-[11px] uppercase tracking-[.14em] text-[var(--accent-strong)]">Local SEO across the GTA &amp; Canada</p>
+        <p className="mt-3 text-[15px] leading-relaxed text-[var(--color-ink-dim)]">{blurb}</p>
+      </div>
+    </Section>
+  );
+}
+
 /** Slim credentials strip near the top of every service page (not just the footer). */
 export function TrustBadgeBar() {
   void serviceCredentials; // canonical credential labels live alongside the stats

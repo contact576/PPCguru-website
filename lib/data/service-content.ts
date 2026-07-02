@@ -39,6 +39,8 @@ export const serviceContent: Record<string, ServiceContent> = {
     definitionHeading: "What is SEO & local search?",
     definition:
       "SEO (search engine optimization) is the practice of improving a website's technical health, content and local presence so it ranks higher on Google and AI search for the terms customers actually use. PPC Guru is a Greater Toronto Area SEO agency that helps service businesses across Canada — Toronto, Mississauga, Brampton, Ottawa and beyond — rank in local search, the Google Business Profile map pack and AI answers to generate organic leads that compound over time.",
+    geoBlurb:
+      "We run SEO and local search for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham, Hamilton, Etobicoke, North York and Ottawa, plus clients coast to coast. Ranking in a Canadian market is won on local relevance: a fully optimized Google Business Profile, consistent NAP and citations across Canadian directories (Yelp, Yellow Pages, Canada411, the BBB and industry listings), genuinely useful location and service pages, and a review profile that builds map-pack authority in your own city — not generic, country-agnostic SEO.",
   },
   creative: {
     definitionHeading: "What is creative production?",
