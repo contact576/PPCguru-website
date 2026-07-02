@@ -104,7 +104,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {/* Trust strip + answer-first definition + per-service stats (AEO / E-E-A-T) */}
       <TrustBadgeBar />
       {content?.definition && <ServiceIntro name={service.name} definition={content.definition} heading={content.definitionHeading} />}
-      {content?.geoBlurb && <ServiceGeo blurb={content.geoBlurb} />}
+      {content?.geoBlurb && <ServiceGeo blurb={content.geoBlurb} label={content.geoHeading} />}
       <ServiceStatBand slug={slug} />
 
       {/* Revenue calculator — moved high (the strongest hook: "what could I make?") */}

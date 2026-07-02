@@ -30,11 +30,11 @@ export function ServiceIntro({ name, definition, heading }: { name: string; defi
  * not just footer links. Renders ONLY when a `geoBlurb` is authored for the service,
  * so pages without one are unchanged (no layout/design impact).
  */
-export function ServiceGeo({ blurb }: { blurb: string }) {
+export function ServiceGeo({ blurb, label }: { blurb: string; label?: string }) {
   return (
     <Section className="!pt-8 !pb-0">
       <div className="mx-auto max-w-3xl text-center">
-        <p className="mono text-[11px] uppercase tracking-[.14em] text-[var(--accent-strong)]">Local SEO across the GTA &amp; Canada</p>
+        <p className="mono text-[11px] uppercase tracking-[.14em] text-[var(--accent-strong)]">{label ?? "Across the GTA & Canada"}</p>
         <p className="mt-3 text-[15px] leading-relaxed text-[var(--color-ink-dim)]">{blurb}</p>
       </div>
     </Section>

@@ -13,7 +13,7 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { accentVarsFor } from "@/lib/data/themes";
-import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable } from "@/components/sections/service-aeo";
+import { TrustBadgeBar, ServiceIntro, ServiceGeo, ServiceStatBand, ComparisonTable } from "@/components/sections/service-aeo";
 import { getServiceContent } from "@/lib/data/service-content";
 import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
 import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
@@ -76,6 +76,7 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
 
       <TrustBadgeBar />
       {content?.definition && <ServiceIntro name="Google Ads management" definition={content.definition} heading={content.definitionHeading} />}
+      {content?.geoBlurb && <ServiceGeo blurb={content.geoBlurb} label={content.geoHeading} />}
       <ServiceStatBand slug="google-ads" />
 
       {/* Revenue calculator — high on the page (strongest hook) */}
