@@ -59,6 +59,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       ? { "@type": "Person", "@id": `${siteConfig.url}/about#${authorMember.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, name: authorMember.name }
       : { "@type": "Organization", "@id": `${siteConfig.url}/#organization`, name: siteConfig.name },
     publisher: { "@id": `${siteConfig.url}/#organization` },
+    image: `${siteConfig.url}/opengraph-image`,
     mainEntityOfPage: `${siteConfig.url}/blog/${slug}`,
   };
 

@@ -9,7 +9,6 @@ import {
 } from "@/lib/data/service-industry";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
-import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/interactive";
 import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
 import { getServiceContent } from "@/lib/data/service-content";
@@ -20,6 +19,9 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { serviceArt } from "@/components/illustrations/service-art";
 import { BigQuote, AccentCard } from "@/components/ui/layout";
+import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { getServiceOffer, genericOffer } from "@/lib/data/service-offers";
+import { HeroOffer } from "@/components/shared/hero-offer";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
 import type { PlatformId } from "@/lib/data/benchmarks";
@@ -64,6 +66,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
   if (!service || !ind || !angle) notFound();
 
   const sShort = serviceShortName[slug] ?? service.name;
+  const offer = getServiceOffer(slug) ?? genericOffer;
   const iShort = industryShortName[industry] ?? ind.name;
   const label = serviceIndustryLabel(slug, industry);
   const crumbs = [
@@ -82,9 +85,24 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
       <PageHero eyebrow={`${sShort} × ${iShort}`} title={label} intro={intro} breadcrumbs={crumbs} accent={getAccent(slug)} art={serviceArt(slug)}>
-        <Magnetic>
-          <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {sShort} audit <ArrowRight size={18} /></Button>
-        </Magnetic>
+        <div>
+          <Magnetic>
+            <LeadCtaButton
+              label={<>Free {sShort} audit for {iShort.toLowerCase()} <ArrowRight size={18} /></>}
+              source={`offer:${slug}:${industry}`}
+              title={`Free ${sShort} audit for ${iShort.toLowerCase()}`}
+              blurb={offer.popupBody}
+              submitLabel={offer.ctaLabel}
+              className="inline-flex items-center justify-center gap-2 rounded-[14px] bg-[var(--accent)] px-6 py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[var(--accent-strong)]"
+            />
+          </Magnetic>
+          <HeroOffer
+            className="mt-5 max-w-xl"
+            badge={offer.trial ? "30-day free trial" : "Free audit · no obligation"}
+            line={offer.trial ? `Try our ${sShort} management for ${iShort.toLowerCase()} free for 30 days — no contract, no setup fee.` : `${offer.subhook} No obligation, no lock-in.`}
+            credit={offer.credit}
+          />
+        </div>
       </PageHero>
 
       <TrustBadgeBar />
@@ -131,7 +149,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
       <EstimateBand
         platform={PLATFORM[slug] ?? "google-search"}
         defaultIndustry={ind.calculatorIndustrySlug ?? ind.slug}
-        title={<>Estimate your {sShort.toLowerCase()} <span className="text-gradient">potential</span></>}
+        title={<>See how much revenue {sShort} could <span className="text-gradient">make your {iShort.toLowerCase()} business</span></>}
         intro={`Model the leads, booked calls and revenue ${sShort} could produce for your ${iShort.toLowerCase()} business — with real benchmarks and your average ticket.`}
       />
 
@@ -149,7 +167,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
 
       <CityCallout serviceName={label} />
       {sc?.faqs && <FaqAccordion faqs={sc.faqs} title={`${label} — questions`} />}
-      <LeadBand source={`service-industry:${slug}:${industry}`} title={`Get a free ${sShort} audit`} />
+      <LeadBand source={`offer:${slug}:${industry}`} title={`Free ${sShort} audit for ${iShort.toLowerCase()}`} blurb={offer.popupBody} ctaLabel={offer.ctaLabel} />
       <LastReviewed />
       <CtaBlock title={`Ready to grow your ${iShort.toLowerCase()} business with ${sShort}?`} />
     </div>

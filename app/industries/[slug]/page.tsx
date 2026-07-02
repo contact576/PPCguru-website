@@ -131,6 +131,13 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
         where the budget is won or lost.
       </BigQuote>
 
+      {/* Revenue calculator — high on the page (strongest hook) */}
+      <EstimateBand
+        defaultIndustry={ind.calculatorIndustrySlug ?? ind.slug}
+        title={<>See how much revenue your <span className="text-gradient">{ind.name.split(" ")[0].toLowerCase()}</span> budget could make</>}
+        intro={`Model the leads, booked calls and revenue your ${ind.name.toLowerCase()} marketing budget could produce — by platform, with real benchmarks.`}
+      />
+
       {/* Related services */}
       <Section className="bg-[var(--color-base-2)]">
         <SectionHeading align="left" eyebrow="Services" title={`What we run for ${ind.name.toLowerCase()}`} />
@@ -177,11 +184,6 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
       {cases.length > 0 && <CaseStudyCards items={cases} heading />}
 
       {/* Per-industry calculator */}
-      <EstimateBand
-        defaultIndustry={ind.calculatorIndustrySlug ?? ind.slug}
-        title={<>Estimate your <span className="text-gradient">{ind.name.split(" ")[0].toLowerCase()}</span> potential</>}
-        intro={`Model the leads, booked calls and revenue your ${ind.name.toLowerCase()} marketing budget could produce — by platform, with real benchmarks.`}
-      />
 
       <CityCallout serviceName={`${ind.name} marketing`} />
 

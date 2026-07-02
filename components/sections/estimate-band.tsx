@@ -22,8 +22,8 @@ export function EstimateBand({
     <Section id="estimate">
       <SectionHeading
         align="left"
-        eyebrow="Estimate your potential"
-        title={title ?? <>What your budget could <span className="text-gradient">produce</span></>}
+        eyebrow="Free revenue estimate"
+        title={title ?? <>See how much revenue you could <span className="text-gradient">generate</span></>}
         intro={intro ?? "Pick your industry and monthly budget — we'll model clicks, leads, booked calls and estimated revenue from real industry benchmarks and your average ticket."}
       />
       <div className="mt-10">

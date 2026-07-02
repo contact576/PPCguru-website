@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { SpotlightCard } from "@/components/ui/interactive";
+import { StatCounter } from "@/components/ui/stat-counter";
 import { getCaseStudies, REPRESENTATIVE_DISCLOSURE } from "@/lib/data/case-studies";
 
 /**
@@ -36,7 +37,7 @@ export function ServiceProof({
         {proofStats.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.06}>
             <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
-              <div className="head text-[clamp(1.9rem,3.6vw,2.7rem)] leading-none text-[var(--color-ink)]">{s.value}</div>
+              <div className="head text-[clamp(1.9rem,3.6vw,2.7rem)] leading-none text-[var(--color-ink)]"><StatCounter value={s.value} /></div>
               <p className="mono mt-3 text-[11px] uppercase leading-relaxed tracking-[.04em] text-[var(--color-ink-dim)]">{s.label}</p>
             </SpotlightCard>
           </Reveal>

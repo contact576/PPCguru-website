@@ -13,6 +13,9 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { accentVarsFor } from "@/lib/data/themes";
+import { HeroOffer } from "@/components/shared/hero-offer";
+import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { genericOffer } from "@/lib/data/service-offers";
 
 const ACCENT = "#2f8f6b";
 const INK = "#14170e";
@@ -32,7 +35,7 @@ export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: Ca
   return (
     <div style={accentVarsFor(ACCENT)}>
       {/* ── Bespoke hero: clinical, booking-led, split with a calendar mock ── */}
-      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-24 pb-10 md:pt-28 md:pb-14" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: ACCENT }} />
         <div className="pointer-events-none absolute -right-32 -top-24 h-[440px] w-[440px] rounded-full" style={{ background: `radial-gradient(circle, color-mix(in srgb, ${ACCENT} 22%, transparent), transparent 65%)` }} />
         <div className="container-page relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -47,8 +50,9 @@ export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: Ca
             </span>
             <h1 className="head mt-5 text-[clamp(2.6rem,5.6vw,4.6rem)]">Fill your <span style={{ color: ACCENT }}>clinic calendar</span> with high-intent patients</h1>
             <p className="mt-6 max-w-xl text-lg text-[var(--color-ink-dim)]">We turn search and social into booked assessments — not clicks — for physiotherapy & rehab clinics across the GTA, measured to the patient.</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Magnetic><Button href="/contact" size="lg" style={{ background: ACCENT, color: "#fff" }}>Get a free clinic audit <ArrowRight size={18} /></Button></Magnetic>
+            <HeroOffer className="mt-7 max-w-xl" badge="30-day free trial" line="Try our Google or Meta ad management free for 30 days — no contract, no setup fee, no obligation." credit />
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Magnetic><LeadCtaButton label={<>Start my free trial <ArrowRight size={18} /></>} source="offer:physiotherapy:flagship-hero" title="Get your free clinic audit" blurb={genericOffer.popupBody} submitLabel="Get my free clinic audit" className="inline-flex items-center justify-center gap-2 rounded-[14px] px-6 py-3.5 text-[15px] font-bold text-white" style={{ background: ACCENT }} /></Magnetic>
               <Button href="#estimate" variant="outline">Estimate new patients</Button>
             </div>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--color-ink-dim)]">
@@ -82,6 +86,9 @@ export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: Ca
           </Reveal>
         </div>
       </section>
+
+      {/* Revenue calculator — high on the page (strongest hook) */}
+      <EstimateBand defaultIndustry="physiotherapy" title={<>See how many <span style={{ color: ACCENT }}>new patients</span> your budget could book</>} intro="Pick your platform and monthly budget — we'll model the bookings and revenue your clinic could expect, using real physio benchmarks and your average patient value." />
 
       {/* ── Conditions we target (bespoke) ── */}
       <Section>
@@ -120,7 +127,6 @@ export function PhysiotherapyFlagship({ ind, cases }: { ind: Industry; cases: Ca
       {ind.plan90 && <IndustryPlan90 items={ind.plan90} />}
       {cases.length > 0 && <CaseStudyCards items={cases} heading />}
 
-      <EstimateBand defaultIndustry="physiotherapy" title={<>Estimate your <span style={{ color: ACCENT }}>new-patient</span> potential</>} intro="Pick your platform and budget — we'll model the bookings and revenue your clinic could expect, using real physio benchmarks and your average patient value." />
       <LeadBand source="flagship:physiotherapy" title="Get a free clinic audit" />
       <FaqAccordion faqs={ind.faqs} title="Physiotherapy marketing — questions" />
       <CtaBlock title="Ready to fill your physiotherapy schedule?" />
