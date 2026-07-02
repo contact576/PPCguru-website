@@ -42,6 +42,47 @@ A 7-wave AEO/GEO/E-E-A-T overhaul + an optimization session took LLM-readiness f
   `claude/site-optimization-session` (PR base = the AEO branch); progress in `OPTIMIZATION_LOG.md`. NEVER push
   to `main` without approval. After large content changes, re-run the AEO audit (a Workflow) to re-confirm the score.
 
+## Lead-gen / conversion & animation layer (branch `claude/lead-gen-conversion`, PR #10 — stacks on the AEO + optimization branches, not yet merged)
+
+A conversion + motion pass on top of the AEO/design work. Durable pieces:
+- **Page-specific offers — single source `lib/data/service-offers.ts`:** per-service `{hook, subhook,
+  popupTitle, popupBody, ctaLabel, formSource, trial, credit}` keyed by slug + `masterOffer` (the **30-day
+  free trial** for Google/Meta ads, the free audit, up-to-**$3,600** Google Ads credit, risk-reversal chips).
+  `offerForPath(pathname)` resolves the offer for a route (fallback `genericOffer`). CONFIRMED real / honesty-safe.
+  The 30-day trial is scoped to `google-ads` + `meta-ads` ONLY; the $3,600 credit to `google-ads`.
+- **`components/shared/hero-offer.tsx` `HeroOffer`** — the bold lime "⚡ 30-day free trial" banner in every hero
+  (service template, 3 flagships, combo pages, homepage); non-trial services show a "Free audit" banner.
+- **`components/shared/offer-popup.tsx` (rewritten, page-aware):** on **service pages** a **centre-screen modal
+  ~4s after landing** with the page-specific catchy hook; a gentle bottom-right card elsewhere. Once per session
+  (localStorage `ppcg_offer_done`), suppressed on `/contact`,`/results`,`/tools`, and **openable on demand by any
+  CTA via the `window` event `ppcg:open-offer`**. (Replaced the old two-step $600 funnel.)
+- **`components/shared/floating-cta.tsx`** converts IN PLACE — dispatches `ppcg:open-offer` (no navigation),
+  shakes every ~4.5s (`ppcShake`), hides while the popup is open (`body[data-offer-open]`).
+- **`/free-audit`** (`app/free-audit/page.tsx`) — dedicated gated audit lander (form high + 30-day-trial
+  `StepFlow` + FAQPage). It's a static hub → wired into sitemap + footer + `llms.txt` per the hub rule.
+- **`lib/data/offers.ts`** — the generic fallback popup copy: now **up to $3,600** credit + a `trial` object.
+- **Calculator-high convention:** `EstimateBand` (the revenue calculator) sits **right after the stat band**
+  (top ~25%) on service/industry/combo/flagship pages with a revenue-framed heading — it's the top hook. Keep
+  it high when editing those templates.
+- **Count-up animation:** `components/ui/stat-counter.tsx` `StatCounter` parses a stat string
+  ("$65M+"/"6.8x"/"-42%") into a scroll-in count-up (built on `components/ui/counter.tsx`, reduced-motion safe),
+  wired broadly (stat bands, proof stats, case metrics, report KPIs). `components/illustrations/dashboard-mock.tsx`
+  is now a **client component** — numbers count up + the revenue line draws via `motion` `pathLength` on view.
+- **Layout-variant toolkit `components/ui/layout.tsx`:** `BigQuote`, `AccentCard`, `SplitFeature`, `StepFlow`
+  (connected timeline), `StatStrip`, `SealDivider` (the leak→sealed divider), `accentAt(i)` — use these to avoid
+  box-grid monotony. `.hoverlift` (globals.css) adds lift+glow to inline-styled homepage cards.
+- **Compact results:** `components/sections/case-study-cards.tsx` + the homepage cases are a horizontal-scroll
+  strip of slim cards (count-up metric + before/after bar), not tall box grids. The homepage comparison table
+  uses a dark header + lime "Guru" column + zebra rows for hierarchy.
+- **Hero spacing:** `PageHero` + flagship heroes use `pt-24 pb-10 md:pt-28 md:pb-14` (reduced from `pt-40`) so
+  the hero + first hook fit the first viewport — don't re-inflate it.
+- **Design hand-off docs:** `DESIGN-HANDOFF.md` (modernization brief for a design agent + copy-paste image/logo
+  generation prompts) + `CREATIVE-BRIEF.md` (~144 assets with exact `/public` paths + palette). All hero/section
+  art is still **placeholder inline SVG** (`components/illustrations/hero-art.tsx`); `/public/images` is empty —
+  real assets are the pending design-team job.
+- **Trust numbers reconciled to `500+`** businesses (Google Ads alone is 500+); per-service figures in
+  `lib/data/service-stats.ts`, all `[VERIFY-client]`.
+
 ## Commands
 
 ```bash
@@ -76,7 +117,8 @@ Edit the typed data modules, not the JSX. Pages render via `generateStaticParams
 - `lib/data/team.ts` — team roster for the About "Meet the team" section (`components/sections/team.tsx`);
   the two real founders are seeded, it scales to N (headshot-or-monogram, focus chips, optional LinkedIn).
   Only add **real** people.
-- `lib/data/offers.ts` — pop-up funnel copy ($600 credit, free audit).
+- `lib/data/offers.ts` — GENERIC fallback pop-up copy (up-to-$3,600 credit, free audit, 30-day trial).
+  Page-specific offers now live in `lib/data/service-offers.ts` (see the Lead-gen/conversion section).
 - `content/blog/*.md` — posts read at build by `lib/blog.ts`.
 - **AEO content layer** (`service-content.ts`, `industry-content.ts`, `service-faq.ts`, `industry-faq.ts`,
   `service-industry.ts` + `service-industry-content.ts`, `service-stats.ts`, `comparisons.ts`, `glossary.ts`)
@@ -98,9 +140,10 @@ via `components/sections/estimate-band.tsx`.
 - `app/actions/lead.ts` `captureLead` — Zod + honeypot + optional Resend (logs without a key); the one
   action behind all lead forms. `app/contact/actions.ts` is the separate full contact form.
 - `components/shared/lead-form.tsx` — the shared form (name/email/phone). Reused by:
-  `offer-popup.tsx` (two-step funnel: arrival audit modal → dismissal-armed $600 slide-in, session-capped,
-  mounted in `app/layout.tsx`), `components/shared/lead-cta.tsx` `LeadCtaButton` (button that opens a popup —
-  used for pricing CTAs), `components/sections/lead-band.tsx` (per-page contact band), and
+  `offer-popup.tsx` (page-aware; centre modal ~4s on service pages, mounted in `app/layout.tsx` — see the
+  Lead-gen/conversion section), `components/shared/hero-offer.tsx` `HeroOffer` (the bold hero offer banner),
+  `components/shared/lead-cta.tsx` `LeadCtaButton` (button that opens an in-place popup — used across service
+  heroes/CTAs), `components/sections/lead-band.tsx` (per-page contact band, page-specific copy), and
   `components/tools/result-gate.tsx` (`ResultGate` blurs the value half of tool results until a lead submits).
 
 ### Routing & page templates
@@ -146,7 +189,8 @@ via `lib/ai/anthropic.ts` — both **fall back to deterministic output when `ANT
     `Reveal` motion component (`whileInView` + a 2.2s mount fallback so a section can never stay `opacity:0`).
     If you add reveal-based content, keep a fallback — stuck-hidden sections read as "broken."
 - Global chrome mounted in `app/layout.tsx`: `AnnouncementBar`, `SiteHeader`, `SiteFooter`, `FloatingCta`,
-  `OfferPopup` (pathname-gated off `/contact`,`/results`,`/tools/*`; 12s dwell), `CookieConsent`.
+  `OfferPopup` (page-aware: centre modal ~4s on service pages / bottom-right card elsewhere; suppressed on
+  `/contact`,`/results`,`/tools/*`; once per session; openable via the `ppcg:open-offer` event), `CookieConsent`.
 - `components/sections/*` — shared blocks (service-proof, estimate-band, lead-band, faq-accordion,
   service-deep, industry-deep, case-study-visuals, cta-block, service-grid, industry-grid, …).
 - `components/illustrations/*` — bespoke SVG hero art + `dashboard-mock.tsx` (a sample dashboard whose every
