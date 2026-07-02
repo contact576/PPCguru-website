@@ -89,6 +89,7 @@ export type NavChild = { label: string; href: string; heading?: boolean };
 export type NavItem = { label: string; href: string; children?: NavChild[] };
 
 export const nav: NavItem[] = [
+  { label: "Free Trial", href: "/#sprint" },
   {
     label: "Services",
     href: "/services",

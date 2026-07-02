@@ -1,19 +1,13 @@
 import { stackGroups } from "@/lib/data/logos";
+import { BrandLogo } from "@/components/shared/brand-logo";
 
 const ink = "#14170e";
 const lime = "#ceff3a";
 
-/** Monogram mark for a tool (first 1–2 significant letters) — stands in for a logo. */
-function mark(name: string) {
-  const words = name.replace(/[^A-Za-z0-9 ]/g, "").split(" ").filter(Boolean);
-  if (words.length >= 2 && name.length > 6) return (words[0][0] + words[1][0]).toUpperCase();
-  return name.slice(0, 2).toUpperCase();
-}
-
 /**
  * The single merged "stack" section — platforms, tools, AI and accreditation in
  * one place (replaces the old separate credentials + AI-operating-system blocks).
- * Server component; each tool is a monochrome pill with a monogram mark.
+ * Server component; each tool is a pill carrying its real brand mark.
  */
 export function ToolsOs() {
   return (
@@ -36,8 +30,8 @@ export function ToolsOs() {
               <div className="mono" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: lime, marginBottom: 14 }}>{g.title}</div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {g.tools.map((t) => (
-                  <span key={t} className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11.5, fontWeight: 600, color: "#d9dac8", background: "rgba(241,239,227,.05)", border: "1px solid rgba(241,239,227,.14)", padding: "5px 10px 5px 5px", borderRadius: 999, whiteSpace: "nowrap" }}>
-                    <span aria-hidden style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: 6, background: "rgba(206,255,58,.14)", color: lime, fontSize: 8.5, fontWeight: 800, letterSpacing: 0 }}>{mark(t)}</span>
+                  <span key={t} className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11.5, fontWeight: 600, color: "#d9dac8", background: "rgba(241,239,227,.05)", border: "1px solid rgba(241,239,227,.14)", padding: "5px 11px 5px 6px", borderRadius: 999, whiteSpace: "nowrap" }}>
+                    <span aria-hidden style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: 6, background: "#fff", boxShadow: "0 0 0 1px rgba(241,239,227,.14)" }}><BrandLogo name={t} size={15} /></span>
                     {t}
                   </span>
                 ))}

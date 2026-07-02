@@ -11,6 +11,7 @@ import {
 } from "@/lib/data/home";
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { ToolsOs } from "@/components/home/tools-os";
+import { LogoStrip } from "@/components/home/logo-strip";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { performanceStats } from "@/lib/data/performance-stats";
 
@@ -84,9 +85,13 @@ export default function HomePage() {
               We audit, rebuild and manage Google Ads, Meta &amp; SEO so your budget turns into <strong style={{ color: ink, fontWeight: 700 }}>qualified leads, booked jobs and revenue.</strong> Find the leaks before you scale.
             </p>
             <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 34 }}>
-              <Link href="#audit" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Get Free PPC Audit →</Link>
-              <Link href="#calculator" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 26px", borderRadius: 14 }}>Try ROI Calculator</Link>
+              <Link href="#sprint" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Start 30-Day Free Trial →</Link>
+              <Link href="#audit" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 26px", borderRadius: 14 }}>Get Free PPC Audit</Link>
             </div>
+            <p className="mono" style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12, color: "#4f5f14", marginTop: 18, letterSpacing: ".02em", maxWidth: 500 }}>
+              <span aria-hidden style={{ color: olive, fontSize: 14 }}>✦</span>
+              No commitment · no obligation · you only continue if you get results
+            </p>
             <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 40, flexWrap: "wrap" }}>
               <svg width="46" height="46" viewBox="0 0 48 48" fill="none" aria-hidden style={{ flexShrink: 0 }}>
                 <path d="M10 30 C 6 22, 8 12, 12 8" stroke={ink} strokeWidth="1.5" fill="none" />
@@ -110,6 +115,9 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* ── LOGO STRIP ─────────────────────────────────────────────────────── */}
+      <LogoStrip />
 
       {/* ── PROOF ──────────────────────────────────────────────────────────── */}
       <section id="proof" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
@@ -154,16 +162,32 @@ export default function HomePage() {
         <div className={WRAP} style={{ position: "relative" }}>
           <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.2fr]">
             <div data-reveal>
-              <Eyebrow>⚡ 30-Day PPC Growth Sprint</Eyebrow>
+              <Eyebrow>⚡ 30-Day Free Trial · our prime offer</Eyebrow>
               <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>Try us for <Em>one month</Em> before you commit</h2>
-              <p style={{ fontSize: 17, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 460 }}>A focused 30-day sprint: we audit your account, fix the obvious leaks, and show you a clear plan — so you can judge us on results, not promises.</p>
-              <div style={{ display: "flex", gap: 13, flexWrap: "wrap", marginTop: 30 }}>
-                <Link href="#audit" className="mono" style={{ background: lime, color: ink, fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 13 }}>Claim 30-Day Sprint</Link>
+              <p style={{ fontSize: 17, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 470 }}>Work with us for a full month — we run the audit, rebuild and optimization up front. You judge us on real results, not promises.</p>
+
+              {/* No-commitment callout — the reassurance that makes the offer land */}
+              <div style={{ background: ink, color: cream, borderRadius: 18, padding: "20px 22px", marginTop: 26, maxWidth: 470 }}>
+                <div className="head" style={{ fontSize: 17, color: lime, marginBottom: 8 }}>No commitment · No obligation</div>
+                <p style={{ fontSize: 14, color: "#c9c8b6", lineHeight: 1.55 }}>No long-term contract. You only continue if you get the results — otherwise you simply walk away and keep everything we set up.</p>
+              </div>
+
+              <div style={{ display: "flex", gap: 13, flexWrap: "wrap", marginTop: 24 }}>
+                <Link href="#audit" className="mono" style={{ background: lime, color: ink, fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 13 }}>Start your free trial →</Link>
                 <Link href="#calculator" className="mono" style={{ background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 24px", borderRadius: 13 }}>Run the free audit</Link>
               </div>
-              <p style={{ fontSize: 12.5, color: "#6b6d5c", lineHeight: 1.55, marginTop: 22, maxWidth: 440 }}>Trial does not include ad spend. Final scope depends on account size, campaign history, tracking setup, and monthly budget. Results vary by industry, budget, tracking quality and offer strength.</p>
+
+              {/* Terms chips */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 22 }}>
+                {["No contract", "Cancel anytime", "You own your accounts", "Continue only if it works"].map((c) => (
+                  <span key={c} className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10.5, fontWeight: 600, color: "#4f5f14", background: "#eef2dd", border: "1px solid #cfe39a", padding: "7px 11px", borderRadius: 999, letterSpacing: ".03em" }}><span style={{ color: olive }}>✓</span>{c}</span>
+                ))}
+              </div>
+
+              <p style={{ fontSize: 12.5, color: "#6b6d5c", lineHeight: 1.55, marginTop: 22, maxWidth: 470 }}>Your free trial covers our strategy, management &amp; optimization — ad spend is billed directly by the ad platforms. Final scope depends on account size, campaign history, tracking setup and goals. Results vary by industry, budget, tracking quality and offer strength.</p>
             </div>
             <div data-reveal>
+              <div className="head" style={{ fontSize: 18, marginBottom: 16 }}>What we do in your 30 days</div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {sprintWeeks.map((w) => (
                   <div key={w.num} style={{ position: "relative", zIndex: 1, background: "#fff", border: "1px solid #e3e0d0", borderRadius: 20, padding: 22 }}>
@@ -502,10 +526,10 @@ export default function HomePage() {
         <div style={{ position: "absolute", bottom: -160, left: "50%", transform: "translateX(-50%)", width: 680, height: 420, background: "radial-gradient(circle,rgba(255,255,255,.45),transparent 65%)" }} />
         <div data-reveal className="mx-auto max-w-[940px] px-5 py-24 text-center md:px-8" style={{ position: "relative" }}>
           <h2 className="head" style={{ fontSize: "clamp(2.6rem,6vw,5rem)" }}>Turn ad spend into<br /><Em>booked jobs</Em></h2>
-          <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>Start with a free PPC audit or claim the 30-Day Growth Sprint. You&rsquo;ll get clear next steps before committing to a long-term plan.</p>
+          <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>Start with a free PPC audit or the 30-Day Free Trial. You&rsquo;ll get clear next steps before committing to a long-term plan — no commitment, no obligation.</p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 40 }}>
-            <Link href="#audit" className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>Get Free PPC Audit</Link>
-            <Link href="#sprint" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>Claim 30-Day Sprint</Link>
+            <Link href="#sprint" className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>Start 30-Day Free Trial</Link>
+            <Link href="#audit" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>Get Free PPC Audit</Link>
             <Link href="/contact" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 26px", borderRadius: 14, display: "inline-flex", alignItems: "center", gap: 9 }}><span style={{ width: 9, height: 9, borderRadius: "50%", background: ink }} />Message us</Link>
           </div>
           <p className="mono" style={{ fontSize: 11, color: "#3a4a10", marginTop: 28, letterSpacing: ".1em", textTransform: "uppercase" }}>No long-term contracts · You keep ownership of your accounts</p>
