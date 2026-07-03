@@ -156,49 +156,51 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 30-DAY SPRINT ──────────────────────────────────────────────────── */}
-      <section id="sprint" style={{ background: "#f7f5ea", color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <div style={{ position: "absolute", top: -120, left: -80, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.08),transparent 65%)" }} />
+      {/* ── 30-DAY FREE TRIAL (prime offer) ────────────────────────────────── */}
+      <section id="sprint" style={{ background: cream, color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
         <div className={WRAP} style={{ position: "relative" }}>
-          <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.2fr]">
-            <div data-reveal>
-              <Eyebrow>⚡ 30-Day Free Trial · our prime offer</Eyebrow>
-              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>Try us for <Em>one month</Em> before you commit</h2>
-              <p style={{ fontSize: 17, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 470 }}>Work with us for a full month — we run the audit, rebuild and optimization up front. You judge us on real results, not promises.</p>
+          <div data-reveal style={{ border: "2px dashed #c4c2b0", borderRadius: 30, overflow: "hidden" }}>
+            <div className="grid lg:grid-cols-[0.95fr_1.15fr]">
+              {/* LEFT — lime offer panel */}
+              <div style={{ background: lime, color: ink, padding: "clamp(28px,4vw,46px)", position: "relative", overflow: "hidden" }}>
+                <div className="mono" style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#3a4a10" }}>Our prime offer</div>
+                <h2 className="head" style={{ fontSize: "clamp(2.7rem,5.4vw,4.6rem)", marginTop: 14 }}>30-Day<br />Free<br />Trial</h2>
+                <p style={{ fontSize: 16, color: "#2c3312", lineHeight: 1.55, marginTop: 22, maxWidth: 400 }}>Work with us for a full month — we run the audit, rebuild and optimization up front. You judge us on real results, not promises.</p>
 
-              {/* No-commitment callout — the reassurance that makes the offer land */}
-              <div style={{ background: ink, color: cream, borderRadius: 18, padding: "20px 22px", marginTop: 26, maxWidth: 470 }}>
-                <div className="head" style={{ fontSize: 17, color: lime, marginBottom: 8 }}>No commitment · No obligation</div>
-                <p style={{ fontSize: 14, color: "#c9c8b6", lineHeight: 1.55 }}>No long-term contract. You only continue if you get the results — otherwise you simply walk away and keep everything we set up.</p>
+                {/* No-commitment callout — the reassurance that makes the offer land */}
+                <div style={{ background: ink, color: cream, borderRadius: 18, padding: "20px 22px", marginTop: 26, maxWidth: 430 }}>
+                  <div className="head" style={{ fontSize: 16, color: lime, marginBottom: 8 }}>No commitment · No obligation</div>
+                  <p style={{ fontSize: 13.5, color: "#c9c8b6", lineHeight: 1.55 }}>No long-term contract. You only continue if you get the results — otherwise you simply walk away and keep everything we set up.</p>
+                </div>
+
+                <Link href="#audit" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: ink, color: cream, fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 30px", borderRadius: 14, marginTop: 26 }}>Start your free trial →</Link>
+                <span aria-hidden style={{ position: "absolute", right: -6, bottom: -18, fontSize: 128, color: "rgba(20,23,14,.09)", lineHeight: 1, pointerEvents: "none" }}>✦</span>
               </div>
 
-              <div style={{ display: "flex", gap: 13, flexWrap: "wrap", marginTop: 24 }}>
-                <Link href="#audit" className="mono" style={{ background: lime, color: ink, fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 13 }}>Start your free trial →</Link>
-                <Link href="#calculator" className="mono" style={{ background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 24px", borderRadius: 13 }}>Run the free audit</Link>
-              </div>
-
-              {/* Terms chips */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 22 }}>
-                {["No contract", "Cancel anytime", "You own your accounts", "Continue only if it works"].map((c) => (
-                  <span key={c} className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10.5, fontWeight: 600, color: "#4f5f14", background: "#eef2dd", border: "1px solid #cfe39a", padding: "7px 11px", borderRadius: 999, letterSpacing: ".03em" }}><span style={{ color: olive }}>✓</span>{c}</span>
-                ))}
-              </div>
-
-              <p style={{ fontSize: 12.5, color: "#6b6d5c", lineHeight: 1.55, marginTop: 22, maxWidth: 470 }}>Your free trial covers our strategy, management &amp; optimization — ad spend is billed directly by the ad platforms. Final scope depends on account size, campaign history, tracking setup and goals. Results vary by industry, budget, tracking quality and offer strength.</p>
-            </div>
-            <div data-reveal>
-              <div className="head" style={{ fontSize: 18, marginBottom: 16 }}>What we do in your 30 days</div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {sprintWeeks.map((w) => (
-                  <div key={w.num} style={{ position: "relative", zIndex: 1, background: "#fff", border: "1px solid #e3e0d0", borderRadius: 20, padding: 22 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                      <span className="head" style={{ fontSize: 22, color: olive }}>{w.num}</span>
-                      <span className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#83856f", letterSpacing: ".1em", textTransform: "uppercase" }}>{w.week}</span>
+              {/* RIGHT — what we do in your 30 days */}
+              <div style={{ background: "#f7f5ea", padding: "clamp(28px,4vw,46px)" }}>
+                <div className="mono" style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#83856f", marginBottom: 18 }}>What we do in your 30 days</div>
+                <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+                  {sprintWeeks.map((w) => (
+                    <div key={w.num} style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 18, padding: 20 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                        <span className="head" style={{ fontSize: 20, color: olive }}>{w.num}</span>
+                        <span className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#83856f", letterSpacing: ".1em", textTransform: "uppercase" }}>{w.week}</span>
+                      </div>
+                      <div className="head" style={{ fontSize: 15, lineHeight: 1.05, marginBottom: 8 }}>{w.title}</div>
+                      <div style={{ fontSize: 12.5, color: "#54564a", lineHeight: 1.5 }}>{w.desc}</div>
                     </div>
-                    <div className="head" style={{ fontSize: 16, lineHeight: 1.05, marginBottom: 9 }}>{w.title}</div>
-                    <div style={{ fontSize: 13, color: "#54564a", lineHeight: 1.5 }}>{w.desc}</div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                {/* Terms chips */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 20 }}>
+                  {["No contract", "Cancel anytime", "You own your accounts", "Continue only if it works"].map((c) => (
+                    <span key={c} className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10.5, fontWeight: 600, color: "#4f5f14", background: "#eef2dd", border: "1px solid #cfe39a", padding: "7px 11px", borderRadius: 999, letterSpacing: ".03em" }}><span style={{ color: olive }}>✓</span>{c}</span>
+                  ))}
+                </div>
+
+                <p style={{ fontSize: 12, color: "#6b6d5c", lineHeight: 1.55, marginTop: 18 }}>Your free trial covers our strategy, management &amp; optimization — ad spend is billed directly by the ad platforms. Final scope depends on account size, campaign history, tracking setup and goals. Results vary by industry, budget, tracking quality and offer strength.</p>
               </div>
             </div>
           </div>
