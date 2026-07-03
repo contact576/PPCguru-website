@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { nav, type NavItem } from "@/lib/site-config";
+import { Logo } from "@/components/layout/logo";
 
 /**
  * Header — sticky, frosts to cream on scroll. Dropdown-aware: parents with
@@ -52,9 +53,8 @@ export function SiteHeader() {
       }}
     >
       <div style={{ maxWidth: 1480, margin: "0 auto", padding: "0 20px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
-        <Link href="/" aria-label="PPC Guru — home" style={{ display: "flex", flexDirection: "column", lineHeight: 0.8 }}>
-          <span className="serif" style={{ fontSize: 20, color: "#14170e", letterSpacing: ".02em" }}>PPC</span>
-          <span className="grotesk" style={{ fontWeight: 900, fontSize: 17, letterSpacing: "-.01em", color: "#14170e", textTransform: "uppercase" }}>Guru<span style={{ color: "#6f7d22" }}>.ca</span></span>
+        <Link href="/" aria-label="PPC Guru — home" style={{ display: "inline-flex", alignItems: "center" }}>
+          <Logo size={34} />
         </Link>
 
         {/* Desktop nav */}
@@ -117,10 +117,7 @@ export function SiteHeader() {
         <div style={{ position: "fixed", inset: 0, height: "100dvh", zIndex: 90, background: "rgba(10,12,7,.6)", backdropFilter: "blur(4px)" }} onClick={() => setOpen(false)}>
           <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "min(92vw,380px)", height: "100dvh", background: "#f1efe3", borderLeft: "1px solid #dddbc9", padding: "22px 20px", display: "flex", flexDirection: "column", gap: 2, overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-              <div style={{ lineHeight: 0.8 }}>
-                <div className="serif" style={{ fontSize: 19 }}>PPC</div>
-                <div className="grotesk" style={{ fontWeight: 900, fontSize: 16, textTransform: "uppercase" }}>Guru<span style={{ color: "#6f7d22" }}>.ca</span></div>
-              </div>
+              <Logo size={32} />
               <button onClick={() => setOpen(false)} aria-label="Close menu" style={{ border: "1px solid #c4c2b0", background: "transparent", width: 44, height: 44, borderRadius: 12, fontSize: 17, cursor: "pointer", color: "#14170e" }}>✕</button>
             </div>
 

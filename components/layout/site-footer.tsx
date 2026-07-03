@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BrandMarquee } from "@/components/shared/logo-wall";
+import { Logo } from "@/components/layout/logo";
 
 /**
  * Footer — handoff design (dark olive #14170e, lime accents). Shared across all
@@ -34,9 +35,8 @@ export function SiteFooter() {
 
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1fr_1.1fr]">
           <div>
-            <div style={{ lineHeight: 0.8, marginBottom: 16 }}>
-              <div className="serif" style={{ fontSize: 24, color: "#f1efe3" }}>PPC</div>
-              <div className="head" style={{ fontSize: 21, color: "#f1efe3" }}>Guru<span style={{ color: "#ceff3a" }}>.ca</span></div>
+            <div style={{ marginBottom: 16 }}>
+              <Logo tone="dark" size={38} />
             </div>
             <p style={{ fontSize: 13.5, color: "#75766a", lineHeight: 1.6, maxWidth: 320 }}>
               A Google Partner &amp; Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA.

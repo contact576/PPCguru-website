@@ -10,7 +10,7 @@ const ink = "#14170e", cream = "#f1efe3", lime = "#ceff3a";
  */
 export function CtaBlock({
   title,
-  intro = "Start with a free PPC audit or claim the 30-Day Growth Sprint. You'll get clear next steps before committing to a long-term plan.",
+  intro = "Start with a free PPC audit or the 30-Day Free Trial. You'll get clear next steps before committing to a long-term plan.",
 }: {
   title?: React.ReactNode;
   intro?: React.ReactNode;
