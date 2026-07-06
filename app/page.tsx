@@ -11,6 +11,7 @@ import {
 } from "@/lib/data/home";
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { ToolsOs } from "@/components/home/tools-os";
+import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { HeroOffer } from "@/components/shared/hero-offer";
 import { performanceStats } from "@/lib/data/performance-stats";
@@ -111,6 +112,16 @@ export default function HomePage() {
             </div>
           </div>
           <HeroDashboard />
+        </div>
+      </section>
+
+      {/* ── TRUST: verified reviews + credentials ──────────────────────────── */}
+      <section style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
+        <div className="mx-auto max-w-[1480px] px-5 py-8 md:px-8 md:py-9">
+          <div data-reveal className="flex flex-col items-center gap-6">
+            <ReviewRating />
+            <AwardsStrip />
+          </div>
         </div>
       </section>
 
@@ -472,6 +483,7 @@ export default function HomePage() {
             <Eyebrow>In their words</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What working with us <Em>feels like</Em></h2>
             <p style={{ fontSize: 14, color: "#8a8c72", marginTop: 14 }}>Representative of the feedback we hear from clients.</p>
+            <div style={{ marginTop: 22, display: "flex", justifyContent: "center" }}><ReviewRating /></div>
           </div>
         </div>
         <TestimonialCarousel />
