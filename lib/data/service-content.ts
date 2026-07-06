@@ -22,6 +22,10 @@ export type ServiceContent = {
   geoBlurb?: string;
   /** Keyword-rich eyebrow for the geo block. Defaults to "Across the GTA & Canada". */
   geoHeading?: string;
+  /** Unique intro paragraph for the "Industries we operate in" breadth grid (per service — avoids duplicate-content). */
+  industriesBlurb?: string;
+  /** Keyword-rich eyebrow for the industries block. Defaults to "Who we serve". */
+  industriesHeading?: string;
   /** Expanded FAQ set — replaces the thin service.faqs when present. */
   faqs?: { q: string; a: string }[];
 };
@@ -34,6 +38,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "Google Ads across the GTA & Canada",
     geoBlurb:
       "We manage Google Ads for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham, Hamilton and Ottawa, plus clients in the USA. Canadian Search auctions are competitive and CPCs run high in the GTA, so we win on tight geo-targeting, airtight conversion tracking and landing pages that turn expensive local clicks into booked jobs — not by simply outspending the firm next door.",
+    industriesHeading: "Google Ads by industry",
+    industriesBlurb:
+      "We run Google Ads across nearly every service vertical we serve in the GTA and Canada — physiotherapy, dental and healthcare clinics; HVAC, plumbing, electrical, roofing, renovation and home-improvement trades; plus law firms, immigration consultants, real estate, med spas, fitness studios and B2B professional services. Every account is structured around the search intent and job value of your specific industry.",
   },
   "meta-ads": {
     definitionHeading: "What is Meta Ads management?",
@@ -42,6 +49,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "Meta Ads across the GTA & Canada",
     geoBlurb:
       "We run Facebook and Instagram campaigns for local and service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients coast to coast and in the USA. Reaching a Canadian audience is about local creative and precise radius, interest and lookalike targeting around each service area, so your budget reaches nearby buyers ready to book — not cheap, irrelevant clicks far outside your market.",
+    industriesHeading: "Meta Ads by industry",
+    industriesBlurb:
+      "Our Facebook and Instagram campaigns cover the full range of industries we serve across the GTA and Canada — healthcare and dental clinics, home-service trades like HVAC, plumbing, electrical and roofing, plus real estate, med spas, fitness, legal, immigration and professional services. Creative and audience targeting are built around how each of these markets actually scrolls, clicks and books.",
   },
   seo: {
     definitionHeading: "What is SEO & local search?",
@@ -50,6 +60,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "Local SEO across the GTA & Canada",
     geoBlurb:
       "We run SEO and local search for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham, Hamilton, Etobicoke, North York and Ottawa, plus clients coast to coast. Ranking in a Canadian market is won on local relevance: a fully optimized Google Business Profile, consistent NAP and citations across Canadian directories (Yelp, Yellow Pages, Canada411, the BBB and industry listings), genuinely useful location and service pages, and a review profile that builds map-pack authority in your own city — not generic, country-agnostic SEO.",
+    industriesHeading: "SEO by industry",
+    industriesBlurb:
+      "We run SEO and local search across the industries we serve in the GTA and Canada — physiotherapy, dental and medical clinics; HVAC, plumbing, electrical, roofing and renovation trades; plus law firms, immigration, real estate, med spas, gyms and B2B professional services. Each program targets the local keywords, map-pack rankings and AI answers that bring in customers for that specific vertical.",
   },
   creative: {
     definitionHeading: "What is creative production?",
@@ -58,6 +71,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "Creative for GTA & Canadian audiences",
     geoBlurb:
       "We produce ad creative for brands across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients in the USA. Creative that converts a Canadian audience speaks to local context, seasons and neighbourhoods, so we ship fresh, on-brand concepts tuned to your market — and refresh them continuously as local audiences fatigue, keeping cost per result down.",
+    industriesHeading: "Creative by industry",
+    industriesBlurb:
+      "We produce ad creative for the industries we serve across the GTA and Canada — healthcare and dental clinics, home-service trades, real estate, med spas, fitness, legal, immigration and professional services. Concepts, hooks and formats are tailored to what stops the scroll and drives bookings in each vertical — never one generic template stretched across every client.",
   },
   "web-design": {
     definitionHeading: "What are conversion-focused websites & landing pages?",
@@ -66,6 +82,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "Websites for GTA & Canadian businesses",
     geoBlurb:
       "We design and build websites and landing pages for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients in the USA. Every build ships with local SEO foundations, location and service pages, and clean tracking, so your site ranks in your own city and converts nearby visitors into booked leads — and you own it outright.",
+    industriesHeading: "Websites by industry",
+    industriesBlurb:
+      "We design conversion-focused websites and landing pages for the industries we serve across the GTA and Canada — clinics, dental, HVAC, plumbing, electrical and roofing trades, plus real estate, med spas, fitness, law, immigration and B2B services. Each build is wired around how that industry's customers research, compare and book.",
   },
   crm: {
     definitionHeading: "What is CRM & marketing operations?",
@@ -74,6 +93,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "Marketing operations for GTA & Canadian teams",
     geoBlurb:
       "We build CRM and marketing-ops systems for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients in the USA. Speed-to-lead decides who wins a local job, so we wire instant follow-up, routing and closed-loop reporting that connect every enquiry from your market straight to a booked appointment and revenue.",
+    industriesHeading: "CRM by industry",
+    industriesBlurb:
+      "We build CRM and lead-follow-up systems for the industries we serve across the GTA and Canada — healthcare and dental clinics, home-service trades, real estate, med spas, fitness, legal, immigration and professional services. Pipelines, routing and speed-to-lead automation are shaped around how each industry sells and how fast its leads go cold.",
   },
   "linkedin-ads": {
     definitionHeading: "What is LinkedIn Ads management?",
@@ -82,6 +104,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "B2B LinkedIn Ads across Canada & the GTA",
     geoBlurb:
       "We run LinkedIn Ads for B2B and professional-services firms across the Greater Toronto Area and Canada — Toronto, Mississauga, Vaughan, Markham and Ottawa and the wider corporate corridor, plus clients in the USA. Canadian B2B buying is relationship-led, so we target decision-makers by role, company and region and build account-based campaigns that generate qualified pipeline in your market — measured against revenue, not clicks.",
+    industriesHeading: "LinkedIn Ads by industry",
+    industriesBlurb:
+      "We run LinkedIn Ads for the B2B and high-consideration verticals we serve across the GTA and Canada — professional and B2B services, legal, immigration, real estate, healthcare and specialist clinics, plus trades and firms that sell to other businesses. Targeting and messaging are built around the decision-makers and deal sizes specific to your industry.",
   },
   "tiktok-ads": {
     definitionHeading: "What is TikTok Ads management?",
@@ -90,6 +115,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "TikTok Ads across the GTA & Canada",
     geoBlurb:
       "We produce and run TikTok campaigns for service and local businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients in the USA. Reaching a Canadian audience on TikTok is about native, culturally-relevant creative and tight geo-targeting around each service area, so attention turns into local leads and bookings — not just views from outside your market.",
+    industriesHeading: "TikTok Ads by industry",
+    industriesBlurb:
+      "Our TikTok campaigns reach the consumer-facing industries we serve across the GTA and Canada — med spas and aesthetics, fitness and gyms, dental and cosmetic clinics, real estate, home services and more. Creative is built native to the platform and tuned to how each of these audiences discovers, trusts and books.",
   },
   "microsoft-ads": {
     definitionHeading: "What is Microsoft (Bing) Ads management?",
@@ -98,6 +126,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "Bing Ads across the GTA & Canada",
     geoBlurb:
       "We manage Microsoft (Bing) Ads for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients in the USA. Bing's audience skews older and higher-income and competition is lighter than Google, so in many Canadian markets it captures high-intent local demand at a lower cost per click — demand most competitors in your city ignore entirely.",
+    industriesHeading: "Bing Ads by industry",
+    industriesBlurb:
+      "We run Microsoft (Bing) Ads across the industries we serve in the GTA and Canada — healthcare and dental clinics, home-service trades, legal, immigration, real estate, professional services and beyond. Bing's lower-competition, higher-intent local demand is captured with campaigns structured around each industry's real job value.",
   },
   "pinterest-ads": {
     definitionHeading: "What is Pinterest Ads management?",
@@ -106,6 +137,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "Pinterest Ads across the GTA & Canada",
     geoBlurb:
       "We run Pinterest campaigns for home, lifestyle, retail and service brands across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients in the USA. Canadian planners use Pinterest to research seasonal and local projects before they buy, so we build visual, intent-driven campaigns and geo-target the buyers in your service area — turning inspiration into measurable local leads.",
+    industriesHeading: "Pinterest Ads by industry",
+    industriesBlurb:
+      "Our Pinterest campaigns serve the visual, consideration-driven verticals we work with across the GTA and Canada — home improvement and renovation, med spas and aesthetics, real estate, interiors, fitness and lifestyle brands. Campaigns are built around how planners and buyers in each of these industries save, research and convert.",
   },
   "youtube-ads": {
     definitionHeading: "What is YouTube Ads management?",
@@ -114,6 +148,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "YouTube Ads across the GTA & Canada",
     geoBlurb:
       "We produce and run YouTube campaigns for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients in the USA. Building demand in a Canadian market means video that speaks to local context and precise geo and audience targeting, so your spend builds awareness and leads in the cities you actually serve — measured against revenue, not views.",
+    industriesHeading: "YouTube Ads by industry",
+    industriesBlurb:
+      "We run YouTube campaigns for the industries we serve across the GTA and Canada — clinics and healthcare, home-service trades, real estate, med spas, fitness, legal, immigration and professional services. Video and targeting are built around the awareness-to-booking journey specific to each vertical.",
   },
   "ai-automation": {
     definitionHeading: "What is AI marketing automation?",
@@ -122,6 +159,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "AI automation for GTA & Canadian businesses",
     geoBlurb:
       "We build AI automations for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients in the USA. In competitive local markets the fastest responder wins the job, so we deploy round-the-clock AI that instantly captures, qualifies, routes and follows up with every lead from your area — with a human strategist reviewing the output.",
+    industriesHeading: "AI automation by industry",
+    industriesBlurb:
+      "We deploy AI automation across the industries we serve in the GTA and Canada — healthcare and dental clinics, home-service trades, real estate, med spas, fitness, legal, immigration and B2B services. Lead-qualification, follow-up and reporting workflows are shaped around how each industry captures and converts demand.",
   },
   "cro-landing-pages": {
     definitionHeading: "What is conversion rate optimization (CRO)?",
@@ -130,6 +170,9 @@ export const serviceContent: Record<string, ServiceContent> = {
     geoHeading: "CRO for GTA & Canadian campaigns",
     geoBlurb:
       "We run CRO and landing-page experiments for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham and Ottawa, plus clients in the USA. Local traffic is expensive in Canadian markets, so we test the pages, offers and messaging that turn more of your existing GTA and Canada-wide visitors into booked leads — lowering cost per lead without raising ad spend.",
+    industriesHeading: "CRO by industry",
+    industriesBlurb:
+      "We build and optimize landing pages across the industries we serve in the GTA and Canada — clinics, dental, HVAC, plumbing, electrical and roofing trades, real estate, med spas, fitness, law, immigration and professional services. Every page is tested around the objections and booking behaviour specific to that vertical.",
   },
 };
 
