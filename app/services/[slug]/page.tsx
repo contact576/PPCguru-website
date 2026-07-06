@@ -21,7 +21,7 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import type { PlatformId } from "@/lib/data/benchmarks";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { GoogleAdsFlagship } from "@/components/flagship/google-ads";
-import { TrustBadgeBar, ServiceIntro, ServiceGeo, ServiceIndustries, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
+import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
 import { BigQuote, SplitFeature, AccentCard, SealDivider, accentAt } from "@/components/ui/layout";
 import { getServiceContent } from "@/lib/data/service-content";
 import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
@@ -104,7 +104,6 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {/* Trust strip + answer-first definition + per-service stats (AEO / E-E-A-T) */}
       <TrustBadgeBar />
       {content?.definition && <ServiceIntro name={service.name} definition={content.definition} heading={content.definitionHeading} />}
-      {content?.geoBlurb && <ServiceGeo blurb={content.geoBlurb} label={content.geoHeading} />}
       <ServiceStatBand slug={slug} />
 
       {/* Revenue calculator — moved high (the strongest hook: "what could I make?") */}
@@ -305,18 +304,13 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {content?.comparison && <ComparisonTable rows={content.comparison} serviceName={service.name} />}
 
 
-      {/* Industry playbooks — depth: "[Service] for [Industry]" accordion + dedicated pages */}
-      {siRows.length > 0 && (
+      {/* Industry playbooks — "[Service] for [Industry]" accordion + dedicated pages */}
+      {siRows.length > 0 ? (
         <Section>
           <SectionHeading align="left" eyebrow="Industry playbooks" title={<>{firstWord} for <span className="text-gradient">your industry</span></>} intro={`Tap an industry to see how we run ${service.name} for it — what good looks like, best practices, typical benchmarks and what to expect.`} />
           <ServiceIndustryAccordion rows={siRows} />
         </Section>
-      )}
-
-      {/* Industries we operate in — breadth: full vertical grid + internal links */}
-      {content?.industriesBlurb ? (
-        <ServiceIndustries blurb={content.industriesBlurb} label={content.industriesHeading} />
-      ) : siRows.length === 0 && relatedIndustries.length > 0 ? (
+      ) : relatedIndustries.length > 0 ? (
         <Section>
           <SectionHeading align="left" eyebrow="Where it works" title="Industries we run this for" />
           <div className="mt-8 flex flex-wrap gap-3">

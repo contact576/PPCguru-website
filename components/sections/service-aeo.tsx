@@ -5,7 +5,6 @@ import { StatCounter } from "@/components/ui/stat-counter";
 import { Reveal } from "@/components/ui/reveal";
 import { getServiceStats, serviceCredentials } from "@/lib/data/service-stats";
 import { trustFacts } from "@/lib/data/performance-stats";
-import { industries } from "@/lib/data/industries";
 
 /**
  * Answer-first definitional block — the FIRST body section on a service page.
@@ -20,55 +19,6 @@ export function ServiceIntro({ name, definition, heading }: { name: string; defi
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="head text-[clamp(1.5rem,3vw,2rem)] text-[var(--color-ink)]">{heading ?? `What is ${name}?`}</h2>
         <p className="mt-4 text-[17px] leading-relaxed text-[var(--color-ink-dim)]">{definition}</p>
-      </div>
-    </Section>
-  );
-}
-
-/**
- * Geo / local-relevance body paragraph. Weaves Canadian city + citation signals into
- * the page body so Google's local algorithm reads geographic relevance from real copy,
- * not just footer links. Renders ONLY when a `geoBlurb` is authored for the service,
- * so pages without one are unchanged (no layout/design impact).
- */
-export function ServiceGeo({ blurb, label }: { blurb: string; label?: string }) {
-  return (
-    <Section className="!pt-8 !pb-0">
-      <div className="mx-auto max-w-3xl text-center">
-        <p className="mono text-[11px] uppercase tracking-[.14em] text-[var(--accent-strong)]">{label ?? "Across the GTA & Canada"}</p>
-        <p className="mt-3 text-[15px] leading-relaxed text-[var(--color-ink-dim)]">{blurb}</p>
-      </div>
-    </Section>
-  );
-}
-
-/**
- * "Industries we operate in" breadth grid. Complements the depth-focused
- * "[Service] for [Industry]" playbook accordion by naming the FULL set of verticals
- * PPC Guru serves, each linking to its /industries page (topical relevance + internal
- * linking). Renders ONLY when an `industriesBlurb` is authored for the service, so
- * pages without one are unchanged (reuses existing Section/card styling — no redesign).
- */
-export function ServiceIndustries({ blurb, label }: { blurb: string; label?: string }) {
-  return (
-    <Section>
-      <SectionHeading
-        align="left"
-        eyebrow={label ?? "Who we serve"}
-        title={<>Industries we <span className="text-gradient">operate in</span></>}
-        intro={blurb}
-      />
-      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {industries.map((ind) => (
-          <Link
-            key={ind.slug}
-            href={`/industries/${ind.slug}`}
-            className="group rounded-2xl border border-[var(--color-border-bright)] bg-white p-5 transition-colors hover:border-[var(--color-ink)]"
-          >
-            <span className="block text-sm font-semibold text-[var(--color-ink)]">{ind.name}</span>
-            <span className="mt-1.5 block text-[13px] leading-snug text-[var(--color-ink-dim)]">{ind.short}</span>
-          </Link>
-        ))}
       </div>
     </Section>
   );
