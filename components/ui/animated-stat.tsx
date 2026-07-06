@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { useReducedMotion, useInView } from "motion/react";
 
 /* Count-up for a stat STRING that may carry a prefix/suffix:
    "$10M+" · "4.2x" · "120,000+" · "−42%" · "↓ 38%". Animates the numeric part
-   from zero the first time it scrolls into view, preserving everything else. */
+   from zero the first time it scrolls into view, preserving everything else.
+   Uses motion's useInView (the same reliable in-view primitive as <Counter>) so
+   it fires consistently whether the stat is above or below the fold. */
 
 function parseStat(value: string) {
   const m = value.match(/^(\D*)([\d,.]+)(.*)$/s);
@@ -31,39 +33,34 @@ export function AnimatedStat({ value, className }: { value: string; className?: 
   const reduce = useReducedMotion();
   const parsed = parseStat(value);
   const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.3 });
   const [display, setDisplay] = useState(parsed ? `${parsed.prefix}0${parsed.suffix}` : value);
   const ran = useRef(false);
 
   useEffect(() => {
+    // No numeric part, or reduced-motion → just show the final value.
     if (!parsed || reduce) {
       setDisplay(value);
       return;
     }
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting && !ran.current) {
-            ran.current = true;
-            const duration = 1400;
-            const start = performance.now();
-            const tick = (now: number) => {
-              const t = Math.min(1, (now - start) / duration);
-              const eased = 1 - Math.pow(1 - t, 3);
-              setDisplay(`${parsed.prefix}${format(parsed.num * eased, parsed.decimals, parsed.hadCommas)}${parsed.suffix}`);
-              if (t < 1) requestAnimationFrame(tick);
-              else setDisplay(`${parsed.prefix}${format(parsed.num, parsed.decimals, parsed.hadCommas)}${parsed.suffix}`);
-            };
-            requestAnimationFrame(tick);
-          }
-        }
-      },
-      { threshold: 0.4 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [parsed, reduce, value]);
+    if (!inView || ran.current) return;
+    ran.current = true;
 
-  return <span ref={ref} className={className}>{display}</span>;
+    const duration = 1400;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+      setDisplay(`${parsed.prefix}${format(parsed.num * eased, parsed.decimals, parsed.hadCommas)}${parsed.suffix}`);
+      if (t < 1) requestAnimationFrame(tick);
+      else setDisplay(`${parsed.prefix}${format(parsed.num, parsed.decimals, parsed.hadCommas)}${parsed.suffix}`);
+    };
+    requestAnimationFrame(tick);
+  }, [inView, parsed, reduce, value]);
+
+  return (
+    <span ref={ref} className={className}>
+      {display}
+    </span>
+  );
 }

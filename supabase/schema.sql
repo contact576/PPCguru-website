@@ -53,6 +53,27 @@ create table if not exists public.leads (
 
 create index if not exists leads_created_idx on public.leads (created_at desc);
 
+-- ── Visitor / interaction events (first-party analytics; see /api/track) ─────
+create table if not exists public.visitor_events (
+  id          uuid primary key default gen_random_uuid(),
+  session_id  text,
+  event       text not null,
+  path        text,
+  referrer    text,
+  target      text,
+  utm         jsonb,
+  ip          text,          -- stored only when the visitor accepted cookies
+  country     text,
+  region      text,
+  city        text,
+  ua          text,
+  lead_id     uuid references public.leads(id) on delete set null,
+  created_at  timestamptz not null default now()
+);
+
+create index if not exists visitor_events_session_idx on public.visitor_events (session_id, created_at desc);
+create index if not exists visitor_events_created_idx on public.visitor_events (created_at desc);
+
 -- ── CMS settings (single-row JSON blob, edited at /admin/settings) ───────────
 create table if not exists public.app_settings (
   id         int primary key default 1,
@@ -67,8 +88,9 @@ create table if not exists public.app_settings (
 -- for published posts in case you later read from the browser with the anon key.
 alter table public.posts enable row level security;
 alter table public.leads enable row level security;
--- No anon policies on app_settings → only the service role can read/write it.
+-- No anon policies on app_settings / visitor_events → only the service role reads/writes.
 alter table public.app_settings enable row level security;
+alter table public.visitor_events enable row level security;
 
 drop policy if exists "public can read published posts" on public.posts;
 create policy "public can read published posts"

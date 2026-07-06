@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { FloatingCta } from "@/components/shared/floating-cta";
 import { OfferPopup } from "@/components/shared/offer-popup";
 import { CookieConsent } from "@/components/shared/cookie-consent";
+import { VisitorTracker } from "@/components/analytics/tracker";
 import { CursorGlow } from "@/components/ui/interactive";
 import { OrganizationJsonLd } from "@/components/seo/json-ld";
 import { ChromeGate } from "@/components/layout/chrome-gate";
@@ -92,6 +93,7 @@ export default function RootLayout({
           </ChromeGate>
           <OfferPopup />
           <CookieConsent />
+          <VisitorTracker />
           {/*
             PRE-LAUNCH VERIFICATION CHECKLIST (search the codebase for "[VERIFY]"):
             [ ] Real phone number + WhatsApp (siteConfig.contact) — currently blank, shows "Book a call"
