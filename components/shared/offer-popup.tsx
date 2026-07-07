@@ -11,8 +11,10 @@ import { offerForPath, masterOffer } from "@/lib/data/service-offers";
 // `/admin` is included so the CMS is never interrupted by the offer popup.
 const SUPPRESS_ON = ["/contact", "/results", "/tools", "/admin"];
 const K_DONE = "ppcg_offer_done";
-const seen = (k: string) => { try { return !!localStorage.getItem(k); } catch { return false; } };
-const mark = (k: string) => { try { localStorage.setItem(k, "1"); } catch { /* ignore */ } };
+// Suppression is SESSION-scoped: once shown/dismissed it stays quiet for the rest
+// of this visit, but a returning visitor on a new session sees the offer again.
+const seen = (k: string) => { try { return !!sessionStorage.getItem(k); } catch { return false; } };
+const mark = (k: string) => { try { sessionStorage.setItem(k, "1"); } catch { /* ignore */ } };
 
 /**
  * Page-aware lead-capture popup. Picks the offer matching the current route

@@ -22,6 +22,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -30,11 +31,18 @@ export function SiteHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  useEffect(() => setOpen(false), [pathname]);
+  // Close every menu on route change. Soft navigation keeps the header mounted,
+  // so the clicked link would otherwise retain focus/hover and leave the dropdown open.
+  useEffect(() => {
+    setOpen(false);
+    setOpenMenu(null);
+    (document.activeElement as HTMLElement | null)?.blur();
+  }, [pathname]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOpen(false);
+        setOpenMenu(null);
         (document.activeElement as HTMLElement | null)?.blur();
       }
     };
@@ -67,21 +75,31 @@ export function SiteHeader() {
                 </Link>
               );
             }
+            const menuOpen = openMenu === item.label;
             return (
-              <div key={item.label} className="group relative" style={{ display: "inline-flex" }}>
+              <div
+                key={item.label}
+                className="relative"
+                style={{ display: "inline-flex" }}
+                onMouseEnter={() => setOpenMenu(item.label)}
+                onMouseLeave={() => setOpenMenu(null)}
+                onFocus={() => setOpenMenu(item.label)}
+                onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpenMenu(null); }}
+              >
                 <Link
                   href={item.href}
                   aria-haspopup="true"
-                  className="nav-underline transition-colors hover:text-[#6f7d22] group-focus-within:text-[#6f7d22]"
-                  style={{ color, padding: "10px 12px", borderRadius: 10, display: "inline-flex", alignItems: "center", gap: 5 }}
+                  aria-expanded={menuOpen}
+                  className="nav-underline transition-colors hover:text-[#6f7d22]"
+                  style={{ color: menuOpen ? "#6f7d22" : color, padding: "10px 12px", borderRadius: 10, display: "inline-flex", alignItems: "center", gap: 5 }}
                 >
                   {item.label}
-                  <ChevronDown size={13} className="transition-transform group-hover:rotate-180 group-focus-within:rotate-180" />
+                  <ChevronDown size={13} className="transition-transform" style={{ transform: menuOpen ? "rotate(180deg)" : "none" }} />
                 </Link>
-                {/* Dropdown: shown on hover or keyboard focus within the group */}
+                {/* Dropdown: visibility is React-state controlled so a route change can close it. */}
                 <div
-                  className="invisible translate-y-1 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
-                  style={{ position: "absolute", top: "100%", left: 0, paddingTop: 8, minWidth: 248 }}
+                  className="transition-all duration-200"
+                  style={{ position: "absolute", top: "100%", left: 0, paddingTop: 8, minWidth: 248, visibility: menuOpen ? "visible" : "hidden", opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(4px)", pointerEvents: menuOpen ? "auto" : "none" }}
                 >
                   <div style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 16, padding: 8, boxShadow: "0 18px 50px rgba(20,23,14,.12)" }}>
                     {item.children.map((c) =>
