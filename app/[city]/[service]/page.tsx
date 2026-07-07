@@ -14,6 +14,7 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { ServiceProof } from "@/components/sections/service-proof";
 import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
+import { TrustBadgeBar, ServiceIntro } from "@/components/sections/service-aeo";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
@@ -60,9 +61,12 @@ export default async function LocationServicePage({ params }: { params: Promise<
     description: `${s.name} for ${c.name} service businesses.`,
     areaServed: { "@type": "City", name: c.name },
     url: `${siteConfig.url}/${city}/${service}`,
+    // priceRange intentionally omitted — we publish no prices, so an invented range would over-claim.
+    address: { "@type": "PostalAddress", addressLocality: c.name, addressRegion: c.region, addressCountry: "CA" },
     ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phone } : {}),
     parentOrganization: { "@id": `${siteConfig.url}/#organization` },
   };
+  const cityDef = `${s.name} in ${c.name} means running ${s.name.toLowerCase()} campaigns built specifically for the ${c.name}, ${c.region} market. ${siteConfig.name} is a Google Partner and Meta Business Partner serving ${c.name} service businesses across ${c.region} and Canada — engineering ${s.name.toLowerCase()} around booked jobs and local demand, not clicks.`;
 
   const otherCities = cities.filter((x) => x.slug !== city).slice(0, 6);
 
@@ -83,6 +87,9 @@ export default async function LocationServicePage({ params }: { params: Promise<
           <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free {c.name} audit <ArrowRight size={18} /></Button>
         </Magnetic>
       </PageHero>
+
+      <TrustBadgeBar />
+      <ServiceIntro name={`${s.name} in ${c.name}`} definition={cityDef} heading={`What is ${s.name} in ${c.name}?`} />
 
       <Section>
         <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">

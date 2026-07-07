@@ -13,6 +13,14 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { accentVarsFor } from "@/lib/data/themes";
+import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable } from "@/components/sections/service-aeo";
+import { getServiceContent } from "@/lib/data/service-content";
+import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
+import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
+import { HeroOffer } from "@/components/shared/hero-offer";
+import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { getServiceOffer, genericOffer } from "@/lib/data/service-offers";
+import { StatCounter } from "@/components/ui/stat-counter";
 
 const ACCENT = "#2f6db0";
 const INK = "#14170e";
@@ -26,9 +34,15 @@ const ANATOMY = [
 /** BESPOKE flagship layout for the Google Ads service — an "anatomy of a rebuilt
  *  account", audit-first design distinct from the generic service template. */
 export function GoogleAdsFlagship({ service }: { service: Service }) {
+  const content = getServiceContent("google-ads");
+  const offer = getServiceOffer("google-ads") ?? genericOffer;
+  const siRows = industriesForService("google-ads").flatMap((iSlug) => {
+    const a = getServiceIndustryAngle("google-ads", iSlug);
+    return a ? [{ industrySlug: iSlug, label: serviceIndustryLabel("google-ads", iSlug), href: `/services/google-ads/${iSlug}`, angle: a }] : [];
+  });
   return (
     <div style={accentVarsFor(ACCENT)}>
-      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-24 pb-10 md:pt-28 md:pb-14" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: ACCENT }} />
         <div className="pointer-events-none absolute -right-32 -top-24 h-[440px] w-[440px] rounded-full" style={{ background: `radial-gradient(circle, color-mix(in srgb, ${ACCENT} 22%, transparent), transparent 65%)` }} />
         <div className="container-page relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -43,19 +57,29 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
             </span>
             <h1 className="head mt-5 text-[clamp(2.6rem,5.6vw,4.6rem)]">Google Ads, rebuilt around <span style={{ color: ACCENT }}>booked jobs</span></h1>
             <p className="mt-6 max-w-xl text-lg text-[var(--color-ink-dim)]">{service.hero}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Magnetic><Button href="/contact" size="lg" style={{ background: ACCENT, color: "#fff" }}>Get a free Google Ads audit <ArrowRight size={18} /></Button></Magnetic>
+            <HeroOffer className="mt-7 max-w-xl" badge="30-day free trial" line="Switching agencies? Try our Google Ads management free for 30 days — no contract, no setup fee, no obligation." credit />
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Magnetic>
+                <LeadCtaButton label={<>Start my free trial <ArrowRight size={18} /></>} source="offer:google-ads:flagship-hero" title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className="inline-flex items-center justify-center gap-2 rounded-[14px] px-6 py-3.5 text-[15px] font-bold text-white" style={{ background: ACCENT }} />
+              </Magnetic>
               <Button href="#estimate" variant="outline">Estimate your results</Button>
             </div>
             <div className="mt-9 grid grid-cols-3 gap-3 max-w-md">
               {service.proofStats.map((s) => (
-                <div key={s.label}><div className="head text-[clamp(1.4rem,3vw,1.9rem)]" style={{ color: INK }}>{s.value}</div><div className="mono mt-1 text-[9.5px] uppercase leading-tight tracking-[.04em] text-[var(--color-ink-dim)]">{s.label}</div></div>
+                <div key={s.label}><div className="head text-[clamp(1.4rem,3vw,1.9rem)]" style={{ color: INK }}><StatCounter value={s.value} /></div><div className="mono mt-1 text-[9.5px] uppercase leading-tight tracking-[.04em] text-[var(--color-ink-dim)]">{s.label}</div></div>
               ))}
             </div>
           </div>
           <Reveal className="relative">{service.dashboardMock ? <DashboardMock data={service.dashboardMock} /> : null}</Reveal>
         </div>
       </section>
+
+      <TrustBadgeBar />
+      {content?.definition && <ServiceIntro name="Google Ads management" definition={content.definition} heading={content.definitionHeading} />}
+      <ServiceStatBand slug="google-ads" />
+
+      {/* Revenue calculator — high on the page (strongest hook) */}
+      <EstimateBand platform="google-search" title={<>See how much revenue <span style={{ color: ACCENT }}>Google Ads</span> could make you</>} intro="Pick your industry and monthly budget — we'll model the leads, booked calls and revenue your Google Ads could produce, using real benchmarks and your average ticket." />
 
       {/* Anatomy of a rebuilt account (bespoke) */}
       <Section>
@@ -83,9 +107,15 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
       {service.toolStack && <ToolStack groups={service.toolStack} />}
 
       <ServiceProof serviceName={service.name} proofStats={service.proofStats} caseStudySlugs={service.caseStudySlugs} />
-      <EstimateBand platform="google-search" title={<>Estimate your <span style={{ color: ACCENT }}>Google Ads</span> potential</>} intro="Pick your industry and budget — we'll model the leads, booked calls and revenue your Google Ads could produce." />
       <LeadBand source="flagship:google-ads" title="Get a free Google Ads audit" />
-      <FaqAccordion faqs={service.faqs} title="Google Ads Management — questions" />
+      {siRows.length > 0 && (
+        <Section>
+          <SectionHeading align="left" eyebrow="Industry playbooks" title={<>Google Ads for <span style={{ color: ACCENT }}>your industry</span></>} intro="Tap an industry to see how we run Google Ads for it — what good looks like, best practices, typical benchmarks and what to expect." />
+          <ServiceIndustryAccordion rows={siRows} />
+        </Section>
+      )}
+      {content?.comparison && <ComparisonTable rows={content.comparison} serviceName="Google Ads management" />}
+      <FaqAccordion faqs={content?.faqs ?? service.faqs} title="Google Ads Management — questions" />
       <CtaBlock />
     </div>
   );

@@ -53,7 +53,7 @@ export function PageHero({
     : undefined;
   return (
     <section
-      className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-base)] pt-32 pb-16 md:pt-40 md:pb-20"
+      className="relative overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-base)] pt-24 pb-10 md:pt-28 md:pb-14"
       style={heroBg ? { background: heroBg } : undefined}
     >
       {accent ? <div className="pointer-events-none absolute inset-x-0 top-0 h-[4px]" style={{ background: accent }} /> : null}

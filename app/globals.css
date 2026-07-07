@@ -21,7 +21,7 @@
   /* Text — near-black olive hierarchy */
   --color-ink: #14170e;
   --color-ink-dim: #54564a;
-  --color-ink-faint: #83856f;
+  --color-ink-faint: #6c6e5a;    /* darkened for WCAG-AA contrast on cream (~4.6:1) */
 
   /* Brand accent — olive green for accent TEXT (readable on cream); lime for
      fills. Legacy violet/cyan names remapped to olive so old classes stay on-brand. */
@@ -331,6 +331,13 @@
   98% { transform: rotate(-1deg); }
 }
 @media (prefers-reduced-motion: reduce) { .ppc-shake { animation: none !important; } }
+
+/* Reusable hover-lift for inline-styled cards (homepage grids) — reactive feel. */
+.hoverlift { transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease; }
+@media (hover: hover) and (pointer: fine) {
+  .hoverlift:hover { transform: translateY(-4px); box-shadow: 0 20px 44px rgba(20,23,14,.12); border-color: #14170e !important; }
+}
+@media (prefers-reduced-motion: reduce) { .hoverlift:hover { transform: none; } }
 
 .mq { display: inline-flex; white-space: nowrap; animation: ppcMarquee 28s linear infinite; }
 .mq-rev { animation-direction: reverse; }

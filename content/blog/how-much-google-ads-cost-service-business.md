@@ -3,7 +3,7 @@ title: "How Much Do Google Ads Cost for a Service Business in 2026?"
 description: "A plain-English breakdown of what Google Ads really cost a Toronto and GTA service business in 2026 - CPC, budgets, cost per lead, and what drives the bill."
 date: "2026-06-12"
 category: "Google Ads"
-author: "PPC Guru"
+author: "Jaydeep Patel"  # [VERIFY-client] confirm real byline
 ---
 
 If you run a physiotherapy clinic in Mississauga or an HVAC company in Brampton, you have probably asked the same question every owner asks before they hit "publish" on a campaign: how much is this actually going to cost me?

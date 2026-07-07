@@ -3,7 +3,7 @@ title: "The Local SEO Checklist for GTA Service Businesses (2026)"
 description: "A practical local SEO checklist for Toronto and GTA service businesses - Google Business Profile, reviews, citations, and on-page fixes that win local leads."
 date: "2026-04-22"
 category: "SEO"
-author: "PPC Guru"
+author: "Jaydeep Patel"  # [VERIFY-client] confirm real byline
 ---
 
 Ads bring leads the day you turn them on. Local SEO brings leads for years after the work is done - but only if you do the right work. For a GTA service business, "the right work" is far more specific than "write blog posts and hope."

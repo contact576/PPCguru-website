@@ -50,12 +50,17 @@ export function SiteFooter() {
           </div>
 
           <FCol title="Services" links={[
+            { label: "Free audit + 30-day trial", href: "/free-audit" },
             { label: "Google Ads Management", href: "/services/google-ads" },
             { label: "Meta Ads", href: "/services/meta-ads" },
             { label: "SEO & Local Search", href: "/services/seo" },
             { label: "Creative Production", href: "/services/creative" },
             { label: "Websites & Landing Pages", href: "/services/web-design" },
             { label: "CRM & Marketing Ops", href: "/services/crm" },
+            { label: "Industry benchmarks", href: "/benchmarks" },
+            { label: "Pricing", href: "/pricing" },
+            { label: "Compare guides", href: "/compare" },
+            { label: "Marketing glossary", href: "/glossary" },
           ]} />
           <FCol title="Industries" links={[
             { label: "Physiotherapy", href: "/industries/physiotherapy" },
