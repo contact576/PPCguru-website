@@ -14,7 +14,6 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { accentVarsFor } from "@/lib/data/themes";
 import { TrustBadgeBar, ServiceIntro, ServiceStatBand, ComparisonTable } from "@/components/sections/service-aeo";
-import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
 import { getServiceContent } from "@/lib/data/service-content";
 import { ServiceIndustryAccordion } from "@/components/sections/service-industry-accordion";
 import { industriesForService, getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
@@ -76,10 +75,6 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
       </section>
 
       <TrustBadgeBar />
-      <div className="container-page flex flex-col items-center gap-6 pt-8">
-        <ReviewRating />
-        <AwardsStrip />
-      </div>
       {content?.definition && <ServiceIntro name="Google Ads management" definition={content.definition} heading={content.definitionHeading} />}
       <ServiceStatBand slug="google-ads" />
 

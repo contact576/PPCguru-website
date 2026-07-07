@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Star, BadgeCheck, Award } from "lucide-react";
+import { Star, BadgeCheck } from "lucide-react";
 import { aggregateReview, earnedAwards, reviewSources, type Award as AwardType } from "@/lib/data/reviews";
+import { PlatformLogo } from "@/components/brand/platform-logo";
 
 /* ------------------------------------------------------------------ *
  * ReviewRating — verified client star-rating widget.
@@ -71,29 +72,27 @@ export function ReviewRating({ align = "center", className = "" }: { align?: "ce
  * Renders only genuinely-earned credentials (lib/data/reviews.ts). Each badge
  * links to its real profile when a url is present. No fabricated badges.
  * ------------------------------------------------------------------ */
-function awardIcon(name: string) {
-  if (name.includes("Partner") || name.includes("Semrush")) return BadgeCheck;
-  if (name.includes("Google Business")) return Star;
-  return Award;
-}
-
 function BadgePill({ award }: { award: AwardType }) {
-  const Icon = awardIcon(award.name);
+  const mark = award.logoSrc ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={award.logoSrc} alt={award.name} className="h-5 w-auto" />
+  ) : award.brand ? (
+    <PlatformLogo brand={award.brand} />
+  ) : (
+    <span className="text-[13px] font-semibold text-[var(--color-ink)]">{award.name}</span>
+  );
   const inner = (
     <>
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] bg-[var(--color-lime-soft)]">
-        <Icon size={16} className="text-[var(--accent-strong,#5d6b1a)]" />
-      </span>
-      <span className="flex flex-col leading-tight">
-        <span className="text-[13px] font-semibold text-[var(--color-ink)]">{award.name}</span>
-        {award.sub && <span className="mono text-[10px] uppercase tracking-[.08em] text-[var(--color-ink-dim)]">{award.sub}</span>}
-      </span>
+      {mark}
+      {award.sub && (
+        <span className="mono mt-1 text-[9px] uppercase tracking-[.1em] text-[var(--color-ink-dim)]">{award.sub}</span>
+      )}
     </>
   );
   const cls =
-    "inline-flex items-center gap-2.5 rounded-full border border-[var(--color-border-bright)] bg-white px-3.5 py-2 transition-colors hover:border-[var(--color-ink)]";
+    "inline-flex min-w-[112px] flex-col items-center justify-center gap-0 rounded-2xl border border-[var(--color-border-bright)] bg-white px-5 py-3 transition-colors hover:border-[var(--color-ink)]";
   return award.url ? (
-    <a href={award.url} target="_blank" rel="noopener noreferrer nofollow" className={cls}>
+    <a href={award.url} target="_blank" rel="noopener noreferrer nofollow" className={cls} aria-label={award.name}>
       {inner}
     </a>
   ) : (

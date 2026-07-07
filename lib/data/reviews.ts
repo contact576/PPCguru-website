@@ -61,20 +61,29 @@ export type Award = {
   url: string;
   /** Gate — badge renders only when the credential is genuinely earned. */
   earned: boolean;
+  /** Brand slug → renders a brand-coloured wordmark logo (components/brand/platform-logo.tsx). */
+  brand?: "google" | "meta" | "clutch" | "goodfirms" | "designrush" | "upcity";
+  /**
+   * Path to the platform's OFFICIAL badge/logo asset (drop into /public, e.g.
+   * "/badges/clutch.svg"). When set it renders instead of the wordmark. Each of Clutch /
+   * GoodFirms / DesignRush / UpCity provides a real embeddable verified-badge SVG — using it
+   * is the ideal (verifiable + links to your live profile). TODO(client).
+   */
+  logoSrc?: string;
 };
 
 /**
  * Third-party credentials & directory recognitions. Order = display priority.
- * earned:true = client-confirmed real. Add the real `url` for each so the badge links to
- * the live profile (and can feed Organization.sameAs). Keep unearned ones earned:false.
+ * earned:true = client-confirmed real. Add the real `url` (badge links out + feeds
+ * Organization.sameAs) and, ideally, the official `logoSrc`. Keep unearned ones earned:false.
  */
 export const awards: Award[] = [
-  { name: "Google Partner", sub: "Partner program", url: "", earned: true },
-  { name: "Meta Business Partner", sub: "Partner program", url: "", earned: true },
-  { name: "Clutch", sub: "Reviewed agency", url: "", earned: true },
-  { name: "UpCity", sub: "Verified provider", url: "", earned: true },
-  { name: "DesignRush", sub: "Listed agency", url: "", earned: true },
-  { name: "Google Business Profile", sub: "Verified reviews", url: "", earned: true },
+  { name: "Google Partner", sub: "Partner program", url: "", earned: true, brand: "google" },
+  { name: "Meta Business Partner", sub: "Partner program", url: "", earned: true, brand: "meta" },
+  { name: "Clutch", sub: "Reviewed agency", url: "", earned: true, brand: "clutch" },
+  { name: "GoodFirms", sub: "Verified reviews", url: "", earned: true, brand: "goodfirms" },
+  { name: "DesignRush", sub: "Listed agency", url: "", earned: true, brand: "designrush" },
+  { name: "UpCity", sub: "Verified provider", url: "", earned: true, brand: "upcity" },
   // Built but hidden until genuinely earned — flip to true + add url when it is.
   { name: "Semrush Agency Partner", sub: "Certified partner", url: "", earned: false },
 ];
