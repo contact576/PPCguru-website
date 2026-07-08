@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { siteConfig } from "@/lib/site-config";
+import { leadRecipients } from "@/lib/email";
 import { saveLead, hasSupabase } from "@/lib/supabase";
 
 const schema = z.object({
@@ -77,7 +77,7 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   // Deliver via Resend if configured; otherwise log (dev/no-key fallback).
   let emailed = false;
   const resendKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL || siteConfig.contact.email;
+  const to = leadRecipients();
   if (resendKey) {
     try {
       const { Resend } = await import("resend");

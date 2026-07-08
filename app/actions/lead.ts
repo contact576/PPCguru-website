@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { siteConfig } from "@/lib/site-config";
+import { leadRecipients } from "@/lib/email";
 import { saveLead, hasSupabase } from "@/lib/supabase";
 
 /**
@@ -56,7 +56,7 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
 
   let emailed = false;
   const resendKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL || siteConfig.contact.email;
+  const to = leadRecipients();
   if (resendKey) {
     try {
       const { Resend } = await import("resend");
