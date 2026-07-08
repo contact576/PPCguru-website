@@ -15,12 +15,21 @@ export const offers = {
   },
   /** Step 2 — bottom-right slide-in, armed after the modal is dismissed. */
   credit: {
-    eyebrow: "Limited offer",
-    title: "$600 in free Google Ads credit",
+    eyebrow: "Google Partner offer",
+    title: "Up to $3,600 in Google Ads credit",
     body:
-      "Start a managed campaign with us and we'll set up your $600 Google Ads credit — plus a free account audit to make sure every dollar works.",
-    cta: "Claim $600 credit",
-    fine: "Eligibility set by Google. We'll confirm details on your audit call.",
+      "As a Google Partner, we can set up to $3,600 in Google Ads credit for eligible new accounts — plus a free account audit to make sure every dollar works.",
+    cta: "Claim my Google Ads credit",
+    fine: "Eligibility and credit amount set by Google. We confirm details on your audit call.",
+  },
+  /** Flagship — the 30-day free trial (Google/Meta ad management). */
+  trial: {
+    eyebrow: "30-day free trial",
+    title: "Try our ad management free for 30 days",
+    body:
+      "Switching agencies or not happy with your results? We'll run your Google or Meta ads for 30 days free — no contract, no setup fee, no upfront payment. Continue only if you're happy with the leads.",
+    cta: "Start my 30-day free trial",
+    fine: "Trial covers management; ad spend is billed by the platform. No obligation — walk away anytime.",
   },
 } as const;
 

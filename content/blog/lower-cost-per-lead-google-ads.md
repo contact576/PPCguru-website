@@ -3,7 +3,7 @@ title: "How to Lower Your Cost Per Lead in Google Ads (Without Cutting Spend)"
 description: "Practical ways GTA service businesses cut wasted Google Ads spend and lower cost per lead - negatives, match types, tracking, and landing page fixes that work."
 date: "2026-05-28"
 category: "Google Ads"
-author: "PPC Guru"
+author: "Jaydeep Patel"  # [VERIFY-client] confirm real byline
 ---
 
 Most service businesses think the way to lower their cost per lead is to spend less. It almost never works. Cutting spend usually just gives you fewer leads at the same bad price.

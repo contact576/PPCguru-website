@@ -25,6 +25,10 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { TrustBadgeBar, ServiceIntro, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
+import { BigQuote } from "@/components/ui/layout";
+import { getIndustryContent } from "@/lib/data/industry-content";
+import { getServiceIndustryAngle, serviceIndustryLabel } from "@/lib/data/service-industry";
 
 const INDUSTRY_ICONS: Record<string, LucideIcon> = {
   physiotherapy: Activity,
@@ -52,7 +56,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const ind = getIndustry(slug);
   if (!ind) return {};
-  return buildMetadata({ title: `${ind.name} Marketing`, description: ind.description, path: `/industries/${slug}` });
+  return buildMetadata({ title: `${ind.name} Marketing in the GTA & Canada`, description: ind.description, path: `/industries/${slug}` });
 }
 
 export default async function IndustryPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -62,6 +66,10 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
 
   const relatedServices = ind.services.map(getService).filter(Boolean);
   const cases = caseStudiesByIndustry(slug);
+  const intro = getIndustryContent(slug);
+  const comboLinks = ind.services
+    .filter((sv) => getServiceIndustryAngle(sv, slug))
+    .map((sv) => ({ href: `/services/${sv}/${slug}`, label: serviceIndustryLabel(sv, slug) }));
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Industries", path: "/industries" },
@@ -80,6 +88,10 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
           <Button href="/contact" size="lg" className="bg-[var(--accent)] text-white hover:bg-[var(--accent-strong)]">Get a free audit <ArrowRight size={18} /></Button>
         </Magnetic>
       </PageHero>
+
+      {/* Trust strip + answer-first definition (AEO / E-E-A-T) */}
+      <TrustBadgeBar />
+      {intro?.definition && <ServiceIntro name={ind.name} definition={intro.definition} heading={intro.definitionHeading} />}
 
       {/* Pain points → approach */}
       <Section>
@@ -112,6 +124,20 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
       {/* Industry reality + benchmarks */}
       <IndustryReality name={ind.name} reality={ind.reality} benchmarks={ind.benchmarks} />
 
+      {/* Editorial break — vertical expertise */}
+      <BigQuote variant="tint" attribution={`Why ${ind.name.toLowerCase()} is different`}>
+        A generic agency runs the same playbook for a plumber and a law firm.{" "}
+        {ind.name} customers search, compare and book differently — and that difference is exactly
+        where the budget is won or lost.
+      </BigQuote>
+
+      {/* Revenue calculator — high on the page (strongest hook) */}
+      <EstimateBand
+        defaultIndustry={ind.calculatorIndustrySlug ?? ind.slug}
+        title={<>See how much revenue your <span className="text-gradient">{ind.name.split(" ")[0].toLowerCase()}</span> budget could make</>}
+        intro={`Model the leads, booked calls and revenue your ${ind.name.toLowerCase()} marketing budget could produce — by platform, with real benchmarks.`}
+      />
+
       {/* Related services */}
       <Section className="bg-[var(--color-base-2)]">
         <SectionHeading align="left" eyebrow="Services" title={`What we run for ${ind.name.toLowerCase()}`} />
@@ -134,6 +160,18 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
         </div>
       </Section>
 
+      {/* Service-for-industry playbooks — reciprocal links into the combo pages */}
+      {comboLinks.length > 0 && (
+        <Section className="!pt-0">
+          <SectionHeading align="left" eyebrow="Playbooks" title={<>How we run each service for <span className="text-gradient">{ind.name.toLowerCase()}</span></>} />
+          <div className="mt-8 flex flex-wrap gap-3">
+            {comboLinks.map((c) => (
+              <Link key={c.href} href={c.href} className="mono rounded-full border border-[var(--accent-line)] bg-[var(--accent-tint)] px-5 py-2.5 text-xs font-semibold uppercase tracking-[.05em] text-[var(--accent-strong)] transition-colors hover:border-[var(--accent)]">{c.label} →</Link>
+            ))}
+          </div>
+        </Section>
+      )}
+
       {/* Per-channel playbook */}
       {ind.playbook && <IndustryPlaybook name={ind.name} playbook={ind.playbook} />}
 
@@ -146,15 +184,13 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
       {cases.length > 0 && <CaseStudyCards items={cases} heading />}
 
       {/* Per-industry calculator */}
-      <EstimateBand
-        defaultIndustry={ind.calculatorIndustrySlug ?? ind.slug}
-        title={<>Estimate your <span className="text-gradient">{ind.name.split(" ")[0].toLowerCase()}</span> potential</>}
-        intro={`Model the leads, booked calls and revenue your ${ind.name.toLowerCase()} marketing budget could produce — by platform, with real benchmarks.`}
-      />
+
+      <CityCallout serviceName={`${ind.name} marketing`} />
 
       <LeadBand source={`industry:${ind.slug}`} title={`Grow your ${ind.name.split(" ")[0].toLowerCase()} business`} />
 
-      <FaqAccordion faqs={ind.faqs} title={`${ind.name} — questions`} />
+      <FaqAccordion faqs={intro?.faqs ?? ind.faqs} title={`${ind.name} — questions`} />
+      <LastReviewed />
       <CtaBlock title={`Ready to grow your ${ind.name.toLowerCase()} business?`} />
     </div>
   );

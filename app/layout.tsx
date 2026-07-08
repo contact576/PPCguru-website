@@ -9,8 +9,10 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { FloatingCta } from "@/components/shared/floating-cta";
 import { OfferPopup } from "@/components/shared/offer-popup";
 import { CookieConsent } from "@/components/shared/cookie-consent";
+import { VisitorTracker } from "@/components/analytics/tracker";
 import { CursorGlow } from "@/components/ui/interactive";
-import { OrganizationJsonLd } from "@/components/seo/json-ld";
+import { SiteGraphJsonLd } from "@/components/seo/json-ld";
+import { ChromeGate } from "@/components/layout/chrome-gate";
 
 // Display + body workhorse — Archivo (the design's primary grotesk).
 const archivo = Archivo({
@@ -75,18 +77,24 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${dmSerif.variable} ${jetbrains.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${archivo.variable} ${dmSerif.variable} ${jetbrains.variable}`}>
       <body className="min-h-screen antialiased">
-        <OrganizationJsonLd />
+        <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-[var(--color-ink)] focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-[var(--color-lime)]">Skip to content</a>
+        <SiteGraphJsonLd />
         <CursorGlow />
         <SmoothScrollProvider>
-          <AnnouncementBar />
-          <SiteHeader />
+          <ChromeGate>
+            <AnnouncementBar />
+            <SiteHeader />
+          </ChromeGate>
           <main id="main">{children}</main>
-          <SiteFooter />
-          <FloatingCta />
+          <ChromeGate>
+            <SiteFooter />
+            <FloatingCta />
+          </ChromeGate>
           <OfferPopup />
           <CookieConsent />
+          <VisitorTracker />
           {/*
             PRE-LAUNCH VERIFICATION CHECKLIST (search the codebase for "[VERIFY]"):
             [ ] Real phone number + WhatsApp (siteConfig.contact) — currently blank, shows "Book a call"

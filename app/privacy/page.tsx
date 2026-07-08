@@ -11,11 +11,14 @@ export const metadata: Metadata = buildMetadata({
 
 export default function PrivacyPage() {
   return (
-    <LegalLayout title="Privacy Policy" updated="June 2026">
-      <p>{siteConfig.name} (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) respects your privacy and is committed to protecting your personal information in accordance with Canada&apos;s Personal Information Protection and Electronic Documents Act (PIPEDA) and applicable provincial privacy laws. This policy explains what we collect, why, and your choices.</p>
+    <LegalLayout title="Privacy Policy" updated="July 2026">
+      <p>{siteConfig.name} (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) respects your privacy and is committed to protecting your personal information in accordance with Canada&apos;s Personal Information Protection and Electronic Documents Act (PIPEDA), Canada&apos;s Anti-Spam Legislation (CASL) and applicable provincial privacy laws. This policy explains what we collect, why, and your choices.</p>
 
       <h2>Information we collect</h2>
-      <p>We collect information you provide directly — such as your name, email, phone number, business name and the details you include in our contact or audit forms. We also collect limited technical information automatically, such as your IP address, device and browser type, and how you interact with our site, through privacy-respecting analytics and cookies.</p>
+      <p>We collect information you provide directly — such as your name, email, phone number, business name and the details you include in our contact or audit forms. We also collect limited technical information automatically, such as your IP address, device and browser type, approximate location (city/region derived from your IP), and how you interact with our site, through first-party analytics and cookies.</p>
+
+      <h2>Website analytics &amp; interaction events</h2>
+      <p>We operate our own first-party analytics. When you accept cookies, we record page views and interactions (such as which buttons or links you click), along with a randomly generated, anonymous site identifier and — for context — your IP address, approximate location and browser. We use this only to understand how our site is used, improve it, and follow up on enquiries you send us. If you decline the cookie notice, we do not record this activity. We do <strong>not</strong> attempt to identify your personal email address or phone number from your IP address, and we do not buy or use third-party &quot;visitor de-anonymization&quot; data to do so.</p>
 
       <h2>How we use your information</h2>
       <ul>
@@ -28,7 +31,10 @@ export default function PrivacyPage() {
       <h2>Legal basis &amp; consent</h2>
       <p>We collect and use your personal information with your consent, which you provide by submitting a form or otherwise contacting us. You may withdraw consent at any time, subject to legal or contractual restrictions, by contacting us using the details below.</p>
 
-      <h2>Cookies &amp; analytics</h2>
+      <h2>Marketing communications (CASL)</h2>
+      <p>If we send you commercial electronic messages, we do so in accordance with CASL — with your consent, with a clear identification of who we are, and with an unsubscribe option in every message. You can opt out of marketing emails at any time using the unsubscribe link or by contacting us.</p>
+
+      <h2 id="cookies">Cookies &amp; analytics</h2>
       <p>We use cookies and similar technologies to operate the site and measure performance. You can control cookies through your browser settings. Where we run advertising pixels (e.g. Google or Meta), they may set cookies to measure ad performance; you can opt out via your ad-platform and browser settings.</p>
 
       <h2>Sharing your information</h2>

@@ -1,7 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { siteConfig } from "@/lib/site-config";
+import { leadRecipients } from "@/lib/email";
+import { saveLead, hasSupabase } from "@/lib/supabase";
 
 const schema = z.object({
   name: z.string().min(2, "Please enter your name.").max(100),
@@ -24,7 +25,11 @@ export type ContactState = {
 
 async function verifyTurnstile(token?: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true; // not configured → skip
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  // Enforce only when BOTH keys are present. If the secret is set but the public
+  // site key is missing, the widget never renders (no token is ever produced) —
+  // requiring a token then would block every legitimate submission.
+  if (!secret || !siteKey) return true;
   if (!token) return false;
   try {
     const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
@@ -57,9 +62,22 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     return { ok: false, message: "Spam check failed. Please try again." };
   }
 
+  // Persist to Supabase first (best-effort) so a request is never lost.
+  const stored = await saveLead({
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    company: data.company,
+    source: "contact",
+    budget: data.budget,
+    service: data.service,
+    message: data.message,
+  });
+
   // Deliver via Resend if configured; otherwise log (dev/no-key fallback).
+  let emailed = false;
   const resendKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL || siteConfig.contact.email;
+  const to = leadRecipients();
   if (resendKey) {
     try {
       const { Resend } = await import("resend");
@@ -80,11 +98,19 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
           data.message,
         ].join("\n"),
       });
+      emailed = true;
     } catch {
-      return { ok: false, message: "We couldn't send your message right now. Please email us directly." };
+      // Email delivery failed — the Supabase row (if any) is still the safety net.
     }
-  } else {
-    console.info("[contact] (no RESEND_API_KEY) submission:", { ...data, turnstileToken: undefined });
+  }
+
+  // If a delivery channel is configured but nothing got through, don't pretend it worked.
+  const anyConfigured = Boolean(resendKey) || hasSupabase();
+  if (anyConfigured && !emailed && !stored) {
+    return { ok: false, message: "We couldn't send your message right now. Please email us directly." };
+  }
+  if (!emailed && !stored) {
+    console.info("[contact] (no RESEND_API_KEY / no Supabase) submission:", { ...data, turnstileToken: undefined });
   }
 
   return { ok: true, message: "Thanks — we've received your request and will be in touch within one business day." };

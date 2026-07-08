@@ -19,6 +19,16 @@ export function RevealInit() {
       return;
     }
 
+    // Stagger: cards that share a parent cascade in (capped so long grids don't drag).
+    const indexInParent = new Map<Element, number>();
+    els.forEach((el) => {
+      const parent = el.parentElement;
+      if (!parent) return;
+      const i = indexInParent.get(parent) ?? 0;
+      indexInParent.set(parent, i + 1);
+      el.style.setProperty("--reveal-delay", `${Math.min(i, 6) * 80}ms`);
+    });
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -32,8 +42,19 @@ export function RevealInit() {
     );
     els.forEach((el) => io.observe(el));
 
-    // Safety net: ensure nothing stays hidden if the observer misses anything.
-    const fallback = window.setTimeout(() => els.forEach((el) => el.classList.add("in")), 2500);
+    // Safety net: only reveal elements that are ALREADY on screen at first paint
+    // (in case the observer is slow to fire). Off-screen cards are left to the
+    // observer so they still animate in as the user scrolls to them.
+    const fallback = window.setTimeout(() => {
+      els.forEach((el) => {
+        if (el.classList.contains("in")) return;
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) {
+          el.classList.add("in");
+          io.unobserve(el);
+        }
+      });
+    }, 1200);
 
     return () => {
       io.disconnect();

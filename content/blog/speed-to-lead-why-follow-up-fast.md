@@ -3,7 +3,7 @@ title: "Speed to Lead: Why Following Up in Minutes Wins More Jobs"
 description: "The fastest business usually wins the job. Here's why speed to lead matters for GTA service businesses, the benchmark numbers, and how to respond in minutes."
 date: "2026-03-30"
 category: "Lead Generation"
-author: "PPC Guru"
+author: "Dhaval Patel"  # [VERIFY-client] confirm real byline
 ---
 
 You can run the best Google Ads campaign in the GTA and still lose. Not because the leads were bad - because you called them back too late.

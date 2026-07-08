@@ -5,14 +5,37 @@ import { WasteCalculator } from "@/components/home/waste-calculator";
 import { FaqList } from "@/components/home/faq-list";
 import { AuditForm } from "@/components/home/audit-form";
 import {
-  tickerLoop, proofItems, proofPoints, sprintWeeks, homeServices, growthLoop, aiTasks, humanTasks,
-  cmpBad, cmpGood, rptDeliverables, rptKpis, homeCases, homeIndustries,
+  tickerLoop, proofItems, proofPoints, sprintWeeks, homeServices, aiTasks, humanTasks,
+  comparisonRows, rptDeliverables, rptKpis, homeCases, homeIndustries,
   homePricing,
 } from "@/lib/data/home";
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { ToolsOs } from "@/components/home/tools-os";
+import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { HeroOffer } from "@/components/shared/hero-offer";
 import { performanceStats } from "@/lib/data/performance-stats";
+import { HeroVectors } from "@/components/shared/hero-vectors";
+import { StatCounter } from "@/components/ui/stat-counter";
+import { ScrollProgress } from "@/components/home/scroll-progress";
+import { ScrollParallax } from "@/components/shared/scroll-parallax";
+import { GsapHeroReveal } from "@/components/home/gsap-hero";
+import { GrowthLoopPinned } from "@/components/home/growth-loop-pinned";
+import { GsapText } from "@/components/shared/gsap-text";
+import { BlogPosts } from "@/components/home/blog-section";
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Google & Meta Ads Agency in the GTA & Canada",
+  description:
+    "PPC Guru is an AI-first Google & Meta Partner agency in the Greater Toronto Area. We audit, rebuild and manage your ads so budget turns into qualified leads, booked jobs and revenue — with a 30-day free trial: no contract, no setup fee.",
+  path: "/",
+});
+
+// ISR: refresh the homepage (incl. the dynamic blog teaser) at most once a minute
+// so newly published posts surface without a redeploy.
+export const revalidate = 60;
 
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
@@ -38,20 +61,14 @@ function Em({ children, color = "#5d6b1a" }: { children: React.ReactNode; color?
 export default function HomePage() {
   return (
     <div style={{ position: "relative", overflowX: "hidden", background: cream }}>
+      <ScrollProgress />
       <RevealInit />
 
       {/* ── HERO ───────────────────────────────────────────────────────────── */}
       <section id="top" style={{ position: "relative", background: cream, overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.5 }} aria-hidden>
-          <g fill="none" stroke={ink} strokeWidth="1" strokeOpacity=".05">
-            <path d="M-50 180 C 200 120, 380 260, 560 200 S 920 90, 1260 220" />
-            <path d="M-50 260 C 220 200, 400 340, 600 280 S 940 170, 1260 300" />
-            <path d="M-50 360 C 240 300, 420 440, 640 380 S 980 270, 1260 400" />
-            <path d="M-50 460 C 260 400, 440 540, 680 480 S 1020 370, 1260 500" />
-            <ellipse cx="600" cy="360" rx="300" ry="180" strokeOpacity=".06" />
-            <ellipse cx="600" cy="360" rx="420" ry="250" strokeOpacity=".05" />
-          </g>
-        </svg>
+        <ScrollParallax speed={20} className="pointer-events-none absolute inset-x-0 -inset-y-[14%]">
+          <HeroVectors variant="feature" animate idSeed="home-hero" />
+        </ScrollParallax>
         <div style={{ position: "absolute", top: -140, right: -100, width: 520, height: 520, background: "radial-gradient(circle,rgba(206,255,58,.1),transparent 65%)" }} />
         {/* kinetic marquee behind */}
         <div style={{ position: "absolute", top: 120, left: 0, right: 0, overflow: "hidden", opacity: 0.16, pointerEvents: "none" }} aria-hidden>
@@ -65,7 +82,7 @@ export default function HomePage() {
         </div>
 
         <div className="mx-auto grid max-w-[1480px] items-center gap-11 px-5 py-[88px] md:px-8 md:py-[96px] lg:grid-cols-[1.05fr_1fr] lg:gap-14" style={{ position: "relative" }}>
-          <div>
+          <GsapHeroReveal>
             <div className="eyebrow" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#4f5f14", border: "1px solid rgba(95,111,23,.4)", padding: "8px 14px", borderRadius: 999, marginBottom: 30 }}>
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: lime, display: "inline-block", boxShadow: `0 0 8px ${lime}` }} />
               GTA&rsquo;s AI-first Google &amp; Meta Partner agency · Canada &amp; USA
@@ -84,21 +101,29 @@ export default function HomePage() {
               We audit, rebuild and manage Google Ads, Meta &amp; SEO so your budget turns into <strong style={{ color: ink, fontWeight: 700 }}>qualified leads, booked jobs and revenue.</strong> Find the leaks before you scale.
             </p>
             <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 34 }}>
-              <Link href="#audit" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Get Free PPC Audit →</Link>
+              <Link href="#audit" className="mono btn-shine transition-transform hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Get Free PPC Audit →</Link>
               <Link href="#calculator" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 26px", borderRadius: 14 }}>Try ROI Calculator</Link>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 40, flexWrap: "wrap" }}>
-              <svg width="46" height="46" viewBox="0 0 48 48" fill="none" aria-hidden style={{ flexShrink: 0 }}>
-                <path d="M10 30 C 6 22, 8 12, 12 8" stroke={ink} strokeWidth="1.5" fill="none" />
-                <path d="M38 30 C 42 22, 40 12, 36 8" stroke={ink} strokeWidth="1.5" fill="none" />
-                <path d="M12 8 L 16 12 M12 8 L 8 12 M36 8 L 40 12 M36 8 L 32 12" stroke={ink} strokeWidth="1.5" />
-                <circle cx="24" cy="22" r="9" stroke={ink} strokeWidth="1.5" fill="none" />
-                <path d="M24 17 L24 22 L28 25" stroke={ink} strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-              <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.7 }}>Google &amp; Meta Partner<br />Performance marketing · GTA</div>
+            <HeroOffer className="mt-7 max-w-lg" badge="30-day free trial" line="Try our Google or Meta ad management free for 30 days — no contract, no setup fee, no obligation." credit />
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 40, flexWrap: "wrap" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+              <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.6 }}>Performance marketing · GTA</div>
             </div>
-          </div>
+          </GsapHeroReveal>
           <HeroDashboard />
+        </div>
+      </section>
+
+      {/* ── TRUST: verified reviews + credentials ──────────────────────────── */}
+      <section style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
+        <div className="mx-auto max-w-[1480px] px-5 py-8 md:px-8 md:py-9">
+          <div data-reveal className="flex flex-col items-center gap-6">
+            <ReviewRating />
+            <AwardsStrip />
+          </div>
         </div>
       </section>
 
@@ -120,7 +145,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-[18px] sm:grid-cols-2">
             {proofItems.map((it) => (
-              <div key={it.title} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28 }}>
+              <div key={it.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28 }}>
                 <div style={{ width: 52, height: 52, borderRadius: 14, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 23, marginBottom: 18 }}>{it.icon}</div>
                 <div className="head" style={{ fontSize: 20, marginBottom: 8 }}>{it.title}</div>
                 <div style={{ fontSize: 14.5, color: "#54564a", lineHeight: 1.55 }}>{it.desc}</div>
@@ -138,7 +163,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-x-8">
               {performanceStats.filter((s) => s.proofType === "agency_aggregate").map((s) => (
                 <div key={s.label} style={{ textAlign: "center" }}>
-                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}>{s.value}</div>
+                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}><StatCounter value={s.value} /></div>
                   <div style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.4, marginTop: 10 }}>{s.label}</div>
                 </div>
               ))}
@@ -150,15 +175,15 @@ export default function HomePage() {
 
       {/* ── 30-DAY SPRINT ──────────────────────────────────────────────────── */}
       <section id="sprint" style={{ background: "#f7f5ea", color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <div style={{ position: "absolute", top: -120, left: -80, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.08),transparent 65%)" }} />
+        <div className="ambient-glow" style={{ position: "absolute", top: -120, left: -80, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.08),transparent 65%)" }} />
         <div className={WRAP} style={{ position: "relative" }}>
           <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.2fr]">
             <div data-reveal>
-              <Eyebrow>⚡ 30-Day PPC Growth Sprint</Eyebrow>
-              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>Try us for <Em>one month</Em> before you commit</h2>
-              <p style={{ fontSize: 17, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 460 }}>A focused 30-day sprint: we audit your account, fix the obvious leaks, and show you a clear plan — so you can judge us on results, not promises.</p>
+              <Eyebrow>⚡ 30-day free trial</Eyebrow>
+              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>Try us <Em>free for a month</Em> before you commit</h2>
+              <p style={{ fontSize: 17, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 460 }}>We run your Google or Meta ads free for 30 days — we audit, fix the leaks and manage the account, so you can judge us on results, not promises. No contract, no setup fee, no obligation.</p>
               <div style={{ display: "flex", gap: 13, flexWrap: "wrap", marginTop: 30 }}>
-                <Link href="#audit" className="mono" style={{ background: lime, color: ink, fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 13 }}>Claim 30-Day Sprint</Link>
+                <Link href="/free-audit" className="mono" style={{ background: lime, color: ink, fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 13 }}>Start my free trial</Link>
                 <Link href="#calculator" className="mono" style={{ background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 24px", borderRadius: 13 }}>Run the free audit</Link>
               </div>
               <p style={{ fontSize: 12.5, color: "#6b6d5c", lineHeight: 1.55, marginTop: 22, maxWidth: 440 }}>Trial does not include ad spend. Final scope depends on account size, campaign history, tracking setup, and monthly budget. Results vary by industry, budget, tracking quality and offer strength.</p>
@@ -212,7 +237,7 @@ export default function HomePage() {
           </div>
           <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
             {homeServices.map((s) => (
-              <div key={s.title} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column" }}>
+              <div key={s.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
                   <span style={{ width: 54, height: 54, borderRadius: 15, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>{s.icon}</span>
                   <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72", letterSpacing: ".08em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "5px 9px", borderRadius: 7 }}>{s.bestFor}</span>
@@ -231,27 +256,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── GROWTH LOOP ────────────────────────────────────────────────────── */}
-      <section id="process" style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -100, right: -60, width: 380, height: 380, background: "radial-gradient(circle,rgba(206,255,58,.07),transparent 65%)" }} />
-        <div className={WRAP} style={{ position: "relative" }}>
-          <div data-reveal style={{ maxWidth: 720, margin: "0 auto 52px", textAlign: "center" }}>
-            <Eyebrow>How it works</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>The Guru <Em>Growth</Em> Loop</h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>A simple, repeatable loop that compounds results month over month — powered by our AI-augmented workflow.</p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {growthLoop.map((l) => (
-              <div key={l.num} data-reveal style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 22, padding: 26 }}>
-                <div className="head" style={{ fontSize: 42, color: "rgba(111,125,34,.3)", marginBottom: 14 }}>{l.num}</div>
-                <div style={{ width: 46, height: 46, borderRadius: 12, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 21, marginBottom: 16 }}>{l.icon}</div>
-                <div className="head" style={{ fontSize: 19, marginBottom: 9 }}>{l.title}</div>
-                <div style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.55 }}>{l.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── GROWTH LOOP (pinned, scroll-scrubbed) ──────────────────────────── */}
+      <GrowthLoopPinned />
 
       {/* ── AI EXECUTION ───────────────────────────────────────────────────── */}
       <section id="ai" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
@@ -259,7 +265,7 @@ export default function HomePage() {
           <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px" }}>
             <Eyebrow>AI-augmented, human-directed</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>AI-augmented execution.<br /><Em>Human-led</Em> strategy.</h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 560 }}>A command center where AI does the heavy lifting and strategists own every decision that touches your budget.</p>
+            <GsapText mode="scrub" style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 560 }}>A command center where AI does the heavy lifting and strategists own every decision that touches your budget.</GsapText>
           </div>
           <div className="grid gap-[18px] lg:grid-cols-2">
             <div data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 24, padding: 28 }}>
@@ -297,23 +303,30 @@ export default function HomePage() {
           <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px", textAlign: "center" }}>
             <Eyebrow>Why PPC Guru</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Typical agency vs <Em>the Guru way</Em></h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>The difference isn&rsquo;t just better bidding — it&rsquo;s transparency, ownership, and optimizing for revenue.</p>
+            <GsapText mode="scrub" style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>The difference isn&rsquo;t just better bidding — it&rsquo;s transparency, ownership, and optimizing for revenue.</GsapText>
           </div>
-          <div className="grid gap-[18px] md:grid-cols-2">
-            <div data-reveal style={{ background: "#fff", border: "1px solid #f0d4c4", borderRadius: 24, padding: 30 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 22 }}><span style={{ width: 40, height: 40, borderRadius: 11, background: "rgba(242,106,43,.16)", color: coral, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>✕</span><span className="head" style={{ fontSize: 19 }}>Typical agency</span></div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {cmpBad.map((b) => <div key={b} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 14.5, color: "#54564a", lineHeight: 1.5 }}><span style={{ color: coral, fontWeight: 700, flexShrink: 0 }}>✕</span>{b}</div>)}
-              </div>
-            </div>
-            <div data-reveal style={{ background: "#eef2dd", border: "1px solid #cfe39a", borderRadius: 24, padding: 30, boxShadow: "0 18px 44px rgba(111,125,34,.12)" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 11, marginBottom: 22 }}><span style={{ width: 40, height: 40, borderRadius: 11, background: lime, color: ink, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>✓</span><span className="head" style={{ fontSize: 19 }}>The PPC Guru way</span></div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {cmpGood.map((g) => <div key={g} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 14.5, color: "#2c2e22", lineHeight: 1.5, fontWeight: 500 }}><span style={{ color: olive, fontWeight: 700, flexShrink: 0 }}>✓</span>{g}</div>)}
-              </div>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 22, paddingTop: 20, borderTop: "1px solid #cfe39a" }}>
-                {["📄 Weekly report", "✅ Tracking checklist", "🔑 Account ownership"].map((c) => <span key={c} className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#4f5f14", border: "1px solid #cfe39a", padding: "6px 10px", borderRadius: 8, letterSpacing: ".05em", textTransform: "uppercase" }}>{c}</span>)}
-              </div>
+          <div data-reveal style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", minWidth: 560, borderCollapse: "separate", borderSpacing: 0, textAlign: "left", borderRadius: 16, overflow: "hidden", border: "1px solid #dddbc9" }}>
+              <caption style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>PPC Guru vs a typical agency, compared</caption>
+              <thead>
+                <tr style={{ background: ink }}>
+                  <th scope="col" className="mono" style={{ padding: "14px 18px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#b8bda6", fontWeight: 700 }}>What matters</th>
+                  <th scope="col" className="mono" style={{ padding: "14px 18px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: lime, fontWeight: 800 }}>The PPC Guru way</th>
+                  <th scope="col" className="mono" style={{ padding: "14px 18px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#9a9b88", fontWeight: 600 }}>Typical agency</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonRows.map((r, i) => (
+                  <tr key={r.dimension} style={{ verticalAlign: "top", background: i % 2 ? "#faf9f0" : "#fff" }}>
+                    <th scope="row" className="head" style={{ padding: "15px 18px", fontSize: 15, color: ink, textAlign: "left", fontWeight: 700, borderTop: "1px solid #ececdd" }}>{r.dimension}</th>
+                    <td style={{ padding: "15px 18px", fontSize: 14, color: ink, fontWeight: 600, background: "rgba(206,255,58,.10)", borderTop: "1px solid #ececdd" }}><span style={{ display: "inline-flex", width: 18, height: 18, marginRight: 8, borderRadius: 999, background: lime, color: ink, alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, verticalAlign: "middle" }}>✓</span>{r.guru}</td>
+                    <td style={{ padding: "15px 18px", fontSize: 13.5, color: "#83856f", borderTop: "1px solid #ececdd" }}><span style={{ color: coral, fontWeight: 700, marginRight: 8 }}>✕</span>{r.typical}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 22 }}>
+              {["📄 Weekly report", "✅ Tracking checklist", "🔑 Account ownership"].map((c) => <span key={c} className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#4f5f14", border: "1px solid #cfe39a", padding: "6px 10px", borderRadius: 8, letterSpacing: ".05em", textTransform: "uppercase" }}>{c}</span>)}
             </div>
           </div>
         </div>
@@ -321,7 +334,7 @@ export default function HomePage() {
 
       {/* ── REPORTING ──────────────────────────────────────────────────────── */}
       <section style={{ background: "#f7f5ea", color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <div style={{ position: "absolute", bottom: -160, left: "8%", width: 480, height: 480, background: "radial-gradient(circle,rgba(206,255,58,.1),transparent 65%)" }} />
+        <div className="ambient-glow" style={{ position: "absolute", bottom: -160, left: "8%", width: 480, height: 480, background: "radial-gradient(circle,rgba(206,255,58,.1),transparent 65%)" }} />
         <div className={WRAP} style={{ position: "relative" }}>
           <div className="grid items-center gap-12 lg:grid-cols-[0.84fr_1.16fr]">
             <div data-reveal>
@@ -341,7 +354,7 @@ export default function HomePage() {
                 {rptKpis.map((k) => (
                   <div key={k.label} style={{ background: "rgba(241,239,227,.04)", border: "1px solid rgba(241,239,227,.08)", borderRadius: 13, padding: 13 }}>
                     <div className="mono" style={{ fontSize: 8.5, color: "#8a8b78", fontWeight: 600, letterSpacing: ".05em", textTransform: "uppercase" }}>{k.label}</div>
-                    <div className="head" style={{ fontSize: 19, marginTop: 4, color: k.c }}>{k.val}</div>
+                    <div className="head" style={{ fontSize: 19, marginTop: 4, color: k.c }}><StatCounter value={k.val} /></div>
                     <div className="mono" style={{ fontSize: 9.5, color: "#9bd227", fontWeight: 600, marginTop: 1 }}>{k.delta}</div>
                   </div>
                 ))}
@@ -372,31 +385,27 @@ export default function HomePage() {
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Results that show up<br />in the <Em>bank account</Em></h2>
             <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 600 }}>Representative engagements showing how we turn spend into booked jobs. Anonymized — individual results vary.</p>
           </div>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3" style={{ marginTop: 40 }}>
+          <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin]" style={{ marginTop: 36 }}>
             {homeCases.map((c) => (
-              <div key={c.industry} data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 26, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-                  <span className="mono" style={{ fontSize: 10, fontWeight: 600, color: ink, background: lime, padding: "5px 10px", borderRadius: 7, letterSpacing: ".05em", textTransform: "uppercase" }}>{c.industry}</span>
-                  <span className="mono" style={{ fontSize: 10, color: "#8a8c72", letterSpacing: ".04em" }}>{c.location}</span>
+              <div key={c.industry} className="w-[236px] shrink-0 snap-start" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 18, padding: 18, display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                  <span className="mono" style={{ fontSize: 9.5, fontWeight: 600, color: ink, background: lime, padding: "4px 9px", borderRadius: 6, letterSpacing: ".04em", textTransform: "uppercase" }}>{c.industry}</span>
+                  <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72" }}>{c.location}</span>
                 </div>
-                <div className="head" style={{ fontSize: 46, color: ink, marginBottom: 6 }}>{c.metric}</div>
-                <div className="mono" style={{ fontSize: 11.5, color: "#54564a", textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 18 }}>{c.metricLabel}</div>
-                <div style={{ marginBottom: 18 }}>
-                  <svg viewBox="0 0 200 44" style={{ width: "100%", height: 46, display: "block" }}>
-                    <line x1="10" y1="42.5" x2="190" y2="42.5" stroke="#dddbc9" strokeWidth="1" />
-                    <rect x="24" y={c.barA} width="60" height={c.barAh} rx="4" fill="#cfcdba" />
-                    <rect x="116" y={c.barB} width="60" height={c.barBh} rx="4" fill="#9bd227" />
-                  </svg>
-                  <div style={{ display: "flex", marginTop: 8 }}>
-                    <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 9, letterSpacing: ".08em", textTransform: "uppercase", color: "#83856f" }}>Before</span>
-                    <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 9, letterSpacing: ".08em", textTransform: "uppercase", color: "#5f6f17", fontWeight: 700 }}>After</span>
-                  </div>
+                <div className="head" style={{ fontSize: 40, color: ink, lineHeight: 1 }}><StatCounter value={c.metric} /></div>
+                <div className="mono" style={{ fontSize: 10.5, color: "#54564a", textTransform: "uppercase", letterSpacing: ".03em", marginTop: 4, marginBottom: 12 }}>{c.metricLabel}</div>
+                <svg viewBox="0 0 200 44" style={{ width: "100%", height: 38, display: "block" }}>
+                  <line x1="10" y1="42.5" x2="190" y2="42.5" stroke="#dddbc9" strokeWidth="1" />
+                  <rect x="24" y={c.barA} width="60" height={c.barAh} rx="4" fill="#cfcdba" />
+                  <rect x="116" y={c.barB} width="60" height={c.barBh} rx="4" fill="#9bd227" />
+                </svg>
+                <div style={{ display: "flex", marginTop: 6 }}>
+                  <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 8.5, letterSpacing: ".08em", textTransform: "uppercase", color: "#83856f" }}>Before</span>
+                  <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 8.5, letterSpacing: ".08em", textTransform: "uppercase", color: "#5f6f17", fontWeight: 700 }}>After</span>
                 </div>
-                <div style={{ fontSize: 13, color: "#54564a", lineHeight: 1.5, marginBottom: 8 }}><strong style={{ color: ink }}>Problem:</strong> {c.problem}</div>
-                <div style={{ fontSize: 13, color: "#54564a", lineHeight: 1.5, marginBottom: 18 }}><strong style={{ color: ink }}>Action:</strong> {c.action}</div>
-                <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid #e3e1d2", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span className="mono" style={{ fontSize: 10, color: "#8a8c72", letterSpacing: ".03em" }}>{c.channel} · {c.timeline}</span>
-                  <Link href={`/results/${c.slug}`} className="mono" style={{ fontSize: 11, fontWeight: 700, color: ink, letterSpacing: ".05em", textTransform: "uppercase" }}>View →</Link>
+                <div style={{ marginTop: "auto", paddingTop: 12, borderTop: "1px solid #e3e1d2", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72" }}>{c.channel}</span>
+                  <Link href={`/results/${c.slug}`} className="mono" style={{ fontSize: 10, fontWeight: 700, color: ink, letterSpacing: ".05em", textTransform: "uppercase" }}>View →</Link>
                 </div>
               </div>
             ))}
@@ -434,7 +443,7 @@ export default function HomePage() {
           </div>
           <div className="grid items-stretch gap-[18px] lg:grid-cols-3">
             {homePricing.map((p) => (
-              <div key={p.name} data-reveal style={{ background: p.dark ? ink : "#fbfaf2", color: p.dark ? cream : ink, border: `1px solid ${p.dark ? ink : "#dddbc9"}`, borderRadius: 24, padding: 32, display: "flex", flexDirection: "column", position: "relative", boxShadow: p.dark ? "0 24px 60px rgba(20,23,14,.25)" : "none" }}>
+              <div key={p.name} data-reveal className="hoverlift" style={{ background: p.dark ? ink : "#fbfaf2", color: p.dark ? cream : ink, border: `1px solid ${p.dark ? ink : "#dddbc9"}`, borderRadius: 24, padding: 32, display: "flex", flexDirection: "column", position: "relative", boxShadow: p.dark ? "0 24px 60px rgba(20,23,14,.25)" : "none" }}>
                 {p.dark && <span className="mono" style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: lime, color: ink, fontSize: 10, fontWeight: 700, padding: "7px 14px", borderRadius: 999, whiteSpace: "nowrap", letterSpacing: ".08em", textTransform: "uppercase" }}>Most popular</span>}
                 <div className="head" style={{ fontSize: 20 }}>{p.name}</div>
                 <div style={{ fontSize: 13, color: p.dark ? "#9a9b88" : "#54564a", marginTop: 7, lineHeight: 1.4 }}>{p.bestFor}</div>
@@ -457,9 +466,25 @@ export default function HomePage() {
             <Eyebrow>In their words</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What working with us <Em>feels like</Em></h2>
             <p style={{ fontSize: 14, color: "#8a8c72", marginTop: 14 }}>Representative of the feedback we hear from clients.</p>
+            <div style={{ marginTop: 22, display: "flex", justifyContent: "center" }}><ReviewRating /></div>
           </div>
         </div>
         <TestimonialCarousel />
+      </section>
+
+      {/* ── FROM THE BLOG (dynamic — latest published posts) ───────────────── */}
+      <section id="blog" style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
+        <div className={WRAP}>
+          <div data-reveal style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 18, marginBottom: 40 }}>
+            <div style={{ maxWidth: 640 }}>
+              <Eyebrow>From the blog</Eyebrow>
+              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Playbooks that <Em>compound</Em></h2>
+              <p style={{ fontSize: 15, color: "#54564a", lineHeight: 1.6, marginTop: 14 }}>Practical guides on paid ads, SEO and lead generation — written by the team running the campaigns.</p>
+            </div>
+            <Link href="/blog" className="mono" style={{ color: olive, fontWeight: 700, fontSize: 12, letterSpacing: ".06em", textTransform: "uppercase", whiteSpace: "nowrap" }}>View all →</Link>
+          </div>
+          <BlogPosts />
+        </div>
       </section>
 
       {/* ── FAQ ────────────────────────────────────────────────────────────── */}
@@ -473,9 +498,34 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── FREE RESOURCES ─────────────────────────────────────────────────── */}
+      <section style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0" }}>
+        <div className="mx-auto max-w-[1080px] px-5 py-16 md:px-8 md:py-20">
+          <div data-reveal style={{ textAlign: "center", marginBottom: 36 }}>
+            <Eyebrow>Free resources</Eyebrow>
+            <h2 className="head" style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)" }}>Useful even if we never <Em>work together</Em></h2>
+          </div>
+          <div data-reveal className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { href: "/tools/google-ads-calculator", t: "ROI calculators", d: "Model leads, cost-per-lead and ROAS by industry and budget." },
+              { href: "/benchmarks", t: "Industry benchmarks", d: "Typical CPC, conversion rate and cost-per-lead for ~35 industries." },
+              { href: "/compare", t: "Compare guides", d: "Google Ads vs Meta, agency vs in-house vs DIY, PPC vs SEO." },
+              { href: "/glossary", t: "Marketing glossary", d: "Every PPC, Meta and SEO term in plain English." },
+              { href: "/pricing", t: "How pricing works", d: "Transparent fee models — your ad spend stays 100% yours." },
+              { href: "/tools/instant-audit", t: "Instant AI audit", d: "On-page and tracking signals for any site in seconds." },
+            ].map((r) => (
+              <Link key={r.href} href={r.href} style={{ display: "block", background: "#fff", border: "1px solid #dddbc9", borderRadius: 18, padding: 22 }} className="transition-colors hover:border-[#14170e]">
+                <div className="head" style={{ fontSize: 16, color: ink }}>{r.t} <span style={{ color: olive }}>→</span></div>
+                <p style={{ fontSize: 13.5, color: "#54564a", marginTop: 6, lineHeight: 1.5 }}>{r.d}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── AUDIT FORM ─────────────────────────────────────────────────────── */}
       <section id="audit" style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -120, right: -90, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.2),transparent 65%)" }} />
+        <div className="ambient-glow" style={{ position: "absolute", top: -120, right: -90, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.2),transparent 65%)" }} />
         <div className="mx-auto max-w-[1360px] px-5 py-20 md:px-8 md:py-24" style={{ position: "relative" }}>
           <div className="grid items-start gap-12 lg:grid-cols-[0.82fr_1.18fr]">
             <div data-reveal>
@@ -501,11 +551,11 @@ export default function HomePage() {
         </svg>
         <div style={{ position: "absolute", bottom: -160, left: "50%", transform: "translateX(-50%)", width: 680, height: 420, background: "radial-gradient(circle,rgba(255,255,255,.45),transparent 65%)" }} />
         <div data-reveal className="mx-auto max-w-[940px] px-5 py-24 text-center md:px-8" style={{ position: "relative" }}>
-          <h2 className="head" style={{ fontSize: "clamp(2.6rem,6vw,5rem)" }}>Turn ad spend into<br /><Em>booked jobs</Em></h2>
-          <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>Start with a free PPC audit or claim the 30-Day Growth Sprint. You&rsquo;ll get clear next steps before committing to a long-term plan.</p>
+          <GsapText as="h2" mode="chars" className="head" style={{ fontSize: "clamp(2.6rem,6vw,5rem)" }}>Turn ad spend into<br /><Em>booked jobs</Em></GsapText>
+          <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>Start with a free PPC audit, or try our management free for 30 days. You&rsquo;ll get clear next steps before committing to anything — no contract, no setup fee.</p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 40 }}>
             <Link href="#audit" className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>Get Free PPC Audit</Link>
-            <Link href="#sprint" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>Claim 30-Day Sprint</Link>
+            <Link href="/free-audit" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>Start 30-day free trial</Link>
             <Link href="/contact" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 26px", borderRadius: 14, display: "inline-flex", alignItems: "center", gap: 9 }}><span style={{ width: 9, height: 9, borderRadius: "50%", background: ink }} />Message us</Link>
           </div>
           <p className="mono" style={{ fontSize: 11, color: "#3a4a10", marginTop: 28, letterSpacing: ".1em", textTransform: "uppercase" }}>No long-term contracts · You keep ownership of your accounts</p>

@@ -3,7 +3,7 @@ title: "Facebook vs Google Ads for Local Lead Generation: Which Wins in 2026?"
 description: "Meta Ads or Google Ads for your GTA service business? A straight comparison of cost, lead quality, intent, and when to use each - with real benchmark numbers."
 date: "2026-05-14"
 category: "Strategy"
-author: "PPC Guru"
+author: "Jaydeep Patel"  # [VERIFY-client] confirm real byline
 ---
 
 Every local business owner eventually asks it: should I put my money into Google Ads or Facebook (Meta) Ads? You will hear loud opinions on both sides, usually from someone who only sells one of them.

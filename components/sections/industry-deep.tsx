@@ -2,6 +2,8 @@ import { Lightbulb } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
 import { SpotlightCard } from "@/components/ui/interactive";
+import { StatCounter } from "@/components/ui/stat-counter";
+import { AccentCard, StepFlow, accentAt } from "@/components/ui/layout";
 import type { Industry } from "@/lib/data/industries";
 
 /** Industry reality + expected benchmarks / lead economics. */
@@ -20,11 +22,13 @@ export function IndustryReality({ name, reality, benchmarks }: { name: string; r
           <div>
             <SectionHeading align="left" eyebrow="Lead economics" title="Expected benchmarks" />
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {benchmarks.map((b) => (
-                <div key={b.label} className="rounded-[16px] border border-[#dddbc9] bg-white p-5">
-                  <div className="head text-[22px] text-[var(--accent-strong,var(--color-ink))]">{b.value}</div>
-                  <div className="mono mt-1 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{b.label}</div>
-                </div>
+              {benchmarks.map((b, i) => (
+                <Reveal key={b.label} delay={(i % 2) * 0.05}>
+                  <AccentCard index={i} className="!p-5">
+                    <div className="head text-[22px] text-[var(--accent-strong,var(--color-ink))]"><StatCounter value={b.value} /></div>
+                    <div className="mono mt-1 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{b.label}</div>
+                  </AccentCard>
+                </Reveal>
               ))}
             </div>
             <p className="mt-4 text-xs text-[var(--color-ink-faint)]">Representative industry ranges — actual results vary by market, offer and tracking.</p>
@@ -35,7 +39,7 @@ export function IndustryReality({ name, reality, benchmarks }: { name: string; r
   );
 }
 
-/** Per-channel strategy. */
+/** Per-channel strategy — spotlight cards with an accent tick. */
 export function IndustryPlaybook({ name, playbook }: { name: string; playbook: NonNullable<Industry["playbook"]> }) {
   return (
     <Section>
@@ -44,8 +48,11 @@ export function IndustryPlaybook({ name, playbook }: { name: string; playbook: N
         {playbook.map((p, i) => (
           <Reveal key={p.channel} delay={(i % 2) * 0.05}>
             <SpotlightCard className="h-full rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
-              <h3 className="head text-[17px]">{p.channel}</h3>
-              <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
+              <div className="flex items-center gap-3">
+                <span className="head flex h-8 w-8 items-center justify-center rounded-[10px] text-[13px] text-white" style={{ background: accentAt(i) }}>{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="head text-[17px]">{p.channel}</h3>
+              </div>
+              <p className="mt-3 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
             </SpotlightCard>
           </Reveal>
         ))}
@@ -54,7 +61,7 @@ export function IndustryPlaybook({ name, playbook }: { name: string; playbook: N
   );
 }
 
-/** Industry "hacks" / hard-won tactics. */
+/** Industry "hacks" / hard-won tactics — accent-edged offset list. */
 export function IndustryHacks({ name, hacks }: { name: string; hacks: NonNullable<Industry["hacks"]> }) {
   return (
     <Section tone="cream">
@@ -62,8 +69,8 @@ export function IndustryHacks({ name, hacks }: { name: string; hacks: NonNullabl
       <div className="mt-10 grid gap-4 md:grid-cols-2">
         {hacks.map((h, i) => (
           <Reveal key={h} delay={(i % 2) * 0.05}>
-            <div className="flex h-full items-start gap-3.5 rounded-[18px] border border-[#dddbc9] bg-white p-5">
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft,#eef2dd)] text-[var(--accent-strong,#5f6f17)]"><Lightbulb size={14} /></span>
+            <div className="flex h-full items-start gap-3.5 rounded-[18px] border border-[#dddbc9] bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-tile" style={{ borderLeft: `3px solid ${accentAt(i)}` }}>
+              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white" style={{ background: accentAt(i) }}><Lightbulb size={14} /></span>
               <p className="text-[14.5px] text-[var(--color-ink-dim)]">{h}</p>
             </div>
           </Reveal>
@@ -73,22 +80,12 @@ export function IndustryHacks({ name, hacks }: { name: string; hacks: NonNullabl
   );
 }
 
-/** Sample 90-day growth plan. */
+/** Sample 90-day growth plan — connected timeline. */
 export function IndustryPlan90({ items }: { items: NonNullable<Industry["plan90"]> }) {
   return (
     <Section>
       <SectionHeading align="left" eyebrow="The first 90 days" title={<>A sample <span className="text-gradient">90-day growth plan</span></>} />
-      <div className="mt-10 grid gap-6 md:grid-cols-3">
-        {items.map((p, i) => (
-          <Reveal key={p.window} delay={i * 0.05}>
-            <div className="h-full rounded-[22px] border border-[var(--color-border)] bg-white p-6">
-              <div className="mono text-[11px] font-bold uppercase tracking-[.08em] text-[#83856f]">{p.window}</div>
-              <h3 className="head mt-2 text-[18px]">{p.title}</h3>
-              <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{p.body}</p>
-            </div>
-          </Reveal>
-        ))}
-      </div>
+      <StepFlow steps={items.map((p, i) => ({ step: i + 1, kicker: p.window, title: p.title, body: p.body }))} />
     </Section>
   );
 }

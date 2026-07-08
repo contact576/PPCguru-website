@@ -33,6 +33,24 @@ export function HeroDashboard() {
   const [dash, setDash] = useState(420);
   useEffect(() => { const t = setTimeout(() => setDash(0), 150); return () => clearTimeout(t); }, []);
 
+  // Subtle pointer-parallax tilt (desktop + motion-OK only).
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
+  const tiltOk = useRef(false);
+  useEffect(() => {
+    tiltOk.current =
+      typeof window !== "undefined" &&
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+  function onMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!tiltOk.current) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    setTilt({ rx: -py * 6, ry: px * 6 });
+  }
+  function onLeave() { setTilt({ rx: 0, ry: 0 }); }
+
   // All numbers derive from one consistent sample model so nothing contradicts.
   const spend = useCountUp(M.spend);
   const waste = useCountUp(M.wasteRecovered);
@@ -43,7 +61,18 @@ export function HeroDashboard() {
   const costPerLead = leads > 0 ? spend / leads : 0; // ratio stays constant = spend/leads
 
   return (
-    <div style={{ position: "relative" }} data-herodash="1">
+    <div
+      style={{
+        position: "relative",
+        perspective: 1100,
+        transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
+        transformStyle: "preserve-3d",
+        transition: "transform .25s ease-out",
+      }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      data-herodash="1"
+    >
       {/* floating: wasted spend found */}
       <div style={{ position: "absolute", top: 30, right: -12, zIndex: 3, background: "#f1efe3", color: "#14170e", borderRadius: 16, padding: "14px 17px", boxShadow: "0 18px 50px rgba(0,0,0,.5)", animation: "ppcFloat 6s ease-in-out infinite", minWidth: 168 }}>
         <div className="mono" style={{ fontSize: 10, color: "#6a6c5a", fontWeight: 600, letterSpacing: ".08em", textTransform: "uppercase" }}>Wasted spend found</div>

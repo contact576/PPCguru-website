@@ -1,7 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { siteConfig } from "@/lib/site-config";
+import { leadRecipients } from "@/lib/email";
+import { saveLead, hasSupabase } from "@/lib/supabase";
 
 /**
  * Shared lead-capture action used by the pop-up funnel and the gated tools.
@@ -43,8 +44,19 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
   // Honeypot triggered → silently accept.
   if (data.company_website) return { ok: true, message: "Thanks — we'll be in touch shortly." };
 
+  // Persist to Supabase first (best-effort) so a lead is never lost even if email fails.
+  const stored = await saveLead({
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    website: data.website,
+    source: data.source || "site",
+    message: data.detail,
+  });
+
+  let emailed = false;
   const resendKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL || siteConfig.contact.email;
+  const to = leadRecipients();
   if (resendKey) {
     try {
       const { Resend } = await import("resend");
@@ -63,11 +75,21 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
           data.detail ? `\n${data.detail}` : "",
         ].join("\n"),
       });
+      emailed = true;
     } catch {
-      return { ok: false, message: "We couldn't submit that right now. Please email us directly." };
+      // Email delivery failed — the Supabase row (if any) is still the safety net.
     }
-  } else {
-    console.info("[lead] (no RESEND_API_KEY) capture:", data);
+  }
+
+  // A delivery channel is "configured" if it has keys. If at least one channel is
+  // configured but nothing actually got through (no email AND no DB row), the lead
+  // would be silently lost — surface an error so the visitor can reach us another way.
+  const anyConfigured = Boolean(resendKey) || hasSupabase();
+  if (anyConfigured && !emailed && !stored) {
+    return { ok: false, message: "We couldn't submit that right now. Please email us directly." };
+  }
+  if (!emailed && !stored) {
+    console.info("[lead] (no RESEND_API_KEY / no Supabase) capture:", data);
   }
 
   return { ok: true, message: "Thanks — your report is unlocked and we'll be in touch shortly." };

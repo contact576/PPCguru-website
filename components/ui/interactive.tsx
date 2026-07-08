@@ -170,6 +170,8 @@ export function SpotlightCard({
       onPointerMove={onMove}
       onPointerLeave={reset}
       style={enabled && tilt ? { rotateX, rotateY, transformPerspective: 900 } : undefined}
+      whileHover={enabled ? { y: -5 } : undefined}
+      transition={{ type: "spring", stiffness: 250, damping: 20 }}
       className={cn(
         "group/spot relative isolate transition-shadow duration-300 hover:shadow-tile",
         className

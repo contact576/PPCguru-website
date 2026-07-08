@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "./badge";
+import { Reveal } from "./reveal";
+import { SplitHeading } from "./split-heading";
 
 export type Tone = "white" | "soft" | "cream" | "lime" | "lilac" | "mint" | "coral" | "pink" | "navy";
 
@@ -32,11 +34,22 @@ export function Section({
   tone?: Tone;
 }) {
   if (tone in COLORED) {
+    const isNavy = tone === "navy";
     return (
       <section id={id} className="py-5 md:py-7">
         <div className="container-page">
-          <div className={cn("rounded-[var(--radius-lg)] px-6 py-16 md:px-14 md:py-20", COLORED[tone], className)}>
-            {children}
+          <div className={cn("relative overflow-hidden rounded-[var(--radius-lg)] px-6 py-16 md:px-14 md:py-20", COLORED[tone], className)}>
+            {/* drifting ambient glow — subtle life behind the panel content */}
+            <div
+              aria-hidden
+              className="ambient-glow pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full"
+              style={{
+                background: isNavy
+                  ? "radial-gradient(circle, rgba(206,255,58,.16), transparent 65%)"
+                  : "radial-gradient(circle, rgba(111,125,34,.12), transparent 65%)",
+              }}
+            />
+            <div className="relative">{children}</div>
           </div>
         </div>
       </section>
@@ -74,9 +87,9 @@ export function SectionHeading({
         className
       )}
     >
-      {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="head text-[clamp(2rem,4.6vw,3.4rem)] text-balance">{title}</h2>
-      {intro ? <p className="text-lg text-[var(--color-ink-dim)] text-pretty">{intro}</p> : null}
+      {eyebrow ? <Reveal className="w-full"><Eyebrow>{eyebrow}</Eyebrow></Reveal> : null}
+      <SplitHeading className="head w-full text-[clamp(2rem,4.6vw,3.4rem)] text-balance">{title}</SplitHeading>
+      {intro ? <Reveal className="w-full" delay={0.16}><p className="text-lg text-[var(--color-ink-dim)] text-pretty">{intro}</p></Reveal> : null}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BrandMarquee } from "@/components/shared/logo-wall";
+import { Logo } from "@/components/shared/logo";
 
 /**
  * Footer — handoff design (dark olive #14170e, lime accents). Shared across all
@@ -34,9 +35,8 @@ export function SiteFooter() {
 
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1fr_1.1fr]">
           <div>
-            <div style={{ lineHeight: 0.8, marginBottom: 16 }}>
-              <div className="serif" style={{ fontSize: 24, color: "#f1efe3" }}>PPC</div>
-              <div className="head" style={{ fontSize: 21, color: "#f1efe3" }}>Guru<span style={{ color: "#ceff3a" }}>.ca</span></div>
+            <div style={{ marginBottom: 16 }}>
+              <Logo variant="light" size={44} />
             </div>
             <p style={{ fontSize: 13.5, color: "#75766a", lineHeight: 1.6, maxWidth: 320 }}>
               A Google Partner &amp; Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA.
@@ -50,12 +50,17 @@ export function SiteFooter() {
           </div>
 
           <FCol title="Services" links={[
+            { label: "Free audit + 30-day trial", href: "/free-audit" },
             { label: "Google Ads Management", href: "/services/google-ads" },
             { label: "Meta Ads", href: "/services/meta-ads" },
             { label: "SEO & Local Search", href: "/services/seo" },
             { label: "Creative Production", href: "/services/creative" },
             { label: "Websites & Landing Pages", href: "/services/web-design" },
             { label: "CRM & Marketing Ops", href: "/services/crm" },
+            { label: "Industry benchmarks", href: "/benchmarks" },
+            { label: "Pricing", href: "/pricing" },
+            { label: "Compare guides", href: "/compare" },
+            { label: "Marketing glossary", href: "/glossary" },
           ]} />
           <FCol title="Industries" links={[
             { label: "Physiotherapy", href: "/industries/physiotherapy" },
@@ -92,7 +97,7 @@ export function SiteFooter() {
           <div style={{ display: "flex", gap: 22 }}>
             <Link href="/privacy" style={{ letterSpacing: ".05em", textTransform: "uppercase", fontSize: 11 }} className="hover:text-[#f1efe3]">Privacy</Link>
             <Link href="/terms" style={{ letterSpacing: ".05em", textTransform: "uppercase", fontSize: 11 }} className="hover:text-[#f1efe3]">Terms</Link>
-            <Link href="/privacy" style={{ letterSpacing: ".05em", textTransform: "uppercase", fontSize: 11 }} className="hover:text-[#f1efe3]">Cookies</Link>
+            <Link href="/privacy#cookies" style={{ letterSpacing: ".05em", textTransform: "uppercase", fontSize: 11 }} className="hover:text-[#f1efe3]">Cookies</Link>
           </div>
         </div>
       </div>

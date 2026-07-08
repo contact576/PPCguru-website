@@ -13,6 +13,9 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { accentVarsFor } from "@/lib/data/themes";
+import { HeroOffer } from "@/components/shared/hero-offer";
+import { LeadCtaButton } from "@/components/shared/lead-cta";
+import { genericOffer } from "@/lib/data/service-offers";
 
 const ACCENT = "#2f7d6b";
 const INK = "#14170e";
@@ -27,7 +30,7 @@ const FUNNELS = [
 export function RealEstateFlagship({ ind, cases }: { ind: Industry; cases: CaseStudy[] }) {
   return (
     <div style={accentVarsFor(ACCENT)}>
-      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-32 pb-16 md:pt-40 md:pb-20" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
+      <section className="relative overflow-hidden border-b border-[var(--color-border)] pt-24 pb-10 md:pt-28 md:pb-14" style={{ background: `color-mix(in srgb, ${ACCENT} 8%, var(--color-base))` }}>
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px]" style={{ background: ACCENT }} />
         <div className="pointer-events-none absolute -right-32 -top-24 h-[440px] w-[440px] rounded-full" style={{ background: `radial-gradient(circle, color-mix(in srgb, ${ACCENT} 22%, transparent), transparent 65%)` }} />
         <div className="container-page relative grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -42,8 +45,9 @@ export function RealEstateFlagship({ ind, cases }: { ind: Industry; cases: CaseS
             </span>
             <h1 className="head mt-5 text-[clamp(2.6rem,5.6vw,4.6rem)]">A <span style={{ color: ACCENT }}>predictable pipeline</span> beyond referrals</h1>
             <p className="mt-6 max-w-xl text-lg text-[var(--color-ink-dim)]">Buyer and seller leads with clear attribution — valuation and listing funnels, instant routing and follow-up so more leads become appointments.</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Magnetic><Button href="/contact" size="lg" style={{ background: ACCENT, color: "#fff" }}>Get a free lead-gen audit <ArrowRight size={18} /></Button></Magnetic>
+            <HeroOffer className="mt-7 max-w-xl" badge="30-day free trial" line="Try our Google or Meta ad management free for 30 days — no contract, no setup fee, no obligation." credit />
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Magnetic><LeadCtaButton label={<>Start my free trial <ArrowRight size={18} /></>} source="offer:real-estate:flagship-hero" title="Get your free lead-gen audit" blurb={genericOffer.popupBody} submitLabel="Get my free audit" className="inline-flex items-center justify-center gap-2 rounded-[14px] px-6 py-3.5 text-[15px] font-bold text-white" style={{ background: ACCENT }} /></Magnetic>
               <Button href="#estimate" variant="outline">Estimate lead volume</Button>
             </div>
           </div>
@@ -64,6 +68,9 @@ export function RealEstateFlagship({ ind, cases }: { ind: Industry; cases: CaseS
           </Reveal>
         </div>
       </section>
+
+      {/* Revenue calculator — high on the page (strongest hook) */}
+      <EstimateBand defaultIndustry="real-estate" platform="meta" title={<>See how many <span style={{ color: ACCENT }}>leads</span> your budget could produce</>} intro="Model the buyer/seller leads and pipeline your budget could produce, using real real-estate benchmarks and your average commission." />
 
       {/* Buyer / seller funnels (bespoke) */}
       <Section>
@@ -99,7 +106,6 @@ export function RealEstateFlagship({ ind, cases }: { ind: Industry; cases: CaseS
       {ind.plan90 && <IndustryPlan90 items={ind.plan90} />}
       {cases.length > 0 && <CaseStudyCards items={cases} heading />}
 
-      <EstimateBand defaultIndustry="real-estate" platform="meta" title={<>Estimate your <span style={{ color: ACCENT }}>lead</span> potential</>} intro="Model the buyer/seller leads and pipeline your budget could produce, using real real-estate benchmarks." />
       <LeadBand source="flagship:real-estate" title="Get a free lead-gen audit" />
       <FaqAccordion faqs={ind.faqs} title="Real estate marketing — questions" />
       <CtaBlock title="Ready for a predictable real-estate pipeline?" />

@@ -1,14 +1,8 @@
 import { stackGroups } from "@/lib/data/logos";
+import { BrandIcon } from "@/components/shared/brand-logos";
 
 const ink = "#14170e";
 const lime = "#ceff3a";
-
-/** Monogram mark for a tool (first 1–2 significant letters) — stands in for a logo. */
-function mark(name: string) {
-  const words = name.replace(/[^A-Za-z0-9 ]/g, "").split(" ").filter(Boolean);
-  if (words.length >= 2 && name.length > 6) return (words[0][0] + words[1][0]).toUpperCase();
-  return name.slice(0, 2).toUpperCase();
-}
 
 /**
  * The single merged "stack" section — platforms, tools, AI and accreditation in
@@ -37,7 +31,7 @@ export function ToolsOs() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {g.tools.map((t) => (
                   <span key={t} className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11.5, fontWeight: 600, color: "#d9dac8", background: "rgba(241,239,227,.05)", border: "1px solid rgba(241,239,227,.14)", padding: "5px 10px 5px 5px", borderRadius: 999, whiteSpace: "nowrap" }}>
-                    <span aria-hidden style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 20, height: 20, borderRadius: 6, background: "rgba(206,255,58,.14)", color: lime, fontSize: 8.5, fontWeight: 800, letterSpacing: 0 }}>{mark(t)}</span>
+                    <BrandIcon name={t} size={20} />
                     {t}
                   </span>
                 ))}

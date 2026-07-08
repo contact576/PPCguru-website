@@ -3,7 +3,7 @@ title: "9 Landing Page Mistakes That Kill Your Ad Conversions"
 description: "Your ads work but leads don't show? These 9 landing page mistakes quietly double your cost per lead. Here's how GTA service businesses can fix each one."
 date: "2026-01-09"
 category: "Lead Generation"
-author: "PPC Guru"
+author: "Dhaval Patel"  # [VERIFY-client] confirm real byline
 ---
 
 Here's a frustrating truth: you can run a great ad campaign and still get almost no leads - because of the page people land on after they click.
