@@ -2,13 +2,14 @@ import { organizationSchema, websiteSchema, graphSchema } from "@/lib/seo";
 
 /** Renders a JSON-LD <script> block. Use for any schema.org object. */
 export function JsonLd({ data }: { data: Record<string, unknown> }) {
-  return (
-    <script
-      type="application/ld+json"
-      // schema is build-time/static data, safe to inject
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
-  );
+  // JSON.stringify does NOT escape "<", so a value containing "</script>" (e.g. a
+  // CMS-authored post title) would break out of the script tag. Escape the few
+  // characters that matter inside a <script> context.
+  const json = JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />;
 }
 
 /** Sitewide Organization/ProfessionalService schema (rendered once in layout). */

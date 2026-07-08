@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { complete, hasAnthropicKey, MODELS } from "@/lib/ai/anthropic";
+import { safeFetch } from "@/lib/safe-fetch";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -18,24 +20,21 @@ function normalizeUrl(input: string): string | null {
 
 /** Fetch the page and extract real, defensible on-page signals (no AI). */
 async function gatherSignals(url: string) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 9000);
   const started = Date.now();
   let html = "";
   let status = 0;
   let isHttps = url.startsWith("https://");
-  try {
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: { "User-Agent": "PPCGuru-Audit/1.0 (+https://ppcguru.ca)" },
-      redirect: "follow",
-    });
-    status = res.status;
-    isHttps = res.url.startsWith("https://");
-    html = await res.text();
-  } finally {
-    clearTimeout(timeout);
-  }
+  // SSRF-hardened: rejects loopback / private / link-local hosts and re-validates
+  // every redirect hop, so a prospect URL can't be used to reach internal services.
+  const res = await safeFetch(url, {
+    headers: { "User-Agent": "PPCGuru-Audit/1.0 (+https://ppcguru.ca)" },
+    timeoutMs: 9000,
+  });
+  status = res.status;
+  isHttps = res.url.startsWith("https://");
+  // Cap the body we read so a hostile/huge page can't exhaust memory.
+  const raw = await res.text();
+  html = raw.slice(0, 1_500_000);
   const ttfbish = Date.now() - started;
 
   const lower = html.toLowerCase();
@@ -78,6 +77,14 @@ function fallbackNarrative(score: number, signals: Signal[]) {
 }
 
 export async function POST(req: Request) {
+  // Unauthenticated + spends Opus tokens → cap per IP to prevent cost abuse / DoS.
+  const limited = rateLimit(`instant-audit:${clientIp(req)}`, 8, 60_000);
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many audits. Please wait a minute and try again." },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfter) } },
+    );
+  }
   let body: { url?: string };
   try {
     body = await req.json();

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { complete, hasAnthropicKey, MODELS } from "@/lib/ai/anthropic";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const maxDuration = 20;
@@ -49,6 +50,14 @@ function fallbackCopy(business: string, offer: string, _platform: string): AdVar
 }
 
 export async function POST(req: Request) {
+  // Unauthenticated + spends model tokens → cap per IP to prevent cost abuse.
+  const limited = rateLimit(`ad-copy:${clientIp(req)}`, 15, 60_000);
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: "Too many requests. Please wait a minute and try again." },
+      { status: 429, headers: { "Retry-After": String(limited.retryAfter) } },
+    );
+  }
   let body: { business?: string; offer?: string; platform?: string };
   try {
     body = await req.json();
