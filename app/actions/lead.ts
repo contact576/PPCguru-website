@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { leadRecipients } from "@/lib/email";
+import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLead, hasSupabase } from "@/lib/supabase";
 
 /**
@@ -54,37 +54,29 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
     message: data.detail,
   });
 
-  let emailed = false;
-  const resendKey = process.env.RESEND_API_KEY;
   const to = leadRecipients();
-  if (resendKey) {
-    try {
-      const { Resend } = await import("resend");
-      const resend = new Resend(resendKey);
-      await resend.emails.send({
-        from: process.env.CONTACT_FROM_EMAIL || "PPC Guru Website <onboarding@resend.dev>",
-        to,
-        replyTo: data.email,
-        subject: `New lead (${data.source || "site"}) — ${data.name}`,
-        text: [
-          `Source: ${data.source || "—"}`,
-          `Name: ${data.name}`,
-          `Email: ${data.email}`,
-          `Phone: ${data.phone}`,
-          `Website: ${data.website || "—"}`,
-          data.detail ? `\n${data.detail}` : "",
-        ].join("\n"),
-      });
-      emailed = true;
-    } catch {
-      // Email delivery failed — the Supabase row (if any) is still the safety net.
-    }
-  }
+  // Team notification (SMTP → Resend fallback; best-effort, never throws).
+  const emailed = await sendMail({
+    to,
+    replyTo: data.email,
+    subject: `New lead (${data.source || "site"}) — ${data.name}`,
+    text: [
+      `Source: ${data.source || "—"}`,
+      `Name: ${data.name}`,
+      `Email: ${data.email}`,
+      `Phone: ${data.phone}`,
+      `Website: ${data.website || "—"}`,
+      data.detail ? `\n${data.detail}` : "",
+    ].join("\n"),
+  });
+
+  // Fire the branded welcome/autoresponder TO the lead (best-effort, never throws).
+  await sendLeadAutoresponder({ name: data.name, email: data.email });
 
   // A delivery channel is "configured" if it has keys. If at least one channel is
   // configured but nothing actually got through (no email AND no DB row), the lead
   // would be silently lost — surface an error so the visitor can reach us another way.
-  const anyConfigured = Boolean(resendKey) || hasSupabase();
+  const anyConfigured = emailConfigured() || hasSupabase();
   if (anyConfigured && !emailed && !stored) {
     return { ok: false, message: "We couldn't submit that right now. Please email us directly." };
   }

@@ -10,6 +10,7 @@ import {
   homePricing,
 } from "@/lib/data/home";
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
+import { GoogleReviews } from "@/components/home/google-reviews";
 import { ToolsOs } from "@/components/home/tools-os";
 import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
@@ -107,7 +108,7 @@ export default function HomePage() {
             <HeroOffer className="mt-7 max-w-lg" badge="30-day free trial" line="Try our Google or Meta ad management free for 30 days — no contract, no setup fee, no obligation." credit />
             <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 40, flexWrap: "wrap" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+              <img src="/badges/google-partner.png" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
               <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.6 }}>Performance marketing · GTA</div>
@@ -235,21 +236,21 @@ export default function HomePage() {
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Full-funnel growth,<br />one <Em>accountable</Em> team</h2>
             <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 560 }}>Paid ads, SEO, creative and the systems that turn leads into booked jobs — all measured against revenue.</p>
           </div>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-[14px] sm:grid-cols-2 lg:grid-cols-4">
             {homeServices.map((s) => (
-              <div key={s.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
-                  <span style={{ width: 54, height: 54, borderRadius: 15, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>{s.icon}</span>
-                  <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72", letterSpacing: ".08em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "5px 9px", borderRadius: 7 }}>{s.bestFor}</span>
+              <div key={s.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 18, padding: 20, display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                  <span style={{ width: 44, height: 44, borderRadius: 13, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{s.icon}</span>
+                  <span className="mono" style={{ fontSize: 8.5, color: "#8a8c72", letterSpacing: ".07em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "4px 7px", borderRadius: 6 }}>{s.bestFor}</span>
                 </div>
-                <div className="head" style={{ fontSize: 20, marginBottom: 9 }}>{s.title}</div>
-                <div style={{ fontSize: 14, color: "#54564a", lineHeight: 1.55, marginBottom: 16 }}>{s.outcome}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 18 }}>
+                <div className="head" style={{ fontSize: 16.5, marginBottom: 7, lineHeight: 1.2 }}>{s.title}</div>
+                <div style={{ fontSize: 12.5, color: "#54564a", lineHeight: 1.5, marginBottom: 13 }}>{s.outcome}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 14 }}>
                   {s.deliverables.map((d) => (
-                    <span key={d} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: "#2c2e22" }}><span style={{ color: olive, fontSize: 13 }}>✓</span>{d}</span>
+                    <span key={d} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#2c2e22" }}><span style={{ color: olive, fontSize: 11 }}>✓</span>{d}</span>
                   ))}
                 </div>
-                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 11.5, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 7, borderTop: "1px solid #e3e1d2", paddingTop: 16 }}>Learn more →</Link>
+                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 10.5, fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 6, borderTop: "1px solid #e3e1d2", paddingTop: 13 }}>Learn more →</Link>
               </div>
             ))}
           </div>
@@ -459,17 +460,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ───────────────────────────────────────────────────── */}
+      {/* ── REVIEWS (real Google reviews via widget; testimonials fallback) ── */}
       <section style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0" }}>
         <div className={WRAP}>
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 14px", textAlign: "center" }}>
+          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 28px", textAlign: "center" }}>
             <Eyebrow>In their words</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What working with us <Em>feels like</Em></h2>
-            <p style={{ fontSize: 14, color: "#8a8c72", marginTop: 14 }}>Representative of the feedback we hear from clients.</p>
-            <div style={{ marginTop: 22, display: "flex", justifyContent: "center" }}><ReviewRating /></div>
+            <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What our clients <Em>actually say</Em></h2>
           </div>
+          <GoogleReviews fallback={<TestimonialCarousel />} />
         </div>
-        <TestimonialCarousel />
       </section>
 
       {/* ── FROM THE BLOG (dynamic — latest published posts) ───────────────── */}

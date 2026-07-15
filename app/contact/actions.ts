@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { leadRecipients } from "@/lib/email";
+import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLead, hasSupabase } from "@/lib/supabase";
 
 const schema = z.object({
@@ -74,38 +74,29 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     message: data.message,
   });
 
-  // Deliver via Resend if configured; otherwise log (dev/no-key fallback).
-  let emailed = false;
-  const resendKey = process.env.RESEND_API_KEY;
+  // Team notification (SMTP → Resend fallback; best-effort, never throws).
   const to = leadRecipients();
-  if (resendKey) {
-    try {
-      const { Resend } = await import("resend");
-      const resend = new Resend(resendKey);
-      await resend.emails.send({
-        from: process.env.CONTACT_FROM_EMAIL || "PPC Guru Website <onboarding@resend.dev>",
-        to,
-        replyTo: data.email,
-        subject: `New audit request from ${data.name}${data.company ? ` (${data.company})` : ""}`,
-        text: [
-          `Name: ${data.name}`,
-          `Email: ${data.email}`,
-          `Phone: ${data.phone || "—"}`,
-          `Company: ${data.company || "—"}`,
-          `Budget: ${data.budget || "—"}`,
-          `Interested in: ${data.service || "—"}`,
-          "",
-          data.message,
-        ].join("\n"),
-      });
-      emailed = true;
-    } catch {
-      // Email delivery failed — the Supabase row (if any) is still the safety net.
-    }
-  }
+  const emailed = await sendMail({
+    to,
+    replyTo: data.email,
+    subject: `New audit request from ${data.name}${data.company ? ` (${data.company})` : ""}`,
+    text: [
+      `Name: ${data.name}`,
+      `Email: ${data.email}`,
+      `Phone: ${data.phone || "—"}`,
+      `Company: ${data.company || "—"}`,
+      `Budget: ${data.budget || "—"}`,
+      `Interested in: ${data.service || "—"}`,
+      "",
+      data.message,
+    ].join("\n"),
+  });
+
+  // Fire the branded welcome/autoresponder TO the person who submitted (best-effort).
+  await sendLeadAutoresponder({ name: data.name, email: data.email });
 
   // If a delivery channel is configured but nothing got through, don't pretend it worked.
-  const anyConfigured = Boolean(resendKey) || hasSupabase();
+  const anyConfigured = emailConfigured() || hasSupabase();
   if (anyConfigured && !emailed && !stored) {
     return { ok: false, message: "We couldn't send your message right now. Please email us directly." };
   }

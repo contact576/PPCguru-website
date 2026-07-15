@@ -19,6 +19,40 @@ export type VisitorEvent = {
   ua?: string | null;
 };
 
+/** A full visitor_events row as stored (read side, for /admin/visitors). */
+export type VisitorEventRow = {
+  id: string;
+  session_id: string | null;
+  event: string;
+  path: string | null;
+  referrer: string | null;
+  target: string | null;
+  utm: Record<string, string> | null;
+  ip: string | null;
+  country: string | null;
+  region: string | null;
+  city: string | null;
+  ua: string | null;
+  lead_id: string | null;
+  created_at: string;
+};
+
+export async function getVisitorEvents(limit = 400): Promise<VisitorEventRow[]> {
+  const sb = supabaseAdmin();
+  if (!sb) return [];
+  try {
+    const { data, error } = await sb
+      .from("visitor_events")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    if (error || !data) return [];
+    return data as VisitorEventRow[];
+  } catch {
+    return [];
+  }
+}
+
 export async function saveVisitorEvent(e: VisitorEvent): Promise<boolean> {
   const sb = supabaseAdmin();
   if (!sb) return false;
