@@ -233,21 +233,21 @@ export default function HomePage() {
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Full-funnel growth,<br />one <Em>accountable</Em> team</h2>
             <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 560 }}>Paid ads, SEO, creative and the systems that turn leads into booked jobs — all measured against revenue.</p>
           </div>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-[14px] sm:grid-cols-2 lg:grid-cols-4">
             {homeServices.map((s) => (
-              <div key={s.title} data-reveal className="hoverlift" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
-                  <span style={{ width: 54, height: 54, borderRadius: 15, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>{s.icon}</span>
-                  <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72", letterSpacing: ".08em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "5px 9px", borderRadius: 7 }}>{s.bestFor}</span>
+              <div key={s.title} data-reveal className="hoverlift" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 16, padding: 18, display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 13 }}>
+                  <span style={{ width: 42, height: 42, borderRadius: 12, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{s.icon}</span>
+                  <span className="mono" style={{ fontSize: 8.5, color: "#8a8c72", letterSpacing: ".06em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "4px 7px", borderRadius: 6 }}>{s.bestFor}</span>
                 </div>
-                <div className="head" style={{ fontSize: 20, marginBottom: 9 }}>{s.title}</div>
-                <div style={{ fontSize: 14, color: "#54564a", lineHeight: 1.55, marginBottom: 16 }}>{s.outcome}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 18 }}>
+                <div className="head" style={{ fontSize: 16.5, marginBottom: 7 }}>{s.title}</div>
+                <div style={{ fontSize: 12.5, color: "#54564a", lineHeight: 1.5, marginBottom: 12 }}>{s.outcome}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 14 }}>
                   {s.deliverables.map((d) => (
-                    <span key={d} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: "#2c2e22" }}><span style={{ color: olive, fontSize: 13 }}>✓</span>{d}</span>
+                    <span key={d} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#2c2e22" }}><span style={{ color: olive, fontSize: 12 }}>✓</span>{d}</span>
                   ))}
                 </div>
-                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 11.5, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 7, borderTop: "1px solid #e3e1d2", paddingTop: 16 }}>Learn more →</Link>
+                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 10.5, fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 6, borderTop: "1px solid #e3e1d2", paddingTop: 13 }}>Learn more →</Link>
               </div>
             ))}
           </div>

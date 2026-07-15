@@ -75,7 +75,7 @@ export function ReviewRating({ align = "center", className = "" }: { align?: "ce
 function BadgePill({ award }: { award: AwardType }) {
   const mark = award.logoSrc ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={award.logoSrc} alt={award.name} className="h-5 w-auto" />
+    <img src={award.logoSrc} alt={award.name} className="h-6 w-auto" />
   ) : award.brand ? (
     <PlatformLogo brand={award.brand} />
   ) : (

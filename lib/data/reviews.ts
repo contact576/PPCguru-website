@@ -79,7 +79,7 @@ export type Award = {
  */
 export const awards: Award[] = [
   { name: "Google Partner", sub: "Partner program", url: "", earned: true, brand: "google" },
-  { name: "Meta Business Partner", sub: "Partner program", url: "", earned: true, brand: "meta" },
+  { name: "Meta Business Partner", sub: "Business Partner", url: "", earned: true, brand: "meta", logoSrc: "/badges/meta-business-partner.png" },
   { name: "Clutch", sub: "Reviewed agency", url: "", earned: true, brand: "clutch" },
   { name: "GoodFirms", sub: "Verified reviews", url: "", earned: true, brand: "goodfirms" },
   { name: "DesignRush", sub: "Listed agency", url: "", earned: true, brand: "designrush" },

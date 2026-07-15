@@ -18,12 +18,12 @@ function mark(name: string) {
 export function ToolsOs() {
   return (
     <section style={{ background: ink, color: "#f1efe3", borderBottom: "1px solid #000" }}>
-      <div className="mx-auto max-w-[1340px] px-5 py-20 md:px-8 md:py-24">
-        <div data-reveal style={{ maxWidth: 820, margin: "0 auto 52px", textAlign: "center" }}>
+      <div className="mx-auto max-w-[1340px] px-5 py-12 md:px-8 md:py-14">
+        <div data-reveal style={{ maxWidth: 820, margin: "0 auto 32px", textAlign: "center" }}>
           <span className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", color: lime }}>
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: lime }} /> The AI operating system
           </span>
-          <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)", marginTop: 14 }}>Every platform, tool & AI behind your marketing</h2>
+          <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)", marginTop: 14, color: "#f1efe3" }}>Every platform, tool & AI behind your marketing</h2>
           <p style={{ fontSize: 17, color: "#a9aa97", marginTop: 18, lineHeight: 1.6 }}>
             Google-trained thinking, AI-powered execution and daily optimization — built with the platforms,
             analytics, automation and AI tools modern growth teams use every day.
