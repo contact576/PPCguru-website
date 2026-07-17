@@ -41,11 +41,12 @@ export function SiteFooter() {
             <p style={{ fontSize: 13.5, color: "#75766a", lineHeight: 1.6, maxWidth: 320 }}>
               A Google Partner &amp; Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA.
             </p>
-            <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap", alignItems: "center" }}>
               {/* [VERIFY] partner status + badge-usage rights before launch */}
-              {["Google Partner", "Meta Partner"].map((b) => (
-                <span key={b} className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#9a9b88", border: "1px solid rgba(241,239,227,.12)", padding: "6px 11px", borderRadius: 8, letterSpacing: ".06em", textTransform: "uppercase" }}>{b}</span>
-              ))}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 38, width: "auto" }} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 38, width: "auto" }} />
             </div>
           </div>
 

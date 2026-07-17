@@ -108,7 +108,7 @@ export default function HomePage() {
             <HeroOffer className="mt-7 max-w-lg" badge="30-day free trial" line="Try our Google or Meta ad management free for 30 days — no contract, no setup fee, no obligation." credit />
             <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 40, flexWrap: "wrap" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/badges/google-partner.png" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+              <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
               <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.6 }}>Performance marketing · GTA</div>
