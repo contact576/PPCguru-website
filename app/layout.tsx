@@ -10,7 +10,7 @@ import { FloatingCta } from "@/components/shared/floating-cta";
 import { OfferPopup } from "@/components/shared/offer-popup";
 import { CookieConsent } from "@/components/shared/cookie-consent";
 import { VisitorTracker } from "@/components/analytics/tracker";
-import { ThirdPartyAnalytics, GtmNoScript } from "@/components/analytics/third-party";
+import { AnalyticsScripts, GtmNoScript, ConsentSignal } from "@/components/analytics/third-party";
 import { CursorGlow } from "@/components/ui/interactive";
 import { SiteGraphJsonLd } from "@/components/seo/json-ld";
 import { ChromeGate } from "@/components/layout/chrome-gate";
@@ -79,6 +79,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${archivo.variable} ${dmSerif.variable} ${jetbrains.variable}`}>
+      <head>
+        {/* GTM + Microsoft Clarity, as high in <head> as possible (vendor spec). */}
+        <AnalyticsScripts />
+      </head>
       <body className="min-h-screen antialiased">
         {/* GTM noscript must be the first thing in <body>. */}
         <GtmNoScript />
@@ -98,8 +102,8 @@ export default function RootLayout({
           <OfferPopup />
           <CookieConsent />
           <VisitorTracker />
-          {/* GTM + Microsoft Clarity — sitewide, skipped if cookies were declined. */}
-          <ThirdPartyAnalytics />
+          {/* Applies a "Decline" choice to GTM (Consent Mode v2) + Clarity. */}
+          <ConsentSignal />
           {/*
             PRE-LAUNCH VERIFICATION CHECKLIST (search the codebase for "[VERIFY]"):
             [ ] Real phone number + WhatsApp (siteConfig.contact) — currently blank, shows "Book a call"
