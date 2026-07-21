@@ -4,6 +4,9 @@ import Link from "next/link";
 import { CalendarDays, Clock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { getAllPostSlugs, getPost, getAllPosts } from "@/lib/blog";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
@@ -88,7 +91,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           />
         ) : null}
         <article className="prose-blog mx-auto max-w-3xl">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          {/* rehypeRaw lets the CMS author use plain HTML alongside Markdown
+              (blog content is admin-authored only, so raw HTML is trusted here);
+              rehypeSlug + autolink give every heading a stable #id and a
+              hover "#" so sections can be linked to and shared. */}
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[
+              rehypeRaw,
+              rehypeSlug,
+              [
+                rehypeAutolinkHeadings,
+                {
+                  behavior: "append",
+                  properties: { className: "heading-anchor", ariaLabel: "Link to this section" },
+                  content: { type: "text", value: "#" },
+                },
+              ],
+            ]}
+          >
+            {post.content}
+          </ReactMarkdown>
         </article>
       </Section>
 

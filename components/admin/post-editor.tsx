@@ -5,7 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ArrowLeft, ImagePlus, Eye, Pencil, Loader2 } from "lucide-react";
+import rehypeRaw from "rehype-raw";
+import rehypeSlug from "rehype-slug";
+import { ArrowLeft, ImagePlus, Eye, Pencil, Columns2, Loader2 } from "lucide-react";
+import { EditorToolbar, applyAction, shortcutFor, type EditorAction } from "@/components/admin/editor-toolbar";
 import { slugify } from "@/lib/slug";
 import type { DbPost } from "@/lib/supabase";
 
@@ -30,12 +33,34 @@ export function PostEditor({
   const [coverImage, setCoverImage] = useState(post?.cover_image ?? "");
   const [published, setPublished] = useState(post?.published ?? false);
 
-  const [tab, setTab] = useState<"write" | "preview">("write");
+  const [tab, setTab] = useState<"write" | "preview" | "split">("write");
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState<"cover" | "inline" | null>(null);
+  const [linkSignal, setLinkSignal] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  /** Runs a toolbar/shortcut action against the content textarea. */
+  function runAction(action: EditorAction) {
+    const ta = contentRef.current;
+    if (!ta) return;
+    if (tab === "preview") setTab("write");
+    applyAction(ta, action, setContent);
+  }
+
+  function onContentKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    const action = shortcutFor(e);
+    if (!action) return;
+    e.preventDefault();
+    if (action === "link") setLinkSignal((n) => n + 1);
+    else runAction(action);
+  }
+
+  const getSelection = () => {
+    const ta = contentRef.current;
+    return ta ? ta.value.slice(ta.selectionStart, ta.selectionEnd) : "";
+  };
 
   function onTitle(v: string) {
     setTitle(v);
@@ -146,6 +171,7 @@ export function PostEditor({
 
             <div className="flex items-center gap-1 border-b border-[var(--color-border)]">
               <button onClick={() => setTab("write")} className={`flex items-center gap-1.5 px-3 py-2 text-sm ${tab === "write" ? "border-b-2 border-[var(--color-ink)] font-semibold" : "text-[var(--color-ink-dim)]"}`}><Pencil size={14} /> Write</button>
+              <button onClick={() => setTab("split")} className={`hidden items-center gap-1.5 px-3 py-2 text-sm lg:flex ${tab === "split" ? "border-b-2 border-[var(--color-ink)] font-semibold" : "text-[var(--color-ink-dim)]"}`}><Columns2 size={14} /> Split</button>
               <button onClick={() => setTab("preview")} className={`flex items-center gap-1.5 px-3 py-2 text-sm ${tab === "preview" ? "border-b-2 border-[var(--color-ink)] font-semibold" : "text-[var(--color-ink-dim)]"}`}><Eye size={14} /> Preview</button>
               <label className="ml-auto flex cursor-pointer items-center gap-1.5 px-3 py-2 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
                 {uploading === "inline" ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />} Insert image
@@ -153,19 +179,30 @@ export function PostEditor({
               </label>
             </div>
 
-            {tab === "write" ? (
-              <textarea
-                ref={contentRef}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Write your post in Markdown…"
-                className="min-h-[460px] w-full resize-y rounded-xl border border-[var(--color-border)] bg-white p-4 font-mono text-sm leading-relaxed outline-none focus:border-[var(--color-ink)]"
-              />
-            ) : (
-              <article className="prose-blog min-h-[460px] rounded-xl border border-[var(--color-border)] bg-white p-6">
-                {content.trim() ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown> : <p className="text-[var(--color-ink-faint)]">Nothing to preview yet.</p>}
-              </article>
-            )}
+            <div className={tab === "split" ? "grid gap-3 lg:grid-cols-2" : ""}>
+              {/* The textarea always stays mounted so selection/undo survive tab switches. */}
+              <div className={tab === "preview" ? "hidden" : ""}>
+                <EditorToolbar onAction={runAction} content={content} getSelection={getSelection} linkSignal={linkSignal} />
+                <textarea
+                  ref={contentRef}
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  onKeyDown={onContentKeyDown}
+                  placeholder="Write your post here. Use the buttons above for headings, bold, lists and links — or type Markdown / HTML directly."
+                  className="min-h-[460px] w-full resize-y rounded-b-xl border border-[var(--color-border)] bg-white p-4 font-mono text-sm leading-relaxed outline-none focus:border-[var(--color-ink)]"
+                />
+              </div>
+
+              {tab !== "write" && (
+                <article className="prose-blog min-h-[460px] overflow-auto rounded-xl border border-[var(--color-border)] bg-white p-6">
+                  {content.trim() ? (
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw, rehypeSlug]}>{content}</ReactMarkdown>
+                  ) : (
+                    <p className="text-[var(--color-ink-faint)]">Nothing to preview yet.</p>
+                  )}
+                </article>
+              )}
+            </div>
           </div>
 
           {/* Sidebar */}
