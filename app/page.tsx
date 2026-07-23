@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { anchorForHref, serviceLinks, hubLinks } from "@/lib/data/internal-links";
 import { RevealInit } from "@/components/home/reveal-init";
 import { HeroDashboard } from "@/components/home/hero-dashboard";
 import { WasteCalculator } from "@/components/home/waste-calculator";
@@ -41,6 +42,7 @@ export const revalidate = 60;
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
 const ink = "#14170e", cream = "#f1efe3", lime = "#ceff3a", olive = "#6f7d22", coral = "#f26a2b";
+const SILO_LINK: React.CSSProperties = { color: "#5d6b1a", textDecoration: "underline", textUnderlineOffset: 3, fontWeight: 600 };
 
 function Eyebrow({ children, color = olive }: { children: React.ReactNode; color?: string }) {
   return (
@@ -234,7 +236,7 @@ export default function HomePage() {
           <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px" }}>
             <Eyebrow>What we do</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Full-funnel growth,<br />one <Em>accountable</Em> team</h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 560 }}>Paid ads, SEO, creative and the systems that turn leads into booked jobs — all measured against revenue.</p>
+            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 640 }}>Paid ads, SEO, creative and the systems that turn leads into booked jobs — all measured against revenue. From <Link href={serviceLinks["google-ads"].href} style={SILO_LINK}>{serviceLinks["google-ads"].anchor}</Link> and <Link href={serviceLinks["seo"].href} style={SILO_LINK}>{serviceLinks["seo"].anchor}</Link> to <Link href={serviceLinks["meta-ads"].href} style={SILO_LINK}>{serviceLinks["meta-ads"].anchor}</Link> and <Link href={serviceLinks["web-design"].href} style={SILO_LINK}>{serviceLinks["web-design"].anchor}</Link>, explore our <Link href={hubLinks.services.href} style={SILO_LINK}>{hubLinks.services.anchor}</Link>.</p>
           </div>
           <div className="grid gap-[14px] sm:grid-cols-2 lg:grid-cols-4">
             {homeServices.map((s) => (
@@ -250,7 +252,7 @@ export default function HomePage() {
                     <span key={d} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#2c2e22" }}><span style={{ color: olive, fontSize: 11 }}>✓</span>{d}</span>
                   ))}
                 </div>
-                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 10.5, fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 6, borderTop: "1px solid #e3e1d2", paddingTop: 13 }}>Learn more →</Link>
+                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 10.5, fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 6, borderTop: "1px solid #e3e1d2", paddingTop: 13 }}>{anchorForHref(s.href)} →</Link>
               </div>
             ))}
           </div>
