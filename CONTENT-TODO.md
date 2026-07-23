@@ -21,7 +21,11 @@ one-line edit in `lib/site-config.ts` or a data file.
 
 - [ ] `ANTHROPIC_API_KEY` — turns the instant audit & ad-copy tools into true AI output.
 - [ ] `RESEND_API_KEY` (+ `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`) — contact form email delivery.
-- [ ] `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` — spam protection on the form.
+- [ ] **`NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` — HIGH PRIORITY.** Turns on the
+      "I'm not a robot" check across *every* form. Free + unlimited: dash.cloudflare.com → Turnstile →
+      Add widget (domains `ppcguru.ca` + `*.vercel.app`, mode **Managed**), then add both keys in
+      Vercel → Settings → Environment Variables (all environments) and redeploy. Until they're set,
+      forms fall back to the `lib/spam-filter.ts` heuristics alone.
 - [ ] Calendar booking embed on `/contact` (e.g. GoHighLevel/Calendly) if you want inline scheduling.
 
 ## Calculator data

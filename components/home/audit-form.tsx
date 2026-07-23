@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { captureLead } from "@/app/actions/lead";
+import { TurnstileField } from "@/components/shared/turnstile-field";
 
 const track = (event: string, data?: Record<string, unknown>) => {
   try {
@@ -39,6 +40,11 @@ export function AuditForm() {
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  // Anti-spam. This form posts hand-built FormData rather than the DOM form, so
+  // the Turnstile token arrives via callback instead of a hidden input.
+  const [token, setToken] = useState("");
+  const [attempt, setAttempt] = useState(0);
+  const [renderedAt] = useState(() => String(Date.now()));
 
   const pick = (field: string, value: string, set: (v: string) => void) => {
     set(value); setError("");
@@ -59,12 +65,16 @@ export function AuditForm() {
     fd.set("website", website.trim());
     fd.set("source", "home:audit");
     fd.set("detail", `Need: ${need || "—"} · Monthly spend: ${spend || "—"} · Main issue: ${issue || "—"} · Preferred contact: ${contact}`);
+    fd.set("turnstileToken", token);
+    fd.set("renderedAt", renderedAt);
     const res = await captureLead({ ok: false, message: "" }, fd);
     setSubmitting(false);
     if (res.ok) {
       track("audit_form_submit", { need, spend, issue });
       setDone(true);
     } else {
+      // Spent token → force a fresh challenge before they retry.
+      setAttempt((n) => n + 1);
       setError(res.message || "We couldn't submit that right now. Please try again.");
     }
   };
@@ -127,6 +137,8 @@ export function AuditForm() {
               </div>
             </div>
           </div>
+          {/* "I'm not a robot" check — renders only once the Turnstile site key is set. */}
+          <TurnstileField resetKey={attempt} onToken={setToken} action="home-audit" className="mt-4" />
           {error && <div style={{ marginTop: 14, fontSize: 13, color: "#c0531f", fontWeight: 600 }}>{error}</div>}
           <button type="button" onClick={submit} disabled={submitting} className="mono" style={{ marginTop: 18, width: "100%", background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: 16, borderRadius: 13, cursor: submitting ? "wait" : "pointer", border: "none", boxShadow: "0 10px 28px rgba(206,255,58,.35)", opacity: submitting ? 0.7 : 1 }}>{submitting ? "Sending…" : "Send my free PPC audit request"}</button>
           <p style={{ fontSize: 11, color: "#83856f", marginTop: 12, lineHeight: 1.5 }}>By submitting, you agree to be contacted by PPC Guru about your audit request. No spam — unsubscribe anytime.</p>

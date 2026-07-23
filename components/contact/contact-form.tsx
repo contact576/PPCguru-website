@@ -1,9 +1,9 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
-import Script from "next/script";
 import { CheckCircle2, Loader2, ArrowRight } from "lucide-react";
 import { submitContact, type ContactState } from "@/app/contact/actions";
+import { TurnstileField } from "@/components/shared/turnstile-field";
 import { services } from "@/lib/data/services";
 
 const initial: ContactState = { ok: false, message: "" };
@@ -11,12 +11,14 @@ const initial: ContactState = { ok: false, message: "" };
 export function ContactForm() {
   const [state, action, pending] = useActionState(submitContact, initial);
   const formRef = useRef<HTMLFormElement>(null);
-  const [token, setToken] = useState("");
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
   useEffect(() => {
     if (state.ok) formRef.current?.reset();
   }, [state.ok]);
+
+  // Tokens are single-use — issue a fresh challenge after a rejected submit.
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => { if (state.message && !state.ok) setAttempt((n) => n + 1); }, [state]);
 
   if (state.ok) {
     return (
@@ -65,20 +67,8 @@ export function ContactForm() {
         {state.errors?.message && <span className="mt-1 block text-xs text-[var(--color-danger)]">{state.errors.message}</span>}
       </label>
 
-      {siteKey && (
-        <>
-          <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" strategy="lazyOnload" />
-          <div
-            className="cf-turnstile mt-5"
-            data-sitekey={siteKey}
-            data-callback="onTurnstile"
-            ref={(el) => {
-              if (el) (window as unknown as { onTurnstile?: (t: string) => void }).onTurnstile = (t: string) => setToken(t);
-            }}
-          />
-          <input type="hidden" name="turnstileToken" value={token} />
-        </>
-      )}
+      {/* "I'm not a robot" check — renders only once the Turnstile site key is set. */}
+      <TurnstileField resetKey={attempt} action="contact-form" className="mt-5" />
 
       {state.message && !state.ok && <p className="mt-5 rounded-lg bg-[color-mix(in_srgb,var(--color-danger)_12%,transparent)] px-4 py-3 text-sm text-[var(--color-danger)]">{state.message}</p>}
 

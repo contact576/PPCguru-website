@@ -146,6 +146,35 @@ via `components/sections/estimate-band.tsx`.
   heroes/CTAs), `components/sections/lead-band.tsx` (per-page contact band, page-specific copy), and
   `components/tools/result-gate.tsx` (`ResultGate` blurs the value half of tool results until a lead submits).
 
+### Anti-spam (four layers — every form, not just /contact)
+Inbound form spam was flooding the team inboxes; `captureLead` AND `submitContact` now run the same gauntlet
+**before** any Supabase write or email send. Order matters: nothing spammy may reach
+`sendLeadAutoresponder`, which would otherwise mail a *forged* address from our domain and burn sender
+reputation.
+1. **Honeypot** — `company_website` (lead) / `website` (contact), must be empty.
+2. **Per-IP rate limit** (`lib/rate-limit.ts` via `headers()`): 5 leads / 4 contacts per IP per 10 min.
+3. **Cloudflare Turnstile** (`lib/turnstile.ts` `verifyTurnstile`) — the "I'm not a robot" check. Verifies
+   with `remoteip` bound so tokens can't be resold/replayed. **Fail-closed once configured, no-op until
+   then** (both `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` must be set — with only one the
+   widget never renders, so requiring a token would block every real visitor). Fails **open** if Cloudflare
+   itself is unreachable — an outage there must not eat real leads.
+4. **Heuristics** (`lib/spam-filter.ts` `scoreSubmission`) — additive score vs `SPAM_THRESHOLD`; catches the
+   SEO/backlink pitches, link-drops, casino/crypto spam and sub-2.5s bot submits. This is the ONLY active
+   filter while the Turnstile keys are blank, and the backstop against solved-for-hire challenges after.
+
+- **Bot submissions are dropped SILENTLY** (returned as `ok: true`) so a bot can't probe what tripped the
+  filter. Drops are `console.warn`ed (`[spam] blocked …`) so they stay auditable in Vercel logs.
+- **`components/shared/turnstile-field.tsx` `<TurnstileField />`** is the one client widget — drop it in any
+  form above the submit button. It posts hidden `turnstileToken` + `renderedAt` (the time-trap stamp) and
+  needs no other wiring. It uses **explicit** rendering, not the `cf-turnstile` auto-scan class: our forms
+  mount inside modals/pop-ups and several can share a page, and auto-scan only sweeps the DOM once at script
+  load. Turnstile tokens are **single-use** — pass a `resetKey` that changes on a rejected submit, or the
+  retry fails with a spent token. `onToken` is for forms that build `FormData` by hand (`home/audit-form.tsx`).
+- **Tuning is false-positive-averse** — a blocked plumber costs a client, a leaked spam email costs an inbox.
+  Signals that a real visitor could plausibly trip (stale timestamp, disposable domain, one URL in the
+  message) score *below* the threshold and need corroboration. Run **`npm run check:spam`**
+  (`scripts/spam-filter-check.mts`, 16 cases, no framework needed) after touching any rule, and add a case.
+
 ### Routing & page templates
 - `app/[city]/[service]/` — programmatic location pages from `allLocationParams()`, `dynamicParams = false`.
 - Service (`app/services/[slug]`) & industry (`app/industries/[slug]`) pages render guarded deep sections

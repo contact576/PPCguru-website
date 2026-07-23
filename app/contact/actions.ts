@@ -3,6 +3,9 @@
 import { z } from "zod";
 import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLead, hasSupabase } from "@/lib/supabase";
+import { verifyTurnstile } from "@/lib/turnstile";
+import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
+import { rateLimit, clientIpFromHeaders } from "@/lib/rate-limit";
 
 const schema = z.object({
   name: z.string().min(2, "Please enter your name.").max(100),
@@ -14,7 +17,8 @@ const schema = z.object({
   message: z.string().min(10, "Tell us a little about your goals.").max(4000),
   // Honeypot — must be empty.
   website: z.string().max(0).optional().or(z.literal("")),
-  turnstileToken: z.string().optional(),
+  turnstileToken: z.string().max(4000).optional().or(z.literal("")),
+  renderedAt: z.string().max(20).optional().or(z.literal("")),
 });
 
 export type ContactState = {
@@ -23,26 +27,8 @@ export type ContactState = {
   errors?: Record<string, string>;
 };
 
-async function verifyTurnstile(token?: string): Promise<boolean> {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  // Enforce only when BOTH keys are present. If the secret is set but the public
-  // site key is missing, the widget never renders (no token is ever produced) —
-  // requiring a token then would block every legitimate submission.
-  if (!secret || !siteKey) return true;
-  if (!token) return false;
-  try {
-    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(token)}`,
-    });
-    const data = (await res.json()) as { success: boolean };
-    return data.success;
-  } catch {
-    return false;
-  }
-}
+/** Silent drop: bots are told "thanks" so they can't probe the filter. */
+const SILENT_OK: ContactState = { ok: true, message: "Thanks — we'll be in touch shortly." };
 
 export async function submitContact(_prev: ContactState, formData: FormData): Promise<ContactState> {
   const raw = Object.fromEntries(formData.entries());
@@ -55,11 +41,39 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   }
   const data = parsed.data;
 
-  // Honeypot triggered → silently accept (bots think they succeeded)
-  if (data.website) return { ok: true, message: "Thanks — we'll be in touch shortly." };
+  // Anti-spam: honeypot → per-IP rate limit → Turnstile → heuristics. Runs
+  // before any delivery so a bot can never trigger the autoresponder (which
+  // would mail a forged address from our domain). See `lib/spam-filter.ts`.
 
-  if (!(await verifyTurnstile(data.turnstileToken))) {
-    return { ok: false, message: "Spam check failed. Please try again." };
+  // 1) Honeypot triggered → silently accept (bots think they succeeded)
+  if (data.website) return SILENT_OK;
+
+  const ip = await clientIpFromHeaders();
+
+  // 2) Per-IP burst cap.
+  if (!rateLimit(`contact:${ip}`, 4, 10 * 60_000).ok) {
+    console.warn(`[spam] rate-limited contact submission from ${ip}`);
+    return SILENT_OK;
+  }
+
+  // 3) Cloudflare Turnstile — no-ops until both keys are set.
+  const turnstile = await verifyTurnstile(data.turnstileToken, ip);
+  if (!turnstile.ok) {
+    return { ok: false, message: "Please complete the “I'm not a robot” check and try again." };
+  }
+
+  // 4) Heuristics — catches the agency-pitch / link-drop spam that dominates
+  //    this form, and keeps working if the challenge is ever solved for hire.
+  const verdict = scoreSubmission({
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    message: data.message,
+    renderedAt: data.renderedAt,
+  });
+  if (verdict.spam) {
+    logBlocked("contact", verdict, { name: data.name, email: data.email, message: data.message });
+    return SILENT_OK;
   }
 
   // Persist to Supabase first (best-effort) so a request is never lost.
