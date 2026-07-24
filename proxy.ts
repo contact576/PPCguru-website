@@ -93,6 +93,17 @@ function gone() {
 }
 
 export default function proxy(request: NextRequest) {
+  const host = (request.headers.get("host") ?? "").toLowerCase();
+
+  // Canonical host: force the bare apex (ppcguru.ca). www.ppcguru.ca must 308 →
+  // apex so the two hostnames can never serve or rank as two separate sites.
+  // Path + query are preserved. Only the www subdomain is touched — localhost
+  // and *.vercel.app preview hosts pass through unchanged.
+  if (host.startsWith("www.")) {
+    const { pathname, search } = request.nextUrl;
+    return NextResponse.redirect(`https://${host.slice(4)}${pathname}${search}`, 308);
+  }
+
   const slug = request.nextUrl.pathname.toLowerCase().replace(/^\/|\/+$/g, "");
 
   // Only top-level, single-segment paths are candidates.

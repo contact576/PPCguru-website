@@ -7,15 +7,18 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema, CONTENT_UPDATED_ISO } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 import { industryEconomics, BENCHMARK_SOURCES, BENCHMARK_DISCLAIMER } from "@/lib/data/benchmarks";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Digital Marketing Benchmarks by Industry (Canada, 2024–2025)",
   description:
     "Typical Google Ads cost-per-click, lead conversion rate, cost-per-lead and cost-per-customer by industry for Canadian service businesses — sourced from WordStream/LocalIQ benchmarks.",
   path: "/benchmarks",
-});
+}), "/benchmarks");
+}
 
 const usd = (n: number) => `$${n >= 100 ? Math.round(n).toLocaleString() : n.toFixed(2)}`;
 const pct = (n: number) => `${(n * 100).toFixed(1)}%`;

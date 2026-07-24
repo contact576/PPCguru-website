@@ -370,7 +370,7 @@ export function EditorToolbar({
                 value={href}
                 onChange={(e) => setHref(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); insertLink(); } }}
-                placeholder={mode === "email" ? "hello@ppcguru.ca" : "ppcguru.ca/services  or  /contact  or  https://…"}
+                placeholder={mode === "email" ? "contact@ppcguru.ca" : "ppcguru.ca/services  or  /contact  or  https://…"}
                 className={dlgField}
               />
               {mode === "url" && (

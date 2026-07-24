@@ -10,13 +10,16 @@ import { industries } from "@/lib/data/industries";
 import { IndustriesArt } from "@/components/illustrations/hero-art";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, itemListSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Industries We Help — Local Service Business Marketing",
   description:
     "Specialized digital marketing for healthcare, home services, construction, immigration, real estate and more. Repeatable playbooks for local lead-gen.",
   path: "/industries",
-});
+}), "/industries");
+}
 
 export default function IndustriesPage() {
   return (

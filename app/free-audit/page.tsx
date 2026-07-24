@@ -8,15 +8,18 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import { StepFlow } from "@/components/ui/layout";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { masterOffer } from "@/lib/data/service-offers";
 import { trustFacts } from "@/lib/data/performance-stats";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Free Google & Meta Ads Audit + 30-Day Free Trial | PPC Guru",
   description:
     "Get a free, no-obligation audit of your Google or Meta Ads — wasted spend, tracking gaps and the first fixes we'd make. Or start a 30-day free trial: no contract, no setup fee, no upfront payment. GTA & Canada.",
   path: "/free-audit",
-});
+}), "/free-audit");
+}
 
 const auditIncludes = [
   "A line-by-line review of wasted spend and where it's going",

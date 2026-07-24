@@ -23,9 +23,9 @@ export function leadRecipients(): string[] {
 }
 
 /** The "from" address used on all outbound mail. For SMTP this must match the
- *  authenticated mailbox (e.g. "PPC Guru <hello@ppcguru.ca>"). */
+ *  authenticated mailbox (e.g. "PPC Guru <contact@ppcguru.ca>"). */
 export function fromAddress(): string {
-  return process.env.CONTACT_FROM_EMAIL || "PPC Guru <hello@ppcguru.ca>";
+  return process.env.CONTACT_FROM_EMAIL || "PPC Guru <contact@ppcguru.ca>";
 }
 
 function smtpConfigured(): boolean {
@@ -112,10 +112,10 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
 
 const BUSINESS = {
   name: "PPC Guru",
-  email: "hello@ppcguru.ca",
+  email: "contact@ppcguru.ca",
   site: "https://ppcguru.ca",
   // [VERIFY-client] confirm the real mailing address for the CASL footer.
-  address: "Brampton, Ontario, Canada",
+  address: "Toronto, Ontario, Canada",
 };
 
 // Colours mirror the site (ink / lime / cream) so the email feels on-brand.

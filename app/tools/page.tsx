@@ -6,14 +6,17 @@ import { Section } from "@/components/ui/section";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { ToolsArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { tools, toolHref } from "@/lib/data/tools";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Free Marketing Tools — Ad Calculators & AI Audit",
   description:
     "Free interactive tools: Google Ads & Meta Ads ROI calculators, an instant AI website audit, and an AI ad-copy generator. See your potential in seconds.",
   path: "/tools",
-});
+}), "/tools");
+}
 
 export default function ToolsPage() {
   return (

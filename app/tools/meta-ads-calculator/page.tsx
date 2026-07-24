@@ -4,13 +4,16 @@ import { Section } from "@/components/ui/section";
 import { AdCalculator } from "@/components/tools/ad-calculator";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Meta Ads ROI Calculator — Free",
   description:
     "Free Meta (Facebook & Instagram) ads calculator. Estimate leads, cost per lead and revenue for your industry and budget using real benchmark data.",
   path: "/tools/meta-ads-calculator",
-});
+}), "/tools/meta-ads-calculator");
+}
 
 export default function MetaAdsCalculatorPage() {
   return (

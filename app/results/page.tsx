@@ -5,14 +5,17 @@ import { StatBand } from "@/components/sections/stat-band";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { ResultsArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { REPRESENTATIVE_DISCLOSURE } from "@/lib/data/case-studies";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Results & Case Studies",
   description:
     "See how PPC Guru turns ad spend into booked jobs — representative case studies across healthcare, home services, construction, immigration and real estate.",
   path: "/results",
-});
+}), "/results");
+}
 
 export default function ResultsPage() {
   return (

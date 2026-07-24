@@ -27,13 +27,16 @@ import { GsapText } from "@/components/shared/gsap-text";
 import { BlogPosts } from "@/components/home/blog-section";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Google & Meta Ads Agency in the GTA & Canada",
   description:
     "PPC Guru is an AI-first Google & Meta Partner agency in the Greater Toronto Area. We audit, rebuild and manage your ads so budget turns into qualified leads, booked jobs and revenue — with a 30-day free trial: no contract, no setup fee.",
   path: "/",
-});
+}), "/");
+}
 
 // ISR: refresh the homepage (incl. the dynamic blog teaser) at most once a minute
 // so newly published posts surface without a redeploy.

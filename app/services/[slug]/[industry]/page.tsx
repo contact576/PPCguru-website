@@ -24,6 +24,7 @@ import { getServiceOffer, genericOffer } from "@/lib/data/service-offers";
 import { HeroOffer } from "@/components/shared/hero-offer";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import type { PlatformId } from "@/lib/data/benchmarks";
 
 export const dynamicParams = false;
@@ -38,11 +39,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug, industry } = await params;
   if (!getServiceIndustryAngle(slug, industry)) return {};
   const label = serviceIndustryLabel(slug, industry);
-  return buildMetadata({
+  return withMetaOverride(buildMetadata({
     title: `${label} in the GTA & Canada`,
     description: `PPC Guru runs ${serviceShortName[slug]} for ${industryShortName[industry]} across the GTA and Canada — best practices, typical benchmarks and what to expect.`,
     path: `/services/${slug}/${industry}`,
-  });
+  }), `/services/${slug}/${industry}`);
 }
 
 function Bullets({ items }: { items: string[] }) {

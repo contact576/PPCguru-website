@@ -6,15 +6,18 @@ import { accentAt } from "@/components/ui/layout";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 import { glossary, glossaryCategories } from "@/lib/data/glossary";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Marketing Glossary — PPC, Meta Ads & SEO Terms Explained",
   description:
     "Plain-English definitions of the Google Ads, Meta Ads and SEO terms service businesses run into — CPC, CPL, ROAS, Quality Score, Performance Max, Local SEO and more. No jargon.",
   path: "/glossary",
-});
+}), "/glossary");
+}
 
 const glossarySchema = {
   "@context": "https://schema.org",

@@ -6,14 +6,17 @@ import { ServicesArt } from "@/components/illustrations/hero-art";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema, faqSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { comparisons } from "@/lib/data/comparisons";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Compare: Google Ads vs Meta, Agency vs In-House, PPC vs SEO",
   description:
     "Straight answers to the marketing decisions service businesses agonise over — Google Ads vs Meta Ads, hiring an agency vs in-house vs DIY, and PPC vs SEO. Honest verdicts, side-by-side tables.",
   path: "/compare",
-});
+}), "/compare");
+}
 
 export default function ComparePage() {
   const crumbs = [{ name: "Home", path: "/" }, { name: "Compare", path: "/compare" }];

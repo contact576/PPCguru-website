@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, Inbox, Users, Settings, ExternalLink, LogOut } from "lucide-react";
+import { FileText, Inbox, Users, Settings, Search, ExternalLink, LogOut } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +10,7 @@ const TABS = [
   { href: "/admin", label: "Posts", icon: FileText },
   { href: "/admin/leads", label: "Leads", icon: Inbox },
   { href: "/admin/visitors", label: "Visitors", icon: Users },
+  { href: "/admin/meta", label: "SEO / Meta", icon: Search },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 

@@ -13,6 +13,7 @@ import { Section } from "@/components/ui/section";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 import { team } from "@/lib/data/team";
 
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
-  return buildMetadata({ title: post.title, description: post.description, path: `/blog/${slug}` });
+  return withMetaOverride(buildMetadata({ title: post.title, description: post.description, path: `/blog/${slug}` }), `/blog/${slug}`);
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
