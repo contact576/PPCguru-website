@@ -9,13 +9,16 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Pricing — How PPC Guru Charges (Transparent & Honest)",
   description:
     "How marketing-agency pricing actually works, and how PPC Guru charges: your ad spend is separate and 100% yours, our fee is based on scope, and we work month-to-month with no lock-in.",
   path: "/pricing",
-});
+}), "/pricing");
+}
 
 // The three common fee models (educational — helps prospects evaluate any agency, not just us).
 const models = [

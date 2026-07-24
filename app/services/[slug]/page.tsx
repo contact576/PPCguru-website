@@ -37,6 +37,7 @@ const SERVICE_PLATFORM: Record<string, PlatformId> = {
 };
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { serviceArt } from "@/components/illustrations/service-art";
 
 export function generateStaticParams() {
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  return buildMetadata({ title: `${service.name} in the GTA & Canada`, description: service.description, path: `/services/${slug}` });
+  return withMetaOverride(buildMetadata({ title: `${service.name} in the GTA & Canada`, description: service.description, path: `/services/${slug}` }), `/services/${slug}`);
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {

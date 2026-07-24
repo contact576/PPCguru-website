@@ -6,14 +6,17 @@ import { ContactForm } from "@/components/contact/contact-form";
 import { PartnerBadges } from "@/components/shared/partner-badges";
 import { ContactArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Contact — Book a Free Audit",
   description:
     "Book a free, no-obligation audit of your Google Ads, Meta Ads and tracking. We'll show you exactly where the opportunity is. Based in the GTA, serving Canada & the USA.",
   path: "/contact",
-});
+}), "/contact");
+}
 
 export default function ContactPage() {
   return (

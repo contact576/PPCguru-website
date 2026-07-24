@@ -3,6 +3,8 @@ import { revalidatePath } from "next/cache";
 import { isAuthed } from "@/lib/admin-auth";
 import { supabaseAdmin } from "@/lib/supabase";
 import { slugify } from "@/lib/slug";
+import { pingIndexNow } from "@/lib/indexnow";
+import { siteConfig } from "@/lib/site-config";
 
 export const runtime = "nodejs";
 
@@ -71,7 +73,9 @@ export async function PUT(req: Request, { params }: Ctx) {
 
   revalidatePath("/blog");
   revalidatePath(`/blog/${slug}`);
+  revalidatePath("/sitemap.xml");
   if (existing?.slug && existing.slug !== slug) revalidatePath(`/blog/${existing.slug}`);
+  if (published) await pingIndexNow([`${siteConfig.url}/blog/${slug}`, `${siteConfig.url}/blog`]);
   return NextResponse.json({ post: data });
 }
 

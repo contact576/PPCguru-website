@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Loader2, Check, LogOut } from "lucide-react";
+import { ArrowLeft, Loader2, Check, LogOut, Search } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 import type { CmsSettings } from "@/lib/settings";
 import type { IntegrationStatus } from "@/lib/system-status";
@@ -64,6 +64,9 @@ export function AdminSettings({
           <div className="flex items-center gap-3">
             <Link href="/admin" className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
               <ArrowLeft size={14} /> Posts
+            </Link>
+            <Link href="/admin/meta" className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
+              <Search size={14} /> SEO / Meta
             </Link>
             <button onClick={logout} className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
               <LogOut size={14} /> Log out

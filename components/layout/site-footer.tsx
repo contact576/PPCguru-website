@@ -83,8 +83,8 @@ export function SiteFooter() {
           <div>
             <div className="mono" style={head}>Contact</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 13.5 }}>
-              <a href="mailto:hello@ppcguru.ca" style={{ ...col }} className="hover:text-[#ceff3a]">hello@ppcguru.ca</a>
-              <span style={{ color: "#75766a" }}>Brampton, ON · GTA</span>
+              <a href="mailto:contact@ppcguru.ca" style={{ ...col }} className="hover:text-[#ceff3a]">contact@ppcguru.ca</a>
+              <span style={{ color: "#75766a" }}>Toronto, ON · GTA</span>
               <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#ceff3a", fontWeight: 600 }}>
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ceff3a" }} />Message us
               </Link>
