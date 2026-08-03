@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLead, hasSupabase } from "@/lib/supabase";
+import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
 import { rateLimit, clientIpFromHeaders } from "@/lib/rate-limit";
@@ -76,8 +77,10 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     return SILENT_OK;
   }
 
-  // Persist to Supabase first (best-effort) so a request is never lost.
-  const stored = await saveLead({
+  // Persist to Supabase and mirror into Zoho CRM (both best-effort) so a request
+  // is never lost. Run together — independent sinks, and serialising them would
+  // add the CRM round-trip to the visitor's wait.
+  const record = {
     name: data.name,
     email: data.email,
     phone: data.phone,
@@ -86,7 +89,8 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     budget: data.budget,
     service: data.service,
     message: data.message,
-  });
+  };
+  const [stored, crmed] = await Promise.all([saveLead(record), sendLeadToZoho(record)]);
 
   // Team notification (SMTP → Resend fallback; best-effort, never throws).
   const to = leadRecipients();
@@ -110,12 +114,16 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   await sendLeadAutoresponder({ name: data.name, email: data.email });
 
   // If a delivery channel is configured but nothing got through, don't pretend it worked.
-  const anyConfigured = emailConfigured() || hasSupabase();
-  if (anyConfigured && !emailed && !stored) {
+  const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured();
+  const anyDelivered = emailed || stored || crmed;
+  if (anyConfigured && !anyDelivered) {
     return { ok: false, message: "We couldn't send your message right now. Please email us directly." };
   }
-  if (!emailed && !stored) {
-    console.info("[contact] (no RESEND_API_KEY / no Supabase) submission:", { ...data, turnstileToken: undefined });
+  if (!anyDelivered) {
+    console.info("[contact] (no RESEND_API_KEY / no Supabase / no Zoho) submission:", {
+      ...data,
+      turnstileToken: undefined,
+    });
   }
 
   return { ok: true, message: "Thanks — we've received your request and will be in touch within one business day." };

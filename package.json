@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "check:spam": "node --experimental-strip-types scripts/spam-filter-check.mts"
+    "check:spam": "node --experimental-strip-types scripts/spam-filter-check.mts",
+    "crm:token": "node --env-file=.env.local --experimental-strip-types scripts/zoho-token.mts",
+    "crm:verify": "node --env-file=.env.local --experimental-strip-types scripts/zoho-verify.mts",
+    "crm:backfill": "node --env-file=.env.local --experimental-strip-types scripts/zoho-backfill.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.2",

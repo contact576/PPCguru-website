@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLead, hasSupabase } from "@/lib/supabase";
+import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
 import { verifyTurnstile, turnstileConfigured } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
 import { rateLimit, clientIpFromHeaders } from "@/lib/rate-limit";
@@ -94,15 +95,18 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
     console.info(`[spam] allowed lead with score ${verdict.score}: ${verdict.reasons.join(" | ")}`);
   }
 
-  // Persist to Supabase first (best-effort) so a lead is never lost even if email fails.
-  const stored = await saveLead({
+  // Persist to Supabase and mirror into Zoho CRM (both best-effort) so a lead is
+  // never lost even if email fails. Run together — they're independent, and
+  // serialising them would add the CRM round-trip to the visitor's wait.
+  const record = {
     name: data.name,
     email: data.email,
     phone: data.phone,
     website: data.website,
     source: data.source || "site",
     message: data.detail,
-  });
+  };
+  const [stored, crmed] = await Promise.all([saveLead(record), sendLeadToZoho(record)]);
 
   const to = leadRecipients();
   // Team notification (SMTP → Resend fallback; best-effort, never throws).
@@ -126,12 +130,13 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
   // A delivery channel is "configured" if it has keys. If at least one channel is
   // configured but nothing actually got through (no email AND no DB row), the lead
   // would be silently lost — surface an error so the visitor can reach us another way.
-  const anyConfigured = emailConfigured() || hasSupabase();
-  if (anyConfigured && !emailed && !stored) {
+  const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured();
+  const anyDelivered = emailed || stored || crmed;
+  if (anyConfigured && !anyDelivered) {
     return { ok: false, message: "We couldn't submit that right now. Please email us directly." };
   }
-  if (!emailed && !stored) {
-    console.info("[lead] (no RESEND_API_KEY / no Supabase) capture:", data);
+  if (!anyDelivered) {
+    console.info("[lead] (no RESEND_API_KEY / no Supabase / no Zoho) capture:", data);
   }
 
   return { ok: true, message: "Thanks — your report is unlocked and we'll be in touch shortly." };

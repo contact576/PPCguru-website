@@ -1,5 +1,6 @@
 import { hasSupabase } from "@/lib/supabase";
 import { adminConfigured } from "@/lib/admin-auth";
+import { zohoConfigured } from "@/lib/zoho";
 
 /**
  * Read-only health of the optional integrations, derived purely from which env
@@ -29,6 +30,12 @@ export function getIntegrationStatus(): IntegrationStatus[] {
       label: "Resend",
       configured: Boolean(process.env.RESEND_API_KEY),
       detail: "Transactional email for form submissions.",
+    },
+    {
+      key: "zoho",
+      label: "Zoho CRM",
+      configured: zohoConfigured(),
+      detail: "Syncs form submissions to the Leads module. Needs client ID + secret + refresh token.",
     },
     {
       key: "anthropic",
