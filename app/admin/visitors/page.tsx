@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { isAuthed } from "@/lib/admin-auth";
 import { getVisitorEvents } from "@/lib/tracking";
+import { getIdentityStatus } from "@/lib/identity";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { VisitorsView } from "@/components/admin/visitors-view";
 
@@ -10,10 +11,10 @@ export const metadata: Metadata = { title: "Visitors", robots: { index: false, f
 
 export default async function AdminVisitorsPage() {
   if (!(await isAuthed())) redirect("/admin/login");
-  const rows = await getVisitorEvents();
+  const [rows, status] = await Promise.all([getVisitorEvents(), getIdentityStatus()]);
   return (
     <AdminShell>
-      <VisitorsView rows={rows} />
+      <VisitorsView rows={rows} status={status} />
     </AdminShell>
   );
 }

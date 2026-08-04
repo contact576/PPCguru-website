@@ -263,6 +263,61 @@ export async function resolveVisitor(sessionId?: string | null): Promise<KnownVi
   return null;
 }
 
+export type IdentityStatus = {
+  /** True only when the migration has been run AND a signing secret exists. */
+  ready: boolean;
+  /** supabase/visitor-identity.sql hasn't been run yet. */
+  tablesMissing: boolean;
+  /** A signing secret exists (dedicated or inherited from ADMIN_PASSWORD). */
+  secretConfigured: boolean;
+  /** A DEDICATED IDENTITY_SECRET is set, rather than borrowing ADMIN_PASSWORD. */
+  secretDedicated: boolean;
+  /** Automated journey emails are switched on and a mail provider is configured. */
+  journeysLive: boolean;
+  /** How many people we can currently put a name to. */
+  knownPeople: number;
+};
+
+/**
+ * Live readiness of the identity layer, for the admin panel. Probes the DB
+ * rather than guessing from env, because the single most common failure mode
+ * is "the SQL was never run" — which is silent by design everywhere else.
+ */
+export async function getIdentityStatus(): Promise<IdentityStatus> {
+  const secretDedicated = Boolean(process.env.IDENTITY_SECRET);
+  const secretConfigured = identityConfigured();
+  const { journeysEnabled } = await import("@/lib/journeys");
+  const journeysLive = journeysEnabled();
+
+  const base: IdentityStatus = {
+    ready: false,
+    tablesMissing: true,
+    secretConfigured,
+    secretDedicated,
+    journeysLive,
+    knownPeople: 0,
+  };
+
+  const sb = supabaseAdmin();
+  if (!sb) return base;
+
+  try {
+    const { count, error } = await sb
+      .from("visitor_identities")
+      .select("session_id", { count: "exact", head: true });
+    // 42P01 = undefined_table — the migration hasn't been run.
+    if (error) return base;
+    return {
+      ...base,
+      tablesMissing: false,
+      knownPeople: count ?? 0,
+      ready: secretConfigured,
+    };
+  } catch {
+    return base;
+  }
+}
+
 /** Bump `last_seen` so the People view can sort by genuine recency. */
 export async function touchIdentity(sessionId?: string | null): Promise<void> {
   if (!sessionId) return;
