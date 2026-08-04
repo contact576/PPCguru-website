@@ -17,6 +17,8 @@ export type VisitorEvent = {
   region?: string | null;
   city?: string | null;
   ua?: string | null;
+  /** Set when the visitor is already known (see lib/identity.ts). Null = anonymous. */
+  lead_id?: string | null;
 };
 
 /** A full visitor_events row as stored (read side, for /admin/visitors). */
@@ -69,6 +71,7 @@ export async function saveVisitorEvent(e: VisitorEvent): Promise<boolean> {
       region: e.region || null,
       city: e.city || null,
       ua: e.ua || null,
+      lead_id: e.lead_id || null,
     });
     return !error;
   } catch {

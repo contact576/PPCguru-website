@@ -2,8 +2,9 @@
 
 import { z } from "zod";
 import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
-import { saveLead, hasSupabase } from "@/lib/supabase";
+import { saveLeadReturning, hasSupabase } from "@/lib/supabase";
 import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
+import { identifyVisitor } from "@/lib/identity";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
 import { rateLimit, clientIpFromHeaders } from "@/lib/rate-limit";
@@ -16,6 +17,8 @@ const schema = z.object({
   budget: z.string().max(40).optional().or(z.literal("")),
   service: z.string().max(60).optional().or(z.literal("")),
   message: z.string().min(10, "Tell us a little about your goals.").max(4000),
+  // First-party device id (<SessionField />) — see app/actions/lead.ts.
+  session_id: z.string().max(64).optional().or(z.literal("")),
   // Honeypot — must be empty.
   website: z.string().max(0).optional().or(z.literal("")),
   turnstileToken: z.string().max(4000).optional().or(z.literal("")),
@@ -90,7 +93,17 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     service: data.service,
     message: data.message,
   };
-  const [stored, crmed] = await Promise.all([saveLead(record), sendLeadToZoho(record)]);
+  const [leadId, crmed] = await Promise.all([saveLeadReturning(record), sendLeadToZoho(record)]);
+  const stored = leadId !== null;
+
+  // Retro-stitch their anonymous browsing to this identity + set the
+  // recognition cookie. See lib/identity.ts. Best-effort — never throws.
+  await identifyVisitor({
+    sessionId: data.session_id,
+    leadId,
+    email: data.email,
+    name: data.name,
+  });
 
   // Team notification (SMTP → Resend fallback; best-effort, never throws).
   const to = leadRecipients();

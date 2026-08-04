@@ -32,7 +32,8 @@ export function sessionId(): string | undefined {
   }
 }
 
-function consentState(): "accepted" | "declined" | null {
+/** Current cookie-consent choice. `null` = they haven't answered the banner yet. */
+export function consentState(): "accepted" | "declined" | null {
   try {
     const v = localStorage.getItem(CONSENT_KEY);
     return v === "accepted" || v === "declined" ? v : null;

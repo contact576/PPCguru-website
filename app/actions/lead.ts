@@ -2,8 +2,9 @@
 
 import { z } from "zod";
 import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
-import { saveLead, hasSupabase } from "@/lib/supabase";
+import { saveLeadReturning, hasSupabase } from "@/lib/supabase";
 import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
+import { identifyVisitor } from "@/lib/identity";
 import { verifyTurnstile, turnstileConfigured } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
 import { rateLimit, clientIpFromHeaders } from "@/lib/rate-limit";
@@ -31,6 +32,9 @@ const schema = z.object({
   website: z.string().max(200).optional().or(z.literal("")),
   source: z.string().max(80).optional().or(z.literal("")),
   detail: z.string().max(2000).optional().or(z.literal("")),
+  // First-party device id (<SessionField />). Lets us retro-stitch everything
+  // this browser did before it had a name. Absent = we just skip the stitch.
+  session_id: z.string().max(64).optional().or(z.literal("")),
   // Honeypot — must be empty.
   company_website: z.string().max(0).optional().or(z.literal("")),
   // Anti-spam fields supplied by <TurnstileField />.
@@ -106,7 +110,18 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
     source: data.source || "site",
     message: data.detail,
   };
-  const [stored, crmed] = await Promise.all([saveLead(record), sendLeadToZoho(record)]);
+  const [leadId, crmed] = await Promise.all([saveLeadReturning(record), sendLeadToZoho(record)]);
+  const stored = leadId !== null;
+
+  // They just told us who they are. Claim their anonymous history (this device
+  // and any other device that used this email), and set the recognition cookie
+  // so future visits arrive already identified. Best-effort — never throws.
+  await identifyVisitor({
+    sessionId: data.session_id,
+    leadId,
+    email: data.email,
+    name: data.name,
+  });
 
   const to = leadRecipients();
   // Team notification (SMTP → Resend fallback; best-effort, never throws).

@@ -1,6 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { z } from "zod";
 import { saveVisitorEvent } from "@/lib/tracking";
+import { resolveVisitor, touchIdentity } from "@/lib/identity";
+import { runJourneys } from "@/lib/journeys";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -11,6 +13,12 @@ export const dynamic = "force-dynamic";
  *  - POST only, body size capped, Zod-validated, unknown keys stripped.
  *  - Per-instance rate limit per IP.
  *  - IP / coarse geo / user-agent are stored ONLY when the client reports consent.
+ *
+ * It is also where a visit becomes attributable: if this device (or the signed
+ * identity cookie) belongs to someone who has previously submitted a form, the
+ * event is stamped with their `lead_id` and the behavioural journeys are
+ * evaluated. Both the identity lookup and the journey run happen in `after()`
+ * so the browser still gets its 204 immediately — analytics must never be felt.
  */
 const schema = z.object({
   event: z.string().min(1).max(40),
@@ -64,8 +72,9 @@ export async function POST(req: NextRequest) {
   const consent = data.consent === true;
   const geo = (h: string) => (consent ? req.headers.get(h) || null : null);
 
-  // Fire-and-forget: analytics writes must never delay or fail the response.
-  await saveVisitorEvent({
+  // Read everything request-scoped up front, so the deferred work below doesn't
+  // depend on `req` still being live.
+  const event = {
     session_id: data.session_id,
     event: data.event,
     path: data.path,
@@ -78,6 +87,28 @@ export async function POST(req: NextRequest) {
     region: geo("x-vercel-ip-country-region"),
     city: consent ? decodeURIComponent(req.headers.get("x-vercel-ip-city") || "").trim() || null : null,
     ua: consent ? (req.headers.get("user-agent") || "").slice(0, 400) || null : null,
+  };
+
+  // Everything past this point runs AFTER the 204 is on the wire. Identity
+  // resolution and journey evaluation both hit the DB, and a visitor should
+  // never wait on our bookkeeping.
+  after(async () => {
+    try {
+      // Known person? Cookie first, then this device's mapping. Null for the
+      // overwhelming majority of traffic, which costs one indexed lookup.
+      const visitor = await resolveVisitor(data.session_id);
+
+      await saveVisitorEvent({ ...event, lead_id: visitor?.leadId ?? null });
+
+      if (visitor) {
+        await touchIdentity(data.session_id);
+        // Behaviour-triggered email (return visit, high intent). Self-limiting:
+        // consent-checked and frequency-capped inside.
+        await runJourneys({ visitor, event: data.event, path: data.path });
+      }
+    } catch (err) {
+      console.error("[track] deferred work failed:", err instanceof Error ? err.message : err);
+    }
   });
 
   return new NextResponse(null, { status: 204 });

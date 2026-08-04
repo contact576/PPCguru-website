@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { CheckCircle2, Loader2, ArrowRight } from "lucide-react";
 import { submitContact, type ContactState } from "@/app/contact/actions";
 import { TurnstileField } from "@/components/shared/turnstile-field";
+import { SessionField } from "@/components/shared/session-field";
 import { services } from "@/lib/data/services";
 
 const initial: ContactState = { ok: false, message: "" };
@@ -34,6 +35,7 @@ export function ContactForm() {
     <form ref={formRef} action={action} className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-7 md:p-9">
       {/* Honeypot */}
       <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
+      <SessionField />
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field name="name" label="Name *" error={state.errors?.name} />

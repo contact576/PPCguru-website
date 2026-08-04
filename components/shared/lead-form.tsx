@@ -4,6 +4,7 @@ import { useEffect, useState, useActionState } from "react";
 import { ArrowRight } from "lucide-react";
 import { captureLead, type LeadState } from "@/app/actions/lead";
 import { TurnstileField } from "@/components/shared/turnstile-field";
+import { SessionField } from "@/components/shared/session-field";
 import { track } from "@/lib/analytics";
 
 const initial: LeadState = { ok: false, message: "" };
@@ -37,6 +38,7 @@ export function LeadForm({
     <form action={action} className={compact ? "space-y-2.5" : "space-y-3"}>
       <input type="text" name="company_website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
       <input type="hidden" name="source" value={source} />
+      <SessionField />
       <input required name="name" aria-label="Your name" placeholder="Name" className={field} />
       <input required type="email" name="email" aria-label="Your email" placeholder="Email" className={field} />
       <div className={compact ? "" : "grid grid-cols-2 gap-3"}>
