@@ -40,6 +40,7 @@ export function LeadForm({
       <input type="hidden" name="source" value={source} />
       <SessionField />
       <input required name="name" aria-label="Your name" placeholder="Name" className={field} />
+      <input required name="company" aria-label="Business name" placeholder="Business name" className={field} />
       <input required type="email" name="email" aria-label="Your email" placeholder="Email" className={field} />
       <div className={compact ? "" : "grid grid-cols-2 gap-3"}>
         <input required name="phone" aria-label="Phone or WhatsApp" placeholder="Phone / WhatsApp" className={field} />

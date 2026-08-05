@@ -33,6 +33,7 @@ export function AuditForm() {
   const [spend, setSpend] = useState("");
   const [issue, setIssue] = useState("");
   const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [website, setWebsite] = useState("");
@@ -54,12 +55,16 @@ export function AuditForm() {
 
   const submit = async () => {
     const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
-    if (!name.trim() || !emailOk) { setError("Please enter your name and a valid business email."); return; }
+    if (!name.trim() || !company.trim() || !emailOk) {
+      setError("Please enter your name, business name and a valid business email.");
+      return;
+    }
     setSubmitting(true); setError("");
     // Persist via the shared lead action (Resend when configured, logs otherwise),
     // packing the qualifying answers into `detail`.
     const fd = new FormData();
     fd.set("name", name.trim());
+    fd.set("company", company.trim());
     fd.set("email", email.trim());
     fd.set("phone", phone.trim());
     fd.set("website", website.trim());
@@ -123,6 +128,7 @@ export function AuditForm() {
           <h3 className="head" style={{ fontSize: 21, marginBottom: 16 }}>Where do we send your audit?</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
             <input value={name} onChange={(e) => { setName(e.target.value); setError(""); }} placeholder="Full name" aria-label="Full name" style={input} />
+            <input value={company} onChange={(e) => { setCompany(e.target.value); setError(""); }} placeholder="Business name" aria-label="Business name" style={input} />
             <input type="email" value={email} onChange={(e) => { setEmail(e.target.value); setError(""); }} placeholder="Business email" aria-label="Business email" style={input} />
             <div className="grid grid-cols-1 gap-[11px] sm:grid-cols-2">
               <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone / WhatsApp" aria-label="Phone or WhatsApp" style={input} />

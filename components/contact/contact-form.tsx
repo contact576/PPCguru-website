@@ -41,7 +41,7 @@ export function ContactForm() {
         <Field name="name" label="Name *" error={state.errors?.name} />
         <Field name="email" label="Email *" type="email" error={state.errors?.email} />
         <Field name="phone" label="Phone" type="tel" error={state.errors?.phone} />
-        <Field name="company" label="Business name" error={state.errors?.company} />
+        <Field name="company" label="Business name *" error={state.errors?.company} />
         <label className="block">
           <span className="mb-2 block text-sm font-medium text-[var(--color-ink-dim)]">Monthly ad budget</span>
           <select name="budget" className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-violet)]">

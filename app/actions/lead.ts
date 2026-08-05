@@ -29,6 +29,10 @@ const schema = z.object({
   // ask for it (e.g. the gated tools) still submit. Forms that require it enforce
   // it in their own UI.
   phone: z.string().max(40).optional().or(z.literal("")),
+  // Business name. Every capture point asks for it now — it's the one field that
+  // makes a lead actionable (and Zoho Leads requires `Company`, which used to
+  // fall back to "Unknown (website lead)" for everything but the contact form).
+  company: z.string().min(2, "Please enter your business name.").max(120),
   website: z.string().max(200).optional().or(z.literal("")),
   source: z.string().max(80).optional().or(z.literal("")),
   detail: z.string().max(2000).optional().or(z.literal("")),
@@ -106,6 +110,7 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
     name: data.name,
     email: data.email,
     phone: data.phone,
+    company: data.company,
     website: data.website,
     source: data.source || "site",
     message: data.detail,
@@ -128,10 +133,11 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
   const emailed = await sendMail({
     to,
     replyTo: data.email,
-    subject: `New lead (${data.source || "site"}) — ${data.name}`,
+    subject: `New lead (${data.source || "site"}) — ${data.name} (${data.company})`,
     text: [
       `Source: ${data.source || "—"}`,
       `Name: ${data.name}`,
+      `Business: ${data.company}`,
       `Email: ${data.email}`,
       `Phone: ${data.phone}`,
       `Website: ${data.website || "—"}`,
