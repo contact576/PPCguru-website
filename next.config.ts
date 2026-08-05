@@ -11,8 +11,19 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
   // Force HTTPS for two years, including subdomains.
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
-  // Defense-in-depth against framing for browsers honouring CSP frame-ancestors.
-  { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
+  // Defense-in-depth against framing for browsers honouring CSP frame-ancestors,
+  // plus three directives that cost nothing here and close real injection paths:
+  //   base-uri 'self'    — an injected <base href> can't repoint every relative
+  //                        script/link URL at an attacker's host.
+  //   object-src 'none'  — no <object>/<embed> plugin content, ever.
+  //   form-action 'self' — a form can only post back to us, so injected markup
+  //                        can't exfiltrate a lead's details to a third party.
+  // NB no `script-src` yet: GTM, Clarity and Turnstile all inject inline script,
+  // so a meaningful policy needs per-request nonces (see SECURITY-REVIEW.md).
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'",
+  },
 ];
 
 const nextConfig: NextConfig = {

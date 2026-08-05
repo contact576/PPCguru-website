@@ -58,12 +58,30 @@ const RETURN_GAP_DAYS = 3;
 const HIGH_INTENT_HITS = 3;
 const HIGH_INTENT_WINDOW_DAYS = 7;
 
-/** Master kill switch — set JOURNEYS_ENABLED=false to silence all automation. */
+/**
+ * Master kill switch — set JOURNEYS_ENABLED=false to silence all automation.
+ *
+ * Also hard-requires a signing secret: without one every unsubscribe link we
+ * send would be rejected on click (see `unsubConfigured`), and mailing someone
+ * an opt-out that cannot work is a CASL breach. Staying silent is the safe
+ * failure mode.
+ */
 export function journeysEnabled(): boolean {
-  return process.env.JOURNEYS_ENABLED !== "false" && emailConfigured();
+  return process.env.JOURNEYS_ENABLED !== "false" && emailConfigured() && unsubConfigured();
 }
 
 /* ── Unsubscribe tokens ─────────────────────────────────────────────────── */
+
+/**
+ * True once real secret material exists. Without it `unsubSecret()` collapses to
+ * the bare constant below — which is public (this file is on GitHub), so anyone
+ * could mint a valid token for any address and mass-unsubscribe the list. Both
+ * signing and verification refuse to operate in that state rather than trusting
+ * a key everyone knows.
+ */
+function unsubConfigured(): boolean {
+  return Boolean(process.env.IDENTITY_SECRET || process.env.ADMIN_PASSWORD);
+}
 
 function unsubSecret(): string {
   return `ppcguru-unsub::${process.env.IDENTITY_SECRET || process.env.ADMIN_PASSWORD || ""}`;
@@ -78,7 +96,7 @@ export function unsubscribeToken(email: string): string {
 
 /** Verify an opt-out token and recover the email it was issued for. */
 export function verifyUnsubscribeToken(token: string | null | undefined): string | null {
-  if (!token) return null;
+  if (!token || !unsubConfigured()) return null;
   const idx = token.lastIndexOf(".");
   if (idx <= 0) return null;
   try {
