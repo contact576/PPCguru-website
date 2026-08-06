@@ -57,10 +57,10 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
             </span>
             <h1 className="head mt-5 text-[clamp(2.6rem,5.6vw,4.6rem)]">Google Ads, rebuilt around <span style={{ color: ACCENT }}>booked jobs</span></h1>
             <p className="mt-6 max-w-xl text-lg text-[var(--color-ink-dim)]">{service.hero}</p>
-            <HeroOffer className="mt-7 max-w-xl" badge="30-day free trial" line="Switching agencies? Try our Google Ads management free for 30 days — no contract, no setup fee, no obligation." credit />
+            <HeroOffer className="mt-7 max-w-xl" badge="Free website audit" line="Switching agencies? Get a free website and Google Ads audit — no contract, no setup fee, no obligation." credit />
             <div className="mt-7 flex flex-wrap gap-3">
               <Magnetic>
-                <LeadCtaButton label={<>Start my free trial <ArrowRight size={18} /></>} source="offer:google-ads:flagship-hero" title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className="inline-flex items-center justify-center gap-2 rounded-[14px] px-6 py-3.5 text-[15px] font-bold text-white" style={{ background: ACCENT }} />
+                <LeadCtaButton label={<>Get my free audit <ArrowRight size={18} /></>} source="offer:google-ads:flagship-hero" title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className="inline-flex items-center justify-center gap-2 rounded-[14px] px-6 py-3.5 text-[15px] font-bold text-white" style={{ background: ACCENT }} />
               </Magnetic>
               <Button href="#estimate" variant="outline">Estimate your results</Button>
             </div>

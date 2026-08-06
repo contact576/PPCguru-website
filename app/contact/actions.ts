@@ -8,14 +8,22 @@ import { identifyVisitor } from "@/lib/identity";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
 import { rateLimit, clientIpFromHeaders } from "@/lib/rate-limit";
+import { SERVICE_OPTIONS, BUDGET_OPTIONS, SERVICES_MAX_LEN } from "@/lib/data/form-options";
 
 const schema = z.object({
   name: z.string().min(2, "Please enter your name.").max(100),
   email: z.string().email("Please enter a valid email."),
-  phone: z.string().max(40).optional().or(z.literal("")),
+  phone: z.string().min(6, "Please enter your phone number.").max(40),
   company: z.string().min(2, "Please enter your business name.").max(120),
-  budget: z.string().max(40).optional().or(z.literal("")),
-  service: z.string().max(60).optional().or(z.literal("")),
+  // NB the honeypot owns the name `website`, so the real website field is
+  // `site_url`. Renaming the honeypot would retire a trap bots already fall for.
+  site_url: z.string().max(200).optional().or(z.literal("")),
+  budget: z.enum(BUDGET_OPTIONS, { message: "Please choose a budget range." }),
+  // Multi-select checkboxes — see `rawFrom()` below.
+  services: z
+    .array(z.enum(SERVICE_OPTIONS))
+    .min(1, "Please choose at least one service.")
+    .max(SERVICE_OPTIONS.length),
   message: z.string().min(10, "Tell us a little about your goals.").max(4000),
   // First-party device id (<SessionField />) — see app/actions/lead.ts.
   session_id: z.string().max(64).optional().or(z.literal("")),
@@ -34,8 +42,16 @@ export type ContactState = {
 /** Silent drop: bots are told "thanks" so they can't probe the filter. */
 const SILENT_OK: ContactState = { ok: true, message: "Thanks — we'll be in touch shortly." };
 
+/** Repeated checkbox keys survive only via getAll — see app/actions/lead.ts. */
+function rawFrom(formData: FormData) {
+  return {
+    ...Object.fromEntries(formData.entries()),
+    services: formData.getAll("services").map(String),
+  };
+}
+
 export async function submitContact(_prev: ContactState, formData: FormData): Promise<ContactState> {
-  const raw = Object.fromEntries(formData.entries());
+  const raw = rawFrom(formData);
   const parsed = schema.safeParse(raw);
 
   if (!parsed.success) {
@@ -72,6 +88,7 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     name: data.name,
     email: data.email,
     phone: data.phone,
+    website: data.site_url,
     message: data.message,
     renderedAt: data.renderedAt,
   });
@@ -83,14 +100,17 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   // Persist to Supabase and mirror into Zoho CRM (both best-effort) so a request
   // is never lost. Run together — independent sinks, and serialising them would
   // add the CRM round-trip to the visitor's wait.
+  const servicesText = data.services.join(", ").slice(0, SERVICES_MAX_LEN);
+
   const record = {
     name: data.name,
     email: data.email,
     phone: data.phone,
     company: data.company,
+    website: data.site_url,
     source: "contact",
     budget: data.budget,
-    service: data.service,
+    service: servicesText,
     message: data.message,
   };
   const [leadId, crmed] = await Promise.all([saveLeadReturning(record), sendLeadToZoho(record)]);
@@ -116,8 +136,9 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
       `Email: ${data.email}`,
       `Phone: ${data.phone || "—"}`,
       `Company: ${data.company || "—"}`,
-      `Budget: ${data.budget || "—"}`,
-      `Interested in: ${data.service || "—"}`,
+      `Website: ${data.site_url || "—"}`,
+      `Budget: ${data.budget}`,
+      `Interested in: ${servicesText}`,
       "",
       data.message,
     ].join("\n"),

@@ -112,7 +112,7 @@ export default function RootLayout({
             [ ] Microsoft Advertising certification (if claimed)
             [ ] Review rating + count (none published yet; no Review schema until real)
             [ ] Replace representative case studies & testimonials with approved, real ones
-            [ ] Pricing ranges & 30-Day Sprint terms; no-long-term-contract policy
+            [ ] Pricing ranges & free-website-audit scope; no-long-term-contract policy
             [x] GTM (GTM-NRX9BRWF) + Microsoft Clarity (xpxkvrbt7j) live sitewide — see
                 components/analytics/third-party.tsx. GA4 / Meta Pixel now belong INSIDE GTM, not in code.
             [ ] CRM/email wiring for forms (app/contact/actions.ts, offer popup)

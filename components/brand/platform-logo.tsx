@@ -63,6 +63,62 @@ export function PlatformLogo({ brand }: { brand: string }) {
           </span>
         </span>
       );
+    case "trustpilot":
+      return (
+        <span className={`${wm} inline-flex items-center gap-1.5`} aria-label="Trustpilot">
+          <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden>
+            <path fill="#00B67A" d="M12 1.5l3.09 6.94 7.41.72-5.6 4.99 1.64 7.35L12 17.77 5.46 21.5l1.64-7.35-5.6-4.99 7.41-.72L12 1.5z" />
+          </svg>
+          <span style={{ color: "#191919" }}>Trustpilot</span>
+        </span>
+      );
+    case "g2":
+      return (
+        <span className={`${wm} inline-flex items-center gap-1.5`} aria-label="G2">
+          <span
+            style={{ background: "#FF492C", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800 }}
+            aria-hidden
+          >
+            G2
+          </span>
+          <span style={{ color: "#191919" }}>G2</span>
+        </span>
+      );
+    case "themanifest":
+      return (
+        <span className={wm} aria-label="The Manifest">
+          <span style={{ color: "#1D1D1B" }}>the</span>
+          <span style={{ color: "#F04E37" }}>manifest</span>
+        </span>
+      );
+    case "sortlist":
+      return (
+        <span className={wm} aria-label="Sortlist">
+          <span style={{ color: "#12344D" }}>Sort</span>
+          <span style={{ color: "#00B2A9" }}>list</span>
+        </span>
+      );
+    case "provenexpert":
+      return (
+        <span className={wm} aria-label="ProvenExpert">
+          <span style={{ color: "#005EA8" }}>Proven</span>
+          <span style={{ color: "#F7941D" }}>Expert</span>
+        </span>
+      );
+    case "techbehemoths":
+      return (
+        <span className={wm} aria-label="TechBehemoths">
+          <span style={{ color: "#F26522" }}>Tech</span>
+          <span style={{ color: "#1B1B1B" }}>Behemoths</span>
+        </span>
+      );
+    case "itprofiles":
+      return (
+        <span className={wm} aria-label="ITProfiles">
+          <span style={{ color: "#0B63CE" }}>IT</span>
+          <span style={{ color: "#1B1B1B" }}>Profiles</span>
+        </span>
+      );
     default:
       return null;
   }

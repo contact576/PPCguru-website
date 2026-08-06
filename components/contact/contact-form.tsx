@@ -5,7 +5,7 @@ import { CheckCircle2, Loader2, ArrowRight } from "lucide-react";
 import { submitContact, type ContactState } from "@/app/contact/actions";
 import { TurnstileField } from "@/components/shared/turnstile-field";
 import { SessionField } from "@/components/shared/session-field";
-import { services } from "@/lib/data/services";
+import { SERVICE_OPTIONS, BUDGET_OPTIONS } from "@/lib/data/form-options";
 
 const initial: ContactState = { ok: false, message: "" };
 
@@ -40,28 +40,32 @@ export function ContactForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         <Field name="name" label="Name *" error={state.errors?.name} />
         <Field name="email" label="Email *" type="email" error={state.errors?.email} />
-        <Field name="phone" label="Phone" type="tel" error={state.errors?.phone} />
+        <Field name="phone" label="Phone *" type="tel" error={state.errors?.phone} />
         <Field name="company" label="Business name *" error={state.errors?.company} />
+        {/* `website` is the honeypot's name — the real field is `site_url`. */}
+        <Field name="site_url" label="Website" type="url" error={state.errors?.site_url} />
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-[var(--color-ink-dim)]">Monthly ad budget</span>
-          <select name="budget" className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-violet)]">
-            <option value="">Select…</option>
-            <option>Under $1,000</option>
-            <option>$1,000–$3,000</option>
-            <option>$3,000–$10,000</option>
-            <option>$10,000–$25,000</option>
-            <option>$25,000+</option>
+          <span className="mb-2 block text-sm font-medium text-[var(--color-ink-dim)]">Monthly budget *</span>
+          <select name="budget" defaultValue="" className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-violet)]">
+            <option value="" disabled>Select…</option>
+            {BUDGET_OPTIONS.map((b) => <option key={b} value={b}>{b}</option>)}
           </select>
-        </label>
-        <label className="block">
-          <span className="mb-2 block text-sm font-medium text-[var(--color-ink-dim)]">Interested in</span>
-          <select name="service" className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-4 py-3 text-sm text-[var(--color-ink)] outline-none focus:border-[var(--color-violet)]">
-            <option value="">Select…</option>
-            {services.map((s) => <option key={s.slug}>{s.name}</option>)}
-            <option>Not sure yet</option>
-          </select>
+          {state.errors?.budget && <span className="mt-1 block text-xs text-[var(--color-danger)]">{state.errors.budget}</span>}
         </label>
       </div>
+
+      <fieldset className="mt-5">
+        <legend className="mb-2 block text-sm font-medium text-[var(--color-ink-dim)]">What are you interested in? * <span className="text-[var(--color-ink-faint)]">(pick all that apply)</span></legend>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {SERVICE_OPTIONS.map((s) => (
+            <label key={s} className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-base)] px-3.5 py-3 text-sm transition-colors has-[:checked]:border-[var(--color-ink)] has-[:checked]:bg-[color-mix(in_srgb,var(--color-lime)_28%,transparent)]">
+              <input type="checkbox" name="services" value={s} className="h-4 w-4 shrink-0 accent-[var(--color-ink)]" />
+              {s}
+            </label>
+          ))}
+        </div>
+        {state.errors?.services && <span className="mt-1 block text-xs text-[var(--color-danger)]">{state.errors.services}</span>}
+      </fieldset>
 
       <label className="mt-5 block">
         <span className="mb-2 block text-sm font-medium text-[var(--color-ink-dim)]">What are your goals? *</span>

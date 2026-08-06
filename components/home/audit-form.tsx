@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { captureLead } from "@/app/actions/lead";
 import { TurnstileField } from "@/components/shared/turnstile-field";
+import { SERVICE_OPTIONS, BUDGET_OPTIONS } from "@/lib/data/form-options";
 
 const track = (event: string, data?: Record<string, unknown>) => {
   try {
@@ -12,8 +13,6 @@ const track = (event: string, data?: Record<string, unknown>) => {
   } catch { /* no-op until GA4/GTM wired */ }
 };
 
-const NEED = ["Google Ads", "Meta Ads", "SEO", "Landing Pages", "Tracking", "CRM / follow-up", "Full audit"];
-const SPEND = ["Not running ads yet", "Under $1,000", "$1,000–$5,000", "$5,000–$15,000", "$15,000+"];
 const ISSUE = ["Leads too expensive", "Leads low quality", "Tracking unclear", "Agency not transparent", "Need more booked calls", "Need landing-page help"];
 const CONTACT = ["WhatsApp", "Email", "Phone"];
 
@@ -29,7 +28,9 @@ const back: React.CSSProperties = { marginTop: 18, background: "transparent", bo
 
 export function AuditForm() {
   const [step, setStep] = useState(1);
-  const [need, setNeed] = useState("");
+  // Step 1 is multi-select now, so it can't auto-advance like the single-choice
+  // steps — the visitor confirms with an explicit Continue.
+  const [needs, setNeeds] = useState<string[]>([]);
   const [spend, setSpend] = useState("");
   const [issue, setIssue] = useState("");
   const [name, setName] = useState("");
@@ -53,10 +54,25 @@ export function AuditForm() {
     if (step < 4) setTimeout(() => setStep((s) => Math.min(4, s + 1)), 170);
   };
 
+  const toggleNeed = (value: string) => {
+    setError("");
+    setNeeds((prev) => (prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]));
+  };
+
   const submit = async () => {
     const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
     if (!name.trim() || !company.trim() || !emailOk) {
       setError("Please enter your name, business name and a valid business email.");
+      return;
+    }
+    if (!phone.trim()) {
+      setError("Please enter a phone number so we can reach you.");
+      return;
+    }
+    // Guard client-side too: these are collected back on steps 1–2, so a server
+    // rejection here would strand the visitor on step 4 with no way to fix it.
+    if (needs.length === 0 || !spend) {
+      setError("Please go back and choose the services you need and a budget range.");
       return;
     }
     setSubmitting(true); setError("");
@@ -69,13 +85,17 @@ export function AuditForm() {
     fd.set("phone", phone.trim());
     fd.set("website", website.trim());
     fd.set("source", "home:audit");
-    fd.set("detail", `Need: ${need || "—"} · Monthly spend: ${spend || "—"} · Main issue: ${issue || "—"} · Preferred contact: ${contact}`);
+    // Repeated key — the action reads these with getAll(), matching the checkbox
+    // groups on the other forms.
+    for (const n of needs) fd.append("services", n);
+    fd.set("budget", spend);
+    fd.set("detail", `Main issue: ${issue || "—"} · Preferred contact: ${contact}`);
     fd.set("turnstileToken", token);
     fd.set("renderedAt", renderedAt);
     const res = await captureLead({ ok: false, message: "" }, fd);
     setSubmitting(false);
     if (res.ok) {
-      track("audit_form_submit", { need, spend, issue });
+      track("audit_form_submit", { needs: needs.join(", "), spend, issue });
       setDone(true);
     } else {
       // Spent token → force a fresh challenge before they retry.
@@ -102,16 +122,30 @@ export function AuditForm() {
         </div>
       ) : step === 1 ? (
         <div>
-          <h3 className="head" style={{ fontSize: 21, marginBottom: 16 }}>What do you need help with?</h3>
+          <h3 className="head" style={{ fontSize: 21, marginBottom: 6 }}>What do you need help with?</h3>
+          <p style={{ fontSize: 13, color: "#83856f", marginBottom: 14 }}>Pick all that apply.</p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            {NEED.map((o) => <Opt key={o} label={o} active={need === o} onClick={() => pick("Need", o, setNeed)} />)}
+            {SERVICE_OPTIONS.map((o) => <Opt key={o} label={o} active={needs.includes(o)} onClick={() => toggleNeed(o)} />)}
           </div>
+          {error && <div style={{ marginTop: 14, fontSize: 13, color: "#c0531f", fontWeight: 600 }}>{error}</div>}
+          <button
+            type="button"
+            onClick={() => {
+              if (needs.length === 0) { setError("Please choose at least one service."); return; }
+              track("audit_form_step", { field: "Need", value: needs.join(", ") });
+              setError(""); setStep(2);
+            }}
+            className="mono"
+            style={{ marginTop: 16, width: "100%", background: "#14170e", color: "#f1efe3", fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: 14, borderRadius: 12, cursor: "pointer", border: "none" }}
+          >
+            Continue
+          </button>
         </div>
       ) : step === 2 ? (
         <div>
-          <h3 className="head" style={{ fontSize: 21, marginBottom: 16 }}>Monthly ad spend?</h3>
+          <h3 className="head" style={{ fontSize: 21, marginBottom: 16 }}>What&rsquo;s your monthly budget?</h3>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            {SPEND.map((o) => <Opt key={o} label={o} active={spend === o} onClick={() => pick("Spend", o, setSpend)} />)}
+            {BUDGET_OPTIONS.map((o) => <Opt key={o} label={o} active={spend === o} onClick={() => pick("Budget", o, setSpend)} />)}
           </div>
           <button type="button" onClick={() => setStep(1)} className="mono" style={back}>← Back</button>
         </div>

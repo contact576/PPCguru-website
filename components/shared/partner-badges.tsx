@@ -22,12 +22,12 @@ export function PartnerBadges({ className }: { className?: string }) {
   const creds = logosByGroup("credential");
   return (
     <div className={cn("flex flex-wrap items-center gap-3", className)}>
-      {creds.map((c) =>
-        c.src ? (
+      {creds.map((c) => {
+        const mark = c.src ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={c.name} src={c.src} alt={c.name} className="h-10 w-auto" />
+          <img src={c.src} alt={c.name} className="h-10 w-auto" />
         ) : (
-          <div key={c.name} className="flex items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2">
+          <div className="flex items-center gap-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-lg" style={{ backgroundColor: `${ACCENT[c.name] ?? "#6f7d22"}22`, color: ACCENT[c.name] ?? "#6f7d22" }}>
               <BadgeCheck size={16} />
             </span>
@@ -36,8 +36,16 @@ export function PartnerBadges({ className }: { className?: string }) {
               {c.sub ? <span className="block text-[10px] uppercase tracking-wide text-[var(--color-ink-faint)]">{c.sub}</span> : null}
             </span>
           </div>
-        )
-      )}
+        );
+        // Linked to the public profile so the credential can be verified at source.
+        return c.url ? (
+          <a key={c.name} href={c.url} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex rounded-xl transition-opacity hover:opacity-80" aria-label={`${c.name} — view profile`}>
+            {mark}
+          </a>
+        ) : (
+          <span key={c.name} className="inline-flex">{mark}</span>
+        );
+      })}
     </div>
   );
 }

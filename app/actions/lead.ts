@@ -8,6 +8,7 @@ import { identifyVisitor } from "@/lib/identity";
 import { verifyTurnstile, turnstileConfigured } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
 import { rateLimit, clientIpFromHeaders } from "@/lib/rate-limit";
+import { SERVICE_OPTIONS, BUDGET_OPTIONS, SERVICES_MAX_LEN } from "@/lib/data/form-options";
 
 /**
  * Shared lead-capture action used by the pop-up funnel and the gated tools.
@@ -34,6 +35,15 @@ const schema = z.object({
   // fall back to "Unknown (website lead)" for everything but the contact form).
   company: z.string().min(2, "Please enter your business name.").max(120),
   website: z.string().max(200).optional().or(z.literal("")),
+  // Services are multi-select checkboxes, so this arrives as N repeated form
+  // entries — see `rawFrom()` for why we can't use Object.fromEntries alone.
+  // Unknown values are rejected rather than trimmed: the strings are written
+  // straight to Supabase and Zoho, so a spoofed option would poison reporting.
+  services: z
+    .array(z.enum(SERVICE_OPTIONS))
+    .min(1, "Please choose at least one service.")
+    .max(SERVICE_OPTIONS.length),
+  budget: z.enum(BUDGET_OPTIONS, { message: "Please choose a budget range." }),
   source: z.string().max(80).optional().or(z.literal("")),
   detail: z.string().max(2000).optional().or(z.literal("")),
   // First-party device id (<SessionField />). Lets us retro-stitch everything
@@ -55,8 +65,20 @@ export type LeadState = {
 /** Silent drop: bots are told "thanks" so they can't probe the filter. */
 const SILENT_OK: LeadState = { ok: true, message: "Thanks — we'll be in touch shortly." };
 
+/**
+ * `Object.fromEntries` keeps only the LAST value of a repeated key, which would
+ * silently reduce a multi-select to one checkbox. Pull the repeating fields with
+ * getAll() and let the rest collapse as before.
+ */
+function rawFrom(formData: FormData) {
+  return {
+    ...Object.fromEntries(formData.entries()),
+    services: formData.getAll("services").map(String),
+  };
+}
+
 export async function captureLead(_prev: LeadState, formData: FormData): Promise<LeadState> {
-  const raw = Object.fromEntries(formData.entries());
+  const raw = rawFrom(formData);
   const parsed = schema.safeParse(raw);
 
   if (!parsed.success) {
@@ -106,6 +128,11 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
   // Persist to Supabase and mirror into Zoho CRM (both best-effort) so a lead is
   // never lost even if email fails. Run together — they're independent, and
   // serialising them would add the CRM round-trip to the visitor's wait.
+  // `leads.service` is a single text column and Zoho has no standard field for
+  // it either, so the multi-select is stored as one comma-joined string. Capped
+  // so a crafted payload can't blow past the column/Description budget.
+  const servicesText = data.services.join(", ").slice(0, SERVICES_MAX_LEN);
+
   const record = {
     name: data.name,
     email: data.email,
@@ -113,6 +140,8 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
     company: data.company,
     website: data.website,
     source: data.source || "site",
+    service: servicesText,
+    budget: data.budget,
     message: data.detail,
   };
   const [leadId, crmed] = await Promise.all([saveLeadReturning(record), sendLeadToZoho(record)]);
@@ -141,6 +170,8 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
       `Email: ${data.email}`,
       `Phone: ${data.phone}`,
       `Website: ${data.website || "—"}`,
+      `Services: ${servicesText}`,
+      `Budget: ${data.budget}`,
       data.detail ? `\n${data.detail}` : "",
     ].join("\n"),
   });

@@ -1,7 +1,7 @@
 import { Zap } from "lucide-react";
 
 /**
- * Bold, unmissable hero offer banner — the flagship 30-day-free-trial hook.
+ * Bold, unmissable hero offer banner — the flagship free-website-audit hook.
  * A lime card with an ink badge, meant to STAND OUT in the hero (not a subtle
  * chip row). Use `badge` + `line`; `credit` appends the Google Ads credit.
  */

@@ -14,33 +14,33 @@ import { trustFacts } from "@/lib/data/performance-stats";
 
 export async function generateMetadata(): Promise<Metadata> {
   return withMetaOverride(buildMetadata({
-  title: "Free Google & Meta Ads Audit + 30-Day Free Trial | PPC Guru",
+  title: "Free Website Audit | PPC Guru",
   description:
-    "Get a free, no-obligation audit of your Google or Meta Ads — wasted spend, tracking gaps and the first fixes we'd make. Or start a 30-day free trial: no contract, no setup fee, no upfront payment. GTA & Canada.",
+    "Get a free, no-obligation website audit — conversion gaps, tracking problems, wasted ad spend and the first fixes we'd make. No contract, no setup fee. GTA & Canada.",
   path: "/free-audit",
 }), "/free-audit");
 }
 
 const auditIncludes = [
-  "A line-by-line review of wasted spend and where it's going",
+  "A page-by-page review of what's stopping visitors converting",
   "Conversion-tracking & attribution health check (are your leads even measured?)",
-  "Campaign structure, match types and negative-keyword gaps",
-  "Landing-page & creative conversion review",
-  "How you benchmark against your industry",
+  "Site speed, mobile experience and Core Web Vitals",
+  "A line-by-line review of wasted ad spend and where it's going",
+  "How your site and offer benchmark against your competitors",
   "A prioritized, plain-English 30-day action plan — yours to keep",
 ];
 
-const trialSteps = [
-  { step: 1, kicker: "Day 0", title: "Free audit & plan", body: "We review your account and show you exactly where the opportunity is — no obligation. If we're not a fit, we'll tell you." },
-  { step: 2, kicker: "Days 1–30", title: "We run your ads — free", body: "We rebuild and manage your Google or Meta campaigns for 30 days. No contract, no setup fee, no upfront management payment. You only pay the platforms for ad spend, as always." },
-  { step: 3, kicker: "Day 30", title: "You decide", body: "Happy with the lead quality and performance? We move forward. Not for you? Walk away — you keep your accounts, data and everything we built. No strings." },
+const auditSteps = [
+  { step: 1, kicker: "Day 0", title: "You send us your site", body: "Tell us your website, what you sell and where your leads come from today. It takes about two minutes — no call required to get started." },
+  { step: 2, kicker: "Days 1–2", title: "We audit it properly", body: "A strategist reviews your website, tracking, and any Google or Meta accounts you share — conversion gaps, wasted spend, technical problems and competitor position." },
+  { step: 3, kicker: "Day 3", title: "You get the plan", body: "A written, prioritized action plan in plain English. Yours to keep and act on, whether you work with us or not. No obligation, no pressure." },
 ];
 
 const faqs = [
-  { q: "What does the 30-day free trial actually include?", a: "We audit, rebuild and manage your Google or Meta Ads for 30 days with no management fee, no contract, no setup fee and no upfront payment. The only cost is your ad spend, which is billed directly by Google/Meta from your own account (that money buys your clicks). At the end of 30 days you decide whether to continue — no obligation." },
+  { q: "What does the free website audit actually include?", a: "A written review of your website and marketing: what's stopping visitors from converting, whether your leads are being tracked properly, how fast the site is on mobile, where ad budget is being wasted if you're running ads, and how you compare to competitors. You get a prioritized action plan you can hand to any developer or agency." },
   { q: "Is the audit really free?", a: "Yes — completely free and no obligation. You get a written, prioritized action plan you can keep and use, whether or not you work with us." },
-  { q: "Who is the free trial for?", a: "It's built for businesses that are switching agencies, unhappy with their current results, or want to test us before committing. If you're spending at least a few thousand dollars a month on ads, there's usually enough data for the trial to prove itself." },
-  { q: "What's the catch?", a: "There isn't one. We'd rather prove the opportunity first than sell you a contract up front. If we can't move your numbers, we don't expect you to stay — and you keep everything we build either way." },
+  { q: "Who is the free audit for?", a: "Any business that has a website and wants more from it — whether you're already running ads, thinking about starting, or getting leads that never convert. If you don't have a website yet, tell us anyway and we'll review what you do have." },
+  { q: "What's the catch?", a: "There isn't one. We'd rather prove the opportunity first than sell you a contract up front. If we're not the right fit, we'll tell you — and you keep the plan either way." },
   { q: "Do I keep my accounts and data?", a: "Always. Your ad accounts, data, history and billing stay in your name from day one — even if we part ways." },
   { q: "What about the up-to-$3,600 Google Ads credit?", a: "As a Google Partner we can set up to $3,600 in Google Ads credit for eligible new accounts. Eligibility and the exact amount are set by Google; we confirm the details on your audit call." },
 ];
@@ -52,13 +52,13 @@ export default function FreeAuditPage() {
       <JsonLd data={breadcrumbSchema(crumbs)} />
 
       <PageHero
-        eyebrow="Free audit + 30-day free trial"
-        title={<>See where your ad spend is <span className="text-gradient">leaking</span> — free</>}
-        intro="Get a free, no-obligation audit of your Google or Meta account, or start a 30-day free trial and let us prove it. No contract, no setup fee, no upfront payment — you only continue if you're happy with the leads."
+        eyebrow="Free website audit"
+        title={<>See where your website is <span className="text-gradient">leaking</span> leads — free</>}
+        intro="Get a free, no-obligation audit of your website and marketing — the conversion gaps, tracking problems and wasted ad spend costing you leads, plus the first fixes we'd make. No contract, no setup fee."
         breadcrumbs={crumbs}
       >
         <div className="flex flex-wrap items-center gap-2">
-          <span className="mono rounded-full border border-[#cfe39a] bg-[#eef2dd] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.04em] text-[#4f5f14]">30-day free trial</span>
+          <span className="mono rounded-full border border-[#cfe39a] bg-[#eef2dd] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.04em] text-[#4f5f14]">Free website audit</span>
           {masterOffer.riskReversal.map((r) => (
             <span key={r} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-3 py-1.5 text-[11px] uppercase tracking-[.04em] text-[var(--color-ink-dim)]">{r}</span>
           ))}
@@ -72,15 +72,15 @@ export default function FreeAuditPage() {
       {/* The form, high on the page */}
       <LeadBand
         source="offer:free-audit"
-        title="Claim your free audit"
-        blurb="Tell us where to send it. We'll review your account and reply within one business day — and if you want the 30-day trial, we'll set it up. No obligation."
+        title="Claim your free website audit"
+        blurb="Tell us where to send it. We'll review your website and reply within one business day. No obligation."
         points={auditIncludes.slice(0, 3)}
-        ctaLabel="Get my free audit"
+        ctaLabel="Get my free website audit"
       />
 
       {/* What's in the audit */}
       <Section>
-        <SectionHeading align="left" eyebrow="What you get" title={<>What&apos;s in your <span className="text-gradient">free audit</span></>} intro="Built like a mini audit report — not a sales call. Yours to keep either way." />
+        <SectionHeading align="left" eyebrow="What you get" title={<>What&apos;s in your <span className="text-gradient">free website audit</span></>} intro="Built like a mini audit report — not a sales call. Yours to keep either way." />
         <div className="mt-10 grid gap-4 md:grid-cols-2">
           {auditIncludes.map((it) => (
             <div key={it} className="flex items-start gap-3 rounded-[16px] border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
@@ -91,14 +91,14 @@ export default function FreeAuditPage() {
         </div>
       </Section>
 
-      {/* How the trial works */}
+      {/* How the audit works */}
       <Section tone="cream">
-        <SectionHeading align="left" eyebrow="How the 30-day free trial works" title={<>We prove it <span className="text-gradient">first</span></>} intro="Most agencies ask you to sign before you've seen anything work. We flip it." />
-        <StepFlow steps={trialSteps} />
+        <SectionHeading align="left" eyebrow="How the free website audit works" title={<>We prove it <span className="text-gradient">first</span></>} intro="Most agencies ask you to sign before you've seen anything work. We flip it." />
+        <StepFlow steps={auditSteps} />
       </Section>
 
-      <FaqAccordion faqs={faqs} title="Free audit & trial — questions" />
-      <CtaBlock title="Ready to see where your budget is leaking?" intro="Get your free audit, or start the 30-day free trial. No contract, no setup fee, no obligation." />
+      <FaqAccordion faqs={faqs} title="Free website audit — questions" />
+      <CtaBlock title="Ready to see where your budget is leaking?" intro="Get your free website audit. No contract, no setup fee, no obligation." />
     </>
   );
 }

@@ -133,8 +133,8 @@ export const certGroups = [
 ];
 
 export const homePricing = [
-  { name: "Starter Audit", bestFor: "For accounts that need clarity before scaling", price: "Free", priceNote: "", dark: false, cta: "Get free audit", items: ["Account & tracking audit", "Wasted-spend review", "Prioritized fix list", "Clear next steps"] },
-  { name: "Growth Management", bestFor: "For businesses with a consistent monthly ad budget", price: "Custom", priceNote: "fee", dark: true, cta: "Start a free trial", items: ["Google Ads management", "Weekly optimization", "Conversion tracking review", "Monthly reporting & strategy", "Landing-page recommendations"] },
+  { name: "Starter Audit", bestFor: "For accounts that need clarity before scaling", price: "Free", priceNote: "", dark: false, cta: "Get my free website audit", items: ["Website & tracking audit", "Wasted-spend review", "Prioritized fix list", "Clear next steps"] },
+  { name: "Growth Management", bestFor: "For businesses with a consistent monthly ad budget", price: "Custom", priceNote: "fee", dark: true, cta: "Get my free website audit", items: ["Google Ads management", "Weekly optimization", "Conversion tracking review", "Monthly reporting & strategy", "Landing-page recommendations"] },
   { name: "Scale Partner", bestFor: "For multi-channel paid media + CRO", price: "Custom", priceNote: "fee", dark: false, cta: "Talk to us", items: ["Google + Meta paid media", "Remarketing & full-funnel", "Landing-page testing / CRO", "Analytics & dashboards", "Dedicated account manager"] },
 ];
 

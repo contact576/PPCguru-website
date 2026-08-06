@@ -46,12 +46,14 @@ A 7-wave AEO/GEO/E-E-A-T overhaul + an optimization session took LLM-readiness f
 
 A conversion + motion pass on top of the AEO/design work. Durable pieces:
 - **Page-specific offers — single source `lib/data/service-offers.ts`:** per-service `{hook, subhook,
-  popupTitle, popupBody, ctaLabel, formSource, trial, credit}` keyed by slug + `masterOffer` (the **30-day
-  free trial** for Google/Meta ads, the free audit, up-to-**$3,600** Google Ads credit, risk-reversal chips).
+  popupTitle, popupBody, ctaLabel, formSource, credit}` keyed by slug + `masterOffer` (the **free website
+  audit**, up-to-**$3,600** Google Ads credit, risk-reversal chips).
   `offerForPath(pathname)` resolves the offer for a route (fallback `genericOffer`). CONFIRMED real / honesty-safe.
-  The 30-day trial is scoped to `google-ads` + `meta-ads` ONLY; the $3,600 credit to `google-ads`.
-- **`components/shared/hero-offer.tsx` `HeroOffer`** — the bold lime "⚡ 30-day free trial" banner in every hero
-  (service template, 3 flagships, combo pages, homepage); non-trial services show a "Free audit" banner.
+  The $3,600 credit is scoped to `google-ads` only.
+  ⚠ The **30-day free trial was RETIRED 2026-08-06** and replaced site-wide by the free website audit — the
+  `trial` flag no longer exists. Don't reintroduce trial copy.
+- **`components/shared/hero-offer.tsx` `HeroOffer`** — the bold lime "⚡ Free website audit" banner in every hero
+  (service template, 3 flagships, combo pages, homepage).
 - **`components/shared/offer-popup.tsx` (rewritten, page-aware):** on **service pages** a **centre-screen modal
   ~4s after landing** with the page-specific catchy hook; a gentle bottom-right card elsewhere. Once per session
   (localStorage `ppcg_offer_done`), suppressed on `/contact`,`/results`,`/tools`, and **openable on demand by any
@@ -117,7 +119,8 @@ Edit the typed data modules, not the JSX. Pages render via `generateStaticParams
 - `lib/data/team.ts` — team roster for the About "Meet the team" section (`components/sections/team.tsx`);
   the two real founders are seeded, it scales to N (headshot-or-monogram, focus chips, optional LinkedIn).
   Only add **real** people.
-- `lib/data/offers.ts` — GENERIC fallback pop-up copy (up-to-$3,600 credit, free audit, 30-day trial).
+- `lib/data/offers.ts` — GENERIC fallback pop-up copy (free website audit, up-to-$3,600 credit). Currently
+  unreferenced — `service-offers.ts` is the live source.
   Page-specific offers now live in `lib/data/service-offers.ts` (see the Lead-gen/conversion section).
 - `content/blog/*.md` — posts read at build by `lib/blog.ts`.
 - **AEO content layer** (`service-content.ts`, `industry-content.ts`, `service-faq.ts`, `industry-faq.ts`,
@@ -264,3 +267,13 @@ Feature work: branch → PR → `main`; each PR push builds a Vercel **preview**
 - Audit docs in repo root: `WEBSITE-AUDIT.md` (page-by-page trust/credibility audit + fixes, all shipped)
   and `ENTERPRISE-AUDIT.md` (enterprise-B2B readiness audit + ranked plan). `CONTENT-TODO.md` lists the
   real assets still to swap in (phone/WhatsApp, founder photos, named client proof, GA4/Pixel/Resend keys).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

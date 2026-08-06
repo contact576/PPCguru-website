@@ -99,8 +99,8 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
           </Magnetic>
           <HeroOffer
             className="mt-5 max-w-xl"
-            badge={offer.trial ? "30-day free trial" : "Free audit · no obligation"}
-            line={offer.trial ? `Try our ${sShort} management for ${iShort.toLowerCase()} free for 30 days — no contract, no setup fee.` : `${offer.subhook} No obligation, no lock-in.`}
+            badge="Free website audit · no obligation"
+            line={`${offer.subhook} No obligation, no lock-in.`}
             credit={offer.credit}
           />
         </div>

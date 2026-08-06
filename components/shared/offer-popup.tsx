@@ -76,10 +76,12 @@ export function OfferPopup() {
   function onDone() { mark(K_DONE); setSubmitted(true); }
   if (!open) return null;
 
-  const eyebrow = offer.trial ? "30-day free trial + free audit" : masterOffer.audit.label;
+  const eyebrow = masterOffer.audit.label;
 
   const inner = (
-    <div className="relative w-full max-w-md rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 shadow-tile sm:p-7">
+    // The capture form asks for services + budget now, so cap the card and let
+    // it scroll — otherwise the submit button falls off short viewports.
+    <div className="relative max-h-[92dvh] w-full max-w-md overflow-y-auto rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 shadow-tile sm:p-7">
       <button onClick={() => setOpen(false)} aria-label="Close" className="absolute right-3.5 top-3.5 flex h-9 w-9 items-center justify-center rounded-full text-[var(--color-ink-faint)] hover:bg-[var(--color-surface-2)]"><X size={18} /></button>
       {submitted ? (
         <div className="py-6 text-center">
