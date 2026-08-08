@@ -40,3 +40,16 @@ export function clientIp(req: Request | NextRequest): string {
   if (xff) return xff.split(",")[0].trim();
   return req.headers.get("x-real-ip") || "unknown";
 }
+
+/**
+ * Same, for Server Actions — they receive `FormData`, not a `Request`, so the
+ * headers have to come from `next/headers`. Server-only (this module is only
+ * ever imported by route handlers and actions).
+ */
+export async function clientIpFromHeaders(): Promise<string> {
+  const { headers } = await import("next/headers");
+  const h = await headers();
+  const xff = h.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  return h.get("x-real-ip") || "unknown";
+}

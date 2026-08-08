@@ -27,6 +27,11 @@ export type Logo = {
   abbr?: string;
   /** For credentials: the sub-label (e.g. "Partner program", "Accredited business"). */
   sub?: string;
+  /**
+   * For credentials: the public verification profile. When set, `PartnerBadges`
+   * makes the badge a link so the claim can be checked at source.
+   */
+  url?: string;
 };
 
 export const logos: Logo[] = [
@@ -70,7 +75,7 @@ export const logos: Logo[] = [
   // [VERIFY] Swap these for the OFFICIAL badge artwork downloaded from your
   // Google Partners / Meta Business Partner dashboards before launch — only
   // display them while you hold active partner status.
-  { name: "Google Partner", group: "credential", sub: "Partner program", src: "/badges/google-partner.svg" },
+  { name: "Google Partner", group: "credential", sub: "Partner program", src: "/badges/google-partner.svg", url: "https://www.google.com/partners/agency?id=1117142019" },
   { name: "Meta Business Partner", group: "credential", sub: "Partner program", src: "/badges/meta-business-partner.svg" },
   { name: "BBB Accredited", group: "credential", sub: "Accredited business" },
 

@@ -4,18 +4,59 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
-import { nav, type NavItem } from "@/lib/site-config";
+import { nav, type NavItem, type NavChild } from "@/lib/site-config";
 import { Logo } from "@/components/shared/logo";
 
 /**
  * Header — sticky, frosts to cream on scroll. Dropdown-aware: parents with
  * children open on hover AND keyboard focus (focus-within), Esc closes, every
  * item is a real link. Mobile menu mirrors the structure as accordions.
+ *
+ * Desktop dropdowns render as a MEGA-MENU: the flat `children` list is grouped
+ * into columns so a 15-item menu (Services) reads as four labelled groups side
+ * by side instead of one long scroll. Layout is derived from the data, not
+ * configured per item — see `groupChildren` / `panelWidth`.
  */
 function isActive(pathname: string, item: NavItem) {
   if (item.href === "/") return pathname === "/";
   if (pathname === item.href || pathname.startsWith(item.href + "/")) return true;
   return item.children?.some((c) => c.href !== item.href && pathname.startsWith(c.href)) ?? false;
+}
+
+type NavSection = { title?: string; items: NavChild[] };
+
+/**
+ * Split a flat child list into sections at each `heading: true` marker, and peel
+ * the trailing "All X →" link off as a panel footer CTA.
+ */
+function groupChildren(children: NavChild[]): { sections: NavSection[]; footer?: NavChild } {
+  const items = [...children];
+  const last = items[items.length - 1];
+  const footer = last && !last.heading && last.label.includes("→") ? items.pop() : undefined;
+
+  const sections: NavSection[] = [];
+  for (const c of items) {
+    if (c.heading) sections.push({ title: c.label, items: [] });
+    else {
+      if (sections.length === 0) sections.push({ items: [] });
+      sections[sections.length - 1].items.push(c);
+    }
+  }
+  return { sections, footer };
+}
+
+/**
+ * Menus with group headings (Services) get the full mega panel; long flat menus
+ * get two columns; short ones stay a single column. Anchored left, and every
+ * menu with a panel sits on the left half of the bar, so this can't overflow the
+ * viewport's right edge at the lg breakpoint.
+ */
+function panelLayout(sections: NavSection[]) {
+  const headed = sections.some((s) => s.title);
+  const count = sections.reduce((n, s) => n + s.items.length, 0);
+  if (headed) return { width: "min(880px, calc(100vw - 40px))", cols: 3 };
+  if (count > 6) return { width: "min(470px, calc(100vw - 40px))", cols: 2 };
+  return { width: "260px", cols: 1 };
 }
 
 export function SiteHeader() {
@@ -76,6 +117,8 @@ export function SiteHeader() {
               );
             }
             const menuOpen = openMenu === item.label;
+            const { sections, footer } = groupChildren(item.children);
+            const { width, cols } = panelLayout(sections);
             return (
               <div
                 key={item.label}
@@ -96,20 +139,34 @@ export function SiteHeader() {
                   {item.label}
                   <ChevronDown size={13} className="transition-transform" style={{ transform: menuOpen ? "rotate(180deg)" : "none" }} />
                 </Link>
-                {/* Dropdown: visibility is React-state controlled so a route change can close it. */}
+                {/* Mega panel: visibility is React-state controlled so a route change can close it. */}
                 <div
                   className="transition-all duration-200"
-                  style={{ position: "absolute", top: "100%", left: 0, paddingTop: 8, minWidth: 248, visibility: menuOpen ? "visible" : "hidden", opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(4px)", pointerEvents: menuOpen ? "auto" : "none" }}
+                  style={{ position: "absolute", top: "100%", left: 0, paddingTop: 8, width, visibility: menuOpen ? "visible" : "hidden", opacity: menuOpen ? 1 : 0, transform: menuOpen ? "translateY(0)" : "translateY(4px)", pointerEvents: menuOpen ? "auto" : "none" }}
                 >
-                  <div style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 16, padding: 8, boxShadow: "0 18px 50px rgba(20,23,14,.12)" }}>
-                    {item.children.map((c) =>
-                      c.heading ? (
-                        <div key={c.label} className="mono" style={{ padding: "11px 12px 4px", fontSize: 9.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#9a9b88" }}>{c.label}</div>
-                      ) : (
-                        <Link key={c.label} href={c.href} className="hover:bg-[#f4f2e6]" style={{ display: "block", padding: "9px 12px", borderRadius: 10, color: "#2c2e22", textTransform: "none", letterSpacing: 0, fontWeight: 500, fontSize: 13.5 }}>
-                          {c.label}
-                        </Link>
-                      )
+                  <div style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 18, padding: cols > 1 ? 16 : 8, boxShadow: "0 18px 50px rgba(20,23,14,.12)" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, minmax(0,1fr))`, gap: cols > 1 ? "18px 12px" : 0, alignItems: "start" }}>
+                      {sections.map((s, i) => (
+                        <div key={s.title ?? `s${i}`}>
+                          {s.title && (
+                            <div className="mono" style={{ padding: "0 10px 7px", fontSize: 9.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#9a9b88" }}>{s.title}</div>
+                          )}
+                          {s.items.map((c) => (
+                            <Link key={c.label} href={c.href} className="hover:bg-[#f4f2e6]" style={{ display: "block", padding: "8px 10px", borderRadius: 10, color: "#2c2e22", textTransform: "none", letterSpacing: 0, fontWeight: 500, fontSize: 13.5, lineHeight: 1.35 }}>
+                              {c.label}
+                            </Link>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                    {footer && (
+                      <Link
+                        href={footer.href}
+                        className="mono hover:bg-[#c2f01f]"
+                        style={{ display: "flex", justifyContent: "center", marginTop: cols > 1 ? 16 : 8, padding: "11px 12px", borderRadius: 12, background: "#ceff3a", color: "#14170e", fontSize: 10.5, fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase" }}
+                      >
+                        {footer.label}
+                      </Link>
                     )}
                   </div>
                 </div>

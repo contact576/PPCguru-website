@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/components/shared/legal-layout";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Terms of Use",
   description: `The terms governing your use of the ${siteConfig.name} website.`,
   path: "/terms",
-});
+}), "/terms");
+}
 
 export default function TermsPage() {
   return (

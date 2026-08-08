@@ -4,13 +4,16 @@ import { Section } from "@/components/ui/section";
 import { InstantAudit } from "@/components/tools/instant-audit";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Instant AI Website Audit — Free",
   description:
     "Enter your URL for an instant, AI-written audit of your website's speed, SEO and ad-tracking signals. Free, no sign-up.",
   path: "/tools/instant-audit",
-});
+}), "/tools/instant-audit");
+}
 
 export default function InstantAuditPage() {
   return (

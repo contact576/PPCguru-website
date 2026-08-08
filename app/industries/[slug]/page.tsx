@@ -25,6 +25,7 @@ import { FaqAccordion } from "@/components/sections/faq-accordion";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { TrustBadgeBar, ServiceIntro, CityCallout, LastReviewed } from "@/components/sections/service-aeo";
 import { BigQuote } from "@/components/ui/layout";
 import { getIndustryContent } from "@/lib/data/industry-content";
@@ -56,7 +57,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const ind = getIndustry(slug);
   if (!ind) return {};
-  return buildMetadata({ title: `${ind.name} Marketing in the GTA & Canada`, description: ind.description, path: `/industries/${slug}` });
+  return withMetaOverride(buildMetadata({ title: `${ind.name} Marketing in the GTA & Canada`, description: ind.description, path: `/industries/${slug}` }), `/industries/${slug}`);
 }
 
 export default async function IndustryPage({ params }: { params: Promise<{ slug: string }> }) {

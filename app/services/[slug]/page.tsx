@@ -37,6 +37,7 @@ const SERVICE_PLATFORM: Record<string, PlatformId> = {
 };
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { serviceArt } from "@/components/illustrations/service-art";
 
 export function generateStaticParams() {
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  return buildMetadata({ title: `${service.name} in the GTA & Canada`, description: service.description, path: `/services/${slug}` });
+  return withMetaOverride(buildMetadata({ title: `${service.name} in the GTA & Canada`, description: service.description, path: `/services/${slug}` }), `/services/${slug}`);
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -91,8 +92,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <div>
           <HeroOffer
             className="mb-6 max-w-xl"
-            badge={offer.trial ? "30-day free trial" : "Free audit · no obligation"}
-            line={offer.trial ? `Try our ${service.name} management free for 30 days — no contract, no setup fee, no obligation.` : offer.subhook}
+            badge="Free website audit · no obligation"
+            line={offer.subhook}
             credit={offer.credit}
           />
           <Magnetic>
@@ -168,7 +169,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <div className="flex flex-col items-center gap-5 rounded-[var(--radius-lg)] border border-[var(--accent-line)] bg-[var(--accent-tint)] px-6 py-8 text-center md:flex-row md:items-center md:justify-between md:text-left">
           <div>
             <p className="head text-[clamp(1.15rem,2.4vw,1.5rem)] text-[var(--color-ink)]">{offer.hook}</p>
-            <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{offer.subhook}{offer.trial ? " No contract, no setup fee — walk away anytime." : " No obligation, no lock-in."}</p>
+            <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">{offer.subhook} No obligation, no lock-in.</p>
           </div>
           <Magnetic><LeadCtaButton label={<>{offer.ctaLabel} <ArrowRight size={16} /></>} source={`${offer.formSource}:mid`} title={offer.popupTitle} blurb={offer.popupBody} submitLabel={offer.ctaLabel} className={`${ctaCls} shrink-0`} /></Magnetic>
         </div>

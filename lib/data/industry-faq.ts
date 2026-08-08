@@ -197,7 +197,7 @@ export const industryFaq: Record<string, Pick<IndustryContent, "faqs">> = {
       },
       {
         "q": "Why should we choose PPC Guru for our renovation business?",
-        "a": "We're a Google Partner and Meta Business Partner based in the GTA (Brampton), serving renovators and builders across Canada and the USA, with a proven construction playbook — qualifying questions, portfolio-led pages, financing messaging and long-cycle remarketing. You own your accounts and data, contracts are month-to-month, ad spend stays separate from our fee, and we report on signed jobs and revenue rather than vanity clicks."
+        "a": "We're a Google Partner and Meta Business Partner based in the GTA (Toronto), serving renovators and builders across Canada and the USA, with a proven construction playbook — qualifying questions, portfolio-led pages, financing messaging and long-cycle remarketing. You own your accounts and data, contracts are month-to-month, ad spend stays separate from our fee, and we report on signed jobs and revenue rather than vanity clicks."
       }
     ]
   },

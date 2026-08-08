@@ -46,12 +46,14 @@ A 7-wave AEO/GEO/E-E-A-T overhaul + an optimization session took LLM-readiness f
 
 A conversion + motion pass on top of the AEO/design work. Durable pieces:
 - **Page-specific offers — single source `lib/data/service-offers.ts`:** per-service `{hook, subhook,
-  popupTitle, popupBody, ctaLabel, formSource, trial, credit}` keyed by slug + `masterOffer` (the **30-day
-  free trial** for Google/Meta ads, the free audit, up-to-**$3,600** Google Ads credit, risk-reversal chips).
+  popupTitle, popupBody, ctaLabel, formSource, credit}` keyed by slug + `masterOffer` (the **free website
+  audit**, up-to-**$3,600** Google Ads credit, risk-reversal chips).
   `offerForPath(pathname)` resolves the offer for a route (fallback `genericOffer`). CONFIRMED real / honesty-safe.
-  The 30-day trial is scoped to `google-ads` + `meta-ads` ONLY; the $3,600 credit to `google-ads`.
-- **`components/shared/hero-offer.tsx` `HeroOffer`** — the bold lime "⚡ 30-day free trial" banner in every hero
-  (service template, 3 flagships, combo pages, homepage); non-trial services show a "Free audit" banner.
+  The $3,600 credit is scoped to `google-ads` only.
+  ⚠ The **30-day free trial was RETIRED 2026-08-06** and replaced site-wide by the free website audit — the
+  `trial` flag no longer exists. Don't reintroduce trial copy.
+- **`components/shared/hero-offer.tsx` `HeroOffer`** — the bold lime "⚡ Free website audit" banner in every hero
+  (service template, 3 flagships, combo pages, homepage).
 - **`components/shared/offer-popup.tsx` (rewritten, page-aware):** on **service pages** a **centre-screen modal
   ~4s after landing** with the page-specific catchy hook; a gentle bottom-right card elsewhere. Once per session
   (localStorage `ppcg_offer_done`), suppressed on `/contact`,`/results`,`/tools`, and **openable on demand by any
@@ -117,7 +119,8 @@ Edit the typed data modules, not the JSX. Pages render via `generateStaticParams
 - `lib/data/team.ts` — team roster for the About "Meet the team" section (`components/sections/team.tsx`);
   the two real founders are seeded, it scales to N (headshot-or-monogram, focus chips, optional LinkedIn).
   Only add **real** people.
-- `lib/data/offers.ts` — GENERIC fallback pop-up copy (up-to-$3,600 credit, free audit, 30-day trial).
+- `lib/data/offers.ts` — GENERIC fallback pop-up copy (free website audit, up-to-$3,600 credit). Currently
+  unreferenced — `service-offers.ts` is the live source.
   Page-specific offers now live in `lib/data/service-offers.ts` (see the Lead-gen/conversion section).
 - `content/blog/*.md` — posts read at build by `lib/blog.ts`.
 - **AEO content layer** (`service-content.ts`, `industry-content.ts`, `service-faq.ts`, `industry-faq.ts`,
@@ -145,6 +148,35 @@ via `components/sections/estimate-band.tsx`.
   `components/shared/lead-cta.tsx` `LeadCtaButton` (button that opens an in-place popup — used across service
   heroes/CTAs), `components/sections/lead-band.tsx` (per-page contact band, page-specific copy), and
   `components/tools/result-gate.tsx` (`ResultGate` blurs the value half of tool results until a lead submits).
+
+### Anti-spam (four layers — every form, not just /contact)
+Inbound form spam was flooding the team inboxes; `captureLead` AND `submitContact` now run the same gauntlet
+**before** any Supabase write or email send. Order matters: nothing spammy may reach
+`sendLeadAutoresponder`, which would otherwise mail a *forged* address from our domain and burn sender
+reputation.
+1. **Honeypot** — `company_website` (lead) / `website` (contact), must be empty.
+2. **Per-IP rate limit** (`lib/rate-limit.ts` via `headers()`): 5 leads / 4 contacts per IP per 10 min.
+3. **Cloudflare Turnstile** (`lib/turnstile.ts` `verifyTurnstile`) — the "I'm not a robot" check. Verifies
+   with `remoteip` bound so tokens can't be resold/replayed. **Fail-closed once configured, no-op until
+   then** (both `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` must be set — with only one the
+   widget never renders, so requiring a token would block every real visitor). Fails **open** if Cloudflare
+   itself is unreachable — an outage there must not eat real leads.
+4. **Heuristics** (`lib/spam-filter.ts` `scoreSubmission`) — additive score vs `SPAM_THRESHOLD`; catches the
+   SEO/backlink pitches, link-drops, casino/crypto spam and sub-2.5s bot submits. This is the ONLY active
+   filter while the Turnstile keys are blank, and the backstop against solved-for-hire challenges after.
+
+- **Bot submissions are dropped SILENTLY** (returned as `ok: true`) so a bot can't probe what tripped the
+  filter. Drops are `console.warn`ed (`[spam] blocked …`) so they stay auditable in Vercel logs.
+- **`components/shared/turnstile-field.tsx` `<TurnstileField />`** is the one client widget — drop it in any
+  form above the submit button. It posts hidden `turnstileToken` + `renderedAt` (the time-trap stamp) and
+  needs no other wiring. It uses **explicit** rendering, not the `cf-turnstile` auto-scan class: our forms
+  mount inside modals/pop-ups and several can share a page, and auto-scan only sweeps the DOM once at script
+  load. Turnstile tokens are **single-use** — pass a `resetKey` that changes on a rejected submit, or the
+  retry fails with a spent token. `onToken` is for forms that build `FormData` by hand (`home/audit-form.tsx`).
+- **Tuning is false-positive-averse** — a blocked plumber costs a client, a leaked spam email costs an inbox.
+  Signals that a real visitor could plausibly trip (stale timestamp, disposable domain, one URL in the
+  message) score *below* the threshold and need corroboration. Run **`npm run check:spam`**
+  (`scripts/spam-filter-check.mts`, 16 cases, no framework needed) after touching any rule, and add a case.
 
 ### Routing & page templates
 - `app/[city]/[service]/` — programmatic location pages from `allLocationParams()`, `dynamicParams = false`.
@@ -235,3 +267,13 @@ Feature work: branch → PR → `main`; each PR push builds a Vercel **preview**
 - Audit docs in repo root: `WEBSITE-AUDIT.md` (page-by-page trust/credibility audit + fixes, all shipped)
   and `ENTERPRISE-AUDIT.md` (enterprise-B2B readiness audit + ranked plan). `CONTENT-TODO.md` lists the
   real assets still to swap in (phone/WhatsApp, founder photos, named client proof, GA4/Pixel/Resend keys).
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

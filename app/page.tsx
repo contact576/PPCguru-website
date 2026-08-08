@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { anchorForHref, serviceLinks, hubLinks } from "@/lib/data/internal-links";
 import { RevealInit } from "@/components/home/reveal-init";
 import { HeroDashboard } from "@/components/home/hero-dashboard";
 import { WasteCalculator } from "@/components/home/waste-calculator";
@@ -10,6 +11,7 @@ import {
   homePricing,
 } from "@/lib/data/home";
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
+import { GoogleReviews } from "@/components/home/google-reviews";
 import { ToolsOs } from "@/components/home/tools-os";
 import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
@@ -25,13 +27,16 @@ import { GsapText } from "@/components/shared/gsap-text";
 import { BlogPosts } from "@/components/home/blog-section";
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Google & Meta Ads Agency in the GTA & Canada",
   description:
-    "PPC Guru is an AI-first Google & Meta Partner agency in the Greater Toronto Area. We audit, rebuild and manage your ads so budget turns into qualified leads, booked jobs and revenue — with a 30-day free trial: no contract, no setup fee.",
+    "PPC Guru is an AI-first Google & Meta Partner agency in the Greater Toronto Area. We audit, rebuild and manage your ads so budget turns into qualified leads, booked jobs and revenue — starting with a free website audit: no contract, no setup fee.",
   path: "/",
-});
+}), "/");
+}
 
 // ISR: refresh the homepage (incl. the dynamic blog teaser) at most once a minute
 // so newly published posts surface without a redeploy.
@@ -40,6 +45,7 @@ export const revalidate = 60;
 /* ── shared bits ─────────────────────────────────────────────────────────── */
 const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
 const ink = "#14170e", cream = "#f1efe3", lime = "#ceff3a", olive = "#6f7d22", coral = "#f26a2b";
+const SILO_LINK: React.CSSProperties = { color: "#5d6b1a", textDecoration: "underline", textUnderlineOffset: 3, fontWeight: 600 };
 
 function Eyebrow({ children, color = olive }: { children: React.ReactNode; color?: string }) {
   return (
@@ -104,7 +110,7 @@ export default function HomePage() {
               <Link href="#audit" className="mono btn-shine transition-transform hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Get Free PPC Audit →</Link>
               <Link href="#calculator" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 26px", borderRadius: 14 }}>Try ROI Calculator</Link>
             </div>
-            <HeroOffer className="mt-7 max-w-lg" badge="30-day free trial" line="Try our Google or Meta ad management free for 30 days — no contract, no setup fee, no obligation." credit />
+            <HeroOffer className="mt-7 max-w-lg" badge="Free website audit" line="Get a free website and ad-account audit — no contract, no setup fee, no obligation." credit />
             <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 40, flexWrap: "wrap" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
@@ -173,20 +179,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 30-DAY SPRINT ──────────────────────────────────────────────────── */}
+      {/* ── FREE WEBSITE AUDIT ─────────────────────────────────────────────── */}
       <section id="sprint" style={{ background: "#f7f5ea", color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
         <div className="ambient-glow" style={{ position: "absolute", top: -120, left: -80, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.08),transparent 65%)" }} />
         <div className={WRAP} style={{ position: "relative" }}>
           <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.2fr]">
             <div data-reveal>
-              <Eyebrow>⚡ 30-day free trial</Eyebrow>
-              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>Try us <Em>free for a month</Em> before you commit</h2>
-              <p style={{ fontSize: 17, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 460 }}>We run your Google or Meta ads free for 30 days — we audit, fix the leaks and manage the account, so you can judge us on results, not promises. No contract, no setup fee, no obligation.</p>
+              <Eyebrow>⚡ Free website audit</Eyebrow>
+              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>See what your site is <Em>losing</Em> before you commit</h2>
+              <p style={{ fontSize: 17, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 460 }}>We audit your website and ad accounts free — the conversion gaps, tracking problems and wasted spend, with the fixes we&rsquo;d make first. Judge us on the plan, not promises. No contract, no setup fee, no obligation.</p>
               <div style={{ display: "flex", gap: 13, flexWrap: "wrap", marginTop: 30 }}>
-                <Link href="/free-audit" className="mono" style={{ background: lime, color: ink, fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 13 }}>Start my free trial</Link>
-                <Link href="#calculator" className="mono" style={{ background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 24px", borderRadius: 13 }}>Run the free audit</Link>
+                <Link href="/free-audit" className="mono" style={{ background: lime, color: ink, fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 13 }}>Get my free website audit</Link>
+                <Link href="#calculator" className="mono" style={{ background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 24px", borderRadius: 13 }}>Run the numbers first</Link>
               </div>
-              <p style={{ fontSize: 12.5, color: "#6b6d5c", lineHeight: 1.55, marginTop: 22, maxWidth: 440 }}>Trial does not include ad spend. Final scope depends on account size, campaign history, tracking setup, and monthly budget. Results vary by industry, budget, tracking quality and offer strength.</p>
+              <p style={{ fontSize: 12.5, color: "#6b6d5c", lineHeight: 1.55, marginTop: 22, maxWidth: 440 }}>The audit is free and yours to keep. Final scope of any engagement depends on account size, campaign history, tracking setup, and monthly budget. Results vary by industry, budget, tracking quality and offer strength.</p>
             </div>
             <div data-reveal>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -233,23 +239,23 @@ export default function HomePage() {
           <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px" }}>
             <Eyebrow>What we do</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Full-funnel growth,<br />one <Em>accountable</Em> team</h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 560 }}>Paid ads, SEO, creative and the systems that turn leads into booked jobs — all measured against revenue.</p>
+            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 640 }}>Paid ads, SEO, creative and the systems that turn leads into booked jobs — all measured against revenue. From <Link href={serviceLinks["google-ads"].href} style={SILO_LINK}>{serviceLinks["google-ads"].anchor}</Link> and <Link href={serviceLinks["seo"].href} style={SILO_LINK}>{serviceLinks["seo"].anchor}</Link> to <Link href={serviceLinks["meta-ads"].href} style={SILO_LINK}>{serviceLinks["meta-ads"].anchor}</Link> and <Link href={serviceLinks["web-design"].href} style={SILO_LINK}>{serviceLinks["web-design"].anchor}</Link>, explore our <Link href={hubLinks.services.href} style={SILO_LINK}>{hubLinks.services.anchor}</Link>.</p>
           </div>
-          <div className="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-[14px] sm:grid-cols-2 lg:grid-cols-4">
             {homeServices.map((s) => (
-              <div key={s.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
-                  <span style={{ width: 54, height: 54, borderRadius: 15, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>{s.icon}</span>
-                  <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72", letterSpacing: ".08em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "5px 9px", borderRadius: 7 }}>{s.bestFor}</span>
+              <div key={s.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 18, padding: 20, display: "flex", flexDirection: "column" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+                  <span style={{ width: 44, height: 44, borderRadius: 13, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{s.icon}</span>
+                  <span className="mono" style={{ fontSize: 8.5, color: "#8a8c72", letterSpacing: ".07em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "4px 7px", borderRadius: 6 }}>{s.bestFor}</span>
                 </div>
-                <div className="head" style={{ fontSize: 20, marginBottom: 9 }}>{s.title}</div>
-                <div style={{ fontSize: 14, color: "#54564a", lineHeight: 1.55, marginBottom: 16 }}>{s.outcome}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 18 }}>
+                <div className="head" style={{ fontSize: 16.5, marginBottom: 7, lineHeight: 1.2 }}>{s.title}</div>
+                <div style={{ fontSize: 12.5, color: "#54564a", lineHeight: 1.5, marginBottom: 13 }}>{s.outcome}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 14 }}>
                   {s.deliverables.map((d) => (
-                    <span key={d} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 13.5, color: "#2c2e22" }}><span style={{ color: olive, fontSize: 13 }}>✓</span>{d}</span>
+                    <span key={d} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#2c2e22" }}><span style={{ color: olive, fontSize: 11 }}>✓</span>{d}</span>
                   ))}
                 </div>
-                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 11.5, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 7, borderTop: "1px solid #e3e1d2", paddingTop: 16 }}>Learn more →</Link>
+                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 10.5, fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 6, borderTop: "1px solid #e3e1d2", paddingTop: 13 }}>{anchorForHref(s.href)} →</Link>
               </div>
             ))}
           </div>
@@ -459,17 +465,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ───────────────────────────────────────────────────── */}
+      {/* ── REVIEWS (real Google reviews via widget; testimonials fallback) ── */}
       <section style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0" }}>
         <div className={WRAP}>
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 14px", textAlign: "center" }}>
+          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 28px", textAlign: "center" }}>
             <Eyebrow>In their words</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What working with us <Em>feels like</Em></h2>
-            <p style={{ fontSize: 14, color: "#8a8c72", marginTop: 14 }}>Representative of the feedback we hear from clients.</p>
-            <div style={{ marginTop: 22, display: "flex", justifyContent: "center" }}><ReviewRating /></div>
+            <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What our clients <Em>actually say</Em></h2>
           </div>
+          <GoogleReviews fallback={<TestimonialCarousel />} />
         </div>
-        <TestimonialCarousel />
       </section>
 
       {/* ── FROM THE BLOG (dynamic — latest published posts) ───────────────── */}
@@ -552,10 +556,10 @@ export default function HomePage() {
         <div style={{ position: "absolute", bottom: -160, left: "50%", transform: "translateX(-50%)", width: 680, height: 420, background: "radial-gradient(circle,rgba(255,255,255,.45),transparent 65%)" }} />
         <div data-reveal className="mx-auto max-w-[940px] px-5 py-24 text-center md:px-8" style={{ position: "relative" }}>
           <GsapText as="h2" mode="chars" className="head" style={{ fontSize: "clamp(2.6rem,6vw,5rem)" }}>Turn ad spend into<br /><Em>booked jobs</Em></GsapText>
-          <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>Start with a free PPC audit, or try our management free for 30 days. You&rsquo;ll get clear next steps before committing to anything — no contract, no setup fee.</p>
+          <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>Start with a free website audit. You&rsquo;ll get clear next steps before committing to anything — no contract, no setup fee.</p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 40 }}>
-            <Link href="#audit" className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>Get Free PPC Audit</Link>
-            <Link href="/free-audit" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>Start 30-day free trial</Link>
+            <Link href="#audit" className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>Get my free website audit</Link>
+            <Link href="/free-audit" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>What&rsquo;s in the audit?</Link>
             <Link href="/contact" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 26px", borderRadius: 14, display: "inline-flex", alignItems: "center", gap: 9 }}><span style={{ width: 9, height: 9, borderRadius: "50%", background: ink }} />Message us</Link>
           </div>
           <p className="mono" style={{ fontSize: 11, color: "#3a4a10", marginTop: 28, letterSpacing: ".1em", textTransform: "uppercase" }}>No long-term contracts · You keep ownership of your accounts</p>

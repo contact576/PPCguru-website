@@ -4,13 +4,16 @@ import { Section } from "@/components/ui/section";
 import { AdCalculator } from "@/components/tools/ad-calculator";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Lead Quality Calculator — Leads to Customers",
   description:
     "Free lead-quality calculator. Model how raw leads become qualified leads, booked calls and customers across any platform and industry — and your true cost per acquisition.",
   path: "/tools/lead-quality-calculator",
-});
+}), "/tools/lead-quality-calculator");
+}
 
 export default function LeadQualityCalculatorPage() {
   return (

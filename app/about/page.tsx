@@ -9,6 +9,7 @@ import { TeamSection } from "@/components/sections/team";
 import { AboutArt } from "@/components/illustrations/hero-art";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema, personSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 import { performanceStats } from "@/lib/data/performance-stats";
 import { team } from "@/lib/data/team";
@@ -21,12 +22,14 @@ const whyAgenciesFail = [
   ["Generic playbooks", "They treat every account the same. We run vertical-specific, AI-augmented playbooks."],
 ];
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "About PPC Guru",
   description:
     "PPC Guru is a founder-led, AI-augmented Google Partner & Meta Business Partner agency in the GTA, helping service businesses turn ad spend into booked jobs.",
   path: "/about",
-});
+}), "/about");
+}
 
 export default function AboutPage() {
   const crumbs = [{ name: "Home", path: "/" }, { name: "About", path: "/about" }];

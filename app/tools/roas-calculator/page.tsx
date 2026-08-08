@@ -4,13 +4,16 @@ import { Section } from "@/components/ui/section";
 import { RoasCalculator } from "@/components/tools/roas-calculator";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "ROAS Calculator — Return on Ad Spend",
   description:
     "Free ROAS calculator: enter spend, revenue and gross margin to see your return on ad spend, profit on ad spend, net profit and break-even ROAS.",
   path: "/tools/roas-calculator",
-});
+}), "/tools/roas-calculator");
+}
 
 export default function RoasCalculatorPage() {
   return (

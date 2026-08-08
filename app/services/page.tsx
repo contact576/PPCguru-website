@@ -12,13 +12,16 @@ import { services } from "@/lib/data/services";
 import { ServicesArt } from "@/components/illustrations/hero-art";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, itemListSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Services — Google Ads, Meta Ads, SEO & more",
   description:
     "Full-funnel digital marketing services for service businesses: Google Ads, Meta Ads, SEO, creative, websites and CRM — all measured against booked jobs and revenue.",
   path: "/services",
-});
+}), "/services");
+}
 
 export default function ServicesPage() {
   return (

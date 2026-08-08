@@ -9,13 +9,16 @@ import { LeadBand } from "@/components/sections/lead-band";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Pricing — How PPC Guru Charges (Transparent & Honest)",
   description:
     "How marketing-agency pricing actually works, and how PPC Guru charges: your ad spend is separate and 100% yours, our fee is based on scope, and we work month-to-month with no lock-in.",
   path: "/pricing",
-});
+}), "/pricing");
+}
 
 // The three common fee models (educational — helps prospects evaluate any agency, not just us).
 const models = [
@@ -44,8 +47,8 @@ const faqs = [
   { q: "How much does PPC management cost?", a: "It depends on scope — your budget, how many channels and locations you run, account complexity and creative needs. After a free audit we give you an exact fee in writing, so there are no surprises. Most agencies fall between a flat retainer and 10–20% of ad spend; we confirm yours based on the actual work." },
   { q: "Do you charge a percentage of my ad spend?", a: "We price around the scope of work rather than skimming your budget, so our incentives are to make your spend efficient — not just bigger. Whichever structure fits your situation, it's agreed in writing before we start. [VERIFY-client]: confirm the exact model + any starting fee here before launch." },
   { q: "Is ad spend included in your fee?", a: "No. Ad spend is separate and paid directly to the ad platforms from your own account — 100% of it goes to media. Our management fee covers strategy, campaign management, optimization and reporting." },
-  { q: "Do you offer a free trial?", a: "Yes. If you're switching agencies or you're not happy with your current results, we'll run your Google or Meta ads for 30 days completely free — no contract, no setup fee, no upfront payment and no obligation. You only move to a paid agreement if you're happy with the lead quality, and you can walk away anytime. (Ad spend during the trial is still billed by the platform, since that money buys your clicks.)" },
-  { q: "Is there a setup fee?", a: "No. There's no setup fee to get started, and with the 30-day free trial there's no upfront payment either. We scope onboarding (audit, tracking setup, account rebuild) and confirm your management fee in writing before you pay anything — no surprise charges." },
+  { q: "Can I see what you'd do before I pay anything?", a: "Yes. Every engagement starts with a free website audit — a written review of your website, tracking and ad accounts showing the conversion gaps, wasted spend and the fixes we'd make first. It's free, no obligation, and the action plan is yours to keep whether or not you hire us." },
+  { q: "Is there a setup fee?", a: "No. There's no setup fee to get started. We scope onboarding (audit, tracking setup, account rebuild) and confirm your management fee in writing before you pay anything — no surprise charges." },
   { q: "Do you require a long-term contract?", a: "No. We work month-to-month. You can pause or leave with notice and keep full ownership of your accounts and data either way." },
   { q: "What's the minimum budget you work with?", a: "We work best with businesses spending at least a few thousand dollars a month on ads, because that's where there's enough data to optimize meaningfully. SEO, web and CRO engagements are scoped separately. Not sure? The free audit will tell you honestly whether paid ads are worth it yet for your business." },
 ];

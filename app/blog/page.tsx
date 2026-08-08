@@ -7,11 +7,12 @@ import { Section } from "@/components/ui/section";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { BlogArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { getSettings } from "@/lib/settings";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
-  return buildMetadata({ title: s.blogTitle, description: s.blogDescription, path: "/blog" });
+  return withMetaOverride(buildMetadata({ title: s.blogTitle, description: s.blogDescription, path: "/blog" }), "/blog");
 }
 
 export const revalidate = 60;

@@ -29,7 +29,9 @@ export type ReviewSource = {
 // [VERIFY-client] Fill rating + count from the REAL profiles, then set verified: true.
 export const reviewSources: ReviewSource[] = [
   { key: "google", label: "Google", rating: null, count: null, url: "", verified: false },
-  { key: "clutch", label: "Clutch", rating: null, count: null, url: "", verified: false },
+  { key: "clutch", label: "Clutch", rating: null, count: null, url: "https://clutch.co/profile/ppc-guru", verified: false },
+  { key: "trustpilot", label: "Trustpilot", rating: null, count: null, url: "https://www.trustpilot.com/review/ppcguru.ca", verified: false },
+  { key: "g2", label: "G2", rating: null, count: null, url: "https://www.g2.com/products/ppc-guru", verified: false },
 ];
 
 /**
@@ -62,7 +64,20 @@ export type Award = {
   /** Gate — badge renders only when the credential is genuinely earned. */
   earned: boolean;
   /** Brand slug → renders a brand-coloured wordmark logo (components/brand/platform-logo.tsx). */
-  brand?: "google" | "meta" | "clutch" | "goodfirms" | "designrush" | "upcity";
+  brand?:
+    | "google"
+    | "meta"
+    | "clutch"
+    | "goodfirms"
+    | "designrush"
+    | "upcity"
+    | "trustpilot"
+    | "g2"
+    | "themanifest"
+    | "sortlist"
+    | "provenexpert"
+    | "techbehemoths"
+    | "itprofiles";
   /**
    * Path to the platform's OFFICIAL badge/logo asset (drop into /public, e.g.
    * "/badges/clutch.svg"). When set it renders instead of the wordmark. Each of Clutch /
@@ -78,10 +93,18 @@ export type Award = {
  * Organization.sameAs) and, ideally, the official `logoSrc`. Keep unearned ones earned:false.
  */
 export const awards: Award[] = [
-  { name: "Google Partner", sub: "Partner program", url: "", earned: true, brand: "google" },
+  { name: "Google Partner", sub: "Partner program", url: "https://www.google.com/partners/agency?id=1117142019", earned: true, brand: "google" },
   { name: "Meta Business Partner", sub: "Partner program", url: "", earned: true, brand: "meta" },
-  { name: "Clutch", sub: "Reviewed agency", url: "", earned: true, brand: "clutch" },
-  { name: "GoodFirms", sub: "Verified reviews", url: "", earned: true, brand: "goodfirms" },
+  { name: "Clutch", sub: "Reviewed agency", url: "https://clutch.co/profile/ppc-guru", earned: true, brand: "clutch" },
+  { name: "Trustpilot", sub: "Verified reviews", url: "https://www.trustpilot.com/review/ppcguru.ca", earned: true, brand: "trustpilot" },
+  { name: "G2", sub: "Listed product", url: "https://www.g2.com/products/ppc-guru", earned: true, brand: "g2" },
+  { name: "GoodFirms", sub: "Verified reviews", url: "https://www.goodfirms.co/company/ppc-guru", earned: true, brand: "goodfirms" },
+  { name: "The Manifest", sub: "Listed agency", url: "https://themanifest.com/company/ppc-guru", earned: true, brand: "themanifest" },
+  { name: "Sortlist", sub: "Listed agency", url: "https://www.sortlist.com/agency/ppc-guru", earned: true, brand: "sortlist" },
+  { name: "ProvenExpert", sub: "Verified reviews", url: "https://www.provenexpert.com/en-us/ppc-guru/", earned: true, brand: "provenexpert" },
+  { name: "TechBehemoths", sub: "Listed agency", url: "https://techbehemoths.com/company/ppc-guru", earned: true, brand: "techbehemoths" },
+  { name: "ITProfiles", sub: "Listed agency", url: "https://itprofiles.com/company/ppc-guru", earned: true, brand: "itprofiles" },
+  // No public profile URL supplied yet — these render as non-linked badges.
   { name: "DesignRush", sub: "Listed agency", url: "", earned: true, brand: "designrush" },
   { name: "UpCity", sub: "Verified provider", url: "", earned: true, brand: "upcity" },
   // Built but hidden until genuinely earned — flip to true + add url when it is.

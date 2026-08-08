@@ -41,16 +41,17 @@ export function SiteFooter() {
             <p style={{ fontSize: 13.5, color: "#75766a", lineHeight: 1.6, maxWidth: 320 }}>
               A Google Partner &amp; Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA.
             </p>
-            <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap", alignItems: "center" }}>
               {/* [VERIFY] partner status + badge-usage rights before launch */}
-              {["Google Partner", "Meta Partner"].map((b) => (
-                <span key={b} className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#9a9b88", border: "1px solid rgba(241,239,227,.12)", padding: "6px 11px", borderRadius: 8, letterSpacing: ".06em", textTransform: "uppercase" }}>{b}</span>
-              ))}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 38, width: "auto" }} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 38, width: "auto" }} />
             </div>
           </div>
 
           <FCol title="Services" links={[
-            { label: "Free audit + 30-day trial", href: "/free-audit" },
+            { label: "Free website audit", href: "/free-audit" },
             { label: "Google Ads Management", href: "/services/google-ads" },
             { label: "Meta Ads", href: "/services/meta-ads" },
             { label: "SEO & Local Search", href: "/services/seo" },
@@ -82,8 +83,8 @@ export function SiteFooter() {
           <div>
             <div className="mono" style={head}>Contact</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 13.5 }}>
-              <a href="mailto:hello@ppcguru.ca" style={{ ...col }} className="hover:text-[#ceff3a]">hello@ppcguru.ca</a>
-              <span style={{ color: "#75766a" }}>Brampton, ON · GTA</span>
+              <a href="mailto:contact@ppcguru.ca" style={{ ...col }} className="hover:text-[#ceff3a]">contact@ppcguru.ca</a>
+              <span style={{ color: "#75766a" }}>Toronto, ON · GTA</span>
               <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#ceff3a", fontWeight: 600 }}>
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ceff3a" }} />Message us
               </Link>

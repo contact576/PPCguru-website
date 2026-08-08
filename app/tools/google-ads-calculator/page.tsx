@@ -4,13 +4,16 @@ import { Section } from "@/components/ui/section";
 import { AdCalculator } from "@/components/tools/ad-calculator";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Google Ads ROI Calculator — Free",
   description:
     "Free Google Ads calculator. Pick your industry and budget to estimate clicks, leads, cost per lead and projected revenue using real industry benchmarks.",
   path: "/tools/google-ads-calculator",
-});
+}), "/tools/google-ads-calculator");
+}
 
 export default function GoogleAdsCalculatorPage() {
   return (

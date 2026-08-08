@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, Pencil, Trash2, ExternalLink, LogOut, Settings } from "lucide-react";
+import { Plus, Pencil, Trash2, ExternalLink, LogOut, Settings, Inbox, Users, Search } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 
 export type AdminPostRow = {
@@ -44,6 +44,15 @@ export function AdminDashboard({ posts, dbConfigured }: { posts: AdminPostRow[];
             <span className="text-sm text-[var(--color-ink-dim)]">· Blog admin</span>
           </div>
           <div className="flex items-center gap-3">
+            <Link href="/admin/leads" className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
+              <Inbox size={14} /> Leads
+            </Link>
+            <Link href="/admin/visitors" className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
+              <Users size={14} /> Visitors
+            </Link>
+            <Link href="/admin/meta" className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
+              <Search size={14} /> SEO / Meta
+            </Link>
             <Link href="/blog" target="_blank" className="flex items-center gap-1.5 text-sm text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
               <ExternalLink size={14} /> View blog
             </Link>

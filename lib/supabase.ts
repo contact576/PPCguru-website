@@ -30,9 +30,7 @@ export function supabaseAdmin(): SupabaseClient | null {
 /** Storage bucket used for blog cover images / inline uploads. */
 export const BLOG_BUCKET = "blog-images";
 
-/** Best-effort lead persistence. Never throws — form delivery must not depend
- *  on the DB being reachable. Returns true if the row was written. */
-export async function saveLead(lead: {
+export type LeadInput = {
   name?: string;
   email?: string;
   phone?: string;
@@ -42,25 +40,46 @@ export async function saveLead(lead: {
   budget?: string;
   service?: string;
   message?: string;
-}): Promise<boolean> {
+};
+
+/**
+ * Best-effort lead persistence that hands back the new row's id. Never throws —
+ * form delivery must not depend on the DB being reachable. Returns null when
+ * Supabase is unconfigured or the insert failed.
+ *
+ * The id matters: it's the key visitor identity stitching hangs off (see
+ * lib/identity.ts), so prefer this over `saveLead` at any call site that will
+ * go on to call `identifyVisitor`.
+ */
+export async function saveLeadReturning(lead: LeadInput): Promise<string | null> {
   const sb = supabaseAdmin();
-  if (!sb) return false;
+  if (!sb) return null;
   try {
-    const { error } = await sb.from("leads").insert({
-      name: lead.name || null,
-      email: lead.email || null,
-      phone: lead.phone || null,
-      company: lead.company || null,
-      website: lead.website || null,
-      source: lead.source || null,
-      budget: lead.budget || null,
-      service: lead.service || null,
-      message: lead.message || null,
-    });
-    return !error;
+    const { data, error } = await sb
+      .from("leads")
+      .insert({
+        name: lead.name || null,
+        email: lead.email || null,
+        phone: lead.phone || null,
+        company: lead.company || null,
+        website: lead.website || null,
+        source: lead.source || null,
+        budget: lead.budget || null,
+        service: lead.service || null,
+        message: lead.message || null,
+      })
+      .select("id")
+      .single();
+    if (error || !data) return null;
+    return (data.id as string) ?? null;
   } catch {
-    return false;
+    return null;
   }
+}
+
+/** Boolean-returning wrapper kept for callers that don't need the id. */
+export async function saveLead(lead: LeadInput): Promise<boolean> {
+  return (await saveLeadReturning(lead)) !== null;
 }
 
 export type DbPost = {

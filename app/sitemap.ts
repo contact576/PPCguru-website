@@ -5,7 +5,7 @@ import { industries } from "@/lib/data/industries";
 import { allLocationParams } from "@/lib/data/locations";
 import { caseStudies } from "@/lib/data/case-studies";
 import { tools } from "@/lib/data/tools";
-import { getAllPostSlugs } from "@/lib/blog";
+import { getAllPosts } from "@/lib/blog";
 import { allServiceIndustryPairs } from "@/lib/data/service-industry";
 
 // Re-generate at most once a minute so newly published blog posts (read from
@@ -34,7 +34,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const industryRoutes = industries.map((i) => ({ url: `${base}/industries/${i.slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 }));
   const locationRoutes = allLocationParams().map((p) => ({ url: `${base}/${p.city}/${p.service}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.6 }));
   const caseRoutes = caseStudies.map((c) => ({ url: `${base}/results/${c.slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.6 }));
-  const blogRoutes = (await getAllPostSlugs()).map((slug) => ({ url: `${base}/blog/${slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.6 }));
+  // Blog posts carry their OWN publish date as lastModified — a fresh CMS post
+  // stamped with the site-wide `now` constant would look months old to Google.
+  const posts = await getAllPosts();
+  const blogRoutes = posts.map((p) => {
+    const d = new Date(p.date);
+    return {
+      url: `${base}/blog/${p.slug}`,
+      lastModified: isNaN(+d) ? now : d,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    };
+  });
 
-  return [...staticRoutes, ...toolRoutes, ...serviceRoutes, ...serviceIndustryRoutes, ...industryRoutes, ...locationRoutes, ...caseRoutes, ...blogRoutes];
+  // /blog itself is as fresh as its newest post.
+  const newestPost = blogRoutes.reduce<Date | null>(
+    (acc, r) => (acc && acc >= r.lastModified ? acc : r.lastModified),
+    null,
+  );
+
+  const staticRoutesDated = staticRoutes.map((r) =>
+    newestPost && r.url === `${base}/blog` ? { ...r, lastModified: newestPost } : r,
+  );
+
+  return [...staticRoutesDated, ...toolRoutes, ...serviceRoutes, ...serviceIndustryRoutes, ...industryRoutes, ...locationRoutes, ...caseRoutes, ...blogRoutes];
 }

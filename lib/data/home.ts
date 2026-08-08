@@ -133,8 +133,8 @@ export const certGroups = [
 ];
 
 export const homePricing = [
-  { name: "Starter Audit", bestFor: "For accounts that need clarity before scaling", price: "Free", priceNote: "", dark: false, cta: "Get free audit", items: ["Account & tracking audit", "Wasted-spend review", "Prioritized fix list", "Clear next steps"] },
-  { name: "Growth Management", bestFor: "For businesses with a consistent monthly ad budget", price: "Custom", priceNote: "fee", dark: true, cta: "Start a free trial", items: ["Google Ads management", "Weekly optimization", "Conversion tracking review", "Monthly reporting & strategy", "Landing-page recommendations"] },
+  { name: "Starter Audit", bestFor: "For accounts that need clarity before scaling", price: "Free", priceNote: "", dark: false, cta: "Get my free website audit", items: ["Website & tracking audit", "Wasted-spend review", "Prioritized fix list", "Clear next steps"] },
+  { name: "Growth Management", bestFor: "For businesses with a consistent monthly ad budget", price: "Custom", priceNote: "fee", dark: true, cta: "Get my free website audit", items: ["Google Ads management", "Weekly optimization", "Conversion tracking review", "Monthly reporting & strategy", "Landing-page recommendations"] },
   { name: "Scale Partner", bestFor: "For multi-channel paid media + CRO", price: "Custom", priceNote: "fee", dark: false, cta: "Talk to us", items: ["Google + Meta paid media", "Remarketing & full-funnel", "Landing-page testing / CRO", "Analytics & dashboards", "Dedicated account manager"] },
 ];
 
@@ -152,7 +152,7 @@ export const homeFaqs = [
   { q: "Are you really a Google and Meta partner?", a: "Yes — we're a Google Partner and a Meta Business Partner, which means verified platform expertise and direct access to platform support and betas." },
   { q: "What's the 'AI-augmented' part really mean for me?", a: "Faster turnaround, more creative and keyword testing, and sharper reporting — because we use AI to do the heavy lifting, with human strategists directing and reviewing everything." },
   { q: "Which industries do you specialize in?", a: "Healthcare and physiotherapy, home services (HVAC, plumbing, electrical), construction and renovation, immigration, real estate, and adjacent local service verticals." },
-  { q: "Where are you based and who do you serve?", a: "We're based in the Greater Toronto Area (Brampton, ON) and serve clients across Canada and the USA, with deep local expertise in the GTA." },
+  { q: "Where are you based and who do you serve?", a: "We're based in the Greater Toronto Area (Toronto, ON) and serve clients across Canada and the USA, with deep local expertise in the GTA." },
   { q: "What's included in the free PPC audit?", a: "Campaign structure review, search-term waste, negative-keyword opportunities, conversion-tracking health (GA4/GTM), landing-page review, budget allocation, competitor visibility and a 30-day action plan." },
   { q: "Do I own my Google Ads and Meta Ads accounts?", a: "Always. Your accounts, data, history and billing stay in your name — you keep full ownership even if we stop working together." },
   { q: "Is ad spend included in your management fee?", a: "No. Ad spend is separate and paid directly to the ad platforms. Our fee covers strategy, management, optimization and reporting." },

@@ -4,15 +4,15 @@ import { Button } from "@/components/ui/button";
 
 /*
   Pricing guidance — ranges/structure only, not a quote.
-  [VERIFY]: Confirm real management-fee ranges and trial pricing before launch.
+  [VERIFY]: Confirm real management-fee ranges before launch.
 */
 const tiers = [
   {
     name: "Starter Audit",
     price: "Free",
     sub: "For accounts that need clarity before scaling",
-    features: ["Account & tracking audit", "Wasted-spend review", "Prioritized fix list", "Clear next steps"],
-    cta: { label: "Get free audit", href: "/contact" },
+    features: ["Website & tracking audit", "Wasted-spend review", "Prioritized fix list", "Clear next steps"],
+    cta: { label: "Get my free website audit", href: "/contact" },
     featured: false,
   },
   {
@@ -20,7 +20,7 @@ const tiers = [
     price: "Custom",
     sub: "For businesses with a consistent monthly ad budget",
     features: ["Google Ads management", "Weekly optimization", "Conversion tracking review", "Monthly reporting & strategy", "Landing-page recommendations"],
-    cta: { label: "Start a 30-Day Sprint", href: "/contact" },
+    cta: { label: "Get my free website audit", href: "/contact" },
     featured: true,
   },
   {

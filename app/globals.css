@@ -218,8 +218,26 @@
 /* Blog markdown typography (light) */
 .prose-blog { color: var(--color-ink-dim); line-height: 1.75; font-size: 1.0625rem; }
 .prose-blog > * + * { margin-top: 1.25rem; }
+.prose-blog h1 { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; color: var(--color-ink); margin-top: 3rem; letter-spacing: -0.03em; line-height: 1.15; }
 .prose-blog h2 { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; color: var(--color-ink); margin-top: 2.75rem; letter-spacing: -0.02em; }
 .prose-blog h3 { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; color: var(--color-ink); margin-top: 2rem; }
+.prose-blog h4 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--color-ink); margin-top: 1.75rem; }
+.prose-blog em, .prose-blog i { font-style: italic; }
+.prose-blog img { border-radius: 16px; border: 1px solid var(--color-border); width: 100%; }
+.prose-blog pre { background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 12px; padding: 1rem 1.15rem; overflow-x: auto; font-size: 0.875rem; }
+.prose-blog pre code { background: none; border: none; padding: 0; }
+.prose-blog del, .prose-blog s { text-decoration: line-through; }
+
+/* Anchor links: every heading gets an id (rehype-slug) so `[text](#the-heading)`
+   jumps to it, plus a hover "#" for readers to copy a link to the section.
+   scroll-margin keeps the target clear of the sticky header. */
+.prose-blog :is(h1, h2, h3, h4, h5, h6) { scroll-margin-top: 7rem; }
+.prose-blog .heading-anchor {
+  margin-left: 0.4em; color: var(--color-ink-faint); text-decoration: none;
+  font-weight: 400; opacity: 0; transition: opacity 0.15s;
+}
+.prose-blog :is(h1, h2, h3, h4, h5, h6):hover .heading-anchor,
+.prose-blog .heading-anchor:focus-visible { opacity: 1; }
 .prose-blog p { color: var(--color-ink-dim); }
 .prose-blog strong { color: var(--color-ink); font-weight: 600; }
 .prose-blog a { color: var(--color-orange-deep); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }

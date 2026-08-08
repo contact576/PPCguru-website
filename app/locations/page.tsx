@@ -7,13 +7,16 @@ import { PageHero } from "@/components/shared/page-hero";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { LocationsArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Locations We Serve — GTA & Ontario Digital Marketing",
   description:
     "Local Google Ads, Meta Ads and SEO across the Greater Toronto Area and Ontario — Toronto, Brampton, Mississauga, Vaughan, Hamilton, Ottawa and more.",
   path: "/locations",
-});
+}), "/locations");
+}
 
 export default function LocationsPage() {
   return (

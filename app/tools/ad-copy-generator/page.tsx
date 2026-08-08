@@ -4,13 +4,16 @@ import { Section } from "@/components/ui/section";
 import { AdCopyGenerator } from "@/components/tools/ad-copy-generator";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "AI Ad Copy Generator — Free",
   description:
     "Generate Google & Meta ad headlines and descriptions for your business in seconds with our free AI ad-copy generator. Character-limit aware.",
   path: "/tools/ad-copy-generator",
-});
+}), "/tools/ad-copy-generator");
+}
 
 export default function AdCopyGeneratorPage() {
   return (

@@ -18,6 +18,7 @@ import { TrustBadgeBar, ServiceIntro } from "@/components/sections/service-aeo";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 
 // Only render the city×service combos we define; everything else 404s.
@@ -32,12 +33,12 @@ export async function generateMetadata({ params }: { params: Promise<{ city: str
   const c = getCity(city);
   const s = getLocationService(service);
   if (!c || !s) return {};
-  return buildMetadata({
+  return withMetaOverride(buildMetadata({
     title: `${s.name} in ${c.name}, ${c.region}`,
     description: `${siteConfig.name} is a Google Partner & Meta Business Partner agency helping ${c.name} service businesses ${s.verb} that turn into booked jobs. Get a free audit.`,
     path: `/${city}/${service}`,
     keywords: [`${s.name} ${c.name}`, `${c.name} ${service}`, `digital marketing ${c.name}`],
-  });
+  }), `/${city}/${service}`);
 }
 
 export default async function LocationServicePage({ params }: { params: Promise<{ city: string; service: string }> }) {

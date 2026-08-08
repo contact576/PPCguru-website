@@ -10,6 +10,7 @@ import { FloatingCta } from "@/components/shared/floating-cta";
 import { OfferPopup } from "@/components/shared/offer-popup";
 import { CookieConsent } from "@/components/shared/cookie-consent";
 import { VisitorTracker } from "@/components/analytics/tracker";
+import { AnalyticsScripts, GtmNoScript, ConsentSignal } from "@/components/analytics/third-party";
 import { CursorGlow } from "@/components/ui/interactive";
 import { SiteGraphJsonLd } from "@/components/seo/json-ld";
 import { ChromeGate } from "@/components/layout/chrome-gate";
@@ -78,7 +79,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${archivo.variable} ${dmSerif.variable} ${jetbrains.variable}`}>
+      <head>
+        {/* GTM + Microsoft Clarity, as high in <head> as possible (vendor spec). */}
+        <AnalyticsScripts />
+      </head>
       <body className="min-h-screen antialiased">
+        {/* GTM noscript must be the first thing in <body>. */}
+        <GtmNoScript />
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-[var(--color-ink)] focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-[var(--color-lime)]">Skip to content</a>
         <SiteGraphJsonLd />
         <CursorGlow />
@@ -95,6 +102,8 @@ export default function RootLayout({
           <OfferPopup />
           <CookieConsent />
           <VisitorTracker />
+          {/* Applies a "Decline" choice to GTM (Consent Mode v2) + Clarity. */}
+          <ConsentSignal />
           {/*
             PRE-LAUNCH VERIFICATION CHECKLIST (search the codebase for "[VERIFY]"):
             [ ] Real phone number + WhatsApp (siteConfig.contact) — currently blank, shows "Book a call"
@@ -103,8 +112,9 @@ export default function RootLayout({
             [ ] Microsoft Advertising certification (if claimed)
             [ ] Review rating + count (none published yet; no Review schema until real)
             [ ] Replace representative case studies & testimonials with approved, real ones
-            [ ] Pricing ranges & 30-Day Sprint terms; no-long-term-contract policy
-            [ ] GA4 / GTM / Meta Pixel IDs (lib/analytics.ts hooks are no-ops) + cookie/consent banner
+            [ ] Pricing ranges & free-website-audit scope; no-long-term-contract policy
+            [x] GTM (GTM-NRX9BRWF) + Microsoft Clarity (xpxkvrbt7j) live sitewide — see
+                components/analytics/third-party.tsx. GA4 / Meta Pixel now belong INSIDE GTM, not in code.
             [ ] CRM/email wiring for forms (app/contact/actions.ts, offer popup)
             [ ] Privacy / Terms reviewed by counsel; verify schema validity
           */}

@@ -4,13 +4,16 @@ import { Section } from "@/components/ui/section";
 import { UtmBuilder } from "@/components/tools/utm-builder";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "UTM Campaign Builder — Free URL Tagger",
   description:
     "Free UTM builder. Create clean, consistent UTM-tagged URLs so every click is tracked correctly in Google Analytics 4 and your ad platforms.",
   path: "/tools/utm-builder",
-});
+}), "/tools/utm-builder");
+}
 
 export default function UtmBuilderPage() {
   return (

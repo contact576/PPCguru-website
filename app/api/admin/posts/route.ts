@@ -3,6 +3,8 @@ import { revalidatePath } from "next/cache";
 import { isAuthed } from "@/lib/admin-auth";
 import { supabaseAdmin } from "@/lib/supabase";
 import { slugify } from "@/lib/slug";
+import { pingIndexNow } from "@/lib/indexnow";
+import { siteConfig } from "@/lib/site-config";
 
 export const runtime = "nodejs";
 
@@ -65,5 +67,8 @@ export async function POST(req: Request) {
 
   revalidatePath("/blog");
   revalidatePath(`/blog/${slug}`);
+  revalidatePath("/sitemap.xml");
+  // Tell IndexNow-participating engines immediately (no-op without a key).
+  if (published) await pingIndexNow([`${siteConfig.url}/blog/${slug}`, `${siteConfig.url}/blog`]);
   return NextResponse.json({ post: data });
 }

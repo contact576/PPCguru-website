@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { LegalLayout } from "@/components/shared/legal-layout";
 import { buildMetadata } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 
-export const metadata: Metadata = buildMetadata({
+export async function generateMetadata(): Promise<Metadata> {
+  return withMetaOverride(buildMetadata({
   title: "Privacy Policy",
   description: `How ${siteConfig.name} collects, uses and protects your personal information, in line with Canada's PIPEDA.`,
   path: "/privacy",
-});
+}), "/privacy");
+}
 
 export default function PrivacyPage() {
   return (

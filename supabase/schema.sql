@@ -82,6 +82,20 @@ create table if not exists public.app_settings (
   constraint app_settings_singleton check (id = 1)
 );
 
+-- ── Per-page SEO meta overrides (edited at /admin/meta) ──────────────────────
+create table if not exists public.page_meta (
+  path        text primary key,   -- normalized route, e.g. "/", "/services/google-ads"
+  title       text,
+  description text,
+  keywords    text,               -- comma-separated
+  noindex     boolean not null default false,
+  updated_at  timestamptz not null default now()
+);
+
+drop trigger if exists page_meta_touch on public.page_meta;
+create trigger page_meta_touch before update on public.page_meta
+for each row execute function public.touch_updated_at();
+
 -- ── Row Level Security ───────────────────────────────────────────────────────
 -- The app only ever talks to these tables with the SERVICE ROLE key (server
 -- side), which bypasses RLS. We still enable RLS and add a public read policy
@@ -91,6 +105,8 @@ alter table public.leads enable row level security;
 -- No anon policies on app_settings / visitor_events → only the service role reads/writes.
 alter table public.app_settings enable row level security;
 alter table public.visitor_events enable row level security;
+-- No anon policies on page_meta → only the service role reads/writes overrides.
+alter table public.page_meta enable row level security;
 
 drop policy if exists "public can read published posts" on public.posts;
 create policy "public can read published posts"

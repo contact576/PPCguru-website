@@ -11,6 +11,7 @@ import { BeforeAfter, RoiTrend } from "@/components/sections/case-study-visuals"
 import { LeadBand } from "@/components/sections/lead-band";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { withMetaOverride } from "@/lib/page-meta";
 import { getAccent } from "@/lib/data/themes";
 
 export function generateStaticParams() {
@@ -21,11 +22,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const c = getCaseStudy(slug);
   if (!c) return {};
-  return buildMetadata({
+  return withMetaOverride(buildMetadata({
     title: `${c.industry} case study — ${c.headlineMetric.value} ${c.headlineMetric.label}`,
     description: `${c.client} in ${c.location}: ${c.challenge.slice(0, 140)}`,
     path: `/results/${slug}`,
-  });
+  }), `/results/${slug}`);
 }
 
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
