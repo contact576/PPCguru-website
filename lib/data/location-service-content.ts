@@ -553,6 +553,486 @@ export const locationServiceContent: Record<string, LocationServiceContent> = {
     ctaIntro:
       "Start with a free Ottawa PPC audit, or try our Google Ads management free for 30 days — no contract, no setup fee. We'll show you whether your campaign is actually speaking to how Ottawa's professional buyers decide.",
   },
+
+  "toronto/seo": {
+    metaTitle: "SEO Agency Toronto | Local SEO Services",
+    metaDescription:
+      "PPC Guru runs local SEO in Toronto — neighbourhood landing pages, map-pack rankings, real organic growth. Free Toronto SEO audit.",
+    metaKeywords: ["SEO agency Toronto", "Toronto SEO services", "local SEO Toronto", "SEO company Toronto"],
+    knowsAbout: [
+      "local SEO Toronto",
+      "map-pack optimization",
+      "neighbourhood landing pages",
+      "technical SEO Toronto",
+      "Google Business Profile Toronto",
+    ],
+
+    heroIntro:
+      "Ranking organically in Toronto means competing against national brands with decade-old domains and backlink profiles most local businesses can't match — we win the fights that are actually winnable: neighbourhood-level map-pack visibility, not head-on battles for generic city-wide terms.",
+
+    definitionHeading: "Why is organic SEO so hard to win in Toronto?",
+    definition:
+      "SEO in Toronto means competing for organic visibility against national brands and enterprise competitors who've spent a decade building domain authority and backlink profiles most local businesses can't match head-on. PPC Guru builds Toronto SEO strategy around the fights that are actually winnable — neighbourhood-specific landing pages, Google Business Profile optimization and map-pack rankings for the boroughs you actually serve, instead of chasing generic city-wide keywords that enterprise SEO budgets already own.",
+
+    whyLocal:
+      "Toronto's organic search results are dominated by national brands and established local competitors with years of backlinks and content most businesses can't out-rank on a single generic keyword. The real opportunity is neighbourhood-specific: dedicated, genuinely useful landing pages for the boroughs you serve — downtown, North York, Scarborough, Etobicoke, East York — each targeting the local map pack and \"near me\" searches, rather than one thin page trying to rank for all of Toronto at once. That's also where Google actually rewards specificity, and where a smaller local business can realistically outrank a national competitor.",
+    localFocus: [
+      "Dedicated, genuinely useful landing pages per borough — downtown, North York, Scarborough, Etobicoke, East York — not one thin citywide page",
+      "Google Business Profile and map-pack optimization for the neighbourhoods you actually serve",
+      "Technical SEO and site speed fixes to compete against enterprise-level domains",
+      "Content built around neighbourhood-modified search terms, not generic city-wide keywords enterprise budgets already dominate",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "A technical, on-page and local audit of your Toronto presence flags exactly where you're losing to bigger domains, and where you can realistically win." },
+      { step: "02", title: "Fix", body: "Technical debt gets resolved and your core pages optimized to compete on a level footing with Toronto's established organic competitors." },
+      { step: "03", title: "Build", body: "We build out neighbourhood-specific location pages and content clusters — the genuinely useful kind Google rewards with map-pack visibility." },
+      { step: "04", title: "Earn", body: "Ongoing content and digital PR earn the links and rankings that compound, borough by borough, instead of chasing one impossible citywide keyword." },
+    ],
+
+    faqs: [
+      { q: "Why can't my business rank for generic \"Toronto\" SEO keywords?", a: "Generic, citywide keywords are usually owned by national brands with years of backlinks and content most local businesses can't match. We target neighbourhood-specific terms and map-pack rankings instead — fights you can actually win, with real revenue behind them." },
+      { q: "How long does SEO take to work in Toronto?", a: "Local map-pack rankings can move within 60–90 days; competitive organic rankings against established Toronto competitors typically take 6–12 months. We usually pair SEO with paid ads so you have leads from day one while it builds." },
+      { q: "Are your Toronto location pages just thin doorway pages?", a: "No. Each neighbourhood page carries real, distinct local context, not a template with the borough name swapped in — that's the difference between pages Google rewards and the thin ones it filters out of results." },
+      { q: "Do you handle technical SEO for competitive Toronto industries?", a: "Yes. Technical SEO — site speed, crawlability, schema — matters more in Toronto than most markets, because you're often competing against enterprise-level domains that already have the content and backlinks covered." },
+      { q: "Can a small Toronto business really outrank a national competitor?", a: "On a generic term, rarely. On a specific neighbourhood, service and intent combination, yes — that's exactly the level of specificity Google rewards, and where a well-built local page can beat a much bigger, more generic competitor." },
+    ],
+
+    ctaIntro:
+      "Start with a free Toronto SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you exactly which keywords are winnable and which ones are already lost to bigger domains.",
+  },
+
+  "brampton/seo": {
+    metaTitle: "SEO Agency Brampton | Local SEO Services",
+    metaDescription:
+      "PPC Guru runs local SEO for Brampton's fast-growing subdivisions — Google Business Profile, citations, real map-pack rankings. Free Brampton SEO audit.",
+    metaKeywords: ["SEO agency Brampton", "Brampton SEO services", "local SEO Brampton", "SEO company Brampton"],
+    knowsAbout: [
+      "local SEO Brampton",
+      "Google Business Profile Brampton",
+      "citation building Peel Region",
+      "multilingual SEO content",
+      "map-pack optimization Brampton",
+    ],
+
+    heroIntro:
+      "Brampton's new subdivisions are generating local search demand faster than most competitors are building the SEO to capture it — we get in early with Google Business Profile and citation work while that gap is still open.",
+
+    definitionHeading: "Why is local SEO different in a fast-growing city like Brampton?",
+    definition:
+      "SEO in Brampton means capturing local search demand from a genuinely fast-growing population before competitors catch up — new subdivisions in Bramalea, Springdale and Mount Pleasant generate real search volume that many local businesses haven't yet built the Google Business Profile and citation presence to capture. PPC Guru builds Brampton SEO strategy around claiming that ground early, with culturally relevant content for the city's large South Asian community and strong local map-pack fundamentals, rather than competing for keywords that are already saturated.",
+
+    whyLocal:
+      "Brampton is growing faster than its local SEO landscape is maturing — new households in Bramalea, Springdale and Mount Pleasant are searching for local services, but many established businesses haven't built out the Google Business Profile, citations and review volume needed to dominate the map pack yet. That's a real, if temporary, opportunity: the businesses that build strong local SEO fundamentals now, plus culturally relevant content for Brampton's large South Asian community, can establish map-pack authority before the competition matures.",
+    localFocus: [
+      "Google Business Profile and citation-building for fast-growing subdivisions before competitors catch up",
+      "Culturally relevant, sometimes multilingual content for Brampton's South Asian community",
+      "Local map-pack optimization anchored around Bramalea, Springdale and Mount Pleasant",
+      "Review-generation strategy to build trust signals quickly in a community-driven market",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "We audit your Brampton Google Business Profile, citations and technical SEO to see exactly what's missing before a competitor fills the gap." },
+      { step: "02", title: "Fix", body: "Technical issues get resolved, and we build out a complete, accurate Google Business Profile and citation footprint." },
+      { step: "03", title: "Build", body: "Location and service pages go live for Brampton's growth areas, with content genuinely relevant to the community searching for it." },
+      { step: "04", title: "Earn", body: "Ongoing reviews, content and local digital PR build the map-pack authority that compounds as Brampton keeps growing." },
+    ],
+
+    faqs: [
+      { q: "Is it easier to rank organically in Brampton than in Toronto?", a: "In many categories, yes — Brampton's rapid growth means local search demand is outpacing how many businesses have built out real SEO fundamentals. Businesses that establish strong Google Business Profiles and citations now have a real head start." },
+      { q: "Do you write SEO content for Brampton's South Asian community?", a: "Where it fits your audience, yes. Culturally relevant, sometimes multilingual content consistently builds more trust, and more genuine engagement, than generic, translated-in-name-only copy." },
+      { q: "How important are Google Business Profile and reviews for Brampton SEO?", a: "Extremely. Brampton is a community-driven, word-of-mouth market, and a strong, complete Google Business Profile with real reviews is often the single biggest lever for map-pack visibility here." },
+      { q: "Can you target new subdivisions like Springdale or Mount Pleasant specifically?", a: "Yes — we build location content and citation strategy around Brampton's actual growth areas, including Bramalea, Springdale and Mount Pleasant, instead of one generic Brampton-wide page." },
+      { q: "How long until I see SEO results in Brampton?", a: "Local map-pack improvements can show within 4–8 weeks given the relatively lower competition; broader organic rankings build over 3–6 months as content and citations accumulate." },
+    ],
+
+    ctaIntro:
+      "Start with a free Brampton SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you exactly which local searches are still up for grabs.",
+  },
+
+  "mississauga/seo": {
+    metaTitle: "SEO Agency Mississauga | Local SEO Services",
+    metaDescription:
+      "PPC Guru runs B2B and consumer local SEO in Mississauga — Corporate Centre authority content to Square One map-pack rankings. Free SEO audit.",
+    metaKeywords: ["SEO agency Mississauga", "Mississauga SEO services", "local SEO Mississauga", "B2B SEO Mississauga"],
+    knowsAbout: [
+      "B2B content SEO Mississauga",
+      "Pearson Corporate Centre organic search",
+      "Square One local SEO",
+      "map-pack optimization Mississauga",
+      "Hurontario corridor SEO",
+    ],
+
+    heroIntro:
+      "Mississauga's search demand splits the same way its economy does — corporate buyers researching B2B solutions near the Corporate Centre, and local consumers searching \"near me\" around Square One — and we build separate SEO strategies for each instead of one blended content plan.",
+
+    definitionHeading: "Why does Mississauga need two different SEO strategies?",
+    definition:
+      "SEO in Mississauga has to serve two genuinely different audiences: corporate B2B researchers connected to the head offices clustered around Pearson Airport's Corporate Centre, who search with long, considered queries, and local consumers around Square One and the residential corridor searching \"near me\" with immediate intent. PPC Guru builds separate content and local-SEO strategies for each — authority-building long-form content for B2B search, and Google Business Profile and map-pack optimization for consumer local search — instead of one blended approach that serves neither well.",
+
+    whyLocal:
+      "Mississauga's search demand mirrors its unusual economy: B2B researchers connected to the corporate offices near Pearson Airport search with long, comparison-driven queries that reward authoritative long-form content, while consumers around Square One, Streetsville and Meadowvale search with immediate, local \"near me\" intent that rewards Google Business Profile strength and map-pack presence. A single blended content strategy serves neither audience well. We build and measure the two tracks separately, and we also account for Toronto-based competitors who rank into Mississauga's organic results for the same local terms.",
+    localFocus: [
+      "Authority-building long-form content for B2B researchers connected to the Corporate Centre",
+      "Google Business Profile and map-pack optimization for consumer local search around Square One and Streetsville",
+      "Defend organic visibility against Toronto-based competitors ranking into Mississauga's local results",
+      "Separate content calendars and success metrics for B2B versus consumer SEO tracks",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "We audit your Mississauga SEO presence across both tracks — B2B content authority and consumer local visibility — since most accounts have only built one." },
+      { step: "02", title: "Fix", body: "Technical issues get resolved, and core pages get optimized for whichever track, or both, your business actually needs." },
+      { step: "03", title: "Build", body: "We build long-form B2B authority content and consumer-facing location pages as two distinct workstreams, not one blended plan." },
+      { step: "04", title: "Earn", body: "Digital PR and content earn B2B authority links while local citations and reviews build consumer map-pack rankings, in parallel." },
+    ],
+
+    faqs: [
+      { q: "Does my Mississauga business need B2B or consumer SEO?", a: "It depends on your buyer. If you sell to other businesses, especially near the Corporate Centre, long-form authority content matters most. If you sell to local consumers, Google Business Profile and map-pack presence matter more. Many Mississauga businesses genuinely need both, run as separate strategies." },
+      { q: "Are we losing organic traffic to Toronto-based competitors?", a: "Often, yes, for local consumer terms — Toronto businesses frequently rank into Mississauga's local search results. Strong, complete Google Business Profile and location-specific content help your business outrank them on relevance." },
+      { q: "What kind of content works for B2B SEO near Mississauga's Corporate Centre?", a: "Long-form, credential-forward content that answers the detailed, comparison-driven questions corporate buyers actually search — not short, sales-first pages built for consumer \"near me\" intent." },
+      { q: "How do you measure SEO success differently for B2B versus consumer in Mississauga?", a: "B2B success is measured on qualified lead quality and organic ranking for research-stage terms; consumer success is measured on map-pack position and \"near me\" visibility. We track them separately because they behave completely differently." },
+      { q: "How competitive is SEO in Mississauga compared to Toronto?", a: "Generally less saturated for local consumer terms, but B2B content competition near the Corporate Centre can be intense given the concentration of national and regional head offices." },
+    ],
+
+    ctaIntro:
+      "Start with a free Mississauga SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you whether your B2B and consumer SEO are actually being built as two separate strategies.",
+  },
+
+  "etobicoke/seo": {
+    metaTitle: "SEO Agency Etobicoke | Local SEO Services",
+    metaDescription:
+      "PPC Guru runs review-led local SEO in Etobicoke — Google Business Profile, trust signals, real map-pack rankings. Free Etobicoke SEO audit.",
+    metaKeywords: ["SEO agency Etobicoke", "Etobicoke SEO services", "local SEO Etobicoke", "SEO company Etobicoke"],
+    knowsAbout: [
+      "review generation Etobicoke",
+      "Google Business Profile Etobicoke",
+      "The Kingsway SEO",
+      "renovation content SEO",
+      "Mimico waterfront local search",
+    ],
+
+    heroIntro:
+      "Etobicoke's established neighbourhoods research before they call — reviews and Google Business Profile strength decide who ranks in the map pack here more than raw content volume does.",
+
+    definitionHeading: "Why do reviews matter more than content volume for SEO in Etobicoke?",
+    definition:
+      "Local SEO in Etobicoke is decided less by content volume and more by whether Google trusts your business — a stack of genuine, recent reviews and a fully completed Google Business Profile routinely out-rank a competitor’s larger content library in this market. PPC Guru builds Etobicoke SEO around that reality: structured review generation, complete local business listings and renovation-focused content for the borough’s older housing stock, targeted separately from the newer waterfront condo audience around Mimico, which searches and buys completely differently.",
+
+    whyLocal:
+      "Map-pack rankings in Etobicoke reward proof of trust more than almost any other signal Google weighs — a business with forty genuine, recent reviews and a fully filled-out Google Business Profile will often out-rank a competitor sitting on twice the blog content but a thin, stale review count. That's close to the opposite of how ranking works in a content-hungry market like downtown Toronto. We treat review generation as core SEO work here, not an afterthought, and we keep the waterfront condo corridor around Mimico and Humber Bay Shores on a separate content track, since that audience's questions and buying triggers don't resemble an established Kingsway homeowner's at all.",
+    localFocus: [
+      "Prioritize review generation and Google Business Profile completeness — Etobicoke's established streets rank on trust, not content volume",
+      "Renovation and home-service content built for Etobicoke's older housing stock",
+      "Separate SEO content strategy for the newer waterfront condo corridor versus established inland streets",
+      "A structured monthly review-request process built directly into service delivery, not left to chance",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "We audit your Etobicoke Google Business Profile, review profile and content, checking whether trust signals are strong enough to compete." },
+      { step: "02", title: "Fix", body: "We complete and optimize your Google Business Profile and resolve any technical gaps holding back map-pack visibility." },
+      { step: "03", title: "Build", body: "We build renovation and home-service content for established neighbourhoods, plus separate content for the waterfront condo corridor." },
+      { step: "04", title: "Earn", body: "A structured review-generation process and ongoing local content build the trust signals that actually move rankings here." },
+    ],
+
+    faqs: [
+      { q: "Why do reviews matter so much for SEO in Etobicoke?", a: "Etobicoke's established neighbourhoods lean heavily on reviews and word-of-mouth before calling anyone. A business with fewer but genuine, recent reviews often out-ranks a competitor with more content but a thin review profile." },
+      { q: "Is Etobicoke's SEO market different from downtown Toronto?", a: "Yes. Downtown competition is largely about content volume and backlinks against enterprise competitors; Etobicoke rewards trust signals and review strength more, especially in its established, loyalty-driven neighbourhoods." },
+      { q: "Do you build separate content for Mimico's waterfront condos?", a: "Yes. Condo renters and buyers along the waterfront ask different questions and respond to different proof points than a homeowner further inland, so we write and structure that content on its own track rather than folding it into one Etobicoke-wide page." },
+      { q: "Can you help my renovation business rank in Etobicoke?", a: "Yes — renovation content is one of the highest-value plays in Etobicoke's older neighbourhoods. We pair genuinely useful project-guide content with the review volume Google actually weighs here, since content alone rarely moves the map pack without trust signals behind it." },
+      { q: "How long does it take to build a strong review profile in Etobicoke?", a: "With a structured request process, most businesses see meaningful review growth within 60–90 days — and because Etobicoke's map pack rewards review strength so heavily, that translates directly into ranking movement." },
+    ],
+
+    ctaIntro:
+      "Start with a free Etobicoke SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you whether your review profile is actually strong enough to compete.",
+  },
+
+  "north-york/seo": {
+    metaTitle: "SEO Agency North York | Local SEO Services",
+    metaDescription:
+      "PPC Guru runs technical-first local SEO along North York's Yonge corridor — site speed, schema, real map-pack rankings. Free SEO audit.",
+    metaKeywords: ["SEO agency North York", "North York SEO services", "local SEO North York", "Yonge corridor SEO"],
+    knowsAbout: [
+      "technical SEO North York",
+      "Yonge-Eglinton local search",
+      "Willowdale SEO",
+      "North York Centre map-pack",
+      "site speed optimization",
+    ],
+
+    heroIntro:
+      "North York's Yonge corridor is as competitive for organic rankings as it is for paid clicks — technical SEO and site speed decide who actually shows up in the map pack along one of the GTA's densest strips.",
+
+    definitionHeading: "Why is technical SEO so important along North York's Yonge corridor?",
+    definition:
+      "Google's local algorithm treats North York's Yonge corridor almost like its own micro-market — so many businesses target the same tight stretch from Yonge-Eglinton to Willowdale that technical fundamentals become the tie-breaker Google actually falls back on. PPC Guru's North York SEO work leads with site speed, mobile performance and structured data, because in a corridor this dense, a half-second page-load advantage can be the difference between page one and page two before content quality even enters the picture.",
+
+    whyLocal:
+      "What makes the Yonge corridor unusual for SEO is how little separates the businesses fighting over it — dozens target the identical few blocks between Yonge-Eglinton and North York Centre, producing broadly similar local content, which means Google increasingly falls back on technical signals to break the tie: Core Web Vitals, mobile experience, structured data. We treat those as first-priority work in North York rather than an afterthought behind content, and we write for Willowdale's real linguistic diversity, including its large East Asian communities, rather than assuming English-only copy covers the corridor.",
+    localFocus: [
+      "Core Web Vitals and mobile-performance fixes prioritized first — the tie-breaker in a corridor this evenly matched on content",
+      "Structured data and schema markup to help Google parse dense, competing local listings correctly",
+      "Content that reflects Willowdale's real linguistic diversity, including its large East Asian communities, instead of English-only pages",
+      "Concentrated content investment on the Yonge-Eglinton to North York Centre stretch, instead of spread thin across lower-density North York",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "A technical SEO audit of your North York site — speed, mobile experience, schema — since technical gaps cost real rankings in this dense corridor." },
+      { step: "02", title: "Fix", body: "Technical debt gets resolved first, because in North York's high-density competition, technical weaknesses get punished fastest." },
+      { step: "03", title: "Build", body: "We build tightly geo-targeted content for Yonge-Eglinton, North York Centre and Willowdale specifically." },
+      { step: "04", title: "Earn", body: "Ongoing content and local citations build the map-pack authority needed to hold position in one of the GTA's most contested corridors." },
+    ],
+
+    faqs: [
+      { q: "Why does technical SEO matter more in North York than other GTA markets?", a: "The Yonge corridor packs so many competing businesses into such a dense area that technical fundamentals — page speed, mobile experience, structured data — genuinely decide rankings when content quality between competitors is otherwise similar." },
+      { q: "Should I target all of North York or specific neighbourhoods?", a: "Specific neighbourhoods, generally. A page trying to rank for all of North York at once ends up too generic to compete anywhere; content built around a couple of well-chosen blocks consistently outperforms one page spread across the whole district." },
+      { q: "Do you build culturally relevant SEO content for Willowdale?", a: "Where it fits, yes — Willowdale's East Asian communities are a meaningful share of local search volume, and pages that acknowledge that in language and cultural references convert noticeably better than English-only content built for a generic Toronto audience." },
+      { q: "How competitive is organic search in North York?", a: "Very, particularly along the Yonge corridor — density means many businesses are fighting for the same searches, so technical SEO and content specificity matter more than in lower-density markets." },
+      { q: "Which North York businesses benefit most from investing in SEO?", a: "High-value local services that can justify the investment in technical SEO and content depth needed to compete in this corridor — professional services, healthcare and higher-end home services typically see the strongest returns." },
+    ],
+
+    ctaIntro:
+      "Start with a free North York SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you exactly where technical gaps are costing you rankings.",
+  },
+
+  "scarborough/seo": {
+    metaTitle: "SEO Agency Scarborough | Local SEO Services",
+    metaDescription:
+      "PPC Guru runs community-aware local SEO in Scarborough — lower competition than downtown, real map-pack rankings. Free Scarborough SEO audit.",
+    metaKeywords: ["SEO agency Scarborough", "Scarborough SEO services", "local SEO Scarborough", "multicultural SEO Scarborough"],
+    knowsAbout: [
+      "Scarborough Town Centre SEO",
+      "multicultural content strategy",
+      "South Asian community SEO",
+      "Agincourt Malvern local search",
+      "map-pack optimization Scarborough",
+    ],
+
+    heroIntro:
+      "Scarborough's organic search results are less contested than downtown Toronto's — and the businesses winning here are the ones building genuinely community-relevant content, not translating a generic Toronto page.",
+
+    definitionHeading: "Why does community-relevant content outrank generic SEO in Scarborough?",
+    definition:
+      "Ranking organically in Scarborough depends on whether your content actually understands the audience reading it — Google's local algorithm increasingly rewards pages that speak directly to a specific community over ones that read as a generic template stretched across the whole district. PPC Guru writes Scarborough SEO content community-first, drawing on the real neighbourhoods and cultures that make up this district, and takes advantage of an organic landscape that's still measurably less contested than downtown Toronto's for equivalent search volume.",
+
+    whyLocal:
+      "Scarborough's search results haven't consolidated around a handful of dominant, content-heavy competitors the way downtown Toronto's have, which means a genuinely well-built local page can climb the map pack here faster than the same effort would in the Financial District. The bigger lever, though, is relevance: pages written with real awareness of Scarborough's South Asian, Tamil, Chinese, Filipino and Caribbean communities consistently earn more clicks and trust than a page built for a generic Toronto audience and simply relabelled. We anchor content around the retail and residential hubs where that audience actually is — Scarborough Town Centre, Agincourt, Malvern — rather than one page trying to speak to everyone at once.",
+    localFocus: [
+      "Content written for the specific communities in each neighbourhood, not a template swapped in under a generic 'Scarborough' banner",
+      "Location content anchored around Scarborough Town Centre, Agincourt and Malvern's actual retail and residential density",
+      "Faster ranking potential — organic competition here hasn't consolidated around dominant players the way downtown Toronto's has",
+      "Trust-building content over premium positioning — Scarborough rewards relevance and value, not a downtown-style sales pitch",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "We audit your Scarborough content and local presence, checking whether it actually reflects the communities you're trying to reach." },
+      { step: "02", title: "Fix", body: "We resolve technical gaps and rebuild any generic content that isn't speaking to Scarborough's real communities." },
+      { step: "03", title: "Build", body: "We build location content anchored around Scarborough Town Centre, Agincourt and Malvern, with community-relevant messaging." },
+      { step: "04", title: "Earn", body: "Ongoing content and citations build map-pack authority faster than in more saturated downtown markets." },
+    ],
+
+    faqs: [
+      { q: "Why does generic Toronto SEO content underperform in Scarborough?", a: "A page written for \"Toronto\" broadly reads as generic here, and generic content simply earns fewer clicks and less trust in a district this specifically multicultural — Scarborough's searchers respond to businesses that clearly understand their community, not a citywide template with the neighbourhood name swapped in." },
+      { q: "Does Scarborough have less SEO competition than downtown Toronto?", a: "Often, yes — Scarborough's organic results haven't consolidated around a handful of entrenched, content-heavy competitors the way the Financial District's have, so a genuinely useful local page has a real shot at climbing the map pack faster here than downtown." },
+      { q: "Do you write SEO content for Scarborough's diverse communities?", a: "Yes, where it genuinely fits your business and customer base — we write with real awareness of the community reading it, and add multilingual content where it makes sense, rather than translating a template and calling it done." },
+      { q: "Do you write separate content for different Scarborough hubs?", a: "Yes. Agincourt, Malvern, Scarborough Town Centre and Guildwood each pull a genuinely different local audience, so we build distinct content and location pages for each instead of one page trying to represent the whole district at once." },
+      { q: "What kind of businesses see the best SEO results in Scarborough?", a: "Local services that lean into genuine community trust rather than premium branding — healthcare, home services and retail businesses that build real relationships with the neighbourhoods they serve tend to see the strongest organic growth here." },
+    ],
+
+    ctaIntro:
+      "Start with a free Scarborough SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you where community-relevant content beats generic Toronto-wide pages.",
+  },
+
+  "vaughan/seo": {
+    metaTitle: "SEO Agency Vaughan | Local SEO Services",
+    metaDescription:
+      "PPC Guru runs research-first local SEO in Vaughan — portfolio-backed content, new-subdivision opportunity. Free Vaughan SEO audit.",
+    metaKeywords: ["SEO agency Vaughan", "Vaughan SEO services", "local SEO Vaughan", "Woodbridge SEO"],
+    knowsAbout: [
+      "Woodbridge content SEO",
+      "new-construction local search Vaughan",
+      "big-ticket home services content",
+      "Kleinburg Maple SEO",
+      "Italian-Canadian community content",
+    ],
+
+    heroIntro:
+      "Vaughan buyers research renovations and real estate extensively before they call — long-form, portfolio-backed content wins the organic search these big-ticket decisions actually generate.",
+
+    definitionHeading: "Why does big-ticket content perform differently with SEO in Vaughan?",
+    definition:
+      "Vaughan's organic searches read like research projects — homeowners in Woodbridge, Maple and Kleinburg planning a renovation or evaluating a real estate move click through multiple pages, compare portfolios and read reviews before ever calling. PPC Guru's Vaughan SEO strategy leans into that pattern with long-form, project-heavy content and dedicated pages for the city's newest subdivisions, where organic demand is only just beginning to be claimed by any competitor's content.",
+
+    whyLocal:
+      "What separates Vaughan from a typical GTA suburb, SEO-wise, is the depth of research behind a typical purchase — a Woodbridge homeowner comparing renovation contractors, or a family evaluating a move to Kleinburg, will read several pages, compare project galleries and check reviews before calling anyone. Thin service pages don't hold up to that. We build genuinely deep, portfolio-backed content for those decisions, and because Vaughan's newest growth areas are so recent, there's real, unclaimed search demand in pockets of Kleinburg and Maple that established competitors haven't built content around yet.",
+    localFocus: [
+      "Long-form, portfolio-backed content for research-heavy big-ticket decisions — renovation, landscaping, real estate",
+      "Location content for fast-growing new-construction subdivisions — Woodbridge, Maple, Kleinburg — where search demand is fresh",
+      "Financing and project-proof content that matches how Vaughan buyers actually research before converting",
+      "Culturally attuned copywriting for Woodbridge's Italian-Canadian community, where it strengthens trust and local relevance",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "We audit your Vaughan content depth, checking whether it actually matches the research-heavy nature of a big-ticket Vaughan purchase." },
+      { step: "02", title: "Fix", body: "We resolve technical gaps and rebuild thin pages into genuinely useful, portfolio-backed content." },
+      { step: "03", title: "Build", body: "We build location content for Vaughan's newest subdivisions — Woodbridge, Maple, Kleinburg — where search demand isn't yet claimed." },
+      { step: "04", title: "Earn", body: "Ongoing content and digital PR build the authority that matches how considered Vaughan's buying decisions really are." },
+    ],
+
+    faqs: [
+      { q: "Why does big-ticket content perform better in Vaughan than short sales pages?", a: "A renovation or a real estate purchase isn't an impulse decision, and Vaughan's buyers research it like one — reading multiple pages, comparing portfolios, checking reviews. A 200-word service page can't answer that many questions, so it loses to competitors with genuinely useful, in-depth content almost every time." },
+      { q: "Is there an opportunity in Vaughan's newest subdivisions?", a: "Often, yes. Because so much of Vaughan's growth is recent, search demand in newer areas like parts of Kleinburg and Maple hasn't been fully claimed by competitor content yet — a real first-mover advantage for businesses that build it now." },
+      { q: "What should Vaughan project pages actually include to rank and convert?", a: "Real project photos, a clear process breakdown and financing details woven into the page itself, not buried in a PDF. Vaughan's research-heavy buyers judge credibility from the content, so a thin page with just a phone number rarely earns the click, let alone the ranking." },
+      { q: "Does Woodbridge's Italian-Canadian community affect how I should write content?", a: "It can help, yes. A genuinely large, established community like Woodbridge's often responds to businesses that show real familiarity with it, whether that's a testimonial, a project in the neighbourhood, or simply signalling you know the area, and that builds trust faster than a generic page ever will." },
+      { q: "How soon will SEO show results in Vaughan?", a: "Local map-pack visibility can build within 8–12 weeks; ranking for competitive, research-heavy terms typically takes 4–6 months given how much content depth those searches reward." },
+    ],
+
+    ctaIntro:
+      "Start with a free Vaughan SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you if your content is actually built for how Vaughan buyers research.",
+  },
+
+  "markham/seo": {
+    metaTitle: "SEO Agency Markham | Local SEO Services",
+    metaDescription:
+      "PPC Guru builds credential-forward local SEO for Markham's tech-corridor and Chinese-Canadian audiences — depth over volume. Free SEO audit.",
+    metaKeywords: ["SEO agency Markham", "Markham SEO services", "local SEO Markham", "bilingual SEO Markham"],
+    knowsAbout: [
+      "Markham tech corridor content",
+      "Chinese-Canadian community SEO",
+      "Pacific Mall local search",
+      "B2B content Markham",
+      "bilingual SEO strategy",
+    ],
+
+    heroIntro:
+      "Thin, generic pages simply don't survive contact with Markham's audience — between a technical tech-sector workforce and one of Canada's largest Chinese-Canadian communities, only genuinely substantive content earns the click, let alone the ranking.",
+
+    definitionHeading: "Why does SEO need to be research-first in Markham?",
+    definition:
+      "Content that would rank comfortably in most GTA suburbs gets picked apart in Markham — a genuine technology corridor staffed by technical, detail-oriented professionals, layered with one of Canada's largest Chinese-Canadian communities known for careful, comparison-heavy research. PPC Guru's Markham SEO work is built around depth: credential-forward pages, bilingual content where real demand justifies it, and a content calendar sized for a multi-visit research cycle rather than a single-click conversion.",
+
+    whyLocal:
+      "Ranking in Markham requires clearing a higher bar than most GTA content ever has to — its tech-sector workforce reads past marketing language to the substance underneath, and its large Chinese-Canadian community, concentrated around hubs like Pacific Mall, is known for genuinely thorough research before any purchase. A thin FAQ page or a 300-word service description simply won't hold up under that kind of scrutiny. We write for depth first: real credentials, specific proof points, and bilingual pages where the search data shows real demand for them, not a hedge, an actual answer to what Markham's searchers are asking.",
+    localFocus: [
+      "In-depth, evidence-backed pages that satisfy Markham's unusually thorough researchers, not a polished surface with nothing underneath",
+      "Bilingual (English/Mandarin or Cantonese) content where real search demand justifies it, particularly near Pacific Mall",
+      "Specificity over hype for B2B content connected to Markham's tech-employer base — real proof points, not generic sales language",
+      "Content depth over content volume — Markham's searchers reward substance, not surface-level pages",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "We audit your Markham content for depth and credibility, since thin or generic pages consistently underperform with this audience." },
+      { step: "02", title: "Fix", body: "We resolve technical gaps and rebuild surface-level content into genuinely credential-forward, in-depth pages." },
+      { step: "03", title: "Build", body: "We build bilingual content where real demand justifies it, plus technical B2B content for Markham's tech-employer corridor." },
+      { step: "04", title: "Earn", body: "Digital PR and deeper content additions build the credibility that matches how thoroughly Markham searchers actually research." },
+    ],
+
+    faqs: [
+      { q: "Why does thin content underperform in Markham?", a: "A 300-word service page reads as thin to Markham's searchers — they're comparing options in detail before ever picking up the phone, so pages need real depth: specifics, proof, and answers to the follow-up questions a surface-level page never addresses." },
+      { q: "Do you offer bilingual SEO content for Markham's Chinese-Canadian community?", a: "Where the search data shows real demand, yes. A meaningful share of Markham's search volume happens outside English entirely, and a bilingual page captures traffic an English-only site never sees — it's not a translation exercise, it's genuinely different content." },
+      { q: "Do you build B2B SEO content for Markham's tech-sector businesses?", a: "Yes, and it has to read like it was written by someone who understands the product, not marketing. Markham's tech-sector buyers can tell the difference immediately, so we prioritize specificity and real proof over persuasive language." },
+      { q: "How long does SEO take to rank in Markham?", a: "Longer than in less research-driven markets, generally, because ranking well requires genuinely deep content — but that same depth tends to hold its position more durably once it ranks." },
+      { q: "Is SEO expensive to execute well in Markham?", a: "The content investment is higher than a typical local page, because Markham's audience rewards genuine depth and credentials — but that content also tends to convert and rank more durably than thin, high-volume alternatives." },
+    ],
+
+    ctaIntro:
+      "Start with a free Markham SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you if your content actually holds up to how thoroughly Markham searchers research.",
+  },
+
+  "hamilton/seo": {
+    metaTitle: "SEO Agency Hamilton | Local SEO Services",
+    metaDescription:
+      "PPC Guru runs local SEO for Hamilton's renovation and trades boom — lower competition than Toronto, real rankings. Free Hamilton SEO audit.",
+    metaKeywords: ["SEO agency Hamilton", "Hamilton SEO services", "local SEO Hamilton", "Hamilton trades content"],
+    knowsAbout: [
+      "Hamilton renovation content",
+      "trades SEO Hamilton",
+      "Ancaster Dundas Stoney Creek local search",
+      "new-homeowner content strategy",
+      "Golden Horseshoe SEO",
+    ],
+
+    heroIntro:
+      "Hamilton's organic search results haven't caught up to its growth — the businesses building real SEO content now can establish authority before this market gets as competitive as Toronto's.",
+
+    definitionHeading: "Why is SEO easier to win in Hamilton right now?",
+    definition:
+      "Hamilton's organic search results are years behind its population growth — homeowners priced out of Toronto have been landing in Ancaster, Dundas and Stoney Creek for a while now, generating real search demand for renovation and trades content that most local competitors haven't built pages for yet. PPC Guru's Hamilton SEO work is about claiming that content gap now, while it's still open, rather than waiting until competitors notice and the market gets as expensive to rank in as Toronto's.",
+
+    whyLocal:
+      "The gap between Hamilton's population growth and its organic content is the real opportunity here — plenty of new Ancaster, Dundas, Stoney Creek and Westdale residents are searching for renovation and trades services, but a lot of the local businesses serving them still haven't built out real content or a complete Google Business Profile to capture it. Every month that gap stays open is a month a well-built local page can claim map-pack position essentially uncontested. It won't last: as Hamilton keeps drawing new residents and diversifying beyond its industrial roots, more competitors will catch on and start investing in content too.",
+    localFocus: [
+      "Capture new-homeowner renovation and trades search demand fast in Ancaster, Dundas and Stoney Creek",
+      "Take advantage of organic competition still meaningfully lower than Toronto's — build authority before it catches up",
+      "Trades and home-service content focused where population growth and demand are concentrated",
+      "A complete, review-backed Google Business Profile, often the single missing piece keeping otherwise-good local businesses out of Hamilton's map pack",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "We audit your Hamilton SEO presence, checking whether you're capturing new-homeowner demand before competitors build the content first." },
+      { step: "02", title: "Fix", body: "We resolve technical gaps and build out a complete Google Business Profile and citation footprint." },
+      { step: "03", title: "Build", body: "We build renovation and trades content for Ancaster, Dundas, Stoney Creek and Westdale, where demand is concentrated." },
+      { step: "04", title: "Earn", body: "Ongoing content and local citations build map-pack authority while Hamilton's organic competition is still catching up." },
+    ],
+
+    faqs: [
+      { q: "Why is it easier to rank organically in Hamilton than Toronto?", a: "Content competition here simply hasn't caught up to how fast Hamilton has grown — a lot of businesses serving Ancaster, Dundas and Stoney Creek are still running thin, unoptimized pages, which leaves real room for a well-built local page to climb quickly. That window is closing as more competitors notice, but it's open right now." },
+      { q: "Is Hamilton a good SEO market for renovation and trades businesses?", a: "Yes, and the timing matters. Hamilton's renovation and trades search volume keeps climbing as new residents settle in, but the local content covering it hasn't kept pace, so a genuinely useful page can establish itself before the space gets crowded." },
+      { q: "Do you target specific Hamilton neighbourhoods differently for SEO?", a: "Yes. Ancaster and Dundas content leans toward established-home renovation and upgrades, while Stoney Creek content leans toward new-build services, so writing one Hamilton-wide page for both audiences would undersell either." },
+      { q: "How is Hamilton different from the rest of the GTA for SEO?", a: "Search intent here skews more practical and less premium than the GTA proper — Hamilton buyers are often weighing affordability and reliability over prestige, which changes what content actually converts: real pricing guidance and clear process explanations outperform polished brand storytelling." },
+      { q: "How fast can I see SEO results in Hamilton?", a: "Often faster than in more saturated markets, precisely because content competition is lower. Meaningful map-pack movement is achievable within 60–90 days for many local categories here." },
+    ],
+
+    ctaIntro:
+      "Start with a free Hamilton SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you how much runway is left before this market's content catches up to Toronto's.",
+  },
+
+  "ottawa/seo": {
+    metaTitle: "SEO Agency Ottawa | Local SEO Services",
+    metaDescription:
+      "PPC Guru runs bilingual, credibility-first local SEO in Ottawa — government, tech and French-language search. Free Ottawa SEO audit.",
+    metaKeywords: ["SEO agency Ottawa", "Ottawa SEO services", "local SEO Ottawa", "bilingual SEO Ottawa"],
+    knowsAbout: [
+      "bilingual SEO Ottawa",
+      "Kanata tech corridor content",
+      "government sector SEO",
+      "credibility-led content strategy",
+      "French-language search Ottawa",
+    ],
+
+    heroIntro:
+      "Ottawa is one of the only genuinely bilingual markets we serve — English-only SEO content leaves real French-language search demand entirely uncaptured.",
+
+    definitionHeading: "Why does Ottawa need bilingual, credibility-first SEO content?",
+    definition:
+      "Two things separate Ottawa's search behaviour from the rest of the markets we serve: real French-language search volume, driven by proximity to Quebec, and a buyer base weighted toward federal government and Kanata tech-sector professionals who read past marketing claims looking for actual proof. PPC Guru's Ottawa SEO content answers both directly — bilingual pages sized to where the search data actually shows French demand, and English content built around verifiable credentials rather than persuasive language, because that's what this audience actually responds to.",
+
+    whyLocal:
+      "Ottawa's search behaviour doesn't map onto the rest of the GTA cleanly. A meaningful share of local searches happen in French, simply because of how close Ottawa sits to Quebec, something almost none of the other cities we serve have to account for. And the English-language searchers skew heavily toward government and tech-sector professionals who evaluate content the way they'd evaluate a work proposal: on evidence, not enthusiasm. We build bilingual pages where the data shows real French demand, and we write English content that leads with credentials and specifics rather than the persuasive, urgency-driven copy that performs better in more consumer-driven GTA markets.",
+    localFocus: [
+      "Content written to withstand scrutiny from a genuinely skeptical, evidence-driven professional audience",
+      "French-language pages built where the actual search data shows demand, not a blanket bilingual rollout",
+      "Technical B2B content built for the decision-makers driving Kanata's tech-sector growth",
+      "A steady, non-seasonal publishing cadence that matches Ottawa's genuinely stable, year-round demand",
+    ],
+
+    process: [
+      { step: "01", title: "Audit", body: "We audit your Ottawa content for credibility signals and bilingual coverage, since gaps in either cost real search demand here." },
+      { step: "02", title: "Fix", body: "We resolve technical gaps and strengthen proof and credential signals across your core pages." },
+      { step: "03", title: "Build", body: "We build bilingual content where real French-language demand justifies it, plus technical content for Kanata's tech-sector buyers." },
+      { step: "04", title: "Earn", body: "Ongoing content and digital PR build steady, year-round authority rather than chasing seasonal spikes." },
+    ],
+
+    faqs: [
+      { q: "Do you build French-language SEO content for Ottawa?", a: "Yes, wherever the actual search data shows meaningful French-language volume. Ottawa's proximity to Quebec makes that a real, measurable slice of demand here, and an English-only site simply never appears in those results at all." },
+      { q: "Why does Ottawa need credibility-first content instead of sales-led pages?", a: "A page full of adjectives and no specifics tends to lose Ottawa's professional audience fast. Real credentials, named qualifications and concrete examples earn far more trust here than confident-sounding marketing language ever will." },
+      { q: "Is Ottawa's SEO demand seasonal like the rest of the GTA?", a: "Barely at all, which is unusual for us. Most of the markets we serve see real seasonal swings in search volume, but Ottawa's stable government and tech employment base means content published in January performs about as well as content published in July." },
+      { q: "Do you build SEO content for tech companies in Kanata?", a: "Yes, and it needs to read like it was written by someone technical. Kanata's B2B audience can spot generic marketing copy immediately, so we prioritize accurate, specific language over anything that sounds like a sales pitch." },
+      { q: "How is Ottawa different from Toronto for SEO?", a: "The content itself has to be different, not just the city name in the title tag. Ottawa's professional, credibility-driven audience and real French-language search volume mean the actual substance and language of the page need to shift, in a way that targeting alone can't fix." },
+    ],
+
+    ctaIntro:
+      "Start with a free Ottawa SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you how much French-language search demand your current content is missing.",
+  },
 };
 
 export function getLocationServiceContent(city: string, service: string): LocationServiceContent | undefined {
