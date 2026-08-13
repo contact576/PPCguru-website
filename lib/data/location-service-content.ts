@@ -82,11 +82,11 @@ export const locationServiceContent: Record<string, LocationServiceContent> = {
     ],
 
     heroIntro:
-      "As a Google Ads agency in Toronto, we build Search and Performance Max campaigns that hold their ground against Bay Street budgets and national competitors — turning expensive downtown clicks into booked jobs, not vanity traffic.",
+      "As a Google Ads agency headquartered right here in Toronto, we build Search and Performance Max campaigns that hold their ground against Bay Street budgets and national competitors — turning expensive downtown clicks into booked jobs, not vanity traffic.",
 
     definitionHeading: "Why hire a local Google Ads agency in Toronto?",
     definition:
-      "A Toronto Google Ads agency earns its keep by controlling cost per click in one of the most expensive ad auctions in the country. PPC Guru is a Google Partner delivering Toronto PPC management for B2B firms near the Financial District, tech companies around Liberty Village and King West, and retail and e-commerce brands competing against national ad budgets — winning through disciplined Quality Score management, sharper ad relevance and neighbourhood-level bid control, not by simply outspending the business next door.",
+      "A Toronto Google Ads agency earns its keep by controlling cost per click in one of the most expensive ad auctions in the country. PPC Guru is a Google Partner headquartered in Toronto, delivering Toronto PPC management for B2B firms near the Financial District, tech companies around Liberty Village and King West, and retail and e-commerce brands competing against national ad budgets — winning through disciplined Quality Score management, sharper ad relevance and neighbourhood-level bid control, not by simply outspending the business next door.",
 
     whyLocal:
       "Toronto is Canada's most expensive and most contested Google Ads market, and the businesses bidding here range from Financial District law and finance firms to fast-scaling tech companies out of Liberty Village and King West to national retailers running Performance Max at a scale most local advertisers can't match. Winning in that environment isn't about matching enterprise budgets — it's about Quality Score discipline, airtight conversion tracking and geo-targeting that concentrates spend on the neighbourhoods and search intent that actually convert for your business, whether that's B2B lead generation downtown or local retail and e-commerce demand across the wider GTA.",
@@ -136,11 +136,11 @@ export const locationServiceContent: Record<string, LocationServiceContent> = {
     ],
 
     heroIntro:
-      "As a Google Ads agency headquartered in Brampton, we build Search and Local campaigns for trades, transportation and community-rooted businesses across Peel Region — turning local search volume into booked jobs, fast.",
+      "As a Toronto-based Google Ads agency with deep, hands-on experience in Peel Region, we build Search and Local campaigns for Brampton's trades, transportation and community-rooted businesses — turning local search volume into booked jobs, fast.",
 
     definitionHeading: "Why hire a local Google Ads agency in Brampton?",
     definition:
-      "A Brampton Google Ads agency wins by capturing local search intent fast, before it drifts to a competitor a few postal codes over. PPC Guru is a Google Partner headquartered in Brampton, delivering Brampton PPC management for HVAC, plumbing, roofing and auto trades, logistics and transportation companies along the Highway 407/410 corridor, and legal, accounting and other SMB service providers — building culturally relevant, community-rooted campaigns that convert Peel Region's dense local demand into booked jobs, not wasted clicks.",
+      "A Brampton Google Ads agency wins by capturing local search intent fast, before it drifts to a competitor a few postal codes over. PPC Guru is a Google Partner headquartered in Toronto, delivering Brampton PPC management for HVAC, plumbing, roofing and auto trades, logistics and transportation companies along the Highway 407/410 corridor, and legal, accounting and other SMB service providers — building culturally relevant, community-rooted campaigns that convert Peel Region's dense local demand into booked jobs, not wasted clicks.",
 
     whyLocal:
       "Brampton's economy runs on trades, transportation and tight-knit community businesses — HVAC, plumbing, roofing and auto shops competing for \"near me\" searches, logistics and warehousing companies serving the Highway 407/410 corridor, and legal, accounting and healthcare SMBs built on word-of-mouth and trust. Local Google Ads here isn't about winning a city-wide bidding war; it's about showing up first for high-intent, immediate-need searches across Peel Region, often across multiple languages, and converting that volume before it goes to a competitor a few kilometres away.",

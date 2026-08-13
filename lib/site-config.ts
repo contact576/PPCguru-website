@@ -30,7 +30,7 @@ export const siteConfig = {
     phone: "",
     phoneHref: "",
     whatsapp: "", // e.g. "https://wa.me/1XXXXXXXXXX" — [VERIFY] real WhatsApp number
-    addressLocality: "Brampton",
+    addressLocality: "Toronto",
     addressRegion: "ON",
     addressCountry: "CA",
     streetAddress: "Greater Toronto Area", // TODO(client) confirm mailing address
