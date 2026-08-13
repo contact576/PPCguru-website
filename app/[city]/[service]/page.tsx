@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Check, ArrowRight, MapPin } from "lucide-react";
 import { allLocationParams, getCity, getLocationService, cities, locationServices } from "@/lib/data/locations";
 import { getService } from "@/lib/data/services";
+import { getLocationServiceContent } from "@/lib/data/location-service-content";
 import { CityServiceArt } from "@/components/illustrations/hero-art";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
@@ -33,11 +34,14 @@ export async function generateMetadata({ params }: { params: Promise<{ city: str
   const c = getCity(city);
   const s = getLocationService(service);
   if (!c || !s) return {};
+  const localContent = getLocationServiceContent(city, service);
   return withMetaOverride(buildMetadata({
-    title: `${s.name} in ${c.name}, ${c.region}`,
-    description: `${siteConfig.name} is a Google Partner & Meta Business Partner agency helping ${c.name} service businesses ${s.verb} that turn into booked jobs. Get a free audit.`,
+    title: localContent?.metaTitle ?? `${s.name} in ${c.name}, ${c.region}`,
+    description:
+      localContent?.metaDescription ??
+      `${siteConfig.name} is a Google Partner & Meta Business Partner agency helping ${c.name} service businesses ${s.verb} that turn into booked jobs. Get a free audit.`,
     path: `/${city}/${service}`,
-    keywords: [`${s.name} ${c.name}`, `${c.name} ${service}`, `digital marketing ${c.name}`],
+    keywords: [`${s.name} ${c.name}`, `${c.name} ${service}`, `digital marketing ${c.name}`, ...(localContent?.metaKeywords ?? [])],
   }), `/${city}/${service}`);
 }
 
@@ -47,6 +51,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
   const s = getLocationService(service);
   const fullService = getService(service);
   if (!c || !s || !fullService) notFound();
+  const localContent = getLocationServiceContent(city, service);
 
   const crumbs = [
     { name: "Home", path: "/" },
@@ -60,14 +65,18 @@ export default async function LocationServicePage({ params }: { params: Promise<
     "@type": "LocalBusiness",
     name: `${siteConfig.name} — ${s.name} in ${c.name}`,
     description: `${s.name} for ${c.name} service businesses.`,
-    areaServed: { "@type": "City", name: c.name },
+    areaServed: [{ "@type": "City", name: c.name }, ...c.neighbourhoods.map((n) => ({ "@type": "Place", name: n }))],
     url: `${siteConfig.url}/${city}/${service}`,
     // priceRange intentionally omitted — we publish no prices, so an invented range would over-claim.
     address: { "@type": "PostalAddress", addressLocality: c.name, addressRegion: c.region, addressCountry: "CA" },
     ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phone } : {}),
+    ...(localContent?.knowsAbout ? { knowsAbout: localContent.knowsAbout } : {}),
     parentOrganization: { "@id": `${siteConfig.url}/#organization` },
   };
-  const cityDef = `${s.name} in ${c.name} means running ${s.name.toLowerCase()} campaigns built specifically for the ${c.name}, ${c.region} market. ${siteConfig.name} is a Google Partner and Meta Business Partner serving ${c.name} service businesses across ${c.region} and Canada — engineering ${s.name.toLowerCase()} around booked jobs and local demand, not clicks.`;
+  const cityDef =
+    localContent?.definition ??
+    `${s.name} in ${c.name} means running ${s.name.toLowerCase()} campaigns built specifically for the ${c.name}, ${c.region} market. ${siteConfig.name} is a Google Partner and Meta Business Partner serving ${c.name} service businesses across ${c.region} and Canada — engineering ${s.name.toLowerCase()} around booked jobs and local demand, not clicks.`;
+  const cityDefHeading = localContent?.definitionHeading ?? `What is ${s.name} in ${c.name}?`;
 
   const otherCities = cities.filter((x) => x.slug !== city).slice(0, 6);
 
@@ -79,7 +88,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
       <PageHero
         eyebrow={`${c.name}, ${c.region}`}
         title={<>{s.name} in <span className="text-gradient">{c.name}</span></>}
-        intro={`We help ${c.name} service businesses ${s.verb} that turn into qualified leads and booked jobs. ${c.context}`}
+        intro={localContent?.heroIntro ?? `We help ${c.name} service businesses ${s.verb} that turn into qualified leads and booked jobs. ${c.context}`}
         breadcrumbs={crumbs}
         accent={getAccent(service)}
         art={<CityServiceArt icon={fullService.icon} city={c.name} accent={getAccent(service)} />}
@@ -90,23 +99,29 @@ export default async function LocationServicePage({ params }: { params: Promise<
       </PageHero>
 
       <TrustBadgeBar />
-      <ServiceIntro name={`${s.name} in ${c.name}`} definition={cityDef} heading={`What is ${s.name} in ${c.name}?`} />
+      <ServiceIntro name={`${s.name} in ${c.name}`} definition={cityDef} heading={cityDefHeading} />
 
       <Section>
         <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           <div>
             <SectionHeading align="left" eyebrow="Why local matters" title={`${s.name} built for the ${c.name} market`} />
-            <p className="mt-6 text-[var(--color-ink-dim)]">{c.context}</p>
-            <p className="mt-4 text-[var(--color-ink-dim)]">
-              As a Google Partner and Meta Business Partner, {siteConfig.name} pairs national-grade
-              expertise with on-the-ground knowledge of {c.name} and the wider {c.region} market. We
-              build campaigns around your most profitable services and the neighbourhoods that matter —
-              from {c.neighbourhoods.slice(0, 3).join(", ")} to {c.neighbourhoods[c.neighbourhoods.length - 1]}.
-            </p>
+            {localContent ? (
+              <p className="mt-6 text-[var(--color-ink-dim)]">{localContent.whyLocal}</p>
+            ) : (
+              <>
+                <p className="mt-6 text-[var(--color-ink-dim)]">{c.context}</p>
+                <p className="mt-4 text-[var(--color-ink-dim)]">
+                  As a Google Partner and Meta Business Partner, {siteConfig.name} pairs national-grade
+                  expertise with on-the-ground knowledge of {c.name} and the wider {c.region} market. We
+                  build campaigns around your most profitable services and the neighbourhoods that matter —
+                  from {c.neighbourhoods.slice(0, 3).join(", ")} to {c.neighbourhoods[c.neighbourhoods.length - 1]}.
+                </p>
+              </>
+            )}
             <div className="mt-7 rounded-[18px] border border-[var(--accent-line)] bg-[var(--accent-soft)] p-5">
               <div className="mono text-[11px] font-bold uppercase tracking-[.1em] text-[var(--accent-strong)]">In {c.name}, we focus on</div>
               <ul className="mt-3 space-y-2.5">
-                {c.localFocus.map((f) => (
+                {(localContent?.localFocus ?? c.localFocus).map((f) => (
                   <li key={f} className="flex items-start gap-3 text-[15px] text-[var(--color-ink)]">
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" />{f}
                   </li>
@@ -149,7 +164,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
       <Section tone="cream">
         <SectionHeading align="left" eyebrow="How we work" title={<>How we run <span className="text-gradient">{s.name.toLowerCase()}</span> in {c.name}</>} />
         <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {fullService.process.map((p, i) => (
+          {(localContent?.process ?? fullService.process).map((p, i) => (
             <Reveal key={p.step} delay={(i % 4) * 0.05}>
               <SpotlightCard className="h-full rounded-[22px] border border-[var(--color-border)] bg-white p-6">
                 <span className="head text-[42px]" style={{ color: "color-mix(in srgb, var(--accent) 38%, transparent)" }}>{p.step}</span>
@@ -180,8 +195,8 @@ export default async function LocationServicePage({ params }: { params: Promise<
 
       <LeadBand source={`location:${city}/${service}`} title={`Get a free ${c.name} audit`} />
 
-      <FaqAccordion faqs={fullService.faqs} title={`${s.name} in ${c.name} — questions`} />
-      <CtaBlock title={`Grow your ${c.name} business with ${s.name.toLowerCase()}`} />
+      <FaqAccordion faqs={localContent?.faqs ?? fullService.faqs} title={`${s.name} in ${c.name} — questions`} />
+      <CtaBlock title={`Grow your ${c.name} business with ${s.name.toLowerCase()}`} intro={localContent?.ctaIntro} />
     </div>
   );
 }
