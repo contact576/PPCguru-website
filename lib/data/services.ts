@@ -310,7 +310,7 @@ export const services: Service[] = [
     ],
     name: "SEO & Local Search",
     short: "Technical SEO, location pages and Google Business Profile that compound over time.",
-    hero: "Paid ads turn off when the budget does. SEO compounds. We build the organic engine that brings leads while you sleep.",
+    hero: "Paid ads stop the moment the budget does. SEO compounds. We build the organic engine that ranks your business across the GTA and Canada — earning local leads while you sleep.",
     description:
       "Local and technical SEO for GTA service businesses — site audits, location & service pages, Google Business Profile optimization and content.",
     icon: TrendingUp,
@@ -338,6 +338,7 @@ export const services: Service[] = [
       "Local + on-page keyword strategy",
       "Optimized location & service pages",
       "Google Business Profile optimization",
+      "Citation building across Canadian directories",
       "Content clusters & internal linking",
       "Rank tracking & monthly reporting",
     ],
@@ -345,6 +346,7 @@ export const services: Service[] = [
       { title: "Technical audit", body: "Core Web Vitals, crawlability, schema and site architecture fixed at the foundation." },
       { title: "Location & service pages", body: "Genuinely useful city-and-service pages — not thin doorway pages — that rank locally." },
       { title: "Google Business Profile", body: "NAP consistency, categories, services, posts and review strategy for the local pack." },
+      { title: "Local citations & directories", body: "Consistent NAP across Canadian directories — Yelp, Yellow Pages, Canada411, the BBB and industry-specific listings — so your business is found and trusted in the map pack." },
       { title: "Content & topic clusters", body: "Pillar pages and supporting articles that build topical authority over time." },
     ],
     platforms: [

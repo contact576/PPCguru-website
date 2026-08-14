@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "./site-config";
+import { aggregateReview, verifiedReviewUrls, awardUrls } from "./data/reviews";
 
 /** Content-freshness stamp for schema dateModified + visible "last reviewed". [VERIFY-client] bump on material revisions. */
 export const CONTENT_UPDATED_ISO = "2026-06-30";
@@ -36,9 +37,13 @@ export function buildMetadata(opts: {
 export function organizationSchema() {
   // Only ship real, non-placeholder profile URLs into sameAs — a bare platform root
   // (e.g. https://linkedin.com/company/) is a broken entity signal, so it's filtered out.
-  const sameAs = ([siteConfig.social.instagram, siteConfig.social.linkedin, siteConfig.social.facebook] as string[]).filter(
-    (u) => Boolean(u) && !/^https?:\/\/[^/]+\/?$/.test(u),
-  );
+  const sameAs = ([
+    siteConfig.social.instagram,
+    siteConfig.social.linkedin,
+    siteConfig.social.facebook,
+    ...verifiedReviewUrls,
+    ...awardUrls,
+  ] as string[]).filter((u) => Boolean(u) && !/^https?:\/\/[^/]+\/?$/.test(u));
   return {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -64,9 +69,20 @@ export function organizationSchema() {
     },
     areaServed: ["Canada", "United States"],
     ...(sameAs.length ? { sameAs } : {}),
-    // NOTE: aggregateRating intentionally omitted — do NOT publish Review/Rating
-    // schema until the rating + review count are verified from a real source.
-    // [VERIFY]: Add aggregateRating only with a confirmed rating and reviewCount.
+    // aggregateRating ships ONLY when a real, verified rating exists in lib/data/reviews.ts
+    // (aggregateReview is null until then), so no Review/Rating schema is published on
+    // unverified data. [VERIFY-client]: fill real rating + count + set verified:true.
+    ...(aggregateReview
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: aggregateReview.ratingValue,
+            reviewCount: aggregateReview.reviewCount,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
     knowsAbout: ["Google Ads", "Meta Ads", "SEO", "PPC", "Conversion optimization"],
   };
 }
