@@ -1033,6 +1033,486 @@ export const locationServiceContent: Record<string, LocationServiceContent> = {
     ctaIntro:
       "Start with a free Ottawa SEO audit, or try our SEO management free for 30 days — no contract, no setup fee. We'll show you how much French-language search demand your current content is missing.",
   },
+
+  "toronto/meta-ads": {
+    metaTitle: "Meta Ads Agency Toronto | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru runs Meta Ads for Toronto's saturated feed — weekly creative testing, neighbourhood targeting, real ROI. Free Toronto Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency Toronto", "Facebook Ads management Toronto", "Instagram advertising Toronto", "social media ad agency Toronto"],
+    knowsAbout: [
+      "creative testing Toronto",
+      "Liberty Village King West targeting",
+      "Yorkville luxury audience",
+      "retargeting funnels Toronto",
+      "CPM optimization",
+    ],
+
+    heroIntro:
+      "Toronto's feeds move faster than almost any market in Canada — a Meta ad that looked fresh two weeks ago already reads as background noise here, so we build creative testing into the campaign itself, not as an afterthought.",
+
+    definitionHeading: "Why does Meta Ads creative burn out faster in Toronto?",
+    definition:
+      "Meta Ads in Toronto live or die on creative velocity — a hyper-segmented, visually literate audience scrolling past national brand budgets and enterprise creative teams means a single winning ad exhausts its audience within days, not weeks. PPC Guru is a Meta Business Partner headquartered in Toronto, running Facebook and Instagram Ads with a structured weekly testing cadence built specifically to outlast creative fatigue in one of the most saturated feeds in the country, rather than a \"set it and forget it\" campaign that stales out inside a month.",
+
+    whyLocal:
+      "What makes Toronto different for Meta Ads isn't just the cost per impression, though that's real — it's how fast an audience here burns through creative. Downtown professionals scrolling between meetings, Liberty Village and King West's design-literate renters, Yorkville's luxury shoppers and Financial District decision-makers all have a higher bar for what earns a stopped thumb, and they've seen more polished ads than almost any other Canadian market. A campaign built around three or four static creatives runs out of runway in days. We build a weekly testing pipeline from day one, with retargeting sequences that make Toronto's premium cost-per-impression actually pay back.",
+    localFocus: [
+      "Weekly creative testing cadence to outrun feed fatigue in one of Canada's most saturated ad markets",
+      "Distinct audience segments by neighbourhood — Liberty Village/King West creative-and-tech renters, Yorkville luxury shoppers, Financial District B2B decision-makers",
+      "Retargeting funnels that make Toronto's premium cost-per-impression pay back over the full customer journey, not just the first click",
+      "Brand-building visual campaigns for DTC, hospitality and lifestyle brands competing for the same saturated feed space as national advertisers",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We study which creative formats and hooks are still landing in Toronto's saturated feed right now, and which have already gone stale." },
+      { step: "02", title: "Build", body: "Offer, creative and neighbourhood-specific audiences get built around whichever segment — Liberty Village renters, Yorkville shoppers, Financial District professionals — actually buys what you sell." },
+      { step: "03", title: "Test", body: "New creative variants go into rotation weekly, because Toronto audiences exhaust a winning ad faster than almost anywhere else we work." },
+      { step: "04", title: "Scale", body: "We scale spend on whatever's still converting and layer in retargeting to protect the premium you're paying per impression." },
+    ],
+
+    faqs: [
+      { q: "Why does my Meta ad creative stop working so quickly in Toronto?", a: "Toronto's audience is unusually visually literate and sees more polished ads than most Canadian markets, so a creative that performs well burns out inside days, not weeks. We build weekly testing into every account so a new variant is always ready before the current one fatigues." },
+      { q: "Is Meta advertising expensive in Toronto?", a: "Cost per impression runs higher here than most of Canada, largely because national and enterprise brands compete for the same feed space as local businesses. Retargeting is what makes that premium worth paying — it captures value from people who saw your ad but didn't convert on the first pass." },
+      { q: "Do you build different campaigns for different Toronto neighbourhoods?", a: "Yes. Liberty Village and King West skew toward design-literate renters and creative professionals, Yorkville toward luxury shoppers, and the Financial District toward B2B decision-makers — we build distinct audiences and creative for each rather than one generic 'Toronto' campaign." },
+      { q: "Do you work with e-commerce and DTC brands in Toronto?", a: "Yes — DTC, hospitality and lifestyle brands are a major part of what we run here, competing for the same saturated feed space as national advertisers. We lean on retargeting and creative testing to compete on relevance rather than raw budget." },
+      { q: "How do you keep cost per lead down in such a competitive market?", a: "Mainly through creative testing velocity and retargeting discipline — in a market this saturated, the businesses winning aren't necessarily spending the most, they're wasting the least on creative that's already fatigued." },
+    ],
+
+    ctaIntro:
+      "Start with a free Toronto Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you exactly how much of your current creative has already gone stale.",
+  },
+
+  "brampton/meta-ads": {
+    metaTitle: "Meta Ads Agency Brampton | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru runs video-first Meta Ads for Brampton's trades and local services — WhatsApp lead capture, fast response. Free Brampton Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency Brampton", "Facebook Ads management Brampton", "social media ads Brampton", "local lead generation Brampton"],
+    knowsAbout: [
+      "video creative Brampton",
+      "WhatsApp lead integration",
+      "trades lead generation Meta Ads",
+      "multilingual ad creative",
+      "Bramalea Heart Lake targeting",
+    ],
+
+    heroIntro:
+      "Brampton customers trust a face and a voice before they trust an ad — video creative that shows your actual team, in a market this community-driven, consistently outperforms polished static ads that could belong to any city.",
+
+    definitionHeading: "Why does video creative outperform static ads for Meta Ads in Brampton?",
+    definition:
+      "Meta Ads in Brampton reward a completely different creative instinct than a market like Toronto — trades, home services, legal and medical businesses here win on trust a stranger can feel through the screen in the first three seconds of a video, not a polished brand aesthetic. PPC Guru builds Brampton Meta Ads campaigns around video-first creative that shows real people and real work, native Meta lead forms wired directly to WhatsApp and CRM for immediate follow-up, and broad demographic targeting that reflects how genuinely wide this market's customer base actually is.",
+
+    whyLocal:
+      "Brampton's Meta Ads audience doesn't respond the same way a hyper-segmented Toronto audience does — this is a broader, more community-connected market, and video creative that shows a real technician, a real clinic, a real face consistently earns more trust than a polished static graphic that could have come from any agency in any city. Because Brampton is genuinely diverse, with a large South Asian community concentrated around growth areas like Bramalea and Heart Lake, creative that reflects that community, sometimes with multilingual variants, builds trust faster than generic messaging. And because trades and local-service leads go cold within minutes, we wire every lead form straight to WhatsApp and your CRM so someone can respond before the customer moves on to the next ad in their feed.",
+    localFocus: [
+      "Video-first creative that shows real people and real work — the trust signal that consistently outperforms polished static ads here",
+      "Native Meta lead forms wired directly to WhatsApp and CRM so no lead sits unanswered",
+      "Broad demographic targeting that reflects Brampton's genuinely wide customer base, rather than hyper-segmented niches",
+      "Culturally relevant, sometimes multilingual creative for Brampton's large South Asian community around Bramalea and Heart Lake",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We study what actually earns trust with Brampton buyers — usually real faces and real work, not polished stock-style creative." },
+      { step: "02", title: "Build", body: "Video-first creative, lead forms and broad-reaching audiences get built around your service and the communities actually searching for it." },
+      { step: "03", title: "Test", body: "We test hooks and formats weekly, watching for which trust signals — testimonials, team faces, before/afters — convert best." },
+      { step: "04", title: "Scale", body: "We scale spend on the creative generating the fastest, highest-quality leads, with WhatsApp response times factored into what counts as a win." },
+    ],
+
+    faqs: [
+      { q: "Does video creative really work better than static ads in Brampton?", a: "Consistently, yes. Brampton is a community-driven, trust-first market, and video showing a real technician, team or clinic earns more confidence than a polished graphic that could belong to any business in any city. We lead with video for most Brampton accounts." },
+      { q: "Can you connect Meta lead forms to WhatsApp for faster response?", a: "Yes — this is one of the most important pieces for Brampton accounts specifically. A lead that sits for even 20 minutes often goes cold, so we wire native Meta lead forms straight to WhatsApp and your CRM for near-immediate follow-up." },
+      { q: "Do you create multilingual ad content for Brampton's communities?", a: "Where it fits your business, yes — video and static creative can both run with Punjabi or Hindi variants when your audience calls for it. A hook delivered in someone's first language earns a stopped scroll far more often than the same message in English alone." },
+      { q: "Should I target a narrow audience or cast a wider net on Meta in Brampton?", a: "Generally wider than you'd expect. Brampton's customer base for most local services is broader than a niche urban market like Toronto, so overly narrow targeting often just limits reach without improving lead quality." },
+      { q: "What kind of Brampton businesses see the best results with Meta Ads?", a: "Trades and home services, medical and dental clinics, legal services and other trust-dependent local businesses — anywhere a real face and a fast response matter more than a slick brand campaign." },
+    ],
+
+    ctaIntro:
+      "Start with a free Brampton Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you how fast your current leads are actually being followed up.",
+  },
+
+  "mississauga/meta-ads": {
+    metaTitle: "Meta Ads Agency Mississauga | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru splits Mississauga Meta Ads into two tracks — Pearson corridor retargeting and Square One family lead magnets. Free Mississauga Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency Mississauga", "Facebook Ads specialist Mississauga", "Instagram ads agency Mississauga", "B2B retargeting Mississauga"],
+    knowsAbout: [
+      "B2B retargeting Mississauga",
+      "lead magnet funnels",
+      "Square One foot-traffic campaigns",
+      "Port Credit premium creative",
+      "Pearson corridor Meta Ads",
+    ],
+
+    heroIntro:
+      "Mississauga's Meta audience splits into two completely different buyers — corporate decision-makers near the Pearson Airport corridor and suburban families around Square One and Meadowvale — and running one campaign for both wastes budget on whichever half it wasn't built for.",
+
+    definitionHeading: "Why does Mississauga need two different Meta Ads audiences, not one?",
+    definition:
+      "Meta Ads in Mississauga have to serve a genuinely split market — B2B decision-makers connected to the corporate offices and industrial parks near Pearson Airport, who respond to retargeting and credibility-driven creative, and suburban families around Square One, City Centre and Meadowvale who respond to lead-magnet funnels and local foot-traffic offers. PPC Guru builds separate Mississauga Meta Ads strategies for each — B2B retargeting sequences for the corporate audience, and family-demographic targeting with lead magnets for the consumer side — instead of one blended campaign that undersells both.",
+
+    whyLocal:
+      "Mississauga's economy is unusual for a GTA suburb — real corporate and industrial density near Pearson Airport sitting alongside dense, family-heavy residential growth around Square One, City Centre, Meadowvale and the more affluent Port Credit. Those are two different Meta audiences with two different buying triggers: B2B decision-makers who need to see your business again and again before they'll take a call, and suburban families who respond to a specific offer — a lead magnet, a local promotion, a reason to visit a location near them. A single campaign built for one persona reads as noise to the other. We run them as genuinely separate strategies, each with its own creative, audience and funnel.",
+    localFocus: [
+      "Separate B2B retargeting sequences for corporate and industrial audiences connected to Pearson Airport",
+      "Family-demographic targeting and lead-magnet funnels for consumer audiences around Square One, City Centre and Meadowvale",
+      "Local foot-traffic campaigns for retail and franchise locations, geo-targeted to where the customers actually are",
+      "Premium positioning and creative for higher-income pockets like Port Credit, distinct from broader family-suburb messaging",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We map which of your services are actually B2B versus consumer in Mississauga, since most accounts here have been running one blended strategy for both." },
+      { step: "02", title: "Build", body: "We build two separate tracks — B2B retargeting creative and consumer lead-magnet funnels — instead of one campaign trying to speak to both." },
+      { step: "03", title: "Test", body: "Each track gets tested independently, since a B2B decision-maker and a Meadowvale parent respond to completely different hooks." },
+      { step: "04", title: "Scale", body: "We scale whichever track — B2B or consumer — is generating the strongest return, and reinvest accordingly." },
+    ],
+
+    faqs: [
+      { q: "Should my Mississauga Meta Ads target businesses or households?", a: "For a lot of our Mississauga clients, honestly, both — just never in the same campaign. Businesses near the Pearson corridor respond to retargeting and credibility-driven creative; households in the family suburbs respond to a concrete lead-magnet offer. Blending the two into one audience dilutes both." },
+      { q: "What is a lead-magnet funnel and does it work in Mississauga?", a: "A lead magnet is a specific, valuable offer — a guide, a discount, a free consultation — that captures contact information before someone's ready to buy. It performs particularly well with Mississauga's suburban family audience, who respond better to a concrete offer than a generic brand ad." },
+      { q: "Can you run foot-traffic campaigns for a retail location near Square One?", a: "Yes — we build geo-targeted campaigns aimed at driving visits to physical locations, which works well in Mississauga given the retail density around Square One and City Centre." },
+      { q: "Do you treat Port Credit differently than the rest of Mississauga?", a: "Yes. Port Credit skews more affluent than the broader Mississauga suburbs, and premium positioning and creative typically outperform the value-led messaging that works well in family-suburb pockets like Meadowvale." },
+      { q: "How is Meta Ads different in Mississauga compared to Toronto?", a: "Mississauga's audience splits more cleanly between B2B and consumer than Toronto's does, and the corporate density near Pearson Airport means a genuine B2B retargeting opportunity most GTA suburbs simply don't have at the same scale." },
+    ],
+
+    ctaIntro:
+      "Start with a free Mississauga Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you whether your B2B and consumer campaigns are actually being run as two separate strategies.",
+  },
+
+  "etobicoke/meta-ads": {
+    metaTitle: "Meta Ads Agency Etobicoke | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru splits Etobicoke Meta Ads by platform — Facebook trust-building to Instagram-native waterfront creative. Free Etobicoke Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency Etobicoke", "Facebook Ads Etobicoke", "Instagram advertising Etobicoke", "social media ads Etobicoke"],
+    knowsAbout: [
+      "Facebook vs Instagram targeting",
+      "testimonial video creative",
+      "The Kingsway advertising",
+      "Mimico waterfront Meta Ads",
+      "renovation lead generation",
+    ],
+
+    heroIntro:
+      "Etobicoke splits cleanly by platform as much as by neighbourhood — Facebook still reaches homeowners along The Kingsway who trust a recommendation from someone their own age, while Instagram is where the waterfront condo crowd around Mimico actually spends their time.",
+
+    definitionHeading: "Why does platform mix matter more than targeting for Meta Ads in Etobicoke?",
+    definition:
+      "Meta Ads in Etobicoke succeed or fail on platform mix as much as targeting — established homeowners along The Kingsway and Islington still spend real time on Facebook and respond to testimonial-driven video, while the newer waterfront renters around Mimico and Humber Bay Shores live on Instagram and expect a different visual language entirely. PPC Guru builds Etobicoke Meta Ads campaigns that split spend and creative across both platforms deliberately, rather than running one Instagram-first campaign that quietly under-serves half the borough.",
+
+    whyLocal:
+      "Most Meta Ads accounts default to Instagram-first creative, and in a lot of Toronto that's the right call — but Etobicoke is genuinely different. Its established, homeowner-heavy streets along The Kingsway and Islington still have real, active Facebook usage among an older demographic, and testimonial-driven video consistently earns more trust there than a polished Instagram Reel ever will. The newer waterfront towers around Mimico and Humber Bay Shores are the opposite: a younger, Instagram-native renter audience with entirely different creative expectations. We build and budget for both deliberately, rather than defaulting to whichever platform is trendiest.",
+    localFocus: [
+      "Deliberate platform split — Facebook for established, testimonial-responsive homeowners, Instagram for the waterfront renter demographic",
+      "Testimonial and review-driven video creative for The Kingsway and Islington's trust-first buyers",
+      "Distinct Instagram-native creative for Mimico and Humber Bay Shores' younger condo audience",
+      "Renovation and home-service offers tuned to Etobicoke's older housing stock, rather than one blended borough-wide message",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We check where your actual audience spends time — Facebook, Instagram, or genuinely both — since Etobicoke splits less evenly than most of Toronto." },
+      { step: "02", title: "Build", body: "Creative and budget get split by platform and neighbourhood, testimonial-led for established streets, Instagram-native for the waterfront corridor." },
+      { step: "03", title: "Test", body: "We test each platform's creative independently, since what earns a stopped scroll on Facebook rarely matches what works on Instagram here." },
+      { step: "04", title: "Scale", body: "We scale whichever platform-and-audience combination is converting, rather than assuming one channel serves the whole borough." },
+    ],
+
+    faqs: [
+      { q: "Should my Etobicoke business advertise on Facebook or Instagram?", a: "Often both, split deliberately. Etobicoke's established, homeowner-heavy streets still have real Facebook engagement, while the newer waterfront condo crowd lives on Instagram — a single-platform strategy usually leaves real reach on the table here." },
+      { q: "Does testimonial video actually outperform polished creative in Etobicoke?", a: "For the borough's established neighbourhoods, yes, consistently. A homeowner along The Kingsway trusts a genuine testimonial from someone in their own community more than a highly produced brand video — we lead with that for Meta Ads targeting those streets." },
+      { q: "Do you build different creative for Mimico's waterfront condos?", a: "Yes. That audience is younger, more Instagram-native, and expects a different visual language than Etobicoke's established inland streets — running one campaign for both usually undersells one of them." },
+      { q: "Can Meta Ads generate renovation leads in Etobicoke?", a: "Yes — Etobicoke's older housing stock drives consistent renovation demand, and we build creative and offers specifically around that, rather than a generic home-services ad that could run anywhere." },
+      { q: "How much does Meta advertising cost in Etobicoke?", a: "Generally more moderate than downtown Toronto's core, though it varies by platform and audience — a free audit gives you a realistic estimate based on your actual service and target streets rather than a citywide average." },
+    ],
+
+    ctaIntro:
+      "Start with a free Etobicoke Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you whether your current campaign is actually reaching both sides of the borough.",
+  },
+
+  "north-york/meta-ads": {
+    metaTitle: "Meta Ads Agency North York | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru runs Advantage+ Meta Ads along North York's Yonge corridor — audience expansion, retargeting, real ROI. Free North York Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency North York", "Facebook Ads North York", "Instagram advertising North York", "Yonge corridor Meta Ads"],
+    knowsAbout: [
+      "Advantage+ audience expansion",
+      "Yonge-Eglinton Meta Ads",
+      "Willowdale creative targeting",
+      "CPM optimization North York",
+      "retargeting funnels",
+    ],
+
+    heroIntro:
+      "North York's Yonge corridor packs so many advertisers into the same feed that manual audience targeting runs dry fast — we lean on Meta's Advantage+ audience expansion to keep finding new buyers once the obvious segment is exhausted.",
+
+    definitionHeading: "Why does audience expansion matter more than manual targeting for Meta Ads in North York?",
+    definition:
+      "Meta Ads along North York's Yonge corridor hit a ceiling fast with manual targeting alone — so many businesses are competing for the same dense, high-value audience between Yonge-Eglinton and Willowdale that a narrow, hand-picked interest list saturates within days. PPC Guru builds North York Meta Ads campaigns around Meta's Advantage+ audience expansion and disciplined retargeting, letting the algorithm find pockets of demand a manual list would miss, while keeping cost per impression under control in one of the GTA's most contested feeds outside downtown.",
+
+    whyLocal:
+      "Hand-picking an interest list along the Yonge corridor gets you the same few thousand people every other advertiser here is already chasing, and that audience burns out fast, sending cost per impression climbing. Leaning on Meta's Advantage+ audience expansion instead lets the algorithm keep surfacing pockets of demand a manual list would never think to include, which matters enormously in a corridor this saturated. It also means the creative can't stay English-only — Willowdale's real audience skews East Asian, and ignoring that leaves reach on the table before the algorithm even gets a chance.",
+    localFocus: [
+      "Advantage+ audience expansion to find demand beyond what a saturated manual interest list can reach",
+      "Retargeting discipline to protect cost per impression in one of the GTA's most contested corridors outside downtown",
+      "Ad creative built for Willowdale's actual audience mix, not a generic downtown-Toronto template",
+      "Concentrated spend on the Yonge-Eglinton to North York Centre stretch rather than diluted across lower-density North York",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We check how saturated your manual audience already is in this corridor, since North York exhausts narrow targeting faster than most markets." },
+      { step: "02", title: "Build", body: "Campaigns get built around Advantage+ audience expansion and retargeting, concentrated on the Yonge-Eglinton to Willowdale stretch." },
+      { step: "03", title: "Test", body: "We test creative variants weekly to keep pace with a corridor where competing ads recycle fast." },
+      { step: "04", title: "Scale", body: "We scale whichever audience expansion and creative combination holds cost per impression down while still converting." },
+    ],
+
+    faqs: [
+      { q: "Why does manual audience targeting stop working in North York?", a: "So many businesses target the identical demographic in the same few blocks along Yonge that a hand-picked interest list saturates within days, driving up cost per impression. We use Meta's Advantage+ audience expansion to keep finding fresh demand once a manual list runs dry." },
+      { q: "Is Meta advertising expensive along the Yonge corridor?", a: "Yes, relative to most of the GTA — this stretch has some of the highest advertiser density outside downtown, and every business fighting for the same feed pushes cost per impression up. A solid retargeting sequence is what earns that spend back, by catching people on the second or third look instead of writing off anyone who didn't convert immediately." },
+      { q: "Do you build culturally relevant creative for Willowdale?", a: "Where it fits, yes — and it's worth doing. Willowdale skews heavily East Asian, and an ad that reads as though it was written for a generic downtown audience simply scrolls past unnoticed there." },
+      { q: "Should I target all of North York or just specific neighbourhoods?", a: "Specific neighbourhoods, generally. Purchasing power and ad competition both concentrate heavily along the Yonge-Eglinton to North York Centre stretch — spreading budget across the whole borough usually dilutes results." },
+      { q: "What kind of businesses see the best Meta Ads results in North York?", a: "Businesses with a high enough average order value to absorb this corridor's premium cost per impression — professional services, healthcare and higher-end home services tend to come out ahead here, where a lower-margin business often can't." },
+    ],
+
+    ctaIntro:
+      "Start with a free North York Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you exactly how saturated your current audience targeting already is.",
+  },
+
+  "scarborough/meta-ads": {
+    metaTitle: "Meta Ads Agency Scarborough | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru runs community-specific Meta Ads in Scarborough — lower CPMs than downtown, real engagement. Free Scarborough Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency Scarborough", "Facebook Ads Scarborough", "Instagram advertising Scarborough", "multicultural Meta Ads Scarborough"],
+    knowsAbout: [
+      "community-specific ad creative",
+      "South Asian community Meta Ads",
+      "Tamil Chinese Filipino Caribbean targeting",
+      "CPM optimization Scarborough",
+      "community Facebook groups",
+    ],
+
+    heroIntro:
+      "Scarborough's Meta audience isn't one audience at all — South Asian, Tamil, Chinese, Filipino and Caribbean communities each respond to different creative and even different community Facebook groups, and treating them as one segment wastes real reach.",
+
+    definitionHeading: "Why does one Meta Ads audience never work for all of Scarborough?",
+    definition:
+      "Run a single generic Meta Ads audience across Scarborough and you'll underperform badly, because there's no such thing as one Scarborough audience — South Asian, Tamil, Chinese, Filipino and Caribbean communities each show up with different platform habits, different creative preferences, and in several cases their own active community Facebook groups. PPC Guru builds Scarborough Meta Ads campaigns around community-specific creative and detailed interest targeting, taking advantage of cost per impression that runs meaningfully below downtown Toronto for the same reach.",
+
+    whyLocal:
+      "Scarborough's population is genuinely enormous and genuinely diverse, and Meta's own targeting tools reflect that — detailed interest and lookalike audiences let us build creative and messaging specific to South Asian, Tamil, Chinese, Filipino and Caribbean communities rather than one flattened message aimed at everyone. Community Facebook groups still carry real weight here too, in a way they've largely faded in denser downtown markets. And because cost per impression in Scarborough runs meaningfully below the Financial District or King West, that community-specific precision goes further per dollar than the same effort would downtown.",
+    localFocus: [
+      "Detailed interest and lookalike targeting split by community rather than one blended Scarborough-wide audience",
+      "Community Facebook group awareness — still genuinely influential here, unlike denser downtown markets",
+      "Take advantage of cost per impression meaningfully lower than downtown Toronto for equivalent reach",
+      "Offers and creative pitched to a genuinely price-conscious, high-volume audience, not a downtown premium-brand aesthetic",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We identify which of Scarborough's communities your actual customers come from, since one blended audience misses most of them." },
+      { step: "02", title: "Build", body: "Creative and detailed interest targeting get built around specific communities — South Asian, Tamil, Chinese, Filipino, Caribbean — rather than one generic Scarborough-wide set." },
+      { step: "03", title: "Test", body: "We test community-specific creative variants independently, since a hook that lands with one audience often falls flat with another." },
+      { step: "04", title: "Scale", body: "We scale whichever community and creative combination is converting at the lowest cost per lead." },
+    ],
+
+    faqs: [
+      { q: "Why does one Meta Ads campaign underperform across all of Scarborough?", a: "Because there isn't really one Scarborough audience to speak to. A South Asian household, a Tamil household and a Filipino household in the same postal code can have completely different platform habits and respond to completely different creative — a single blended audience ends up half-speaking to everyone and fully connecting with no one." },
+      { q: "Do you build creative for specific Scarborough communities?", a: "Yes, where it fits your business — detailed interest targeting and community-specific creative consistently outperform one-size-fits-all messaging in a market this diverse." },
+      { q: "Is Meta advertising cheaper in Scarborough than downtown Toronto?", a: "Generally, yes — reaching the same number of eyeballs costs noticeably less here than it does downtown, which means the budget for testing five community-specific creative variants in Scarborough might only cover two in the Financial District." },
+      { q: "Do community Facebook groups still matter for advertising in Scarborough?", a: "More than in most of Toronto, yes. Community groups remain genuinely active and influential in several of Scarborough's neighbourhoods, and awareness of that dynamic informs how we build paid creative around it." },
+      { q: "Which Scarborough businesses tend to get the strongest Meta Ads results?", a: "Local services that lean on genuine community trust rather than a premium brand image — healthcare providers, home-service businesses and retailers that show up as part of the community, not just an ad in the feed, consistently see the strongest engagement." },
+    ],
+
+    ctaIntro:
+      "Start with a free Scarborough Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you which of Scarborough's communities your current campaign is actually reaching.",
+  },
+
+  "vaughan/meta-ads": {
+    metaTitle: "Meta Ads Agency Vaughan | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru runs Meta Ads for Vaughan's big-ticket home services — real project photos, lookalike audiences. Free Vaughan Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency Vaughan", "Facebook Ads Vaughan", "Instagram advertising Vaughan", "Woodbridge Meta Ads"],
+    knowsAbout: [
+      "lookalike audiences Vaughan",
+      "before-and-after creative",
+      "Woodbridge Meta Ads",
+      "big-ticket home services advertising",
+      "Kleinburg Maple targeting",
+    ],
+
+    heroIntro:
+      "Vaughan buyers scroll past a hundred generic renovation ads before one earns a click — real before-and-after project photos and lookalike audiences built from your actual customer list outperform stock imagery every time.",
+
+    definitionHeading: "Why do lookalike audiences and real project photos outperform generic creative in Vaughan?",
+    definition:
+      "Meta Ads in Vaughan work best when they lean on two things most competitors skip — genuine before-and-after project imagery instead of stock photography, and lookalike audiences built from your actual customer list rather than broad interest targeting. PPC Guru builds Vaughan Meta Ads campaigns around that combination, tuned to the city's higher household incomes and new-construction growth in Woodbridge, Maple and Kleinburg, where big-ticket renovation and real estate decisions reward visible proof over polished but generic brand imagery.",
+
+    whyLocal:
+      "Vaughan's higher household incomes and new-construction boom across Woodbridge, Maple and Kleinburg mean buyers are financing genuinely large projects — renovations, landscaping, real estate — and they scroll past generic stock photography without a second look. Real before-and-after project imagery earns dramatically more engagement here than polished but generic brand creative. We also build Meta lookalike audiences from your actual past customer list wherever we can, since Meta's algorithm finds new high-income buyers who resemble your real clients far more precisely than a broad interest-based audience ever could, and we build creative that reflects Woodbridge's established Italian-Canadian community where it strengthens trust.",
+    localFocus: [
+      "Real before-and-after project imagery instead of stock photography for big-ticket renovation and landscaping offers",
+      "Lookalike audiences built from your actual customer list to find new buyers who resemble your real clients",
+      "Creative and targeting concentrated on new-construction growth in Woodbridge, Maple and Kleinburg",
+      "Culturally attuned creative for Woodbridge's established Italian-Canadian community where it strengthens trust",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We gather your best project photos and past-customer data, since both drive Vaughan campaigns more than generic targeting does." },
+      { step: "02", title: "Build", body: "Creative gets built around real before-and-after imagery, with lookalike audiences sourced from your actual customer list where the data supports it." },
+      { step: "03", title: "Test", body: "We test which real projects and which lookalike segments generate the strongest engagement and lead quality." },
+      { step: "04", title: "Scale", body: "We scale spend on the project types and audiences converting at the highest average order value." },
+    ],
+
+    faqs: [
+      { q: "Why do before-and-after photos work better than stock imagery in Vaughan?", a: "Vaughan buyers are researching genuinely large purchases and scroll past generic stock photography without a second look. Real project photos signal you've actually done the work, which matters enormously when someone's about to finance a major renovation or landscaping project." },
+      { q: "What is a lookalike audience and does it work well in Vaughan?", a: "A lookalike audience uses Meta's algorithm to find new people who resemble your existing customers. It works particularly well in Vaughan because the city's higher-income buyer profile is distinctive enough that the algorithm can target it precisely, once we feed it real customer data." },
+      { q: "Do you target Vaughan's newest subdivisions specifically?", a: "Yes — Woodbridge, Maple and Kleinburg are where Vaughan's new-construction growth and renovation demand concentrate, so we weight creative and budget toward those areas rather than the city as a whole." },
+      { q: "Is Woodbridge's Italian-Canadian community relevant to ad creative?", a: "It can, yes — Woodbridge specifically has a large, established Italian-Canadian community, and an ad that clearly wasn't written with them in mind tends to get scrolled past. A little cultural specificity in the creative goes a long way here." },
+      { q: "How much does Meta advertising cost for home services in Vaughan?", a: "It varies with project size — big-ticket renovation and real estate audiences typically cost more to reach but convert to significantly higher-value jobs. A free audit sets a realistic budget against your actual average project value." },
+    ],
+
+    ctaIntro:
+      "Start with a free Vaughan Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you whether your creative is actually built to earn a stopped scroll from Vaughan's buyers.",
+  },
+
+  "markham/meta-ads": {
+    metaTitle: "Meta Ads Agency Markham | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru builds proof-heavy Meta Ads for Markham's tech-corridor and Chinese-Canadian audiences — data over lifestyle imagery. Free Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency Markham", "Facebook Ads Markham", "Instagram advertising Markham", "bilingual Meta Ads Markham"],
+    knowsAbout: [
+      "proof-driven ad creative",
+      "Markham tech corridor Meta Ads",
+      "Chinese-Canadian community targeting",
+      "Pacific Mall advertising",
+      "B2B lookalike audiences",
+    ],
+
+    heroIntro:
+      "Markham audiences are unusually ad-literate — a polished lifestyle image alone doesn't convert here, so we lead with proof: real data, real credentials, real specifics, delivered through creative built for a genuinely skeptical scroll.",
+
+    definitionHeading: "Why does proof-heavy creative outperform lifestyle imagery in Markham?",
+    definition:
+      "Markham's Meta audience is unusually hard to impress with a pretty picture alone — a real technology sector fills the feed with technical, detail-oriented professionals, and one of Canada's largest Chinese-Canadian communities brings a research-first buying habit most creative simply isn't built for. PPC Guru's Markham Meta Ads lean on proof instead of polish — specific numbers, named credentials, concrete outcomes — paired with retargeting sequences long enough to survive an audience that almost never converts off the first impression.",
+
+    whyLocal:
+      "A pretty lifestyle photo with no substance behind it dies fast in Markham's feed. This audience treats an ad less like advertising and more like a claim to be checked — tech-sector viewers pick apart vague language instantly, and the concentration of Chinese-Canadian buyers around hubs like Pacific Mall tends to compare several options before committing to any of them. So the creative leads with something checkable: a number, a named credential, a specific result. And because that scrutiny takes time, we build the retargeting sequence around it, expecting three or four touches before a click actually happens.",
+    localFocus: [
+      "Proof-heavy creative — real data, credentials and specifics — instead of lifestyle-first imagery that underperforms with this audience",
+      "Retargeting sequences sized for Markham's multi-touch research cycle rather than a single-impression conversion",
+      "Bilingual creative variants where real search and engagement data show demand, particularly near Pacific Mall",
+      "B2B lookalike audiences built from real customer data for buyers connected to Markham's tech-employer corridor",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We identify the actual proof points — numbers, credentials, outcomes — that will hold up under Markham's unusually skeptical scroll." },
+      { step: "02", title: "Build", body: "Creative gets built around that proof, with retargeting sequences sized for a multi-touch research cycle rather than a single impression." },
+      { step: "03", title: "Test", body: "We test which specific proof points and formats earn engagement from an audience that ignores generic lifestyle imagery." },
+      { step: "04", title: "Scale", body: "We scale the creative and retargeting sequences converting Markham's research-heavy, multi-visit audience." },
+    ],
+
+    faqs: [
+      { q: "Why does lifestyle-focused ad creative underperform in Markham?", a: "Markham's audience combines technical tech-sector professionals and a large, research-driven Chinese-Canadian community, both of whom scroll past vague, polished imagery without a second look. Creative built around real proof — data, credentials, specifics — earns far more engagement." },
+      { q: "Do you offer bilingual Meta Ads creative for Markham?", a: "When the numbers justify it, yes. A large share of Markham's population is Chinese-Canadian, concentrated around hubs like Pacific Mall, and an English-only ad set simply never shows up in that audience's preferred language at all." },
+      { q: "How many times does a Markham buyer typically see an ad before converting?", a: "More than most markets, generally — this is a genuinely research-heavy audience. We build retargeting sequences that expect multiple touches rather than optimizing for a first-impression click that rarely comes." },
+      { q: "Do you run B2B Meta Ads for Markham's tech-sector businesses?", a: "Yes. We build lookalike audiences from real customer data and lead with specific, technical proof points rather than generic sales language, since Markham's tech-sector buyers can spot the difference immediately." },
+      { q: "Is Meta advertising expensive in Markham?", a: "Cost per impression reflects Markham's affluent, competitive market, but the bigger factor is usually the creative — proof-heavy ads convert far more of Markham's skeptical traffic than lifestyle imagery at any budget level." },
+    ],
+
+    ctaIntro:
+      "Start with a free Markham Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you whether your creative actually holds up to how skeptically Markham scrolls.",
+  },
+
+  "hamilton/meta-ads": {
+    metaTitle: "Meta Ads Agency Hamilton | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru runs Meta Ads for Hamilton's renovation and trades boom — lower CPMs than Toronto, more creative tests. Free Hamilton Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency Hamilton", "Facebook Ads Hamilton", "Instagram advertising Hamilton", "Hamilton trades Meta Ads"],
+    knowsAbout: [
+      "Hamilton trades video creative",
+      "CPM advantage Hamilton",
+      "Ancaster Dundas Stoney Creek targeting",
+      "new-homeowner Meta Ads",
+      "renovation lead generation",
+    ],
+
+    heroIntro:
+      "Hamilton's ad auction hasn't caught up to its growth — the same Meta budget that buys limited reach in Toronto stretches into meaningfully more impressions and creative tests here.",
+
+    definitionHeading: "Why does the same Meta Ads budget go further in Hamilton than Toronto?",
+    definition:
+      "Meta Ads in Hamilton benefit from real timing — a wave of homeowners priced out of Toronto has settled into Ancaster, Dundas and Stoney Creek, generating fresh renovation and trades demand, while advertiser competition and cost per impression here remain meaningfully lower than Toronto's. PPC Guru builds Hamilton Meta Ads campaigns to test more creative variants for the same budget than a Toronto account would allow, capturing that new-homeowner demand with video-led trades and renovation content before the local auction catches up.",
+
+    whyLocal:
+      "The gap between how fast Hamilton is growing and how competitive its Meta Ads auction remains is the real opportunity here — new residents settling into Ancaster, Dundas, Stoney Creek and Westdale are generating real demand for renovation and trades content, but advertiser competition for that attention hasn't caught up yet. That means the same budget buys more impressions, more creative tests and more frequency than the identical spend would in Toronto. It won't stay this way forever: as Hamilton keeps growing and diversifying beyond its industrial roots, more advertisers will notice and costs will climb toward Toronto's.",
+    localFocus: [
+      "More creative tests and impressions per dollar than an equivalent Toronto budget, while the local auction is still catching up",
+      "Video-led trades and renovation content targeted at Ancaster, Dundas and Stoney Creek's new-homeowner wave",
+      "Capture demand fast — the cost advantage here is real but temporary as more advertisers notice",
+      "Trust-building creative for buyers new to the area, who haven't yet formed brand loyalties",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We check how saturated Hamilton's Meta auction actually is for your category, since it's typically lower than Toronto's for the same service." },
+      { step: "02", title: "Build", body: "Video-led trades and renovation creative gets built around the new-homeowner wave settling into Ancaster, Dundas and Stoney Creek." },
+      { step: "03", title: "Test", body: "We run more creative variants than a Toronto budget would allow, since the lower cost per impression stretches further here." },
+      { step: "04", title: "Scale", body: "We scale the creative and neighbourhoods converting fastest, while Hamilton's auction is still less competitive than Toronto's." },
+    ],
+
+    faqs: [
+      { q: "Why is Meta advertising cheaper in Hamilton than Toronto?", a: "Hamilton's advertiser competition hasn't caught up to its recent population growth — plenty of new residents are here, but fewer businesses are actively bidding for their attention on Meta than in Toronto, which keeps cost per impression down for now." },
+      { q: "Is Hamilton a good market for renovation and trades businesses on Meta?", a: "Yes, and the timing works in your favour. There's a genuine wave of new homeowners settling into Ancaster, Dundas, Stoney Creek and Westdale right now, and because fewer advertisers are bidding for their attention than in Toronto, the same dollar buys noticeably more reach and more room to test creative." },
+      { q: "Do you target specific Hamilton neighbourhoods differently?", a: "Yes. An established-home renovation offer lands differently in Ancaster and Dundas than a new-build service offer does in Stoney Creek, so the creative gets built separately for each rather than stretched thin across one campaign." },
+      { q: "How long will Hamilton's lower Meta Ads costs last?", a: "Impossible to say precisely, but the gap is closing as more advertisers notice Hamilton's growth. Businesses that build a presence and audience data now have a real head start once competition catches up." },
+      { q: "How fast can I see results from Meta Ads in Hamilton?", a: "Often faster than in more saturated markets — lower competition means better ad placement and frequency for the same budget, so meaningful engagement typically builds within the first couple of weeks." },
+    ],
+
+    ctaIntro:
+      "Start with a free Hamilton Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you how much further your budget stretches here than it would in Toronto.",
+  },
+
+  "ottawa/meta-ads": {
+    metaTitle: "Meta Ads Agency Ottawa | Facebook & Instagram Ads",
+    metaDescription:
+      "PPC Guru runs bilingual, proof-led Meta Ads for Ottawa's government and tech audience — steady, year-round pacing. Free Ottawa Meta Ads audit.",
+    metaKeywords: ["Meta Ads agency Ottawa", "Facebook Ads Ottawa", "Instagram advertising Ottawa", "bilingual Meta Ads Ottawa"],
+    knowsAbout: [
+      "bilingual ad creative Ottawa",
+      "Kanata tech corridor Meta Ads",
+      "government sector targeting",
+      "credibility-led creative",
+      "B2B lookalike audiences Ottawa",
+    ],
+
+    heroIntro:
+      "Ottawa is one of the only Meta Ads markets we serve where creative genuinely needs two languages — English-only ads leave real French-language engagement on the table, and a professional audience expects proof over polish either way.",
+
+    definitionHeading: "Why does Meta Ads need bilingual, proof-led creative in Ottawa?",
+    definition:
+      "Two features of Ottawa's Meta audience rarely show up together anywhere else we work: real French-speaking reach, a byproduct of sitting right next to Quebec, and a buyer base stacked with federal public servants and Kanata tech professionals who are unusually hard to impress with a pretty picture. PPC Guru's Ottawa campaigns run bilingual creative wherever the numbers show French engagement is worth chasing, and lean on real credentials and named outcomes for the English side, since this particular audience keeps scrolling past anything that reads as generic lifestyle content.",
+
+    whyLocal:
+      "Ottawa breaks two patterns we'd otherwise apply from the rest of the GTA. First, its position next to Quebec means a genuinely sizable slice of the audience engages more in French than English, and that slice is invisible to an English-only ad set no matter how well it's built. Second, a public servant or a Kanata engineer tends to read an ad more like a claim than a vibe, so anything that leans purely on mood and imagery underperforms while anything built on a specific, checkable outcome earns real engagement. There's also a pacing difference worth knowing: government and tech employment barely moves with the seasons, so budget gets spread evenly across the year here instead of chasing the seasonal spikes that shape most GTA accounts.",
+    localFocus: [
+      "Bilingual (English/French) creative variants wherever engagement data shows real French-language demand",
+      "Proof-driven messaging — real credentials, real outcomes — for a professional, credibility-conscious audience",
+      "B2B lookalike audiences for Kanata's tech-sector decision-makers, built on specifics rather than lifestyle imagery",
+      "Steady, non-seasonal ad pacing that matches Ottawa's genuinely stable, year-round demand",
+    ],
+
+    process: [
+      { step: "01", title: "Research", body: "We check whether your Ottawa audience shows real French-language engagement, and what proof points actually resonate with a professional buyer base." },
+      { step: "02", title: "Build", body: "Bilingual creative variants and proof-driven messaging get built where the data supports them, rather than a blanket English-only rollout." },
+      { step: "03", title: "Test", body: "We test English and French creative independently, along with different proof points, since Ottawa's audience responds differently than a typical GTA market." },
+      { step: "04", title: "Scale", body: "We scale whichever language, creative and audience combination is converting Ottawa's genuinely professional, credibility-driven buyers." },
+    ],
+
+    faqs: [
+      { q: "Do you build French-language Meta Ads creative for Ottawa?", a: "When the data backs it up, yes. Being this close to Quebec gives Ottawa a real French-speaking audience that most of the cities we work in simply don't have, and an English-only ad set never appears in front of them at all." },
+      { q: "Why does polished lifestyle creative underperform in Ottawa?", a: "Ottawa's buyer base skews heavily toward federal government and tech-sector professionals who evaluate an ad on substance, not polish. Real credentials and specific outcomes consistently earn more engagement here than generic lifestyle imagery." },
+      { q: "Is Ottawa's Meta Ads demand seasonal like the rest of the GTA?", a: "Much less so. Ottawa's stable government and tech-sector employment base means engagement holds steady year-round, so we pace spend evenly rather than building around the seasonal swings that shape most GTA campaigns." },
+      { q: "Do you run Meta Ads for tech companies in Kanata?", a: "Yes — Kanata is a genuine technology corridor, and its B2B buyers respond to specific, credibility-led creative built on lookalike audiences from real customer data, rather than generic marketing imagery." },
+      { q: "How is Meta Ads different in Ottawa compared to Toronto?", a: "Retargeting the same Toronto-built ad set at Ottawa postal codes misses the point entirely — the actual words on the ad need to change, both because the audience wants proof over polish and because a real chunk of them are reading in French, not just the geography setting in Ads Manager." },
+    ],
+
+    ctaIntro:
+      "Start with a free Ottawa Meta Ads audit, or try our management free for 30 days — no contract, no setup fee. We'll show you how much French-language engagement your current creative is missing.",
+  },
 };
 
 export function getLocationServiceContent(city: string, service: string): LocationServiceContent | undefined {
