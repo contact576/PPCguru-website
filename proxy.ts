@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { GONE_PATHS } from "@/lib/gone-paths";
 
 /**
  * Kills the casino/gambling spam URLs left over from the compromised WordPress
@@ -9,63 +10,13 @@ import { NextResponse, type NextRequest } from "next/server";
  * `X-Robots-Tag: noindex` so any crawler that ignores the status still gets the
  * message. These paths must stay CRAWLABLE (never robots.txt-blocked) — a
  * blocked URL can't be re-crawled, so Google would never see the 410 and the
- * spam page would sit in the index indefinitely.
+ * spam page would sit in the index indefinitely. `/spam-removal-sitemap.xml`
+ * lists them all so Google is nudged to re-crawl rather than waiting to notice.
  *
- * Adding more as they surface in Search Console: drop the slug into GONE_PATHS,
- * or rely on SPAM_PATTERN, which catches unknown variants automatically.
+ * The slug list lives in `lib/gone-paths.ts` (shared with the removal sitemap).
+ * Adding more as they surface in Search Console: append the slug there, or rely
+ * on SPAM_PATTERN, which catches unknown variants automatically.
  */
-
-/** Exact spam slugs found indexed (Search Console, Jul 2026). */
-const GONE_PATHS = new Set([
-  "mobile-slots-canada",
-  "mobile-casino-new",
-  "mobile-slots-review",
-  "10-deposit-casinos",
-  "popular-slot-machines",
-  "10-free-casino",
-  "10-free-casinos",
-  "mobile-casino-games",
-  "safe-casino-online",
-  "craps-card-game",
-  "good-payout-slots",
-  "maximum-casino-review",
-  "craps-introduction-canada",
-  "any-casinos-in-canada",
-  "most-reliable-online-casino",
-  "safest-gambling-sites-canada",
-  "older-casinos-in-canada",
-  "mini-slot-machine-canada",
-  "mobile-casino-free-money",
-  "safe-canada-online-casino",
-  "most-popular-online-casinos",
-  "1-canada-online-casino",
-  "888-casino-canada-app",
-  "10-free-casino-canada",
-  "springbok-casino-no-deposit-canada",
-  "american-roulette-wheel-vs-european",
-  "book-of-dead-slot-canada",
-  "5-minimum-deposit-casino-canada",
-  "18-plus-casino-in-canada",
-  "mobile-casinos-for-real-money",
-  "pros-of-casinos-in-canada",
-  "welcome-bonus-casino-no-deposit-canada",
-  "bohocasino-review-and-free-chips-bonus",
-  "10-minimum-deposit-online-casino-canada",
-  "win-online-slots",
-  "winning-baccarat-system",
-  "popular-casino-games",
-  "american-roulette-games",
-  "american-roulette-game-free",
-  "10-top-casinos-online",
-  "5-no-deposit-casino",
-  "10-dollar-free-slots",
-  "is-online-casino-safe",
-  "age-for-casino-in-canada",
-  "3-minimum-deposit-casino-canada",
-  "most-popular-casino-games-in-canada",
-  "10-free-bet-no-deposit-casino",
-  "karamba-casino-review-and-free-chips-bonus",
-]);
 
 /**
  * Catches spam slugs we haven't enumerated yet. Only applied to single-segment
