@@ -16,6 +16,7 @@ const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 export type PostMeta = {
   slug: string;
   title: string;
+  seoTitle?: string | null;
   description: string;
   date: string;
   publishAt?: string | null;
@@ -40,6 +41,7 @@ function fileToPost(file: string): Post {
   return {
     slug,
     title: data.title ?? slug,
+    seoTitle: data.seoTitle ?? null,
     description: data.description ?? "",
     date: data.date ?? "2026-01-01",
     publishAt: data.publishAt ?? null,
@@ -64,6 +66,7 @@ function dbToPost(p: DbPost): Post {
   return {
     slug: p.slug,
     title: p.title,
+    seoTitle: null,
     description: p.description ?? "",
     date: (p.published_at ?? p.created_at).slice(0, 10),
     publishAt: p.published_at ?? p.created_at,
