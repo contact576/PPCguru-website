@@ -1,5 +1,6 @@
 ---
 title: "Contractor Website Checklist for GTA Project Leads: 15 Checks Before You Buy More Traffic"
+seoTitle: "Contractor Website Checklist: 15 Lead-Quality Checks"
 description: "Use this 15-point contractor website checklist to find conversion, qualification and tracking gaps before you spend more on SEO or Google Ads."
 date: "2026-08-25"
 publishAt: "2026-08-25T09:00:00+05:30"
