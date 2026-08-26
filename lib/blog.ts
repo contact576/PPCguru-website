@@ -16,8 +16,10 @@ const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 export type PostMeta = {
   slug: string;
   title: string;
+  seoTitle?: string | null;
   description: string;
   date: string;
+  publishAt?: string | null;
   category: string;
   author: string;
   readingTime: string;
@@ -39,8 +41,10 @@ function fileToPost(file: string): Post {
   return {
     slug,
     title: data.title ?? slug,
+    seoTitle: data.seoTitle ?? null,
     description: data.description ?? "",
     date: data.date ?? "2026-01-01",
+    publishAt: data.publishAt ?? null,
     category: data.category ?? "Marketing",
     author: data.author ?? "PPC Guru",
     readingTime: readingTimeFor(content),
@@ -62,8 +66,10 @@ function dbToPost(p: DbPost): Post {
   return {
     slug: p.slug,
     title: p.title,
+    seoTitle: null,
     description: p.description ?? "",
     date: (p.published_at ?? p.created_at).slice(0, 10),
+    publishAt: p.published_at ?? p.created_at,
     category: p.category ?? "Marketing",
     author: p.author ?? "PPC Guru",
     readingTime: readingTimeFor(p.content ?? ""),
@@ -85,13 +91,23 @@ async function dbPosts(): Promise<Post[]> {
 }
 
 /* ── merge + public API ──────────────────────────────────────────────────── */
+function isAvailableNow(post: Post): boolean {
+  const scheduledAt = post.publishAt ?? `${post.date}T00:00:00Z`;
+  const timestamp = Date.parse(scheduledAt);
+  // Preserve existing behaviour for malformed legacy dates; editorial QA should
+  // still prevent new posts with invalid dates from reaching this layer.
+  return Number.isNaN(timestamp) || timestamp <= Date.now();
+}
+
 async function allPosts(): Promise<Post[]> {
   const [db, md] = await Promise.all([dbPosts(), Promise.resolve(markdownPosts())]);
   const bySlug = new Map<string, Post>();
   // markdown first, then DB overrides on slug collision
   for (const p of md) bySlug.set(p.slug, p);
   for (const p of db) bySlug.set(p.slug, p);
-  return [...bySlug.values()].sort((a, b) => +new Date(b.date) - +new Date(a.date));
+  return [...bySlug.values()]
+    .filter(isAvailableNow)
+    .sort((a, b) => +new Date(b.date) - +new Date(a.date));
 }
 
 const stripContent = ({ content: _c, ...meta }: Post): PostMeta => meta;
