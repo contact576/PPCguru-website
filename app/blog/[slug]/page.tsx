@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
-  return withMetaOverride(buildMetadata({ title: post.title, description: post.description, path: `/blog/${slug}` }), `/blog/${slug}`);
+  return withMetaOverride(buildMetadata({ title: post.seoTitle ?? post.title, description: post.description, path: `/blog/${slug}` }), `/blog/${slug}`);
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
