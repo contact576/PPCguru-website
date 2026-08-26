@@ -4,6 +4,7 @@ import { isAuthed } from "@/lib/admin-auth";
 import { supabaseAdmin } from "@/lib/supabase";
 import { slugify } from "@/lib/slug";
 import { pingIndexNow } from "@/lib/indexnow";
+import { cmsWritesBlocked, cmsWritesRetired } from "@/lib/blog-source";
 import { siteConfig } from "@/lib/site-config";
 
 export const runtime = "nodejs";
@@ -28,6 +29,7 @@ export async function GET() {
 /** POST /api/admin/posts — create a post. */
 export async function POST(req: Request) {
   if (!(await isAuthed())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (cmsWritesBlocked()) return cmsWritesRetired();
   const sb = supabaseAdmin();
   if (!sb) return noDb();
 

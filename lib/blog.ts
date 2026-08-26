@@ -4,9 +4,15 @@ import matter from "gray-matter";
 import { supabaseAdmin, type DbPost } from "@/lib/supabase";
 
 /**
- * Blog source of truth: Supabase `posts` table (managed via /admin), with the
- * bundled markdown files in content/blog/* as a fallback so the blog still works
- * with no database configured. Supabase posts win on slug collisions.
+ * Blog source of truth: the markdown files in content/blog/*, reviewed and
+ * merged through Git. The Supabase `posts` table is kept as a read-only legacy
+ * source so nothing published through the old /admin CMS can vanish, but
+ * MARKDOWN WINS on slug collisions — a committed file always beats a database
+ * row describing the same post.
+ *
+ * This precedence is load-bearing: it is what lets an approved pull request
+ * actually change a page. Reversing it would silently shadow every file with a
+ * stale database row, which is exactly the bug it replaced.
  *
  * All public helpers are async and only ever return PUBLISHED posts.
  */
@@ -104,9 +110,9 @@ function isAvailableNow(post: Post): boolean {
 async function allPosts(): Promise<Post[]> {
   const [db, md] = await Promise.all([dbPosts(), Promise.resolve(markdownPosts())]);
   const bySlug = new Map<string, Post>();
-  // markdown first, then DB overrides on slug collision
-  for (const p of md) bySlug.set(p.slug, p);
+  // Legacy database rows first, then markdown overrides on slug collision.
   for (const p of db) bySlug.set(p.slug, p);
+  for (const p of md) bySlug.set(p.slug, p);
   return [...bySlug.values()]
     .filter(isAvailableNow)
     .sort((a, b) => +new Date(b.date) - +new Date(a.date));

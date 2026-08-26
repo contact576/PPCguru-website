@@ -1,11 +1,17 @@
 ---
-title: "Contractor Website Checklist for GTA Project Leads: 15 Checks Before You Buy More Traffic"
-seoTitle: "Contractor Website Checklist: 15 Lead-Quality Checks"
-description: "Use this 15-point contractor website checklist to find conversion, qualification and tracking gaps before you spend more on SEO or Google Ads."
-date: "2026-08-25"
-publishAt: "2026-08-25T09:00:00+05:30"
-category: "Conversion"
-author: "PPC Guru"
+title: >-
+  Contractor Website Checklist for GTA Project Leads: 15 Checks Before You Buy
+  More Traffic
+seoTitle: 'Contractor Website Checklist: 15 Lead-Quality Checks'
+description: >-
+  Use this 15-point contractor website checklist to find conversion,
+  qualification and tracking gaps before you spend more on SEO or Google Ads.
+date: '2026-08-25'
+publishAt: '2026-08-25T13:40:32.24+00:00'
+category: Web Development
+author: Shrikant
+coverImage: >-
+  https://pozpdqckjqnsdjtvdnft.supabase.co/storage/v1/object/public/blog-images/contractor-website-checklist-mt8q0uol.png
 ---
 
 A contractor hears two completely different stories about the same website.
@@ -29,6 +35,10 @@ This contractor website checklist turns that journey into 15 checks. Use it befo
 - Use the score as a planning tool, not as a Google metric or a promise of rankings, leads or revenue.
 
 ## Define the outcome before you score the website
+
+![Define  the outcomes before you score the website](https://pozpdqckjqnsdjtvdnft.supabase.co/storage/v1/object/public/blog-images/define-the-outcomes-before-you-score-the-website-mt8qc2xr.png)
+
+
 
 “Lead” is a slippery word. Marketing may count every submitted form. Sales may count only prospects worth calling. An estimator may reserve the term for projects that fit the service area, scope and schedule.
 
@@ -225,7 +235,7 @@ This contractor website checklist is deliberately stricter than a visual review.
 | **Google Ads** | The ad made a specific promise | Preserve message match, make the action clear and measure downstream quality |
 | **Google Business Profile or direct** | The visitor may be comparing local options or returning | Keep contact, hours, area and business details consistent; route them to the right service |
 
-The same homepage does not need to carry every conversation. Clear [website design and development](/services/web-design) architecture can give priority services their own path, while [Google Ads management](/services/google-ads) and [SEO services](/services/seo) send traffic to the most relevant destination.
+The same homepage does not need to carry every conversation. Clear [website design and development](https://ppcguru.ca/services/web-design) architecture can give priority services their own path, while [Google Ads management](https://ppcguru.ca/services/google-ads) and [SEO services](https://ppcguru.ca/services/seo) send traffic to the most relevant destination.
 
 Use the contractor website checklist separately for each important source-to-page path; one strong referral journey does not prove that a paid-search journey works.
 
@@ -254,7 +264,7 @@ No result is assumed. The point is that the next marketing decision will be base
 | **Rebuild the priority path** | The site is a generic catch-all, mobile actions fail, ownership is unclear or measurement stops at the form | Map one high-value visitor-to-project journey before redesigning the whole site |
 | **Increase traffic carefully** | The path scores well, the team has response capacity and lead stages are measurable | Run a controlled SEO or paid-search test and review qualified outcomes |
 
-For construction and renovation firms, a focused [contractor website solution](/services/web-design/construction-renovation) should support the way projects are actually assessed—not force operations into a generic marketing template. Broader [construction and renovation marketing](/industries/construction-renovation) should use the same definitions of service, area and qualified project.
+For construction and renovation firms, a focused [contractor website solution](https://ppcguru.ca/services/web-design/construction-renovation) should support the way projects are actually assessed—not force operations into a generic marketing template. Broader [construction and renovation marketing](https://ppcguru.ca/industries/construction-renovation) should use the same definitions of service, area and qualified project.
 
 ## A seven-day contractor website audit
 
@@ -324,8 +334,4 @@ A website cannot select the right projects if nobody has defined “right.” It
 
 Start with one service, one area and one path. Score it with the people who sell and deliver the work. Then decide whether the next dollar belongs in a page repair, a larger rebuild, SEO or paid acquisition.
 
-If you want a second set of eyes, [request a contractor website and qualified-lead-path audit](/contact). PPC Guru can review the path from landing page to lead handoff and help identify what should be verified, repaired and measured before you scale traffic.
-
-## Sources and methodology
-
-This guide combines PPC Guru’s Qualified Project Lead Path with primary Google documentation. Google’s [page experience guidance](https://developers.google.com/search/docs/appearance/page-experience) informs the mobile and usability checks. Google Ads documentation supports [landing-page relevance and message match](https://support.google.com/google-ads/answer/6238826?hl=en-GB). Google Analytics documents [recommended lead-generation events](https://support.google.com/analytics/answer/9267735?hl=en), including enquiry, qualification and closed outcomes. Google’s [LocalBusiness structured-data documentation](https://developers.google.com/search/docs/appearance/structured-data/local-business) can help a developer represent supported business details, but markup must match visible, accurate content and does not replace real-world evidence.
+If you want a second set of eyes, [request a contractor website and qualified-lead-path audit](https://ppcguru.ca/contact). PPC Guru can review the path from landing page to lead handoff and help identify what should be verified, repaired and measured before you scale traffic.

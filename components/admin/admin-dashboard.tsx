@@ -72,10 +72,24 @@ export function AdminDashboard({ posts, dbConfigured }: { posts: AdminPostRow[];
             <h1 className="head text-3xl">Posts</h1>
             <p className="mt-1 text-sm text-[var(--color-ink-dim)]">{posts.length} total</p>
           </div>
-          <Link href="/admin/posts/new" className="mono inline-flex items-center gap-2 rounded-xl bg-[var(--color-ink)] px-4 py-2.5 text-[12px] font-bold uppercase tracking-[.06em] text-[var(--color-base)]">
-            <Plus size={15} /> New post
-          </Link>
+          {/* Writing moved to Git — see lib/blog-source.ts. The link points at
+              the repo rather than the retired editor so the button still leads
+              somewhere useful. */}
+          <a
+            href="https://github.com/contact576/PPCguru-website/new/master/content/blog"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mono inline-flex items-center gap-2 rounded-xl bg-[var(--color-ink)] px-4 py-2.5 text-[12px] font-bold uppercase tracking-[.06em] text-[var(--color-base)]"
+          >
+            <Plus size={15} /> New post in Git
+          </a>
         </div>
+
+        <p className="mt-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 text-sm text-[var(--color-ink-dim)]">
+          <strong className="text-[var(--color-ink)]">This editor is read-only.</strong> Posts live in{" "}
+          <code className="mono">content/blog/</code> and publish by merging a pull request to{" "}
+          <code className="mono">master</code>. The list below is the legacy database copy, kept for reference.
+        </p>
 
         {!dbConfigured && (
           <p className="mt-6 rounded-xl border border-[var(--color-warning)]/40 bg-[color-mix(in_srgb,var(--color-warning)_12%,transparent)] p-4 text-sm text-[var(--color-ink)]">
@@ -87,7 +101,7 @@ export function AdminDashboard({ posts, dbConfigured }: { posts: AdminPostRow[];
         <div className="mt-6 overflow-hidden rounded-[20px] border border-[var(--color-border)] bg-[var(--color-surface)]">
           {posts.length === 0 ? (
             <div className="p-10 text-center text-sm text-[var(--color-ink-dim)]">
-              No posts yet. Click <strong>New post</strong> to write your first one.
+              No posts in the legacy database. Published posts live in <code className="mono">content/blog/</code>.
             </div>
           ) : (
             <table className="w-full text-sm">

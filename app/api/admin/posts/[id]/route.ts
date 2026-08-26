@@ -4,6 +4,7 @@ import { isAuthed } from "@/lib/admin-auth";
 import { supabaseAdmin } from "@/lib/supabase";
 import { slugify } from "@/lib/slug";
 import { pingIndexNow } from "@/lib/indexnow";
+import { cmsWritesBlocked, cmsWritesRetired } from "@/lib/blog-source";
 import { siteConfig } from "@/lib/site-config";
 
 export const runtime = "nodejs";
@@ -28,6 +29,7 @@ export async function GET(_req: Request, { params }: Ctx) {
 /** PUT — update a post. */
 export async function PUT(req: Request, { params }: Ctx) {
   if (!(await isAuthed())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (cmsWritesBlocked()) return cmsWritesRetired();
   const sb = supabaseAdmin();
   if (!sb) return noDb();
   const { id } = await params;
@@ -85,6 +87,7 @@ export async function PUT(req: Request, { params }: Ctx) {
 /** DELETE — remove a post. */
 export async function DELETE(_req: Request, { params }: Ctx) {
   if (!(await isAuthed())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (cmsWritesBlocked()) return cmsWritesRetired();
   const sb = supabaseAdmin();
   if (!sb) return noDb();
   const { id } = await params;
