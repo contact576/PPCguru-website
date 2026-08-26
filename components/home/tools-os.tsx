@@ -1,4 +1,4 @@
-import { stackGroups } from "@/lib/data/logos";
+import { stackGroups, logoUrl } from "@/lib/data/logos";
 import { BrandIcon } from "@/components/shared/brand-logos";
 
 const ink = "#14170e";
@@ -29,12 +29,18 @@ export function ToolsOs() {
             <div key={g.title} data-reveal style={{ background: "rgba(241,239,227,.04)", border: "1px solid rgba(241,239,227,.1)", borderRadius: 20, padding: 22 }}>
               <div className="mono" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: lime, marginBottom: 14 }}>{g.title}</div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {g.tools.map((t) => (
-                  <span key={t} className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11.5, fontWeight: 600, color: "#d9dac8", background: "rgba(241,239,227,.05)", border: "1px solid rgba(241,239,227,.14)", padding: "5px 10px 5px 5px", borderRadius: 999, whiteSpace: "nowrap" }}>
-                    <BrandIcon name={t} size={20} />
-                    {t}
-                  </span>
-                ))}
+                {g.tools.map((t) => {
+                  const pillStyle = { display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11.5, fontWeight: 600, color: "#d9dac8", background: "rgba(241,239,227,.05)", border: "1px solid rgba(241,239,227,.14)", padding: "5px 10px 5px 5px", borderRadius: 999, whiteSpace: "nowrap" } as const;
+                  const body = (<><BrandIcon name={t} size={20} />{t}</>);
+                  // Credentials with a public profile (e.g. Google Partner) link
+                  // out so the claim is verifiable at source.
+                  const href = logoUrl(t);
+                  return href ? (
+                    <a key={t} href={href} target="_blank" rel="noopener noreferrer nofollow" className="mono transition-opacity hover:opacity-75" style={pillStyle} aria-label={`${t} — view profile`}>{body}</a>
+                  ) : (
+                    <span key={t} className="mono" style={pillStyle}>{body}</span>
+                  );
+                })}
               </div>
             </div>
           ))}

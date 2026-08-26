@@ -34,6 +34,13 @@ export type Logo = {
   url?: string;
 };
 
+/**
+ * Public Google Partners profile — the single source for every Google Partner
+ * badge on the site. Any place the badge is rendered links here so the claim is
+ * verifiable at source (hero, footer, PartnerBadges).
+ */
+export const GOOGLE_PARTNER_URL = "https://www.google.com/partners/agency?id=1117142019";
+
 export const logos: Logo[] = [
   // ---- Ad platforms ----
   { name: "Google Ads", group: "platform" },
@@ -75,7 +82,7 @@ export const logos: Logo[] = [
   // [VERIFY] Swap these for the OFFICIAL badge artwork downloaded from your
   // Google Partners / Meta Business Partner dashboards before launch — only
   // display them while you hold active partner status.
-  { name: "Google Partner", group: "credential", sub: "Partner program", src: "/badges/google-partner.svg", url: "https://www.google.com/partners/agency?id=1117142019" },
+  { name: "Google Partner", group: "credential", sub: "Partner program", src: "/badges/google-partner.svg", url: GOOGLE_PARTNER_URL },
   { name: "Meta Business Partner", group: "credential", sub: "Partner program", src: "/badges/meta-business-partner.svg" },
   { name: "BBB Accredited", group: "credential", sub: "Accredited business" },
 
@@ -95,6 +102,13 @@ export const logos: Logo[] = [
 ];
 
 export const logosByGroup = (group: LogoGroup) => logos.filter((l) => l.group === group);
+
+/**
+ * Public verification profile for a logo/credential by name, when one exists —
+ * lets any surface that renders the mark (badge strip, stack pills, footer)
+ * make it clickable from the same source of truth.
+ */
+export const logoUrl = (name: string) => logos.find((l) => l.name === name)?.url;
 
 /**
  * Unified "stack" — the single source for the merged homepage section that

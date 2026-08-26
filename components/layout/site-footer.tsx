@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BrandMarquee } from "@/components/shared/logo-wall";
 import { Logo } from "@/components/shared/logo";
+import { GOOGLE_PARTNER_URL } from "@/lib/data/logos";
 
 /**
  * Footer — handoff design (dark olive #14170e, lime accents). Shared across all
@@ -43,8 +44,12 @@ export function SiteFooter() {
             </p>
             <div style={{ display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap", alignItems: "center" }}>
               {/* [VERIFY] partner status + badge-usage rights before launch */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 38, width: "auto" }} />
+              {/* Badge links to the public Google Partners profile so the claim
+                  can be verified at source (same link as the hero badge). */}
+              <a href={GOOGLE_PARTNER_URL} target="_blank" rel="noopener noreferrer nofollow" aria-label="Google Partner — view our profile on Google Partners" style={{ display: "inline-flex", borderRadius: 10 }} className="transition-opacity hover:opacity-80">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 38, width: "auto" }} />
+              </a>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 38, width: "auto" }} />
             </div>

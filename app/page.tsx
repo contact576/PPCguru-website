@@ -17,6 +17,7 @@ import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { HeroOffer } from "@/components/shared/hero-offer";
 import { performanceStats } from "@/lib/data/performance-stats";
+import { GOOGLE_PARTNER_URL } from "@/lib/data/logos";
 import { HeroVectors } from "@/components/shared/hero-vectors";
 import { StatCounter } from "@/components/ui/stat-counter";
 import { ScrollProgress } from "@/components/home/scroll-progress";
@@ -112,8 +113,11 @@ export default function HomePage() {
             </div>
             <HeroOffer className="mt-7 max-w-lg" badge="Free website audit" line="Get a free website and ad-account audit — no contract, no setup fee, no obligation." credit />
             <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 40, flexWrap: "wrap" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+              {/* Clickable → public Google Partners profile (same link everywhere the badge appears). */}
+              <a href={GOOGLE_PARTNER_URL} target="_blank" rel="noopener noreferrer nofollow" aria-label="Google Partner — view our profile on Google Partners" className="transition-opacity hover:opacity-80" style={{ display: "inline-flex", flexShrink: 0, borderRadius: 10 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+              </a>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
               <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.6 }}>Performance marketing · GTA</div>
