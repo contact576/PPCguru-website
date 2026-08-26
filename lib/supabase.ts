@@ -86,6 +86,8 @@ export type DbPost = {
   id: string;
   slug: string;
   title: string;
+  /** Optional shorter <title>/OG title. Falls back to `title` when unset. */
+  seo_title: string | null;
   description: string | null;
   category: string | null;
   author: string | null;

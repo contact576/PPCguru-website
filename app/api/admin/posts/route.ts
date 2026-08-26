@@ -43,12 +43,15 @@ export async function POST(req: Request) {
   const slug = slugify(String(body.slug ?? "") || title);
   if (!slug) return NextResponse.json({ error: "Could not derive a slug from the title." }, { status: 400 });
   const published = Boolean(body.published);
+  // Optional shorter headline for the <title>/OG tag; blank means "use title".
+  const seoTitle = String(body.seo_title ?? "").trim();
 
   const { data, error } = await sb
     .from("posts")
     .insert({
       slug,
       title,
+      seo_title: seoTitle || null,
       description: String(body.description ?? ""),
       category: String(body.category ?? "Marketing"),
       author: String(body.author ?? "PPC Guru"),

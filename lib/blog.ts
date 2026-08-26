@@ -66,7 +66,9 @@ function dbToPost(p: DbPost): Post {
   return {
     slug: p.slug,
     title: p.title,
-    seoTitle: null,
+    // `?? null` also covers a database that predates the seo_title column:
+    // select("*") simply omits the key, which reads back as undefined.
+    seoTitle: p.seo_title ?? null,
     description: p.description ?? "",
     date: (p.published_at ?? p.created_at).slice(0, 10),
     publishAt: p.published_at ?? p.created_at,

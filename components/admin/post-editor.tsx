@@ -26,6 +26,7 @@ export function PostEditor({
   const [title, setTitle] = useState(post?.title ?? "");
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [slugDirty, setSlugDirty] = useState(!isNew);
+  const [seoTitle, setSeoTitle] = useState(post?.seo_title ?? "");
   const [description, setDescription] = useState(post?.description ?? "");
   const [category, setCategory] = useState(post?.category ?? defaults?.category ?? "Marketing");
   const [author, setAuthor] = useState(post?.author ?? defaults?.author ?? "PPC Guru");
@@ -117,7 +118,7 @@ export function PostEditor({
     }
     setBusy(true);
     setError(null);
-    const payload = { title, slug, description, category, author, content, cover_image: coverImage, published };
+    const payload = { title, slug, seo_title: seoTitle, description, category, author, content, cover_image: coverImage, published };
     const res = await fetch(isNew ? "/api/admin/posts" : `/api/admin/posts/${post!.id}`, {
       method: isNew ? "POST" : "PUT",
       headers: { "Content-Type": "application/json" },
@@ -224,6 +225,14 @@ export function PostEditor({
                   {coverImage && <button onClick={() => setCoverImage("")} className="text-[13px] text-[var(--color-danger)]">Remove</button>}
                 </div>
               </div>
+            </div>
+
+            <div>
+              <span className={label}>SEO title</span>
+              {/* Separate from the headline above: the on-page H1 can stay long
+                  and specific while the <title> tag stays under ~60 chars. */}
+              <input value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Optional — defaults to the post title" className={`mt-2 ${field}`} />
+              <span className="mt-1.5 block text-[11px] text-[var(--color-ink-faint)]">{(seoTitle || title).length} chars · aim for under 60</span>
             </div>
 
             <div>

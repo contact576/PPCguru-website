@@ -11,6 +11,7 @@ create table if not exists public.posts (
   id           uuid primary key default gen_random_uuid(),
   slug         text unique not null,
   title        text not null,
+  seo_title    text,
   description  text default '',
   category     text default 'Marketing',
   author       text default 'PPC Guru',

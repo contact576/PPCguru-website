@@ -43,6 +43,8 @@ export async function PUT(req: Request, { params }: Ctx) {
   if (!title) return NextResponse.json({ error: "Title is required." }, { status: 400 });
   const slug = slugify(String(body.slug ?? "") || title);
   const published = Boolean(body.published);
+  // Optional shorter headline for the <title>/OG tag; blank means "use title".
+  const seoTitle = String(body.seo_title ?? "").trim();
 
   // Read current row so publishing for the first time stamps published_at once.
   const { data: existing } = await sb.from("posts").select("published, published_at, slug").eq("id", id).single();
@@ -54,6 +56,7 @@ export async function PUT(req: Request, { params }: Ctx) {
     .update({
       slug,
       title,
+      seo_title: seoTitle || null,
       description: String(body.description ?? ""),
       category: String(body.category ?? "Marketing"),
       author: String(body.author ?? "PPC Guru"),
