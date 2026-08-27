@@ -122,7 +122,11 @@ Edit the typed data modules, not the JSX. Pages render via `generateStaticParams
 - `lib/data/offers.ts` — GENERIC fallback pop-up copy (free website audit, up-to-$3,600 credit). Currently
   unreferenced — `service-offers.ts` is the live source.
   Page-specific offers now live in `lib/data/service-offers.ts` (see the Lead-gen/conversion section).
-- `content/blog/*.md` — posts read at build by `lib/blog.ts`.
+- `content/blog/*.md` — **the blog source of truth.** Merged to `master`, deployed, then published on their
+  own `publishAt` timestamp (`revalidate = 60`, `dynamicParams = true`). A committed file WINS over the legacy
+  Supabase `posts` row of the same slug; the `/admin` editor is read-only (409, see `lib/blog-source.ts`).
+  Gate every change with `npm run blog:check` (`scripts/check-blog.mts` — frontmatter, ToC anchors, internal
+  links, leaked reviewer notes). Posts arrive as scheduled-agent PRs; the rules they follow are in **AGENTS.md**.
 - **AEO content layer** (`service-content.ts`, `industry-content.ts`, `service-faq.ts`, `industry-faq.ts`,
   `service-industry.ts` + `service-industry-content.ts`, `service-stats.ts`, `comparisons.ts`, `glossary.ts`)
   — detailed in the **AEO/GEO, schema & content hubs** section above. `getServiceContent`/`getIndustryContent`
