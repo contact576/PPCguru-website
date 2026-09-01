@@ -40,7 +40,7 @@ function readingTimeFor(content: string) {
 }
 
 /* ── markdown (fallback) ─────────────────────────────────────────────────── */
-function fileToPost(file: string): Post {
+function fileToPost(file: string): Post & { draft: boolean } {
   const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf8");
   const { data, content } = matter(raw);
   const slug = file.replace(/\.mdx?$/, "");
@@ -55,6 +55,7 @@ function fileToPost(file: string): Post {
     author: data.author ?? "PPC Guru",
     readingTime: readingTimeFor(content),
     coverImage: data.coverImage ?? null,
+    draft: data.draft === true,
     content,
   };
 }
@@ -64,7 +65,12 @@ function markdownPosts(): Post[] {
   return fs
     .readdirSync(BLOG_DIR)
     .filter((f) => f.endsWith(".md") || f.endsWith(".mdx"))
-    .map(fileToPost);
+    .map(fileToPost)
+    // `draft: true` holds a post back regardless of its dates — it is what the
+    // /admin/blog editor writes for a post that is drafted but not yet worth
+    // scheduling. Stripped here so `draft` never reaches a public helper.
+    .filter((post) => !post.draft)
+    .map(({ draft: _draft, ...post }) => post);
 }
 
 /* ── supabase ────────────────────────────────────────────────────────────── */

@@ -17,6 +17,11 @@ agent writes content/blog/<slug>.md
   → the post appears on its own at `publishAt`
 ```
 
+A human writing in `/admin` takes the same route with the review step collapsed —
+the editor commits the identical file straight to `master` (see "The `/admin`
+blog editor writes to Git" below). Either way the artefact is one markdown file
+and `publishAt` decides when it shows.
+
 ### The three rules that matter
 
 **1. Branch from `origin/master`, and only ever from `origin/master`.**
@@ -46,6 +51,7 @@ publishAt: "2026-08-28T09:00:00+05:30"                 # optional; when it goes 
 category: "SEO"
 author: "PPC Guru"
 coverImage: "/blog/some-image.jpg"                     # optional, must exist in public/
+draft: true                                            # optional; holds the post back on any date
 ---
 ```
 
@@ -77,13 +83,32 @@ Omit `publishAt` and the post is live the moment it is merged.
   liability, not a stylistic choice.
 - Cite primary sources (platform documentation) rather than secondary blogs.
 
-### Do not use the `/admin` post editor
+### The `/admin` blog editor writes to Git, not to a database
 
-Git is the blog's source of truth. `/admin` still lists posts read-only; its
-create/update/delete routes return 409. A committed markdown file wins over the
-legacy Supabase row of the same slug, so a database edit would not change the
-published page — it would be silently shadowed by the file. See
-`lib/blog-source.ts`.
+`/admin` is the blog queue: scheduled, drafts, live. Saving a post there does
+not create a database row — it commits `content/blog/<slug>.md` to `master`
+through the GitHub Contents API (`lib/blog-git.ts`, token in
+`BLOG_GITHUB_TOKEN`), producing the same file a pull request would have added.
+So both paths — a scheduled agent's PR and a human in `/admin` — write the same
+artefact, and Git stays the single source of truth.
+
+Rules that follow from that:
+
+- **The editor refuses to commit a post with lint errors.** The rules live in
+  `lib/blog-lint.ts`, shared by the editor and `npm run blog:check` so the two
+  cannot drift. If you add a rule, add it there, not in the script.
+- **Scheduling is a commit, not a deploy.** Setting `publishAt` in the future
+  commits the post now and it appears on its own at that timestamp. `draft: true`
+  holds a post back regardless of its dates.
+- **A stale edit is refused, not merged.** The editor sends the blob sha it
+  loaded; GitHub rejects a write against a superseded version.
+- **The legacy Supabase CMS is at `/admin/legacy`, still read-only** (its
+  create/update/delete routes return 409 — `lib/blog-source.ts`). A committed
+  markdown file wins over the database row of the same slug, so an edit saved
+  there would not change the published page; it would be shadowed by the file.
+- **AI drafting exists** (`/api/admin/blog/generate`) and its system prompt is
+  the writing rules below. Keep the two in step — a rule that lives only here is
+  a rule the drafter will break.
 
 ## General repository rules
 

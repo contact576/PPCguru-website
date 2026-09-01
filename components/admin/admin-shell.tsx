@@ -2,23 +2,24 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, Inbox, Users, UserCheck, Settings, Search, ExternalLink, LogOut } from "lucide-react";
+import { FileText, Inbox, Users, UserCheck, Settings, Search, ExternalLink, LogOut, Archive } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { href: "/admin", label: "Posts", icon: FileText },
+  { href: "/admin", label: "Blog", icon: FileText },
   { href: "/admin/leads", label: "Leads", icon: Inbox },
   { href: "/admin/people", label: "People", icon: UserCheck },
   { href: "/admin/visitors", label: "Visitors", icon: Users },
   { href: "/admin/meta", label: "SEO / Meta", icon: Search },
   { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin/legacy", label: "Legacy CMS", icon: Archive },
 ];
 
 /**
- * Shared chrome for every admin page: brand + tabbed nav (Posts / Leads /
- * People / Visitors / SEO / Settings) + view-site + log-out. Client so log-out
- * can POST.
+ * Shared chrome for every admin page: brand + tabbed nav (Blog / Leads /
+ * People / Visitors / SEO / Settings / Legacy CMS) + view-site + log-out.
+ * Client so log-out can POST.
  */
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

@@ -123,10 +123,15 @@ Edit the typed data modules, not the JSX. Pages render via `generateStaticParams
   unreferenced — `service-offers.ts` is the live source.
   Page-specific offers now live in `lib/data/service-offers.ts` (see the Lead-gen/conversion section).
 - `content/blog/*.md` — **the blog source of truth.** Merged to `master`, deployed, then published on their
-  own `publishAt` timestamp (`revalidate = 60`, `dynamicParams = true`). A committed file WINS over the legacy
-  Supabase `posts` row of the same slug; the `/admin` editor is read-only (409, see `lib/blog-source.ts`).
-  Gate every change with `npm run blog:check` (`scripts/check-blog.mts` — frontmatter, ToC anchors, internal
-  links, leaked reviewer notes). Posts arrive as scheduled-agent PRs; the rules they follow are in **AGENTS.md**.
+  own `publishAt` timestamp (`revalidate = 60`, `dynamicParams = true`); `draft: true` holds one back on any
+  date. A committed file WINS over the legacy Supabase `posts` row of the same slug.
+  Two write paths, one artefact: scheduled-agent PRs (rules in **AGENTS.md**) and the **`/admin` blog editor**,
+  which commits `content/blog/<slug>.md` through the GitHub Contents API (`lib/blog-git.ts`, `BLOG_GITHUB_TOKEN`)
+  rather than writing a database row — plus AI first-drafting at `/api/admin/blog/generate` (`MODELS.writer`).
+  The editorial rules live ONCE in `lib/blog-lint.ts`, shared by the editor (which refuses to commit on an
+  error) and `npm run blog:check` (`scripts/check-blog.mts`, which adds the fs-only route/public checks) — add
+  a rule there, not in either caller. The legacy Supabase CMS survives read-only at `/admin/legacy`
+  (409 on write, see `lib/blog-source.ts`).
 - **AEO content layer** (`service-content.ts`, `industry-content.ts`, `service-faq.ts`, `industry-faq.ts`,
   `service-industry.ts` + `service-industry-content.ts`, `service-stats.ts`, `comparisons.ts`, `glossary.ts`)
   — detailed in the **AEO/GEO, schema & content hubs** section above. `getServiceContent`/`getIndustryContent`
