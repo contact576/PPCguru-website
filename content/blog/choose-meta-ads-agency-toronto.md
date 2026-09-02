@@ -84,6 +84,8 @@ Document access removal, asset transfer, creative rights, data continuity and th
 
 ## Score answers using evidence
 
+<div role="region" aria-label="Meta agency evidence scorecard" tabindex="0" style="max-width:100%;overflow-x:auto">
+
 | Area | 0 | 1 | 2 |
 |---|---|---|---|
 | Ownership | Agency-controlled | Mixed | Client-owned and documented |
@@ -92,6 +94,8 @@ Document access removal, asset transfer, creative rights, data continuity and th
 | Testing | Vague optimization | Activities listed | Hypotheses and decision rules |
 | Pricing | Blended and unclear | Partially separated | Complete operating-cost view |
 | Exit | Unclear | Basic access return | Documented continuity and rights |
+
+</div>
 
 This is a buyer tool, not a certification. Use it to expose where another question is needed.
 
