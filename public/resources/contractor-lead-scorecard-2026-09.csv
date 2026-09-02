@@ -1,0 +1,7 @@
+stage,definition,required_field,example_status,optimization_use
+enquiry,"A call or form submission","source and contact timestamp",received,"Do not treat alone as proof of lead quality"
+reachable,"The person can be contacted","contact outcome",reached,"Separates bad contact data from real enquiries"
+qualified,"Service location timing and project fit are acceptable","service city timing fit reason",qualified,"Candidate offline optimization signal"
+estimate,"An estimate or consultation was booked","appointment date and value band",estimate-booked,"Measures progress beyond qualification"
+won,"The job was accepted or a defined closed stage occurred","close date and value",won,"Supports revenue and job-mix analysis"
+
