@@ -271,9 +271,13 @@ The score also cannot predict rankings, leads or the working relationship. It si
 
 Copy this worksheet and use one row for each meaningful priority:
 
+<div role="region" aria-label="SEO proposal comparison worksheet" tabindex="0" style="max-width:100%;overflow-x:auto">
+
 | Priority | Evidence | Work to ship | Owner | Due or decision point | Success signal | Dependency |
 |---|---|---|---|---|---|---|
 | Example: improve a core service page | Query and page evidence | Rewrite, proof, internal links and QA | Named agency lead plus client approver | Day 30 | More relevant visibility, engagement and qualified enquiries | Subject-matter approval |
+
+</div>
 
 This exposes the difference between a deliverable and a strategy.
 
@@ -324,11 +328,15 @@ PPC Guru's [SEO vs AEO vs GEO guide](https://ppcguru.ca/blog/seo-vs-aeo-vs-geo-t
 
 The scorecard can be used for any operating model.
 
+<div role="region" aria-label="SEO delivery model comparison" tabindex="0" style="max-width:100%;overflow-x:auto">
+
 | Model | Often useful when | Watch for |
 |---|---|---|
 | Agency | You need several disciplines and implementation capacity | Sales-to-delivery handoff and unclear account ownership |
 | Consultant | You have capable internal implementers but need senior diagnosis and direction | Recommendations can stall without delivery capacity |
 | In-house hire | SEO is continuous, strategically central and can support a full role | One hire may still need development, design, PR or analytics support |
+
+</div>
 
 Choose the model after identifying the bottleneck. A larger team is not automatically better. A cheaper retainer is not automatically lower risk. A brilliant consultant cannot compensate for a company that never implements; an implementation-heavy agency cannot compensate for the wrong commercial priority.
 
