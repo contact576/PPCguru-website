@@ -4,6 +4,7 @@ import { z } from "zod";
 import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLeadReturning, hasSupabase } from "@/lib/supabase";
 import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
+import { sendLeadToGhl, ghlConfigured } from "@/lib/gohighlevel";
 import { identifyVisitor } from "@/lib/identity";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
@@ -97,9 +98,8 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     return SILENT_OK;
   }
 
-  // Persist to Supabase and mirror into Zoho CRM (both best-effort) so a request
-  // is never lost. Run together — independent sinks, and serialising them would
-  // add the CRM round-trip to the visitor's wait.
+  // Save the submission before CRM delivery, keeping a durable copy and stable
+  // submission id for recovery if GoHighLevel is temporarily unavailable.
   const servicesText = data.services.join(", ").slice(0, SERVICES_MAX_LEN);
 
   const record = {
@@ -113,7 +113,14 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     service: servicesText,
     message: data.message,
   };
-  const [leadId, crmed] = await Promise.all([saveLeadReturning(record), sendLeadToZoho(record)]);
+  const leadId = await saveLeadReturning(record);
+  if (hasSupabase() && !leadId) {
+    return { ok: false, message: "We couldn't save your request right now. Please try again shortly." };
+  }
+  // GoHighLevel replaces Zoho once configured; keep Zoho active until cutover.
+  const crmed = ghlConfigured()
+    ? await sendLeadToGhl({ ...record, submissionId: leadId ?? undefined, createdAt: new Date().toISOString() })
+    : await sendLeadToZoho(record);
   const stored = leadId !== null;
 
   // Retro-stitch their anonymous browsing to this identity + set the
@@ -148,13 +155,13 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   await sendLeadAutoresponder({ name: data.name, email: data.email });
 
   // If a delivery channel is configured but nothing got through, don't pretend it worked.
-  const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured();
+  const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured() || ghlConfigured();
   const anyDelivered = emailed || stored || crmed;
   if (anyConfigured && !anyDelivered) {
     return { ok: false, message: "We couldn't send your message right now. Please email us directly." };
   }
   if (!anyDelivered) {
-    console.info("[contact] (no RESEND_API_KEY / no Supabase / no Zoho) submission:", {
+    console.info("[contact] (no RESEND_API_KEY / no Supabase / no Zoho / no GHL) submission:", {
       ...data,
       turnstileToken: undefined,
     });

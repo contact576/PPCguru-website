@@ -4,6 +4,7 @@ import { z } from "zod";
 import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLeadReturning, hasSupabase } from "@/lib/supabase";
 import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
+import { sendLeadToGhl, ghlConfigured } from "@/lib/gohighlevel";
 import { identifyVisitor } from "@/lib/identity";
 import { verifyTurnstile, turnstileConfigured } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
@@ -125,9 +126,8 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
     console.info(`[spam] allowed lead with score ${verdict.score}: ${verdict.reasons.join(" | ")}`);
   }
 
-  // Persist to Supabase and mirror into Zoho CRM (both best-effort) so a lead is
-  // never lost even if email fails. Run together — they're independent, and
-  // serialising them would add the CRM round-trip to the visitor's wait.
+  // Save the submission before CRM delivery, so a temporary CRM outage can be
+  // recovered from Supabase using the stable submission id.
   // `leads.service` is a single text column and Zoho has no standard field for
   // it either, so the multi-select is stored as one comma-joined string. Capped
   // so a crafted payload can't blow past the column/Description budget.
@@ -144,7 +144,15 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
     budget: data.budget,
     message: data.detail,
   };
-  const [leadId, crmed] = await Promise.all([saveLeadReturning(record), sendLeadToZoho(record)]);
+  const leadId = await saveLeadReturning(record);
+  if (hasSupabase() && !leadId) {
+    return { ok: false, message: "We couldn't save your request right now. Please try again shortly." };
+  }
+  // Activating GoHighLevel replaces Zoho delivery. Until its credentials are
+  // configured, retain the existing Zoho path for a staged cutover.
+  const crmed = ghlConfigured()
+    ? await sendLeadToGhl({ ...record, submissionId: leadId ?? undefined, createdAt: new Date().toISOString() })
+    : await sendLeadToZoho(record);
   const stored = leadId !== null;
 
   // They just told us who they are. Claim their anonymous history (this device
@@ -182,13 +190,13 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
   // A delivery channel is "configured" if it has keys. If at least one channel is
   // configured but nothing actually got through (no email AND no DB row), the lead
   // would be silently lost — surface an error so the visitor can reach us another way.
-  const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured();
+  const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured() || ghlConfigured();
   const anyDelivered = emailed || stored || crmed;
   if (anyConfigured && !anyDelivered) {
     return { ok: false, message: "We couldn't submit that right now. Please email us directly." };
   }
   if (!anyDelivered) {
-    console.info("[lead] (no RESEND_API_KEY / no Supabase / no Zoho) capture:", data);
+    console.info("[lead] (no RESEND_API_KEY / no Supabase / no Zoho / no GHL) capture:", data);
   }
 
   return { ok: true, message: "Thanks — your report is unlocked and we'll be in touch shortly." };
