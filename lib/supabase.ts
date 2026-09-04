@@ -43,9 +43,9 @@ export type LeadInput = {
 };
 
 /**
- * Best-effort lead persistence that hands back the new row's id. Never throws —
- * form delivery must not depend on the DB being reachable. Returns null when
- * Supabase is unconfigured or the insert failed.
+ * Lead persistence that hands back the new row's id. Never throws. Returns null
+ * when Supabase is unconfigured or the insert failed; form actions require a
+ * successful save when Supabase is configured before delivering to the CRM.
  *
  * The id matters: it's the key visitor identity stitching hangs off (see
  * lib/identity.ts), so prefer this over `saveLead` at any call site that will

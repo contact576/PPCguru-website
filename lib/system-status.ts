@@ -1,6 +1,7 @@
 import { hasSupabase } from "@/lib/supabase";
 import { adminConfigured } from "@/lib/admin-auth";
 import { zohoConfigured } from "@/lib/zoho";
+import { ghlConfigured } from "@/lib/gohighlevel";
 
 /**
  * Read-only health of the optional integrations, derived purely from which env
@@ -35,7 +36,15 @@ export function getIntegrationStatus(): IntegrationStatus[] {
       key: "zoho",
       label: "Zoho CRM",
       configured: zohoConfigured(),
-      detail: "Syncs form submissions to the Leads module. Needs client ID + secret + refresh token.",
+      detail: ghlConfigured()
+        ? "Standby: new website leads are routed to GoHighLevel."
+        : "Active until GoHighLevel is configured. Needs client ID + secret + refresh token.",
+    },
+    {
+      key: "gohighlevel",
+      label: "GoHighLevel",
+      configured: ghlConfigured(),
+      detail: "Primary CRM when configured; Supabase keeps each submission. Credential presence does not verify delivery.",
     },
     {
       key: "anthropic",

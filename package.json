@@ -12,7 +12,11 @@
     "blog:check": "node --experimental-strip-types scripts/check-blog.mts",
     "crm:token": "node --env-file=.env.local --experimental-strip-types scripts/zoho-token.mts",
     "crm:verify": "node --env-file=.env.local --experimental-strip-types scripts/zoho-verify.mts",
-    "crm:backfill": "node --env-file=.env.local --experimental-strip-types scripts/zoho-backfill.mts"
+    "crm:backfill": "node --env-file=.env.local --experimental-strip-types scripts/zoho-backfill.mts",
+    "ghl:verify": "node --env-file=.env.local --experimental-strip-types scripts/ghl-verify.mts",
+    "ghl:backfill": "node --env-file=.env.local --experimental-strip-types scripts/ghl-backfill.mts",
+    "check:lead-routing": "node scripts/check-form-routing.mjs",
+    "check:ghl": "node --experimental-strip-types scripts/ghl-check.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.2",
