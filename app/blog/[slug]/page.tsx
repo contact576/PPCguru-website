@@ -30,7 +30,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
-  return withMetaOverride(buildMetadata({ title: post.seoTitle ?? post.title, description: post.description, path: `/blog/${slug}` }), `/blog/${slug}`);
+  return withMetaOverride(
+    buildMetadata({
+      title: post.seoTitle ?? post.title,
+      description: post.description,
+      path: `/blog/${slug}`,
+      image: post.coverImage,
+    }),
+    `/blog/${slug}`,
+  );
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -68,7 +76,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       ? { "@type": "Person", "@id": `${siteConfig.url}/about#${authorMember.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, name: authorMember.name }
       : { "@type": "Organization", "@id": `${siteConfig.url}/#organization`, name: siteConfig.name },
     publisher: { "@id": `${siteConfig.url}/#organization` },
-    image: `${siteConfig.url}/opengraph-image`,
+    image: post.coverImage
+      ? post.coverImage.startsWith("http")
+        ? post.coverImage
+        : `${siteConfig.url}${post.coverImage.startsWith("/") ? "" : "/"}${post.coverImage}`
+      : `${siteConfig.url}/opengraph-image`,
     mainEntityOfPage: `${siteConfig.url}/blog/${slug}`,
   };
 

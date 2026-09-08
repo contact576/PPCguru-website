@@ -11,8 +11,14 @@ export function buildMetadata(opts: {
   description: string;
   path: string;
   keywords?: string[];
+  image?: string | null;
 }): Metadata {
   const url = `${siteConfig.url}${opts.path}`;
+  const image = opts.image
+    ? opts.image.startsWith("http")
+      ? opts.image
+      : `${siteConfig.url}${opts.image.startsWith("/") ? "" : "/"}${opts.image}`
+    : null;
   return {
     title: opts.title,
     description: opts.description,
@@ -24,11 +30,13 @@ export function buildMetadata(opts: {
       url,
       siteName: siteConfig.name,
       type: "website",
+      ...(image ? { images: [{ url: image }] } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: `${opts.title} | ${siteConfig.name}`,
       description: opts.description,
+      ...(image ? { images: [image] } : {}),
     },
   };
 }
