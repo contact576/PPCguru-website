@@ -116,10 +116,10 @@ export default function HomePage() {
               {/* Clickable → public Google Partners profile (same link everywhere the badge appears). */}
               <a href={GOOGLE_PARTNER_URL} target="_blank" rel="noopener noreferrer nofollow" aria-label="Google Partner — view our profile on Google Partners" className="transition-opacity hover:opacity-80" style={{ display: "inline-flex", flexShrink: 0, borderRadius: 10 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+                <img src="/badges/google-partner.svg" alt="Google Partner" width={224} height={56} style={{ height: 40, width: "auto", flexShrink: 0 }} />
               </a>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 40, width: "auto", flexShrink: 0 }} />
+              <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" width={252} height={56} style={{ height: 40, width: "auto", flexShrink: 0 }} />
               <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.6 }}>Performance marketing · GTA</div>
             </div>
           </GsapHeroReveal>

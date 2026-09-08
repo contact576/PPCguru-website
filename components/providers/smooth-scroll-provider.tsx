@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { ReactLenis, useLenis } from "lenis/react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { scrollState } from "@/lib/scroll-store";
 
 /**
@@ -45,16 +43,31 @@ function useSmoothScrollEligible() {
   return eligible;
 }
 
-/** ScrollTrigger sync + the ambient parallax inputs. Desktop-only, like Lenis. */
+/**
+ * ScrollTrigger sync + the ambient parallax inputs. Desktop-only, like Lenis.
+ *
+ * GSAP is imported DYNAMICALLY here. This provider sits in the root layout, so
+ * a static import put ~100KB of GSAP + ScrollTrigger on the critical path of
+ * every page for every visitor — including the phones that never run a single
+ * GSAP animation. Now it is fetched only once smooth scrolling is actually on.
+ */
 function ScrollSync() {
   const lenis = useLenis();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    gsap.registerPlugin(ScrollTrigger);
+    let detach: (() => void) | undefined;
 
-    const update = () => ScrollTrigger.update();
-    lenis?.on("scroll", update);
+    void (async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      gsap.registerPlugin(ScrollTrigger);
+      const update = () => ScrollTrigger.update();
+      lenis?.on("scroll", update);
+      detach = () => lenis?.off("scroll", update);
+    })();
 
     // Track global page progress + pointer for ambient parallax.
     const onScroll = () => {
@@ -70,7 +83,7 @@ function ScrollSync() {
     onScroll();
 
     return () => {
-      lenis?.off("scroll", update);
+      detach?.();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("pointermove", onPointer);
     };

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BrandMarquee } from "@/components/shared/logo-wall";
 import { Logo } from "@/components/shared/logo";
 import { GOOGLE_PARTNER_URL } from "@/lib/data/logos";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, addressLines } from "@/lib/site-config";
 
 /**
  * Footer — handoff design (dark olive #14170e, lime accents). Shared across all
@@ -49,10 +49,10 @@ export function SiteFooter() {
                   can be verified at source (same link as the hero badge). */}
               <a href={GOOGLE_PARTNER_URL} target="_blank" rel="noopener noreferrer nofollow" aria-label="Google Partner — view our profile on Google Partners" style={{ display: "inline-flex", borderRadius: 10 }} className="transition-opacity hover:opacity-80">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/badges/google-partner.svg" alt="Google Partner" style={{ height: 38, width: "auto" }} />
+                <img src="/badges/google-partner.svg" alt="Google Partner" width={224} height={56} style={{ height: 38, width: "auto" }} />
               </a>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" style={{ height: 38, width: "auto" }} />
+              <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" width={252} height={56} style={{ height: 38, width: "auto" }} />
             </div>
           </div>
 
@@ -96,17 +96,22 @@ export function SiteFooter() {
                 </a>
               ) : null}
               <a href={`mailto:${siteConfig.contact.email}`} style={{ ...col }} className="hover:text-[#ceff3a]">{siteConfig.contact.email}</a>
-              {/* The printed address links to the Google Business Profile — the
-                  same listing the /contact map embeds, so the NAP citation and
-                  the pin can never drift apart. */}
+              {/* The full postal address, marked up as one, linking to the
+                  Google Business Profile — the same listing the /contact map
+                  embeds, so the NAP citation and the pin can never drift. */}
               <a
                 href={siteConfig.maps.mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`${siteConfig.name}, ${addressLines().join(", ")} — open in Google Maps`}
                 style={{ ...col }}
                 className="hover:text-[#ceff3a]"
               >
-                {siteConfig.contact.addressLabel}
+                <address style={{ fontStyle: "normal", lineHeight: 1.55 }}>
+                  {addressLines().map((line) => (
+                    <span key={line} style={{ display: "block" }}>{line}</span>
+                  ))}
+                </address>
               </a>
               <span style={{ color: "#75766a" }}>{siteConfig.contact.hours}</span>
               <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#ceff3a", fontWeight: 600 }}>

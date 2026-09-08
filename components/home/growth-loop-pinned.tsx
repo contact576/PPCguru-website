@@ -1,14 +1,8 @@
 "use client";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useEffect, useRef } from "react";
 import { growthLoop } from "@/lib/data/home";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { skipHeavyMotion } from "@/lib/motion-env";
 
 const ink = "#14170e", olive = "#6f7d22";
 
@@ -20,35 +14,55 @@ const ink = "#14170e", olive = "#6f7d22";
 export function GrowthLoopPinned() {
   const root = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      const el = root.current;
-      if (!el) return;
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
-        const cards = gsap.utils.toArray<HTMLElement>(el.querySelectorAll("[data-step]"));
-        const bars = gsap.utils.toArray<HTMLElement>(el.querySelectorAll("[data-step] [data-bar]"));
-        gsap.set(cards, { opacity: 0.28, y: 44, scale: 0.96 });
-        gsap.set(bars, { scaleX: 0, transformOrigin: "left center" });
+  // The pinned scrub is a >=1024px effect, so a phone has no reason to download
+  // GSAP for it. The matchMedia guard stays as the desktop-width gate; the
+  // skipHeavyMotion() check is what keeps the import off the mobile path.
+  useEffect(() => {
+    const el = root.current;
+    if (!el || skipHeavyMotion()) return;
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: el,
-            start: "top top",
-            end: "+=" + cards.length * 340,
-            scrub: 0.6,
-            pin: true,
-            anticipatePin: 1,
-          },
+    let cancelled = false;
+    let ctx: { revert: () => void } | undefined;
+
+    void (async () => {
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      if (cancelled || !root.current) return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      ctx = gsap.context(() => {
+        const mm = gsap.matchMedia();
+        mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
+          const cards = gsap.utils.toArray<HTMLElement>(el.querySelectorAll("[data-step]"));
+          const bars = gsap.utils.toArray<HTMLElement>(el.querySelectorAll("[data-step] [data-bar]"));
+          gsap.set(cards, { opacity: 0.28, y: 44, scale: 0.96 });
+          gsap.set(bars, { scaleX: 0, transformOrigin: "left center" });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: el,
+              start: "top top",
+              end: "+=" + cards.length * 340,
+              scrub: 0.6,
+              pin: true,
+              anticipatePin: 1,
+            },
+          });
+          cards.forEach((c, i) => {
+            tl.to(c, { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power2.out" }, i)
+              .to(bars[i], { scaleX: 1, duration: 1, ease: "none" }, i);
+          });
         });
-        cards.forEach((c, i) => {
-          tl.to(c, { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power2.out" }, i)
-            .to(bars[i], { scaleX: 1, duration: 1, ease: "none" }, i);
-        });
-      });
-    },
-    { scope: root }
-  );
+      }, root);
+    })();
+
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
+  }, []);
 
   return (
     <section

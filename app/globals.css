@@ -313,15 +313,31 @@
 .head    { font-family: var(--font-display), sans-serif; font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; line-height: .9; }
 
 /* Scroll-reveal — fade + rise + slight scale, with an optional per-item stagger
-   delay set by RevealInit (--reveal-delay) so grid cards cascade in. */
+   delay set by RevealInit (--reveal-delay) so grid cards cascade in.
+
+   ⚠ [data-reveal] is VISIBLE by default and stays that way unless JavaScript
+   explicitly arms it. It used to start at `opacity: 0`, which meant every
+   revealed element — including the homepage <h1> — was invisible from first
+   paint until RevealInit hydrated and IntersectionObserver fired. On a
+   mid-range Android over slow 4G that measured as a 7.3s LCP against a 1.2s
+   FCP: the page had painted, then hidden itself waiting for JS.
+
+   So the hidden state now lives on `.reveal-armed`, which RevealInit adds only
+   to elements BELOW the fold, and only on a device where the animation is
+   wanted at all. Anything above the fold is never hidden by anything. Keep it
+   that way — no animation is worth gating the largest paint on hydration. */
 [data-reveal] {
-  opacity: 0;
-  transform: translateY(30px) scale(.985);
   transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
   transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal].reveal-armed {
+  opacity: 0;
+  transform: translateY(30px) scale(.985);
+  /* Only armed elements get a compositor layer — `will-change` on all 44 of
+     them cost memory for elements that may never animate. */
   will-change: opacity, transform;
 }
-[data-reveal].in { opacity: 1; transform: none; }
+[data-reveal].reveal-armed.in { opacity: 1; transform: none; will-change: auto; }
 
 /* Card hover lift (applied to inline-styled tiles via .hcard) */
 .hcard { transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s cubic-bezier(.22,1,.36,1); }
@@ -413,6 +429,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .mq { animation: none !important; }
-  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  [data-reveal], [data-reveal].reveal-armed { opacity: 1 !important; transform: none !important; transition: none !important; }
   .scribble path { animation: none !important; stroke-dashoffset: 0 !important; }
 }

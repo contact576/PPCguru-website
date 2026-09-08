@@ -1,14 +1,7 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { skipHeavyMotion } from "@/lib/motion-env";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 /**
  * GSAP ScrollTrigger parallax. Drifts its children vertically as the parent
@@ -26,20 +19,35 @@ export function ScrollParallax({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      const el = ref.current;
-      if (!el) return;
-      if (skipHeavyMotion()) return;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || skipHeavyMotion()) return;
+
+    let cancelled = false;
+    let ctx: { revert: () => void } | undefined;
+
+    void (async () => {
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      if (cancelled || !ref.current) return;
+      gsap.registerPlugin(ScrollTrigger);
       const trigger = el.parentElement ?? el;
-      gsap.to(el, {
-        yPercent: speed,
-        ease: "none",
-        scrollTrigger: { trigger, start: "top top", end: "bottom top", scrub: true },
-      });
-    },
-    { scope: ref }
-  );
+      ctx = gsap.context(() => {
+        gsap.to(el, {
+          yPercent: speed,
+          ease: "none",
+          scrollTrigger: { trigger, start: "top top", end: "bottom top", scrub: true },
+        });
+      }, ref);
+    })();
+
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
+  }, [speed]);
 
   return (
     <div ref={ref} className={className} aria-hidden>

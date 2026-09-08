@@ -66,8 +66,10 @@ export function organizationSchema() {
     })),
     address: {
       "@type": "PostalAddress",
+      ...(siteConfig.contact.streetAddress ? { streetAddress: siteConfig.contact.streetAddress } : {}),
       addressLocality: siteConfig.contact.addressLocality,
       addressRegion: siteConfig.contact.addressRegion,
+      ...(siteConfig.contact.postalCode ? { postalCode: siteConfig.contact.postalCode } : {}),
       addressCountry: siteConfig.contact.addressCountry,
     },
     areaServed: ["Canada", "United States"],

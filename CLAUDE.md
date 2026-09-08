@@ -275,6 +275,23 @@ via `lib/ai/anthropic.ts` — both **fall back to deterministic output when `ANT
 ## Mobile performance (2026-09)
 
 Changes here are deliberate; re-check the reasoning before reverting one.
+
+**The rule that matters: above-the-fold content is never hidden by JavaScript.**
+A PSI mobile run scored 59 with **FCP 1.2s but LCP 7.3s** — the page painted, then hid itself waiting
+for hydration. Two causes, both fixed, both easy to reintroduce:
+1. `[data-reveal] { opacity: 0 }` in `globals.css` blanked all 44 revealed elements from first paint until
+   `RevealInit` hydrated. The hidden state now lives on `.reveal-armed`, which `RevealInit` adds ONLY to
+   elements below the fold and ONLY when `skipHeavyMotion()` is false. `[data-reveal]` itself is visible.
+2. `GsapHeroReveal` ran `gsap.from(el.children, {opacity: 0})` on the homepage `<h1>` — i.e. on the mobile
+   LCP element — rendering its from-state after hydration. It is now a no-op on touch.
+If you add an entrance animation above the fold, it must clear both bars: no from-state applied after
+paint, and no animation library on the mobile path.
+
+- **GSAP is dynamically imported everywhere** (`gsap-hero`, `gsap-text`, `split-heading`, `scroll-parallax`,
+  `growth-loop-pinned`, `smooth-scroll-provider`), always *after* the `skipHeavyMotion()` check, so a phone
+  never downloads ~100KB to run nothing. `useGSAP` was replaced by `useEffect` + `gsap.context()` because a
+  hook can't be conditionally imported — keep that shape. `smooth-scroll-provider` matters most: it lives in
+  the root layout, so its static import put GSAP on the critical path of *every* page.
 - **Fonts are variable, not multi-weight.** Archivo + JetBrains Mono are variable families — naming six
   weights made next/font ship six static instances. No `weight` array ⇒ one file each covering 100–900.
   DM Serif Display is NOT variable, so it keeps its explicit 400 normal+italic. JetBrains Mono is
@@ -291,9 +308,13 @@ Changes here are deliberate; re-check the reasoning before reverting one.
   whichever comes first (`components/analytics/third-party.tsx`). The `clarity()` stub is still installed
   synchronously, so queued calls (notably ConsentSignal's opt-out) replay on load and nothing is lost.
   **GTM is deliberately NOT deferred** — delaying it would drop pageviews for bouncing visitors.
-- Blog covers render through `next/image` (`priority` + `sizes`); most are unoptimized PNGs in Supabase
-  storage, so `images.remotePatterns` allows `*.supabase.co/storage/v1/object/public/**` and a cover from
-  any other host falls back to a plain `<img>` rather than throwing and 500-ing the post.
+- Blog covers render through `next/image` (`priority` + `sizes` on the post page, lazy + `33vw` on the
+  homepage cards); most are unoptimized PNGs in Supabase storage, so `images.remotePatterns` allows
+  `*.supabase.co/storage/v1/object/public/**`. `lib/image-source.ts` `canOptimizeImage()` is the shared
+  guard — a cover from any other host falls back to a plain `<img>` rather than making next/image THROW and
+  500 the page. Keep it in step with `remotePatterns`.
+- The partner badges and author photo carry explicit `width`/`height` (their SVG intrinsic sizes are
+  224×56 and 252×56).
 - `transpilePackages: ["three"]` was removed — the 3D hero is retired and nothing in the build graph
   reaches `three`/`@react-three` any more.
 

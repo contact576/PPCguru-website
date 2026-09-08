@@ -30,13 +30,14 @@ export const siteConfig = {
     phone: "+1 (519) 992-9567",
     phoneHref: "tel:+15199929567",
     whatsapp: "", // e.g. "https://wa.me/1XXXXXXXXXX" — [VERIFY] real WhatsApp number
+    // Confirmed against the Google Business Profile pin (43.6526967, -79.3767816).
+    // These five fields are the NAP address — every printed address and the
+    // PostalAddress in schema derive from them, so they can never disagree.
+    streetAddress: "55 Queen Street East",
     addressLocality: "Toronto",
     addressRegion: "ON",
+    postalCode: "M5C 1R8",
     addressCountry: "CA",
-    /** One-line address as it should READ anywhere it is printed. */
-    addressLabel: "Toronto, ON, Canada",
-    streetAddress: "Greater Toronto Area", // TODO(client) confirm mailing address
-    postalCode: "", // TODO(client)
     hours: "Mon–Fri, 9:00 AM – 6:00 PM ET",
   },
 
@@ -82,6 +83,21 @@ export const siteConfig = {
     facebook: "", // TODO(client) e.g. https://www.facebook.com/ppcguru
   },
 } as const;
+
+/**
+ * The one place the address is turned into text. Everything that prints it —
+ * footer, /contact, schema — goes through these, so a NAP citation can never
+ * drift from the PostalAddress in the markup.
+ */
+export function addressLines(): string[] {
+  const c = siteConfig.contact;
+  return [c.streetAddress, `${c.addressLocality}, ${c.addressRegion} ${c.postalCode}`.trim(), "Canada"];
+}
+
+/** Same address on one line, for inline contexts. */
+export function addressOneLine(): string {
+  return addressLines().join(", ");
+}
 
 export type SiteConfig = typeof siteConfig;
 

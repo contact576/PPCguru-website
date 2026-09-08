@@ -7,7 +7,7 @@ import { PartnerBadges } from "@/components/shared/partner-badges";
 import { ContactArt } from "@/components/illustrations/hero-art";
 import { buildMetadata } from "@/lib/seo";
 import { withMetaOverride } from "@/lib/page-meta";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, addressLines, addressOneLine } from "@/lib/site-config";
 
 export async function generateMetadata(): Promise<Metadata> {
   return withMetaOverride(buildMetadata({
@@ -56,7 +56,13 @@ export default function ContactPage() {
                   <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Phone size={16} className="text-[var(--color-cyan-bright)]" /> WhatsApp</a>
                 ) : null}
                 <a href={`mailto:${siteConfig.contact.email}`} className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Mail size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.email}</a>
-                <a href={siteConfig.maps.mapUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><MapPin size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.addressLabel} · {siteConfig.trust.serviceArea}</a>
+                <a href={siteConfig.maps.mapUrl} target="_blank" rel="noopener noreferrer" aria-label={`${addressOneLine()} — open in Google Maps`} className="flex items-start gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]">
+                  <MapPin size={16} className="mt-0.5 shrink-0 text-[var(--color-cyan-bright)]" />
+                  <address className="not-italic leading-relaxed">
+                    {addressLines().map((line) => (<span key={line} className="block">{line}</span>))}
+                    <span className="block text-[var(--color-ink-faint)]">Serving {siteConfig.trust.serviceArea}</span>
+                  </address>
+                </a>
                 <span className="flex items-center gap-3 text-[var(--color-ink-dim)]"><Clock size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.hours}</span>
               </div>
             </div>
@@ -84,7 +90,7 @@ export default function ContactPage() {
             </a>
           </div>
           <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">
-            {siteConfig.contact.addressLabel} · serving {siteConfig.trust.serviceArea}
+            {addressOneLine()} · serving {siteConfig.trust.serviceArea}
           </p>
           <div className="mt-5 overflow-hidden rounded-[24px] border border-[var(--color-border)]">
             <iframe

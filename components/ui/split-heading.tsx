@@ -1,15 +1,7 @@
 "use client";
 
-import { createElement, useRef, type ElementType, type ReactNode } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
-import { useGSAP } from "@gsap/react";
+import { createElement, useEffect, useRef, type ElementType, type ReactNode } from "react";
 import { skipHeavyMotion } from "@/lib/motion-env";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
-}
 
 /**
  * Heading that reveals word-by-word (rising out of a masked line) as it scrolls
@@ -27,29 +19,45 @@ export function SplitHeading({
 }) {
   const ref = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      const el = ref.current;
-      if (!el) return;
-      if (skipHeavyMotion()) return;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || skipHeavyMotion()) return;
 
-      let split: SplitText | null = null;
-      try {
-        split = new SplitText(el, { type: "lines,words", linesClass: "split-line" });
-      } catch {
-        return;
-      }
-      gsap.from(split.words, {
-        yPercent: 115,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.035,
-        scrollTrigger: { trigger: el, start: "top 85%", once: true },
-      });
-    },
-    { scope: ref }
-  );
+    let cancelled = false;
+    let ctx: { revert: () => void } | undefined;
+
+    void (async () => {
+      const [{ default: gsap }, { ScrollTrigger }, { SplitText }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+        import("gsap/SplitText"),
+      ]);
+      if (cancelled || !ref.current) return;
+      gsap.registerPlugin(ScrollTrigger, SplitText);
+
+      ctx = gsap.context(() => {
+        let split: InstanceType<typeof SplitText>;
+        try {
+          split = new SplitText(el, { type: "lines,words", linesClass: "split-line" });
+        } catch {
+          return;
+        }
+        gsap.from(split.words, {
+          yPercent: 115,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.035,
+          scrollTrigger: { trigger: el, start: "top 85%", once: true },
+        });
+      }, ref);
+    })();
+
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
+  }, []);
 
   return createElement(Tag, { ref, className }, children);
 }

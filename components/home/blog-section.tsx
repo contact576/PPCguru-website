@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import { canOptimizeImage } from "@/lib/image-source";
 import { CalendarDays, Clock, ArrowRight } from "lucide-react";
 import { getAllPosts } from "@/lib/blog";
 
@@ -23,8 +25,19 @@ export async function BlogPosts({ limit = 3 }: { limit?: number }) {
             className="group flex h-full flex-col overflow-hidden rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] transition-all hover:-translate-y-1 hover:border-[var(--color-ink)]"
           >
             {p.coverImage && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={p.coverImage} alt="" className="aspect-[16/9] w-full object-cover" />
+              // Three cover images sit on the homepage and most are raw PNGs out
+              // of Supabase storage. next/image re-encodes them to AVIF/WebP at
+              // the card's real width; `sizes` is what stops a phone fetching a
+              // 1200px-wide file for a 358px card. Not `priority` — they are
+              // well below the fold and must not compete with the hero.
+              <div className="relative aspect-[16/9] w-full overflow-hidden">
+                {canOptimizeImage(p.coverImage) ? (
+                  <Image src={p.coverImage} alt="" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={p.coverImage} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                )}
+              </div>
             )}
             <div className="flex flex-1 flex-col p-7">
               <span className="mono text-[10.5px] font-semibold uppercase tracking-[.1em] text-[#5f6f17]">{p.category}</span>

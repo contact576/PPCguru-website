@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { canOptimizeImage } from "@/lib/image-source";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -23,17 +24,6 @@ export const dynamicParams = true;
 
 export async function generateStaticParams() {
   return (await getAllPostSlugs()).map((slug) => ({ slug }));
-}
-
-/** True when `images.remotePatterns` (see next.config.ts) can serve this source. */
-function canOptimizeImage(src: string): boolean {
-  if (src.startsWith("/")) return true;
-  try {
-    const { protocol, hostname, pathname } = new URL(src);
-    return protocol === "https:" && hostname.endsWith(".supabase.co") && pathname.startsWith("/storage/v1/object/public/");
-  } catch {
-    return false;
-  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -155,7 +145,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="mx-auto flex max-w-3xl items-start gap-4 rounded-[18px] border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6">
             {authorMember.photo ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={authorMember.photo} alt={authorMember.name} className="h-14 w-14 shrink-0 rounded-[14px] object-cover" />
+              <img src={authorMember.photo} alt={authorMember.name} width={56} height={56} loading="lazy" decoding="async" className="h-14 w-14 shrink-0 rounded-[14px] object-cover" />
             ) : (
               <span className="head flex h-14 w-14 shrink-0 items-center justify-center rounded-[14px] bg-[var(--color-ink)] text-lg text-[var(--color-lime)]">
                 {authorMember.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}

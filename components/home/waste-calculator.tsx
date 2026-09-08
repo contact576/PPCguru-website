@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { industryEconomics, PLATFORMS, getEconomics, getPlatform, resolveCell, type PlatformId } from "@/lib/data/benchmarks";
 
 const clampN = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
@@ -63,31 +63,40 @@ export function WasteCalculator() {
   const firstFix = conv < 2 ? "Conversion tracking + search-term cleanup" : conv < 4 ? "Search-term waste & ad relevance" : "Landing-page CRO & bid strategy";
   const apColor = wastePct >= 0.2 ? "#ef4444" : wastePct >= 0.12 ? "#f26a2b" : "#ceff3a";
 
+  // Every control is explicitly associated with its <label>. They looked
+  // labelled, but with no htmlFor/id pair a screen reader announced them as
+  // bare "slider"/"combo box" — which is what Lighthouse flagged as "form
+  // elements do not have associated labels".
+  const uid = useId();
+
   const slider = (
     label: string, value: string, min: number, max: number, step: number, v: number, set: (n: number) => void, full = false
-  ) => (
-    <div style={full ? { gridColumn: "1 / -1" } : undefined}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 9 }}>
-        <label className="mono" style={labelStyle}>{label}</label>
-        <span className="mono" style={{ fontSize: 13, fontWeight: 700, color: "#ceff3a" }}>{value}</span>
+  ) => {
+    const id = `${uid}-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+    return (
+      <div style={full ? { gridColumn: "1 / -1" } : undefined}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 9 }}>
+          <label className="mono" htmlFor={id} style={labelStyle}>{label}</label>
+          <span className="mono" style={{ fontSize: 13, fontWeight: 700, color: "#ceff3a" }}>{value}</span>
+        </div>
+        <input id={id} type="range" min={min} max={max} step={step} value={v} onChange={(e) => set(Number(e.target.value))} aria-valuetext={value} style={{ width: "100%", accentColor: "#ceff3a" }} />
       </div>
-      <input type="range" min={min} max={max} step={step} value={v} onChange={(e) => set(Number(e.target.value))} style={{ width: "100%", accentColor: "#ceff3a" }} />
-    </div>
-  );
+    );
+  };
 
   return (
     <div data-reveal className="p-5 md:p-[30px]" style={{ background: "#1b1f12", border: "1px solid rgba(241,239,227,.12)", borderRadius: 26, boxShadow: "0 40px 90px rgba(0,0,0,.4)" }}>
       <div className="grid grid-cols-1 gap-x-[22px] gap-y-[18px] sm:grid-cols-2">
         <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2" style={{ gridColumn: "1 / -1" }}>
           <div>
-            <label className="mono" style={{ ...labelStyle, display: "block", marginBottom: 8 }}>Industry</label>
-            <select value={industrySlug} onChange={(e) => onIndustry(e.target.value)} style={fieldStyle}>
+            <label className="mono" htmlFor={`${uid}-industry`} style={{ ...labelStyle, display: "block", marginBottom: 8 }}>Industry</label>
+            <select id={`${uid}-industry`} value={industrySlug} onChange={(e) => onIndustry(e.target.value)} style={fieldStyle}>
               {industryEconomics.map((o) => <option key={o.slug} value={o.slug}>{o.label}</option>)}
             </select>
           </div>
           <div>
-            <label className="mono" style={{ ...labelStyle, display: "block", marginBottom: 8 }}>Platform</label>
-            <select value={platform} onChange={(e) => onPlatform(e.target.value as PlatformId)} style={fieldStyle}>
+            <label className="mono" htmlFor={`${uid}-platform`} style={{ ...labelStyle, display: "block", marginBottom: 8 }}>Platform</label>
+            <select id={`${uid}-platform`} value={platform} onChange={(e) => onPlatform(e.target.value as PlatformId)} style={fieldStyle}>
               {PLATFORMS.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
             </select>
           </div>
