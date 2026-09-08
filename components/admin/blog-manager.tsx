@@ -14,6 +14,7 @@ import {
   RefreshCw,
   Search,
   Send,
+  Stethoscope,
   Trash2,
   X,
 } from "lucide-react";
@@ -32,6 +33,14 @@ import { isoToLocalInput, localInputToIso, type PostStatus, type PostSummary } f
 type Feedback = { tone: "ok" | "error"; message: string } | null;
 
 const READ_ONLY_HINT = "Editing needs BLOG_GITHUB_TOKEN — posts are shown from the deployed content/blog.";
+
+type Diagnosis = {
+  repo: string;
+  branch: string;
+  token: { present: boolean; kind: string; length: number; looksValid: boolean; note?: string };
+  steps: { step: string; ok: boolean; detail: string }[];
+  fix: string;
+};
 
 const STATUS_STYLE: Record<PostStatus, { label: string; className: string }> = {
   scheduled: { label: "Scheduled", className: "bg-[var(--color-accent)] text-[var(--color-ink)]" },
@@ -70,6 +79,19 @@ export function BlogManager() {
   const [busySlug, setBusySlug] = useState<string | null>(null);
   const [rescheduling, setRescheduling] = useState<string | null>(null);
   const [when, setWhen] = useState("");
+  const [diagnosis, setDiagnosis] = useState<Diagnosis | null>(null);
+  const [diagnosing, setDiagnosing] = useState(false);
+
+  async function diagnose() {
+    setDiagnosing(true);
+    setDiagnosis(null);
+    try {
+      const res = await fetch("/api/admin/blog/check");
+      setDiagnosis((await res.json()) as Diagnosis);
+    } finally {
+      setDiagnosing(false);
+    }
+  }
 
   const load = useCallback(async () => {
     setLoadError(null);
@@ -340,6 +362,9 @@ export function BlogManager() {
             repo in <code>BLOG_GITHUB_TOKEN</code>. Until then, posts can still be added by hand in{" "}
             <code>content/blog/</code>.
           </p>
+          <button onClick={() => void diagnose()} disabled={diagnosing} className={`${action} mt-3`}>
+            {diagnosing ? <Loader2 size={13} className="animate-spin" /> : <Stethoscope size={13} />} Test the GitHub connection
+          </button>
         </div>
       )}
 
@@ -351,6 +376,33 @@ export function BlogManager() {
             can be opened and read. To edit, schedule or delete from here, add a GitHub fine-grained token with{" "}
             <code className="mono">contents: write</code> on <code className="mono">{repo?.repo ?? "the site repo"}</code>{" "}
             as <code className="mono">BLOG_GITHUB_TOKEN</code> and redeploy. Until then, posts change through Git.
+          </p>
+          <button onClick={() => void diagnose()} disabled={diagnosing} className={`${action} mt-3`}>
+            {diagnosing ? <Loader2 size={13} className="animate-spin" /> : <Stethoscope size={13} />} Test the GitHub connection
+          </button>
+        </div>
+      )}
+
+      {diagnosis && (
+        <div className="mt-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 text-sm">
+          <p className="mono text-[11px] font-bold uppercase tracking-[.08em] text-[var(--color-ink-faint)]">
+            GitHub connection · {diagnosis.repo}@{diagnosis.branch}
+          </p>
+          <ul className="mt-3 space-y-1.5">
+            {diagnosis.steps.map((s) => (
+              <li key={s.step} className="flex items-start gap-2">
+                <span className={s.ok ? "text-[#5f6f17]" : "text-[var(--color-danger)]"}>
+                  {s.ok ? <Check size={15} /> : <X size={15} />}
+                </span>
+                <span>
+                  <strong className="font-semibold">{s.step}</strong>
+                  <span className="text-[var(--color-ink-dim)]"> — {s.detail}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 rounded-lg bg-[var(--color-base)] p-3 text-[var(--color-ink)]">
+            <strong>What to do:</strong> {diagnosis.fix}
           </p>
         </div>
       )}

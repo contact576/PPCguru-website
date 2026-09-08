@@ -28,16 +28,78 @@ export type GitPostFile = {
   content: string;
 };
 
+/**
+ * Env panels store what you type, quotes included.
+ *
+ * A GitHub token is always bare ASCII with no whitespace and no quotes, so any
+ * of those in the value came from the hosting panel, not from GitHub. Pasting
+ * `BLOG_GITHUB_TOKEN="github_pat_…"` into Hostinger stores the quote characters
+ * literally, the header goes out as `Bearer "github_pat_…"`, and GitHub answers
+ * 401 Bad credentials — which reads like a permissions problem and isn't one.
+ * Strip them rather than making someone debug an invisible character.
+ */
+function sanitizeToken(raw: string | undefined): string {
+  if (!raw) return "";
+  let t = raw.trim();
+  // Surrounding quotes, possibly doubled by a panel that quotes on save.
+  while (t.length >= 2 && ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith("'") && t.endsWith("'")))) {
+    t = t.slice(1, -1).trim();
+  }
+  return t;
+}
+
 export function blogGitConfig() {
   return {
-    repo: process.env.BLOG_REPO || "contact576/PPCguru-website",
-    branch: process.env.BLOG_BRANCH || "master",
-    token: process.env.BLOG_GITHUB_TOKEN || process.env.GITHUB_TOKEN || "",
+    repo: sanitizeToken(process.env.BLOG_REPO) || "contact576/PPCguru-website",
+    branch: sanitizeToken(process.env.BLOG_BRANCH) || "master",
+    token: sanitizeToken(process.env.BLOG_GITHUB_TOKEN) || sanitizeToken(process.env.GITHUB_TOKEN) || "",
   };
 }
 
 export function blogGitConfigured() {
   return Boolean(blogGitConfig().token);
+}
+
+/**
+ * A description of the token that is safe to show in the admin UI and in logs:
+ * its kind and length, never its value. Enough to spot the three failures that
+ * actually happen — a truncated paste, a stray quote, and the wrong kind of
+ * token — without ever printing the secret.
+ */
+export function tokenFingerprint(): {
+  present: boolean;
+  kind: string;
+  length: number;
+  looksValid: boolean;
+  note?: string;
+} {
+  const raw = process.env.BLOG_GITHUB_TOKEN || process.env.GITHUB_TOKEN || "";
+  const token = blogGitConfig().token;
+  if (!token) return { present: false, kind: "none", length: 0, looksValid: false };
+
+  const kinds: [RegExp, string, number][] = [
+    [/^github_pat_/, "fine-grained PAT", 80],
+    [/^ghp_/, "classic PAT", 36],
+    [/^gho_/, "OAuth token", 36],
+    [/^ghs_/, "app installation token", 36],
+  ];
+  const match = kinds.find(([re]) => re.test(token));
+  const kind = match ? match[1] : "unrecognized prefix";
+  const minLength = match ? match[2] : 0;
+  const notes: string[] = [];
+
+  if (raw.trim() !== raw) notes.push("the stored value had surrounding whitespace (trimmed)");
+  if (/^["']|["']$/.test(raw.trim())) notes.push("the stored value was wrapped in quotes (stripped)");
+  if (!match) notes.push("a GitHub token starts with github_pat_, ghp_, gho_ or ghs_ — this one doesn't, so it was probably truncated or is not a token");
+  else if (token.length < minLength) notes.push(`${kind} values are longer than this (${token.length} chars) — the paste was probably cut short`);
+
+  return {
+    present: true,
+    kind,
+    length: token.length,
+    looksValid: Boolean(match) && token.length >= minLength,
+    ...(notes.length ? { note: notes.join("; ") } : {}),
+  };
 }
 
 /** Thrown for any non-2xx from GitHub so routes can surface a real message. */
@@ -78,8 +140,25 @@ async function gh(path: string, init: RequestInit = {}, accept = "application/vn
     } catch {
       /* non-JSON error body — keep the status line */
     }
-    if (res.status === 401 || res.status === 403) {
-      message = `${message} — check BLOG_GITHUB_TOKEN has \`contents: write\` on ${blogGitConfig().repo}.`;
+    // These three statuses mean genuinely different things, and conflating them
+    // sends people to fix the wrong thing. 401 is the token VALUE; 403 is the
+    // token's permissions; 404 on a repo path means the token is fine but can't
+    // see this repo at all.
+    const { repo } = blogGitConfig();
+    if (res.status === 401) {
+      const fp = tokenFingerprint();
+      message =
+        `${message} — GitHub rejected the token itself, so this is NOT a permissions problem. ` +
+        `BLOG_GITHUB_TOKEN is ${fp.present ? `a ${fp.kind}, ${fp.length} chars` : "empty"}. ` +
+        (fp.note ? `${fp.note}. ` : "") +
+        `Usual causes: the value was pasted with quotes or a line break, it was truncated, or the token has expired or been revoked.`;
+    } else if (res.status === 403) {
+      message = `${message} — the token is valid but not allowed to do this. It needs \`Contents: Read and write\` on ${repo}.`;
+    } else if (res.status === 404 && path.includes(`/repos/${repo}`)) {
+      message =
+        `${message} — the token authenticates, but ${repo} is not visible to it. ` +
+        `A fine-grained token only covers repositories owned by the account that created it and explicitly selected under "Repository access"; ` +
+        `for a repo owned by someone else, either that owner creates the token or you use a classic token with the \`repo\` scope.`;
     }
     throw new BlogGitError(message, res.status);
   }

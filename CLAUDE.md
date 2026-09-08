@@ -266,6 +266,16 @@ via `lib/ai/anthropic.ts` — both **fall back to deterministic output when `ANT
   family here when you add its template.
 - `/admin/meta` gained a search box and collapsed groups — it lists ~170 pages, which is unusable as a flat
   accordion.
+- **Diagnosing `BLOG_GITHUB_TOKEN`:** `/api/admin/blog/check` (button in the Blog tab) walks token shape →
+  GitHub auth → repo visibility → write permission → branch, and stops at the first failure. It never returns
+  the token, only `tokenFingerprint()` (kind + length). Read the statuses as three different bugs:
+  **401 = the token VALUE is wrong** (quotes, whitespace, truncation, expiry) — not a permissions problem;
+  **403 = valid token, missing `Contents: write`**; **404 on the repo = the token can't see the repo at all.**
+  ⚠ `contact576` is a personal **User** account, so a fine-grained PAT created by anyone else (e.g. the
+  `shrikaanths` collaborator) can NEVER select this repo — fine-grained tokens only cover repos owned by the
+  creator. Either contact576 issues it, or use a **classic** PAT with the `repo` scope from an account with
+  push access. `blogGitConfig()` now trims whitespace and strips surrounding quotes, because hosting env
+  panels store `"…"` literally and that alone produced 401 Bad credentials.
 - **The admin blog list no longer requires `BLOG_GITHUB_TOKEN` to SHOW anything.** Writing still goes through
   GitHub (a write to the deployed filesystem would be erased by the next deploy), but reading falls back to
   `lib/blog-fs.ts`, which parses `content/blog` off disk — drafts and scheduled posts included. Without a
