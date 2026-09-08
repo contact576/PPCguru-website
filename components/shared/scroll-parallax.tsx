@@ -4,6 +4,7 @@ import { useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { skipHeavyMotion } from "@/lib/motion-env";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -29,7 +30,7 @@ export function ScrollParallax({
     () => {
       const el = ref.current;
       if (!el) return;
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (skipHeavyMotion()) return;
       const trigger = el.parentElement ?? el;
       gsap.to(el, {
         yPercent: speed,

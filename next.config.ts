@@ -30,9 +30,32 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     formats: ["image/avif", "image/webp"],
+    // Phones first: the narrow widths are what a 390pt viewport actually asks
+    // for, and without them next/image rounds up to 640 and ships ~2.5x the
+    // bytes for a full-width image on mobile.
+    deviceSizes: [360, 414, 640, 828, 1080, 1200, 1920],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+    // Blog covers written by the legacy CMS live in Supabase storage and are
+    // served as raw PNGs. Allowing the host lets next/image re-encode them to
+    // AVIF/WebP at the requested width — the single biggest byte saving on a
+    // post page. Anything NOT matched here falls back to a plain <img> in
+    // app/blog/[slug]/page.tsx rather than throwing.
+    remotePatterns: [
+      { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/**" },
+    ],
   },
-  // three.js / R3F transpilation safety for the App Router
-  transpilePackages: ["three"],
+  // NB no `transpilePackages: ["three"]`: the Three.js hero was retired with
+  // the dark theme (components/home/hero.tsx is unimported), so nothing in the
+  // build graph reaches three/@react-three any more. Re-add it if a 3D scene
+  // is ever wired back in.
+  //
+  // content/blog is read with fs at request time (lib/blog.ts, lib/blog-fs.ts)
+  // to honour `publishAt` embargoes without a redeploy. That read is dynamic,
+  // so file tracing can't infer it — name it explicitly or a scheduled post can
+  // vanish from a serverless build.
+  outputFileTracingIncludes: {
+    "/*": ["./content/blog/**/*"],
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

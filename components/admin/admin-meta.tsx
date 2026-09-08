@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Loader2, Check, ChevronDown, Plus, RotateCcw, ExternalLink } from "lucide-react";
+import { Loader2, Check, ChevronDown, Plus, RotateCcw, ExternalLink, Search } from "lucide-react";
 import type { PageGroup, PageRef } from "@/lib/data/page-registry";
 import type { PageMetaOverride } from "@/lib/page-meta";
 
@@ -41,6 +41,11 @@ export function AdminMeta({
   const [savedPath, setSavedPath] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [customPath, setCustomPath] = useState("");
+  const [query, setQuery] = useState("");
+  // The registry is ~150 rows across 8 groups, so groups start collapsed and
+  // only "Core pages" is open — the alternative is a page you have to scroll
+  // past 100 location URLs to use.
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({ "Core pages": true });
 
   // Registry paths, so any override NOT in the registry surfaces under "Custom".
   const registryPaths = useMemo(
@@ -59,6 +64,19 @@ export function AdminMeta({
   const allGroups: PageGroup[] = customPages.length
     ? [...groups, { group: "Custom paths", pages: customPages }]
     : groups;
+
+  const q = query.trim().toLowerCase();
+  // Searching filters ACROSS groups and force-opens whatever still matches, so
+  // "professional-services" or "/toronto/" finds its page without knowing which
+  // group it lives in.
+  const visibleGroups: PageGroup[] = !q
+    ? allGroups
+    : allGroups
+        .map((g) => ({ ...g, pages: g.pages.filter((p) => `${p.label} ${p.path}`.toLowerCase().includes(q)) }))
+        .filter((g) => g.pages.length > 0);
+
+  const totalPages = allGroups.reduce((n, g) => n + g.pages.length, 0);
+  const matchCount = visibleGroups.reduce((n, g) => n + g.pages.length, 0);
 
   function toggle(path: string) {
     setError(null);
@@ -143,7 +161,8 @@ export function AdminMeta({
       <h1 className="head text-3xl">SEO / Meta</h1>
       <p className="mt-1 max-w-2xl text-sm text-[var(--color-ink-dim)]">
         Override the <strong>title</strong>, <strong>meta description</strong> and <strong>keywords</strong> for any
-        page. Leave a field blank to keep the page&apos;s built-in default. Saved changes go live within a minute.
+        page — including every location page, every &ldquo;service for industry&rdquo; page, case studies and blog
+        posts. Leave a field blank to keep the page&apos;s built-in default. Saved changes go live within a minute.
       </p>
 
       {!dbConfigured && (
@@ -157,6 +176,21 @@ export function AdminMeta({
       {error && (
         <p className="mt-6 rounded-xl border border-[var(--color-danger)]/40 bg-[color-mix(in_srgb,var(--color-danger)_10%,transparent)] p-3 text-sm text-[var(--color-danger)]">
           {error}
+        </p>
+      )}
+
+      <div className="relative mt-6">
+        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-ink-faint)]" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={`Search ${totalPages} pages — try "toronto", "crm" or "/services/crm/professional-services"`}
+          className="w-full rounded-xl border border-[var(--color-border)] bg-white py-2.5 pl-10 pr-3.5 text-sm outline-none focus:border-[var(--color-ink)]"
+        />
+      </div>
+      {q && (
+        <p className="mono mt-2 text-[11px] text-[var(--color-ink-faint)]">
+          {matchCount} of {totalPages} pages match
         </p>
       )}
 
@@ -180,11 +214,29 @@ export function AdminMeta({
         </button>
       </div>
 
-      {allGroups.map((g) => (
+      {visibleGroups.map((g) => {
+        const expanded = Boolean(q) || openGroups[g.group];
+        const customCount = g.pages.filter((p) => customized(p.path)).length;
+        return (
         <section key={g.group} className="mt-8">
-          <h2 className="mono text-[11px] font-semibold uppercase tracking-[.1em] text-[var(--color-ink-faint)]">
-            {g.group}
-          </h2>
+          <button
+            onClick={() => setOpenGroups((o) => ({ ...o, [g.group]: !o[g.group] }))}
+            className="flex w-full items-center gap-2 text-left"
+            aria-expanded={expanded}
+          >
+            <ChevronDown
+              size={14}
+              className={`text-[var(--color-ink-faint)] transition-transform ${expanded ? "" : "-rotate-90"}`}
+            />
+            <h2 className="mono text-[11px] font-semibold uppercase tracking-[.1em] text-[var(--color-ink-faint)]">
+              {g.group}
+            </h2>
+            <span className="mono text-[11px] text-[var(--color-ink-faint)]">
+              {g.pages.length}
+              {customCount > 0 && <span className="text-[#5f6f17]"> · {customCount} custom</span>}
+            </span>
+          </button>
+          {expanded && (
           <ul className="mt-3 divide-y divide-[var(--color-border)] overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
             {g.pages.map((p) => {
               const isOpen = open === p.path;
@@ -279,8 +331,13 @@ export function AdminMeta({
               );
             })}
           </ul>
+          )}
         </section>
-      ))}
+        );
+      })}
+      {q && !visibleGroups.length && (
+        <p className="mt-10 text-sm text-[var(--color-ink-dim)]">No page matches &ldquo;{query}&rdquo;.</p>
+      )}
     </div>
   );
 }

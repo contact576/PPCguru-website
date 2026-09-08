@@ -15,15 +15,23 @@ import { CursorGlow } from "@/components/ui/interactive";
 import { SiteGraphJsonLd } from "@/components/seo/json-ld";
 import { ChromeGate } from "@/components/layout/chrome-gate";
 
-// Display + body workhorse — Archivo (the design's primary grotesk).
+/**
+ * Display + body workhorse — Archivo (the design's primary grotesk).
+ *
+ * NO `weight` array on purpose. Archivo and JetBrains Mono are VARIABLE fonts:
+ * naming six weights makes next/font download six static instances (~6 files,
+ * ~120KB) where the variable axis is one file covering the whole 100–900 range.
+ * The design uses 400→900 of Archivo, so the variable file is both smaller and
+ * strictly more capable. Don't "fix" this by re-adding the weights.
+ */
 const archivo = Archivo({
   subsets: ["latin"],
   variable: "--font-archivo",
-  weight: ["400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
-// Italic editorial accent for emphasis words.
+// Italic editorial accent for emphasis words. NOT a variable font — 400
+// normal + italic is the whole family, so both faces are named explicitly.
 const dmSerif = DM_Serif_Display({
   subsets: ["latin"],
   variable: "--font-dm-serif",
@@ -35,8 +43,9 @@ const dmSerif = DM_Serif_Display({
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
-  weight: ["500", "600", "700"],
   display: "swap",
+  // Mono is chrome, never the LCP element — don't spend a preload slot on it.
+  preload: false,
 });
 
 export const metadata: Metadata = {

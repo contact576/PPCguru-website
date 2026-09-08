@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/admin-auth";
-import { blogGitConfig, blogGitConfigured, BlogGitError, listRemotePosts, writeRemotePost } from "@/lib/blog-git";
+import { blogGitConfig, blogGitConfigured, BlogGitError, listRemotePosts, writeRemotePost, type GitPostFile } from "@/lib/blog-git";
+import { listLocalPosts } from "@/lib/blog-fs";
 import { postStatus, liveTimestamp, wordCount, type PostSummary } from "@/lib/blog-post-file";
 import { lintPost } from "@/lib/blog-lint";
 import { fsLintCheckers } from "@/lib/blog-lint-fs";
@@ -25,15 +26,21 @@ function failure(err: unknown) {
 }
 
 /**
- * GET /api/admin/blog — every post on the branch, drafts and scheduled ones
- * included. This is the one view that must see what the public site hides.
+ * GET /api/admin/blog — every post, drafts and scheduled ones included. This is
+ * the one view that must see what the public site hides.
+ *
+ * Source of truth is the GitHub branch when a token is configured, because that
+ * is what the editor writes to and it shows commits made from anywhere. Without
+ * a token it falls back to the deployed content/blog on disk, so the list is
+ * never empty just because editing isn't wired up — `writable: false` tells the
+ * UI to explain why the buttons are off.
  */
 export async function GET() {
   if (!(await isAuthed())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!blogGitConfigured()) return notConfigured();
 
   try {
-    const files = await listRemotePosts();
+    const writable = blogGitConfigured();
+    const files: GitPostFile[] = writable ? await listRemotePosts() : listLocalPosts();
     const knownSlugs = new Set(files.map((f) => f.slug));
     const checkers = fsLintCheckers();
 
@@ -59,7 +66,13 @@ export async function GET() {
     });
 
     const { repo, branch } = blogGitConfig();
-    return NextResponse.json({ posts, repo, branch });
+    return NextResponse.json({
+      posts,
+      repo,
+      branch,
+      writable,
+      source: writable ? "github" : "deployment",
+    });
   } catch (err) {
     return failure(err);
   }

@@ -1,16 +1,51 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ReactLenis, useLenis } from "lenis/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { scrollState } from "@/lib/scroll-store";
 
 /**
- * Wraps the app in Lenis smooth scrolling and syncs GSAP ScrollTrigger to it.
+ * Lenis smooth scrolling + GSAP ScrollTrigger sync — active on DESKTOP ONLY.
+ *
  * Lenis wraps the NATIVE scroll, so sticky positioning, anchor links and
- * keyboard a11y all keep working. Disabled automatically for reduced-motion.
+ * keyboard a11y all keep working. On a phone, though, it is pure cost: it runs
+ * a requestAnimationFrame loop for the whole session, and it never smooths
+ * touch scrolling anyway (`syncTouch` is off), which the browser already does
+ * off the main thread. That loop competes with hydration and with every tap —
+ * it shows up as input latency and a janky first scroll on mid-range Android.
+ *
+ * So on a coarse pointer (or with reduced motion requested) Lenis is put to
+ * sleep: `autoRaf` off kills the per-frame work, and `smoothWheel` off means it
+ * never calls preventDefault on a wheel event — which matters, because a Lenis
+ * that intercepts wheel but never advances would freeze the page.
+ *
+ * The component stays MOUNTED either way. Swapping the provider in and out
+ * would change the element type wrapping the whole app, remounting every child
+ * (and re-firing the visitor beacon) the moment the media query resolved.
  */
+function useSmoothScrollEligible() {
+  const [eligible, setEligible] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const fine = window.matchMedia("(pointer: fine)");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const evaluate = () => setEligible(fine.matches && !reduced.matches);
+    evaluate();
+    fine.addEventListener("change", evaluate);
+    reduced.addEventListener("change", evaluate);
+    return () => {
+      fine.removeEventListener("change", evaluate);
+      reduced.removeEventListener("change", evaluate);
+    };
+  }, []);
+
+  return eligible;
+}
+
+/** ScrollTrigger sync + the ambient parallax inputs. Desktop-only, like Lenis. */
 function ScrollSync() {
   const lenis = useLenis();
 
@@ -45,9 +80,11 @@ function ScrollSync() {
 }
 
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
+  const eligible = useSmoothScrollEligible();
+
   return (
-    <ReactLenis root options={{ lerp: 0.1, smoothWheel: true }}>
-      <ScrollSync />
+    <ReactLenis root autoRaf={eligible} options={{ lerp: 0.1, smoothWheel: eligible }}>
+      {eligible && <ScrollSync />}
       {children}
     </ReactLenis>
   );

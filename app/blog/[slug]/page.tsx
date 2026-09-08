@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -22,6 +23,17 @@ export const dynamicParams = true;
 
 export async function generateStaticParams() {
   return (await getAllPostSlugs()).map((slug) => ({ slug }));
+}
+
+/** True when `images.remotePatterns` (see next.config.ts) can serve this source. */
+function canOptimizeImage(src: string): boolean {
+  if (src.startsWith("/")) return true;
+  try {
+    const { protocol, hostname, pathname } = new URL(src);
+    return protocol === "https:" && hostname.endsWith(".supabase.co") && pathname.startsWith("/storage/v1/object/public/");
+  } catch {
+    return false;
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -84,12 +96,34 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <Section className="!pt-12">
         {post.coverImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="mx-auto mb-10 max-w-3xl w-full rounded-[24px] border border-[var(--color-border)] object-cover"
-          />
+          /*
+           * next/image, not a bare <img>: on a post page the cover IS the LCP
+           * element, and the raw tag shipped the full-size original (often an
+           * unoptimized PNG straight out of Supabase storage) to a 390px phone
+           * with no intrinsic size, so it cost a layout shift too. `priority`
+           * because it is above the fold; `sizes` caps the mobile fetch at the
+           * width actually rendered.
+           *
+           * A cover from a host that images.remotePatterns doesn't cover would
+           * make next/image THROW and take the whole post down, so an
+           * unrecognised URL degrades to a plain tag inside the same fixed
+           * ratio box — slower, but never a 500.
+           */
+          <div className="relative mx-auto mb-10 aspect-[16/9] w-full max-w-3xl overflow-hidden rounded-[24px] border border-[var(--color-border)]">
+            {canOptimizeImage(post.coverImage) ? (
+              <Image
+                src={post.coverImage}
+                alt={post.title}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={post.coverImage} alt={post.title} className="h-full w-full object-cover" />
+            )}
+          </div>
         ) : null}
         <article className="prose-blog mx-auto max-w-3xl">
           {/* rehypeRaw lets the CMS author use plain HTML alongside Markdown

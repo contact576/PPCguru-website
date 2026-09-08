@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BrandMarquee } from "@/components/shared/logo-wall";
 import { Logo } from "@/components/shared/logo";
 import { GOOGLE_PARTNER_URL } from "@/lib/data/logos";
+import { siteConfig } from "@/lib/site-config";
 
 /**
  * Footer — handoff design (dark olive #14170e, lime accents). Shared across all
@@ -67,6 +68,7 @@ export function SiteFooter() {
             { label: "Pricing", href: "/pricing" },
             { label: "Compare guides", href: "/compare" },
             { label: "Marketing glossary", href: "/glossary" },
+            { label: "Blog", href: "/blog" },
           ]} />
           <FCol title="Industries" links={[
             { label: "Physiotherapy", href: "/industries/physiotherapy" },
@@ -88,8 +90,25 @@ export function SiteFooter() {
           <div>
             <div className="mono" style={head}>Contact</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 13.5 }}>
-              <a href="mailto:contact@ppcguru.ca" style={{ ...col }} className="hover:text-[#ceff3a]">contact@ppcguru.ca</a>
-              <span style={{ color: "#75766a" }}>Toronto, ON · GTA</span>
+              {siteConfig.contact.phone ? (
+                <a href={siteConfig.contact.phoneHref} style={{ ...col, fontWeight: 700, color: "#f1efe3" }} className="hover:text-[#ceff3a]">
+                  {siteConfig.contact.phone}
+                </a>
+              ) : null}
+              <a href={`mailto:${siteConfig.contact.email}`} style={{ ...col }} className="hover:text-[#ceff3a]">{siteConfig.contact.email}</a>
+              {/* The printed address links to the Google Business Profile — the
+                  same listing the /contact map embeds, so the NAP citation and
+                  the pin can never drift apart. */}
+              <a
+                href={siteConfig.maps.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ ...col }}
+                className="hover:text-[#ceff3a]"
+              >
+                {siteConfig.contact.addressLabel}
+              </a>
+              <span style={{ color: "#75766a" }}>{siteConfig.contact.hours}</span>
               <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#ceff3a", fontWeight: 600 }}>
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ceff3a" }} />Message us
               </Link>

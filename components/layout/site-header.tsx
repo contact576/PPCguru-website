@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown } from "lucide-react";
-import { nav, type NavItem, type NavChild } from "@/lib/site-config";
+import { ChevronDown, Phone } from "lucide-react";
+import { nav, siteConfig, type NavItem, type NavChild } from "@/lib/site-config";
 import { Logo } from "@/components/shared/logo";
 
 /**
@@ -176,7 +176,13 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden lg:flex" style={{ alignItems: "center", gap: 10 }}>
-          <Link href="/contact" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11, fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase", color: "#3a3a36", padding: "10px 13px", border: "1px solid #d8d6c6", borderRadius: 12 }}>Message us</Link>
+          {siteConfig.contact.phone ? (
+            <a href={siteConfig.contact.phoneHref} className="mono transition-colors hover:border-[#14170e]" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11, fontWeight: 700, letterSpacing: ".05em", color: "#3a3a36", padding: "10px 13px", border: "1px solid #d8d6c6", borderRadius: 12, whiteSpace: "nowrap" }}>
+              <Phone size={13} /> {siteConfig.contact.phone}
+            </a>
+          ) : (
+            <Link href="/contact" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11, fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase", color: "#3a3a36", padding: "10px 13px", border: "1px solid #d8d6c6", borderRadius: 12 }}>Message us</Link>
+          )}
           <Link href="/contact" className="mono btn-shine transition-transform hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 11.5, letterSpacing: ".05em", textTransform: "uppercase", padding: "12px 18px", borderRadius: 12, whiteSpace: "nowrap", boxShadow: "0 6px 20px rgba(206,255,58,.28)" }}>Book a Growth Audit</Link>
         </div>
 
@@ -223,7 +229,12 @@ export function SiteHeader() {
               </div>
             ))}
 
-            <Link href="/contact" onClick={() => setOpen(false)} className="mono" style={{ marginTop: 16, textAlign: "center", background: "#ceff3a", color: "#14170e", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", padding: 15, borderRadius: 13 }}>Book a Growth Audit</Link>
+            {siteConfig.contact.phone ? (
+              <a href={siteConfig.contact.phoneHref} onClick={() => setOpen(false)} className="mono" style={{ marginTop: 16, display: "flex", alignItems: "center", justifyContent: "center", gap: 9, border: "1px solid #14170e", color: "#14170e", fontWeight: 700, letterSpacing: ".04em", padding: 15, borderRadius: 13 }}>
+                <Phone size={16} /> {siteConfig.contact.phone}
+              </a>
+            ) : null}
+            <Link href="/contact" onClick={() => setOpen(false)} className="mono" style={{ marginTop: 10, textAlign: "center", background: "#ceff3a", color: "#14170e", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", padding: 15, borderRadius: 13 }}>Book a Growth Audit</Link>
           </div>
         </div>
       )}

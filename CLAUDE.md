@@ -241,6 +241,62 @@ via `lib/ai/anthropic.ts` — both **fall back to deterministic output when `ANT
 - **Signature motif — "the leak, sealed":** the `Eyebrow` (`components/ui/badge.tsx`) leads every section
   label with the dashed-coral-leak → ink-node → olive→lime SVG mark. Keep it; don't add competing flourishes.
 
+## NAP, the Google Business Profile & the /contact map (2026-09)
+
+- **One source for the business's identity: `lib/site-config.ts`.** `contact.phone` (+1 (519) 992-9567) /
+  `contact.phoneHref` (the `tel:` string) / `contact.addressLabel` ("Toronto, ON, Canada") and the new
+  `maps` block. `maps.mapUrl` is the public Google Business Profile link, `maps.mapEmbedUrl` is the Maps
+  embed on /contact — **they must point at the same listing**, or the printed address and the pin disagree,
+  which is exactly the mismatch local SEO reads. Every phone/address render is gated on the config value, so
+  clearing `phone` reverts the whole site to the old "Book a call" behaviour with no component edits.
+- Rendered in: header (desktop tap-to-call replaces the old "Message us" outline button; a full-width call
+  button in the mobile drawer), footer contact column (phone, email, GBP-linked address, hours), /contact
+  ("Reach us directly" + the lazy-loaded map band), and `organizationSchema()` (`telephone` + `hasMap`).
+  `app/[city]/[service]` already emitted `telephone` conditionally, so all 30 location pages picked it up.
+- **Blog is in the nav now** — `nav` in `site-config.ts` (header + mobile menu) and the footer's resources
+  column. `mainNav` in the same file is DEAD (nothing imports it); `nav` is the live model.
+
+## Admin: SEO/Meta coverage + the blog list (2026-09)
+
+- **`lib/data/page-registry.ts` must stay exhaustive over indexable routes.** `withMetaOverride` was already
+  wired into every template, but the registry only listed core/services/industries/tools — so the 30
+  `/[city]/[service]` pages, the 45 `/services/[slug]/[industry]` combos, case studies and blog posts had no
+  way to be edited from `/admin/meta` even though the plumbing worked. It now derives all of them from the
+  same data modules (blog posts are passed IN by the page, since they're content, not code). Add a route
+  family here when you add its template.
+- `/admin/meta` gained a search box and collapsed groups — it lists ~170 pages, which is unusable as a flat
+  accordion.
+- **The admin blog list no longer requires `BLOG_GITHUB_TOKEN` to SHOW anything.** Writing still goes through
+  GitHub (a write to the deployed filesystem would be erased by the next deploy), but reading falls back to
+  `lib/blog-fs.ts`, which parses `content/blog` off disk — drafts and scheduled posts included. Without a
+  token the tab renders every post read-only and says why; with one, nothing changes. `next.config.ts`
+  `outputFileTracingIncludes` names `content/blog` so the runtime read survives file tracing.
+
+## Mobile performance (2026-09)
+
+Changes here are deliberate; re-check the reasoning before reverting one.
+- **Fonts are variable, not multi-weight.** Archivo + JetBrains Mono are variable families — naming six
+  weights made next/font ship six static instances. No `weight` array ⇒ one file each covering 100–900.
+  DM Serif Display is NOT variable, so it keeps its explicit 400 normal+italic. JetBrains Mono is
+  `preload: false` (chrome, never the LCP element).
+- **Lenis smooth scroll is desktop-only** (`components/providers/smooth-scroll-provider.tsx`). On touch it
+  runs `autoRaf: false` + `smoothWheel: false`, killing the per-frame loop while never intercepting a wheel
+  event it won't advance (that combination would freeze the page). The provider stays MOUNTED in both cases
+  — swapping it out would remount the whole app once the media query resolved, re-firing the visitor beacon.
+- **`lib/motion-env.ts` `skipHeavyMotion()`** treats a coarse pointer like reduced-motion, and gates
+  `GsapText`, `SplitHeading` and `ScrollParallax`. SplitText rewrites a heading into a span per word/char;
+  that DOM + layout cost lands on the weakest device during hydration for an effect that's illegible at
+  390px. All three still render their children normally — only the animation is skipped.
+- **Microsoft Clarity is deferred** to `requestIdleCallback` after load, or the first real interaction,
+  whichever comes first (`components/analytics/third-party.tsx`). The `clarity()` stub is still installed
+  synchronously, so queued calls (notably ConsentSignal's opt-out) replay on load and nothing is lost.
+  **GTM is deliberately NOT deferred** — delaying it would drop pageviews for bouncing visitors.
+- Blog covers render through `next/image` (`priority` + `sizes`); most are unoptimized PNGs in Supabase
+  storage, so `images.remotePatterns` allows `*.supabase.co/storage/v1/object/public/**` and a cover from
+  any other host falls back to a plain `<img>` rather than throwing and 500-ing the post.
+- `transpilePackages: ["three"]` was removed — the 3D hero is retired and nothing in the build graph
+  reaches `three`/`@react-three` any more.
+
 ## Conventions & gotchas
 - **Tailwind v4, no config file.** Tokens live in `app/globals.css` `@theme`; reference as arbitrary values
   (`text-[--color-ink-dim]`). Light cream base; `--color-lime` signature fill, `--color-ink` text,
@@ -260,9 +316,13 @@ via `lib/ai/anthropic.ts` — both **fall back to deterministic output when `ANT
 - Env vars (`ANTHROPIC_API_KEY`, `RESEND_API_KEY`, Turnstile, …) are all optional; everything degrades gracefully.
 
 ## Git / deploy
-`main` is production (Vercel auto-deploys it). The revamp (PR #7, branch `claude/revamp`) is **merged**.
-Feature work: branch → PR → `main`; each PR push builds a Vercel **preview**, merging to `main` deploys
-**production** (`https://pp-cguru-website.vercel.app`, Vercel team `dhaval-patel`).
+**`master` is production** — Vercel auto-deploys it and `https://ppcguru.ca` serves it. (`main` still exists
+and is GitHub's *default* branch, but it is ~28 commits BEHIND and is not what ships; verified by fetching
+posts that exist only on `master` and getting 200s. Earlier revisions of this file said `main` — they were
+right at the time and are wrong now. Check before you push.) The revamp (PR #7, branch `claude/revamp`) is
+**merged**. Feature work: branch → PR → `master`; each PR push builds a Vercel **preview**, merging to
+`master` deploys **production** (Vercel team `dhaval-patel`). `lib/blog-git.ts` agrees: `BLOG_BRANCH`
+defaults to `master`.
 
 - **⚠ Vercel blocks a production build when the tip commit's author email isn't matched to a GitHub
   account.** A GitHub UI "merge" can author the merge commit with an unverified email (e.g.

@@ -31,6 +31,8 @@ import { isoToLocalInput, localInputToIso, type PostStatus, type PostSummary } f
 
 type Feedback = { tone: "ok" | "error"; message: string } | null;
 
+const READ_ONLY_HINT = "Editing needs BLOG_GITHUB_TOKEN — posts are shown from the deployed content/blog.";
+
 const STATUS_STYLE: Record<PostStatus, { label: string; className: string }> = {
   scheduled: { label: "Scheduled", className: "bg-[var(--color-accent)] text-[var(--color-ink)]" },
   draft: { label: "Draft", className: "bg-[var(--color-border)] text-[var(--color-ink-dim)]" },
@@ -59,6 +61,9 @@ function whenLabel(iso: string | null, status: PostStatus): string {
 export function BlogManager() {
   const [posts, setPosts] = useState<PostSummary[] | null>(null);
   const [repo, setRepo] = useState<{ repo: string; branch: string } | null>(null);
+  // false ⇒ the list came off the deployed filesystem because BLOG_GITHUB_TOKEN
+  // isn't set. Posts are all visible; only the write actions are unavailable.
+  const [writable, setWritable] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [query, setQuery] = useState("");
@@ -73,6 +78,7 @@ export function BlogManager() {
       posts?: PostSummary[];
       repo?: string;
       branch?: string;
+      writable?: boolean;
       error?: string;
     };
     if (!res.ok) {
@@ -81,6 +87,7 @@ export function BlogManager() {
       return;
     }
     setPosts(json.posts ?? []);
+    setWritable(json.writable !== false);
     if (json.repo && json.branch) setRepo({ repo: json.repo, branch: json.branch });
   }, []);
 
@@ -186,9 +193,14 @@ export function BlogManager() {
 
           <div className="flex flex-wrap items-center gap-2">
             <Link href={`/admin/blog/${post.slug}`} className={action}>
-              <Pencil size={13} /> Edit
+              <Pencil size={13} /> {writable ? "Edit" : "Read"}
             </Link>
-            <button onClick={() => startReschedule(post)} disabled={busy} className={action}>
+            <button
+              onClick={() => startReschedule(post)}
+              disabled={busy || !writable}
+              title={writable ? undefined : READ_ONLY_HINT}
+              className={action}
+            >
               <CalendarClock size={13} /> Schedule
             </button>
             {post.status === "published" && (
@@ -198,7 +210,8 @@ export function BlogManager() {
             )}
             <button
               onClick={() => remove(post)}
-              disabled={busy}
+              disabled={busy || !writable}
+              title={writable ? undefined : READ_ONLY_HINT}
               aria-label={`Delete ${post.title}`}
               className={`${action} hover:border-[var(--color-danger)] hover:text-[var(--color-danger)]`}
             >
@@ -278,10 +291,13 @@ export function BlogManager() {
           <h1 className="head text-3xl">Blog</h1>
           <p className="mt-1 text-sm text-[var(--color-ink-dim)]">
             {posts ? `${posts.length} posts` : "Loading…"}
-            {repo && (
+            {repo && writable && (
               <span className="mono ml-2 text-[11px] text-[var(--color-ink-faint)]">
                 {repo.repo}@{repo.branch}
               </span>
+            )}
+            {!writable && posts && (
+              <span className="mono ml-2 text-[11px] text-[var(--color-ink-faint)]">read-only · content/blog</span>
             )}
           </p>
         </div>
@@ -289,12 +305,18 @@ export function BlogManager() {
           <button onClick={() => void load()} className={action}>
             <RefreshCw size={13} /> Refresh
           </button>
-          <Link
-            href="/admin/blog/new"
-            className="mono inline-flex items-center gap-2 rounded-xl bg-[var(--color-ink)] px-5 py-2.5 text-[12px] font-bold uppercase tracking-[.06em] text-[var(--color-base)]"
-          >
-            <Plus size={15} /> New post
-          </Link>
+          {writable ? (
+            <Link
+              href="/admin/blog/new"
+              className="mono inline-flex items-center gap-2 rounded-xl bg-[var(--color-ink)] px-5 py-2.5 text-[12px] font-bold uppercase tracking-[.06em] text-[var(--color-base)]"
+            >
+              <Plus size={15} /> New post
+            </Link>
+          ) : (
+            <span title={READ_ONLY_HINT} className="mono inline-flex cursor-not-allowed items-center gap-2 rounded-xl bg-[var(--color-ink)] px-5 py-2.5 text-[12px] font-bold uppercase tracking-[.06em] text-[var(--color-base)] opacity-40">
+              <Plus size={15} /> New post
+            </span>
+          )}
         </div>
       </div>
 
@@ -317,6 +339,18 @@ export function BlogManager() {
             The editor commits markdown to GitHub, so it needs a token with <code>contents: write</code> on the site
             repo in <code>BLOG_GITHUB_TOKEN</code>. Until then, posts can still be added by hand in{" "}
             <code>content/blog/</code>.
+          </p>
+        </div>
+      )}
+
+      {posts && !writable && (
+        <div className="mt-5 rounded-xl border border-[var(--color-warning)]/40 bg-[color-mix(in_srgb,var(--color-warning)_12%,transparent)] p-4 text-sm text-[var(--color-ink)]">
+          <p className="font-semibold">Read-only — showing the posts this deployment is serving.</p>
+          <p className="mt-1.5 text-[var(--color-ink-dim)]">
+            Every published, scheduled and draft post in <code className="mono">content/blog/</code> is listed below and
+            can be opened and read. To edit, schedule or delete from here, add a GitHub fine-grained token with{" "}
+            <code className="mono">contents: write</code> on <code className="mono">{repo?.repo ?? "the site repo"}</code>{" "}
+            as <code className="mono">BLOG_GITHUB_TOKEN</code> and redeploy. Until then, posts change through Git.
           </p>
         </div>
       )}

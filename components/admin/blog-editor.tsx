@@ -55,11 +55,14 @@ export function BlogEditor({
   post,
   sha,
   isNew,
+  readOnly = false,
 }: {
   post: PostFields;
   /** Blob sha of the version loaded — sent back so a stale save is refused. */
   sha?: string;
   isNew: boolean;
+  /** No GitHub token ⇒ the post opens for reading only; nothing can be committed. */
+  readOnly?: boolean;
 }) {
   const router = useRouter();
 
@@ -206,27 +209,35 @@ export function BlogEditor({
             <ArrowLeft size={15} /> Blog
           </Link>
           <div className="flex flex-wrap items-center gap-2">
-            <button onClick={() => setAiOpen((v) => !v)} className={ghost}>
-              <Sparkles size={14} /> Write with AI
-            </button>
-            <button onClick={check} disabled={busy !== null} className={ghost}>
-              {busy === "check" ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />} Check
-            </button>
-            <button
-              onClick={() => save({ draft: true }, "draft")}
-              disabled={busy !== null}
-              className={ghost}
-            >
-              {busy === "draft" ? <Loader2 size={14} className="animate-spin" /> : null} Save as draft
-            </button>
-            <button
-              onClick={() => save()}
-              disabled={busy !== null}
-              className="mono inline-flex items-center gap-2 rounded-xl bg-[var(--color-ink)] px-5 py-2.5 text-[12px] font-bold uppercase tracking-[.06em] text-[var(--color-base)] disabled:opacity-50"
-            >
-              {busy === "save" && <Loader2 size={14} className="animate-spin" />}
-              {fields.draft ? "Commit draft" : status === "scheduled" ? "Commit + schedule" : "Commit + publish"}
-            </button>
+            {readOnly ? (
+              <span className="mono rounded-lg border border-[var(--color-border)] px-3 py-2 text-[11px] font-bold uppercase tracking-[.06em] text-[var(--color-ink-faint)]">
+                Read-only · set BLOG_GITHUB_TOKEN to edit
+              </span>
+            ) : (
+              <>
+                <button onClick={() => setAiOpen((v) => !v)} className={ghost}>
+                  <Sparkles size={14} /> Write with AI
+                </button>
+                <button onClick={check} disabled={busy !== null} className={ghost}>
+                  {busy === "check" ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />} Check
+                </button>
+                <button
+                  onClick={() => save({ draft: true }, "draft")}
+                  disabled={busy !== null}
+                  className={ghost}
+                >
+                  {busy === "draft" ? <Loader2 size={14} className="animate-spin" /> : null} Save as draft
+                </button>
+                <button
+                  onClick={() => save()}
+                  disabled={busy !== null}
+                  className="mono inline-flex items-center gap-2 rounded-xl bg-[var(--color-ink)] px-5 py-2.5 text-[12px] font-bold uppercase tracking-[.06em] text-[var(--color-base)] disabled:opacity-50"
+                >
+                  {busy === "save" && <Loader2 size={14} className="animate-spin" />}
+                  {fields.draft ? "Commit draft" : status === "scheduled" ? "Commit + schedule" : "Commit + publish"}
+                </button>
+              </>
+            )}
           </div>
         </div>
       </header>

@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
+import { skipHeavyMotion } from "@/lib/motion-env";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -30,7 +31,7 @@ export function SplitHeading({
     () => {
       const el = ref.current;
       if (!el) return;
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (skipHeavyMotion()) return;
 
       let split: SplitText | null = null;
       try {

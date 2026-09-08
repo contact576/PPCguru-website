@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/admin-auth";
 import { blogGitConfigured, BlogGitError, deleteRemotePost, readRemotePost, writeRemotePost } from "@/lib/blog-git";
+import { readLocalPost } from "@/lib/blog-fs";
 import { postStatus, toFields } from "@/lib/blog-post-file";
 import { commitMessage, fieldsFrom, hasErrors, preparePost } from "@/lib/blog-admin";
 
@@ -18,19 +19,26 @@ function failure(err: unknown) {
   return NextResponse.json({ error: "Could not reach GitHub." }, { status: 502 });
 }
 
-/** GET — one post, as editor fields, with the blob sha the editor must send back. */
+/**
+ * GET — one post, as editor fields, with the blob sha the editor must send back.
+ *
+ * Falls back to the deployed file when GitHub isn't connected: the post opens
+ * read-only (`writable: false`, empty `sha`) instead of 503-ing, so the content
+ * can still be read and copied out of the dashboard.
+ */
 export async function GET(_req: Request, { params }: Ctx) {
   if (!(await isAuthed())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!blogGitConfigured()) return notConfigured();
   const { slug } = await params;
 
   try {
-    const post = await readRemotePost(slug);
+    const writable = blogGitConfigured();
+    const post = writable ? await readRemotePost(slug) : readLocalPost(slug);
     if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json({
       post: toFields(post.slug, post.data, post.content),
       sha: post.sha,
       status: postStatus(post.data),
+      writable,
     });
   } catch (err) {
     return failure(err);

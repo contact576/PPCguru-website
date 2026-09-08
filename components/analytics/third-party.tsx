@@ -39,14 +39,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         />
       )}
 
+      {/*
+        Clarity, deferred off the critical path.
+
+        The vendor snippet injects the tag immediately, which on mobile costs a
+        ~50KB download plus its recorder setup while the page is still trying to
+        paint and hydrate — for a session recorder, the least time-critical tag
+        on the page. This is the same snippet with the injection moved behind
+        whichever comes first: window load (+ a beat), or the visitor's first
+        real interaction. Nothing is lost — the `clarity()` stub is installed
+        synchronously exactly as before, so calls made before the tag arrives
+        (notably ConsentSignal's opt-out) queue and replay on load, and any
+        session with an interaction is still recorded from its start.
+      */}
       {CLARITY_ID && (
         <script
           id="clarity-init"
           dangerouslySetInnerHTML={{
-            __html: `(function(c,l,a,r,i,t,y){
+            __html: `(function(c,l,a,r,i){
 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+var loaded=0,load=function(){if(loaded)return;loaded=1;
+var t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+var y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);};
+var idle=function(){if(c.requestIdleCallback){c.requestIdleCallback(load,{timeout:3000});}else{c.setTimeout(load,1200);}};
+if(l.readyState==="complete"){idle();}else{c.addEventListener("load",idle,{once:true});}
+["pointerdown","keydown","touchstart"].forEach(function(e){c.addEventListener(e,load,{once:true,passive:true});});
 })(window,document,"clarity","script","${CLARITY_ID}");`,
           }}
         />

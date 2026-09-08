@@ -21,21 +21,36 @@ export const siteConfig = {
   founded: 2021,
   founders: ["Jaydeep Patel", "Dhaval Patel"],
 
-  // Contact — TODO(client): confirm exact public details before launch
+  // Contact — client-confirmed public details.
   contact: {
     email: "contact@ppcguru.ca", // [VERIFY] confirm real inbox before launch
-    // Phone intentionally blank — no placeholder number is shown anywhere.
-    // [VERIFY]: add the real business phone + WhatsApp; components show a
-    // "Book a call" CTA instead while these are empty.
-    phone: "",
-    phoneHref: "",
+    // Real business line. `phone` is what a human reads, `phoneHref` is the
+    // dial string — keep them in sync, and keep phoneHref digits-only after the
+    // "+" so iOS/Android dial it without stripping formatting characters.
+    phone: "+1 (519) 992-9567",
+    phoneHref: "tel:+15199929567",
     whatsapp: "", // e.g. "https://wa.me/1XXXXXXXXXX" — [VERIFY] real WhatsApp number
     addressLocality: "Toronto",
     addressRegion: "ON",
     addressCountry: "CA",
+    /** One-line address as it should READ anywhere it is printed. */
+    addressLabel: "Toronto, ON, Canada",
     streetAddress: "Greater Toronto Area", // TODO(client) confirm mailing address
     postalCode: "", // TODO(client)
     hours: "Mon–Fri, 9:00 AM – 6:00 PM ET",
+  },
+
+  /**
+   * Google Business Profile. `mapUrl` is the public listing every printed
+   * address links to (footer, contact page, `hasMap` in schema); `mapEmbedUrl`
+   * is the matching Maps embed rendered on /contact. They must point at the
+   * SAME listing — a footer address that opens a different pin is a local-SEO
+   * NAP mismatch, which is exactly what these signals are read for.
+   */
+  maps: {
+    mapUrl: "https://maps.app.goo.gl/A5RsDnYeByur6KVV8",
+    mapEmbedUrl:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.782338362125!2d-79.3767816!3d43.6526967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4cb08e322f495%3A0xcdb30e0c3864fa4c!2sPPC%20Guru!5e0!3m2!1sen!2sin!4v1788364563849!5m2!1sen!2sin",
   },
 
   // Trust signals — client-confirmed figures (published as real). See
@@ -153,6 +168,7 @@ export const nav: NavItem[] = [
   },
   { label: "Results", href: "/results" },
   { label: "Pricing", href: "/pricing" },
+  { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

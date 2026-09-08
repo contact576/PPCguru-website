@@ -55,6 +55,9 @@ export function organizationSchema() {
     description: siteConfig.description,
     email: siteConfig.contact.email,
     ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phone } : {}),
+    // Points the entity at the Google Business Profile the footer + /contact
+    // both link to, so the on-page NAP and the listing corroborate each other.
+    ...(siteConfig.maps.mapUrl ? { hasMap: siteConfig.maps.mapUrl } : {}),
     foundingDate: String(siteConfig.founded),
     founder: siteConfig.founders.map((name) => ({
       "@type": "Person",

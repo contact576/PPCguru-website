@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Phone, Mail, MapPin, Clock, Check } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Check, ExternalLink } from "lucide-react";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { ContactForm } from "@/components/contact/contact-form";
@@ -56,7 +56,7 @@ export default function ContactPage() {
                   <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Phone size={16} className="text-[var(--color-cyan-bright)]" /> WhatsApp</a>
                 ) : null}
                 <a href={`mailto:${siteConfig.contact.email}`} className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Mail size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.email}</a>
-                <span className="flex items-center gap-3 text-[var(--color-ink-dim)]"><MapPin size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.addressLocality}, {siteConfig.contact.addressRegion} · {siteConfig.trust.serviceArea}</span>
+                <a href={siteConfig.maps.mapUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><MapPin size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.addressLabel} · {siteConfig.trust.serviceArea}</a>
                 <span className="flex items-center gap-3 text-[var(--color-ink-dim)]"><Clock size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.hours}</span>
               </div>
             </div>
@@ -65,6 +65,37 @@ export default function ContactPage() {
               <PartnerBadges />
             </div>
           </aside>
+        </div>
+
+        {/* Google Business Profile map. `loading="lazy"` keeps ~900KB of Maps
+            JS off the critical path — it is below the form, so it must never
+            compete with it for bandwidth on a phone. The wrapper owns the
+            aspect ratio so the iframe can be fluid without CLS. */}
+        <div className="mt-14">
+          <div className="flex flex-wrap items-baseline justify-between gap-3">
+            <h2 className="head text-2xl">Find us on Google</h2>
+            <a
+              href={siteConfig.maps.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mono inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[.06em] text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"
+            >
+              Open in Google Maps <ExternalLink size={13} />
+            </a>
+          </div>
+          <p className="mt-1.5 text-sm text-[var(--color-ink-dim)]">
+            {siteConfig.contact.addressLabel} · serving {siteConfig.trust.serviceArea}
+          </p>
+          <div className="mt-5 overflow-hidden rounded-[24px] border border-[var(--color-border)]">
+            <iframe
+              src={siteConfig.maps.mapEmbedUrl}
+              title={`${siteConfig.name} on Google Maps`}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              className="block h-[320px] w-full border-0 md:h-[420px]"
+            />
+          </div>
         </div>
       </Section>
     </>
