@@ -24,6 +24,12 @@ export type GhlSyncResult = {
   contactSynced: boolean;
   tagsSynced: boolean;
   noteSynced: boolean;
+  /**
+   * Whether budget/services/message reached real custom fields. Deliberately
+   * NOT part of `ok`: a location that blocks custom fields must still count as
+   * a delivered lead, exactly as it did before fields existed.
+   */
+  fieldsSynced: boolean;
   contactId?: string;
   noteId?: string;
 };
@@ -118,16 +124,195 @@ function contactPayload(lead: GhlLead): Record<string, unknown> {
   if (lead.company?.trim()) payload.companyName = lead.company.trim();
   if (lead.website?.trim()) payload.website = lead.website.trim();
   if (process.env.GHL_ASSIGNED_USER_ID?.trim()) payload.assignedTo = process.env.GHL_ASSIGNED_USER_ID.trim();
-  const fields: Array<[string | undefined, string | undefined]> = [
-    [process.env.GHL_CUSTOM_FIELD_BUDGET, lead.budget],
-    [process.env.GHL_CUSTOM_FIELD_SERVICES, lead.service],
-    [process.env.GHL_CUSTOM_FIELD_SOURCE, lead.source],
-  ];
-  const customFields = fields.filter(([field, value]) => field?.trim() && value?.trim())
-    .map(([field, value]) => ({ ...ghlCustomFieldReference(field!), fieldValue: value! }));
-  if (customFields.length) payload.customFields = customFields;
-  // Do not send tags here: the upsert endpoint replaces all existing tags.
+  // Custom fields are NOT sent here on purpose. They are applied in a separate
+  // update after the contact exists (see syncCustomFields), so a field the
+  // location rejects can never take the whole contact down with it — the lead
+  // is the thing that must not be lost.
+  // Do not send tags here either: the upsert endpoint replaces all existing tags.
   return payload;
+}
+
+/* ── custom fields ──────────────────────────────────────────────────────── */
+
+/**
+ * Getting the rest of the form into GoHighLevel as real, filterable fields.
+ *
+ * The contact upsert only carries GHL's STANDARD fields — name, email, phone,
+ * companyName, website, source. Everything else a visitor tells us (budget,
+ * which services they want, their message) has nowhere standard to go, so it
+ * was written into a note and nothing else. A note is not searchable, not
+ * filterable and not usable as a workflow condition, which is why the leads
+ * arrived but "the other details" appeared to vanish.
+ *
+ * Custom fields are the answer, but their ids differ per sub-account, so the
+ * original code required GHL_CUSTOM_FIELD_* env vars that were never filled in
+ * — the mapping silently resolved to nothing and `message` had no slot at all.
+ * This removes the setup step: the fields are looked up on the location by
+ * name, the missing ones are created, and the result is cached.
+ *
+ * NB this lives in this file rather than its own module on purpose: the offline
+ * checks run under Node's type-stripping, which cannot resolve the `@/` alias,
+ * and `lib/` is type-checked so a `./x.ts` specifier is not allowed either.
+ */
+
+type FieldSlot = "budget" | "services" | "message";
+
+type FieldSpec = {
+  slot: FieldSlot;
+  /** Field name created in GoHighLevel, and what an existing one is matched against. */
+  name: string;
+  dataType: "TEXT" | "LARGE_TEXT";
+  /** Env var that pins an explicit id, overriding discovery. */
+  envVar: string;
+  value: (lead: GhlLead) => string | undefined;
+};
+
+const FIELD_SPECS: FieldSpec[] = [
+  { slot: "budget", name: "Budget", dataType: "TEXT", envVar: "GHL_CUSTOM_FIELD_BUDGET", value: (l) => l.budget },
+  { slot: "services", name: "Services Interested In", dataType: "LARGE_TEXT", envVar: "GHL_CUSTOM_FIELD_SERVICES", value: (l) => l.service },
+  { slot: "message", name: "Message", dataType: "LARGE_TEXT", envVar: "GHL_CUSTOM_FIELD_MESSAGE", value: (l) => l.message },
+];
+
+type LocationField = { id?: string; name?: string; fieldKey?: string; dataType?: string };
+type FieldMap = Partial<Record<FieldSlot, string>>;
+
+/** "Services Interested In" and "contact.services_interested_in" must match. */
+function normalizeFieldName(value: string): string {
+  return value.replace(/^contact\./i, "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function matchField(spec: FieldSpec, fields: LocationField[]): LocationField | undefined {
+  const target = normalizeFieldName(spec.name);
+  return fields.find(
+    (field) =>
+      (field.name && normalizeFieldName(field.name) === target) ||
+      (field.fieldKey && normalizeFieldName(field.fieldKey) === target),
+  );
+}
+
+const FIELD_CACHE_TTL_MS = 10 * 60_000;
+/**
+ * A failed lookup is cached only briefly. Not caching it at all meant a token
+ * without the customFields scope paid an extra API call and logged a warning on
+ * every single lead; caching it for the full TTL would mean waiting ten minutes
+ * after fixing the scope. A minute is short enough to feel immediate.
+ */
+const FIELD_FAILURE_TTL_MS = 60_000;
+let cachedFields: { map: FieldMap; at: number; ttl: number } | null = null;
+/** Collapses concurrent resolution so a burst of leads triggers one lookup. */
+let fieldsInFlight: Promise<FieldMap> | null = null;
+
+/** Exposed for the offline checks and the admin diagnostic. */
+export function clearFieldMapCache(): void {
+  cachedFields = null;
+  fieldsInFlight = null;
+}
+
+/** Auto-creation is on by default; set GHL_AUTO_CREATE_FIELDS=false to opt out. */
+function autoCreateEnabled(): boolean {
+  return (process.env.GHL_AUTO_CREATE_FIELDS || "true").trim().toLowerCase() !== "false";
+}
+
+
+/**
+ * The location's field ids for budget / services / message, looked up once and
+ * cached. An explicit GHL_CUSTOM_FIELD_* env var wins; otherwise a field of the
+ * same name is reused, and only a genuinely missing one is created.
+ *
+ * Returns an empty map on any failure — the caller then simply skips fields.
+ */
+export async function resolveFieldMap(): Promise<FieldMap> {
+  if (cachedFields && Date.now() - cachedFields.at < cachedFields.ttl) return cachedFields.map;
+  if (fieldsInFlight) return fieldsInFlight;
+
+  fieldsInFlight = (async () => {
+    const map: FieldMap = {};
+    for (const spec of FIELD_SPECS) {
+      const pinned = process.env[spec.envVar]?.trim();
+      if (pinned) map[spec.slot] = pinned;
+    }
+
+    const needed = FIELD_SPECS.filter((spec) => !map[spec.slot]);
+    if (!needed.length) {
+      cachedFields = { map, at: Date.now(), ttl: FIELD_CACHE_TTL_MS };
+      return map;
+    }
+
+    const locationId = process.env.GHL_LOCATION_ID?.trim();
+    if (!locationId) return map;
+
+    const listed = await request("/locations/" + encodeURIComponent(locationId) + "/customFields?model=contact", "GET", undefined, true);
+    if (!listed.ok) {
+      // Most often a token without locations/customFields.readonly.
+      warn("custom field lookup", listed.status);
+      cachedFields = { map, at: Date.now(), ttl: FIELD_FAILURE_TTL_MS };
+      return map;
+    }
+    const existing = ((listed.data as { customFields?: LocationField[] } | null)?.customFields ?? []) as LocationField[];
+
+    for (const spec of needed) {
+      const found = matchField(spec, existing);
+      if (found?.id) {
+        map[spec.slot] = found.id;
+        continue;
+      }
+      if (!autoCreateEnabled()) continue;
+      const created = await request("/locations/" + encodeURIComponent(locationId) + "/customFields", "POST", {
+        name: spec.name,
+        dataType: spec.dataType,
+        model: "contact",
+      });
+      const id = (created.data as { customField?: LocationField; id?: string } | null)?.customField?.id;
+      if (created.ok && id) map[spec.slot] = id;
+      else warn("custom field create (" + spec.name + ")", created.status);
+    }
+
+    // Anything still unmapped means a create was refused; retry that soon.
+    const complete = FIELD_SPECS.every((spec) => map[spec.slot]);
+    cachedFields = { map, at: Date.now(), ttl: complete ? FIELD_CACHE_TTL_MS : FIELD_FAILURE_TTL_MS };
+    return map;
+  })().finally(() => {
+    fieldsInFlight = null;
+  });
+  return fieldsInFlight;
+}
+
+/**
+ * Writes the form's remaining answers onto the contact.
+ *
+ * The two contact endpoints in this API disagree about the value key —
+ * `field_value` is what the v2 contact schema documents, `fieldValue` appears
+ * elsewhere — and this integration's field path had never actually run, so
+ * neither spelling was proven against a real location. Rather than guess, it
+ * sends the documented one and retries once with the other on a validation
+ * rejection. The right spelling then costs one call forever after.
+ */
+async function syncCustomFields(contactId: string, lead: GhlLead): Promise<boolean> {
+  let map: FieldMap;
+  try {
+    map = await resolveFieldMap();
+  } catch {
+    return false;
+  }
+
+  const values = FIELD_SPECS.map((spec) => ({ id: map[spec.slot], value: spec.value(lead)?.trim() }))
+    .filter((entry): entry is { id: string; value: string } => Boolean(entry.id && entry.value));
+  if (!values.length) return false;
+
+  const path = "/contacts/" + encodeURIComponent(contactId);
+  for (const key of ["field_value", "fieldValue"] as const) {
+    const result = await request(path, "PUT", {
+      customFields: values.map((entry) => ({ id: entry.id, [key]: entry.value })),
+    }, true);
+    if (result.ok) return true;
+    // Only a schema complaint is worth re-trying with the other spelling.
+    if (result.status !== 400 && result.status !== 422) {
+      warn("custom field update", result.status);
+      return false;
+    }
+  }
+  warn("custom field update", 422);
+  return false;
 }
 
 function markerFor(lead: GhlLead): string | undefined {
@@ -184,7 +369,7 @@ async function syncNote(contactId: string, lead: GhlLead): Promise<{ ok: boolean
 /** Full delivery result; never throws or logs submitted values. */
 export async function syncLeadToGhl(lead: GhlLead, options: { backfill?: boolean } = {}): Promise<GhlSyncResult> {
   const result: GhlSyncResult = {
-    ok: false, configured: ghlConfigured(), contactSynced: false, tagsSynced: false, noteSynced: false,
+    ok: false, configured: ghlConfigured(), contactSynced: false, tagsSynced: false, noteSynced: false, fieldsSynced: false,
   };
   if (!result.configured || (!lead.email?.trim() && !lead.phone?.trim())) return result;
   try {
@@ -196,6 +381,9 @@ export async function syncLeadToGhl(lead: GhlLead, options: { backfill?: boolean
     }
     result.contactSynced = true;
     result.contactId = contactId;
+    // Budget / services / message onto the contact itself. Best-effort and
+    // deliberately after the upsert: the lead is already safe at this point.
+    result.fieldsSynced = await syncCustomFields(contactId, lead);
     const note = await syncNote(contactId, lead);
     result.noteSynced = note.ok;
     result.noteId = note.noteId;
@@ -205,6 +393,8 @@ export async function syncLeadToGhl(lead: GhlLead, options: { backfill?: boolean
       result.tagsSynced = tags.ok;
       if (!tags.ok) warn("tag delivery", tags.status);
     }
+    // `fieldsSynced` is intentionally excluded: the note still carries every
+    // answer, so a location that won't take custom fields is not a failed lead.
     result.ok = result.contactSynced && result.noteSynced && result.tagsSynced;
     return result;
   } catch {

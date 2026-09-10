@@ -1,6 +1,6 @@
 /** Offline contract checks. Fetch is fully mocked; no credentials or live services are used. */
 import assert from "node:assert/strict";
-import { ghlConfigured, syncLeadToGhl } from "../lib/gohighlevel.ts";
+import { ghlConfigured, syncLeadToGhl, clearFieldMapCache } from "../lib/gohighlevel.ts";
 
 type Step = { path: string; method: string; status?: number; data?: unknown; inspect?: (body: Record<string, unknown>) => void; error?: boolean };
 let steps: Step[] = [];
@@ -41,6 +41,10 @@ const contact = { path: "/contacts/upsert", method: "POST", data: { contact: { i
 const emptyNotes = { path: "/contacts/test-contact/notes", method: "GET", data: { notes: [] } };
 const createNote = { path: "/contacts/test-contact/notes", method: "POST", data: { note: { id: "test-note" } } };
 const addTags = { path: "/contacts/test-contact/tags", method: "POST", data: { tags: ["existing-customer", "website-lead", "form-popup-audit"] } };
+// Budget/services/message are written onto the contact AFTER it exists, so a
+// rejected field payload can never cost us the lead.
+const updateFields = { path: "/contacts/test-contact", method: "PUT", data: { contact: { id: "test-contact" } } };
+const listFields = { path: "/locations/offline-location/customFields", method: "GET" };
 
 function done(): void {
   assert.equal(steps.length, 0, "Not all expected requests occurred");
@@ -55,20 +59,25 @@ try {
   process.env.GHL_API_TOKEN = "offline-test-token";
   process.env.GHL_LOCATION_ID = "offline-location";
   process.env.GHL_CUSTOM_FIELD_BUDGET = "field-budget-id";
-  process.env.GHL_CUSTOM_FIELD_SERVICES = "contact.services";
-  process.env.GHL_CUSTOM_FIELD_SOURCE = "key:custom_source";
+  process.env.GHL_CUSTOM_FIELD_SERVICES = "field-services-id";
+  process.env.GHL_CUSTOM_FIELD_MESSAGE = "field-message-id";
+  clearFieldMapCache();
 
   steps = [
     { ...contact, inspect: (body) => {
       assert.equal(body.tags, undefined, "upsert must preserve existing tags");
       assert.equal(body.email, "lead@example.invalid");
       assert.equal(body.createNewIfDuplicateAllowed, false);
+      assert.equal(body.customFields, undefined, "custom fields must not ride on the upsert");
+    } },
+    { ...updateFields, inspect: (body) => {
       assert.deepEqual(body.customFields, [
-        { id: "field-budget-id", fieldValue: "test budget" },
-        { key: "contact.services", fieldValue: "test service" },
-        { key: "custom_source", fieldValue: "popup:audit" },
+        { id: "field-budget-id", field_value: "test budget" },
+        { id: "field-services-id", field_value: "test service" },
+        { id: "field-message-id", field_value: "test message" },
       ]);
-    } }, emptyNotes,
+    } },
+    emptyNotes,
     { ...createNote, inspect: (body) => {
       assert.ok(String(body.body).startsWith(marker + "\n"));
       assert.ok(String(body.body).includes("Submitted: " + lead.createdAt));
@@ -79,21 +88,22 @@ try {
   const initial = await syncLeadToGhl(lead);
   assert.equal(initial.ok, true);
   assert.equal(initial.noteId, "test-note");
+  assert.equal(initial.fieldsSynced, true);
   done();
 
-  steps = [contact,
+  steps = [contact, updateFields,
     { ...emptyNotes, data: { notes: [{ id: "test-note", body: marker + "\npreviously delivered" }] } },
     { ...addTags, inspect: (body) => assert.deepEqual(body.tags, ["website-backfill", "form-backfill-popup-audit"]) },
   ];
   assert.equal((await syncLeadToGhl(lead, { backfill: true })).ok, true);
   done(); // Rerun must not append a second note or apply the normal live trigger tag.
 
-  steps = [contact, emptyNotes, { ...createNote, status: 503 },
+  steps = [contact, updateFields, emptyNotes, { ...createNote, status: 503 },
     { ...emptyNotes, data: { notes: [{ id: "reconciled-note", body: marker + "\naccepted before timeout" }] } }, addTags];
   assert.equal((await syncLeadToGhl(lead)).noteId, "reconciled-note");
   done(); // An uncertain POST is reconciled, never blindly retried.
 
-  steps = [contact, emptyNotes, { ...createNote, status: 400, data: { message: "SECRET_TOKEN lead@example.invalid" } }];
+  steps = [contact, updateFields, emptyNotes, { ...createNote, status: 400, data: { message: "SECRET_TOKEN lead@example.invalid" } }];
   const missingNote = await syncLeadToGhl(lead);
   assert.equal(missingNote.contactSynced, true);
   assert.equal(missingNote.noteSynced, false);
@@ -101,21 +111,84 @@ try {
   assert.equal(missingNote.ok, false);
   done();
 
-  steps = [{ ...contact, status: 429 }, contact, emptyNotes, createNote, addTags];
+  steps = [{ ...contact, status: 429 }, contact, updateFields, emptyNotes, createNote, addTags];
   assert.equal((await syncLeadToGhl(lead)).ok, true);
   done(); // Safe contact upsert retries a transient rate-limit response.
 
-  steps = [contact, { ...emptyNotes, status: 403 }];
+  steps = [contact, updateFields, { ...emptyNotes, status: 403 }];
   assert.equal((await syncLeadToGhl(lead)).ok, false);
   done(); // Failed note reads must not cause duplicate writes.
 
-  steps = [contact, emptyNotes, createNote, { ...addTags, status: 400 }];
+  steps = [contact, updateFields, emptyNotes, createNote, { ...addTags, status: 400 }];
   assert.equal((await syncLeadToGhl(lead)).ok, false);
   done();
 
-  steps = [contact, emptyNotes, createNote, addTags];
+  steps = [contact, updateFields, emptyNotes, createNote, addTags];
   assert.equal((await syncLeadToGhl({ ...lead, email: undefined, phone: "+15555550123" })).ok, true);
   done();
+
+  // A location that rejects custom fields must still produce a delivered lead —
+  // the note carries every answer, so this is a degraded write, not a lost one.
+  // Both value spellings are tried before giving up.
+  steps = [contact,
+    { ...updateFields, status: 422 },
+    { ...updateFields, status: 422, inspect: (body) => {
+      const first = (body.customFields as Record<string, unknown>[])[0];
+      assert.equal(first.fieldValue, "test budget", "the retry uses the other value key");
+      assert.equal(first.field_value, undefined);
+    } },
+    emptyNotes, createNote, addTags];
+  const fieldsRejected = await syncLeadToGhl(lead);
+  assert.equal(fieldsRejected.fieldsSynced, false);
+  assert.equal(fieldsRejected.ok, true, "custom fields must never gate lead delivery");
+  done();
+
+  // With no env pins the location is inspected: an existing field is reused by
+  // name, and only a genuinely missing one is created. This is what removes the
+  // per-sub-account setup step that left every mapping resolving to nothing.
+  for (const name of ["GHL_CUSTOM_FIELD_BUDGET", "GHL_CUSTOM_FIELD_SERVICES", "GHL_CUSTOM_FIELD_MESSAGE"]) delete process.env[name];
+  clearFieldMapCache();
+  steps = [contact,
+    { ...listFields, data: { customFields: [
+      { id: "existing-budget", name: "Budget", fieldKey: "contact.budget" },
+      { id: "existing-services", name: "services interested in" },
+      { id: "unrelated", name: "Preferred Contact Time" },
+    ] } },
+    // Only "Message" is absent, so it is the only one created.
+    { path: "/locations/offline-location/customFields", method: "POST", data: { customField: { id: "created-message" } },
+      inspect: (body) => {
+        assert.equal(body.name, "Message");
+        assert.equal(body.model, "contact");
+        assert.equal(body.dataType, "LARGE_TEXT");
+      } },
+    { ...updateFields, inspect: (body) => {
+      assert.deepEqual(body.customFields, [
+        { id: "existing-budget", field_value: "test budget" },
+        { id: "existing-services", field_value: "test service" },
+        { id: "created-message", field_value: "test message" },
+      ]);
+    } },
+    emptyNotes, createNote, addTags];
+  assert.equal((await syncLeadToGhl(lead)).fieldsSynced, true);
+  done(); // Name matching ignores case and the contact. prefix.
+
+  // The resolved map is cached: a second lead re-uses it with no lookup.
+  steps = [contact, updateFields, emptyNotes, createNote, addTags];
+  assert.equal((await syncLeadToGhl(lead)).fieldsSynced, true);
+  done();
+
+  // A location that will not even list its fields degrades to today's behaviour.
+  clearFieldMapCache();
+  steps = [contact, { ...listFields, status: 403 }, emptyNotes, createNote, addTags];
+  const noFieldAccess = await syncLeadToGhl(lead);
+  assert.equal(noFieldAccess.fieldsSynced, false);
+  assert.equal(noFieldAccess.ok, true);
+  done();
+
+  process.env.GHL_CUSTOM_FIELD_BUDGET = "field-budget-id";
+  process.env.GHL_CUSTOM_FIELD_SERVICES = "field-services-id";
+  process.env.GHL_CUSTOM_FIELD_MESSAGE = "field-message-id";
+  clearFieldMapCache();
 
   steps = [{ ...contact, error: true }, { ...contact, error: true }, { ...contact, error: true }];
   assert.equal((await syncLeadToGhl(lead)).ok, false);
@@ -150,7 +223,7 @@ try {
   assert.ok(backfillLogs.some((line) => line.includes("DRY RUN")));
   assert.equal(backfillLogs.some((line) => line.includes("same@example.invalid")), false);
   console.log = realLog;
-  console.log("PASS: 11 offline checks (GHL delivery, preserved tags, note identity, failure/retry behavior, private logs, paginated dry-run backfill).");
+  console.log("PASS: 16 offline checks (GHL delivery, custom-field discovery/creation/caching, fields never gating a lead, preserved tags, note identity, failure/retry behavior, private logs, paginated dry-run backfill).");
 } finally {
   globalThis.fetch = realFetch;
   console.warn = realWarn;

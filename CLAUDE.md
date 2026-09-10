@@ -85,6 +85,30 @@ A conversion + motion pass on top of the AEO/design work. Durable pieces:
 - **Trust numbers reconciled to `500+`** businesses (Google Ads alone is 500+); per-service figures in
   `lib/data/service-stats.ts`, all `[VERIFY-client]`.
 
+## /100-leads paid landing page + landing-lead pipeline (2026-09-10)
+
+The "100 Qualified Leads or our fee is $0" page for Google/Meta ad traffic, ported from Dhaval's standalone Vite
+build (branch `landing-page`, now retired — everything lives in the main app).
+- **Route `app/100-leads/page.tsx`** renders `components/landing/leads-landing.tsx` (client). It is standalone by
+  design: own header/footer, **CSS scoped under `.lp-root`** in `app/100-leads/landing.css` (every selector is
+  prefixed — never add an unscoped rule there), site chrome hidden via `chrome-gate.tsx`, offer popup suppressed
+  (`SUPPRESS_ON`), `robots: noindex` (ad destination; flip if it should rank). Assets live in `public/landing/`.
+  Icons are lucide (`.lp-root .lucide { width:1em }` matches the original Phosphor sizing).
+- **Data `lib/data/landing-100-leads.ts`** — business-type/budget ids (stored verbatim, validated by the same enum
+  server-side), logo + screenshot lists, `LANDING_SOURCE = "landing:100-leads"`.
+- **Action `app/actions/landing-lead.ts` `submitLandingLead`** — same four-layer anti-spam gauntlet + delivery
+  fan-out as `captureLead` (Supabase `leads` → GHL/Zoho → team email → autoresponder → identity stitch), PLUS a
+  structured row in **`landing_page_leads`** (`lib/landing-leads.ts`, DDL in `supabase/landing-leads.sql` — run
+  once). Missing table = soft-fail; the lead is still in `leads`. On success it `redirect()`s to
+  **`/100-leads/thank-you?n=<first>&c=<company>`** (a real URL so GTM can fire ad conversions on it) with Call +
+  WhatsApp buttons from `siteConfig.contact.phoneHref` / `.whatsapp`.
+- **Admin `/admin/landing-leads`** (`components/admin/landing-leads-view.tsx`): search, status filter, CSV, per-row
+  status select → `PATCH /api/admin/landing-leads`. Falls back to `leads.source like 'landing:%'` (read-only) until
+  the table exists. The same leads also show in `/admin/leads` tagged `landing · 100-leads`.
+- The three steps are ONE `<form>`; earlier answers ride as hidden inputs, Enter on step 1 advances instead of
+  submitting. GTM's form-interact script stamps `data-gtm-form-interact-id` before hydration → a harmless dev-only
+  hydration warning on every form, not a bug here.
+
 ## Commands
 
 ```bash
@@ -158,7 +182,27 @@ via `components/sections/estimate-band.tsx`.
   heroes/CTAs), `components/sections/lead-band.tsx` (per-page contact band, page-specific copy), and
   `components/tools/result-gate.tsx` (`ResultGate` blurs the value half of tool results until a lead submits).
 
-### Anti-spam (four layers — every form, not just /contact)
+#### GoHighLevel custom fields (2026-09-09)
+`lib/gohighlevel.ts`. Leads were arriving with only the STANDARD contact fields — name, email, phone,
+companyName, website, source — because **budget, services and message have no standard GHL field**. They
+went into a note only, which is not searchable, filterable, or usable as a workflow condition, so they
+looked lost. The old mapping needed `GHL_CUSTOM_FIELD_*` env ids that were never filled in (and `message`
+had no slot at all), so it silently resolved to nothing.
+- `resolveFieldMap()` now discovers the location's fields by NAME (case- and `contact.`-prefix-insensitive),
+  reuses what exists, and creates only what's missing (`GHL_AUTO_CREATE_FIELDS=false` opts out). Cached 10 min
+  on success, **1 min on failure** so a missing scope costs one lookup a minute, not one per lead, and a
+  scope fix takes effect within a minute. `GHL_CUSTOM_FIELD_*` still wins when set.
+- **Custom fields are written in a separate `PUT /contacts/{id}` AFTER the upsert, never in the upsert body.**
+  The lead must not be lost to a rejected field payload. For the same reason `fieldsSynced` is deliberately
+  NOT part of `result.ok` — the note still carries every answer.
+- The v2 contact schema documents `field_value`; `fieldValue` appears elsewhere and this path had never run
+  against a real location. It sends `field_value` and retries once with `fieldValue` on a 400/422 only.
+- Scopes needed: contacts.write/readonly, notes.write, **locations/customFields.readonly + .write**.
+- Verify in prod at **`/api/admin/crm/check`** (`?provision=1` creates missing fields on demand).
+- `npm run check:ghl` is the contract test (16 offline checks, fetch fully mocked). It asserts the request
+  SEQUENCE, so adding a call means updating every scenario's `steps` array.
+
+## Anti-spam (four layers — every form, not just /contact)
 Inbound form spam was flooding the team inboxes; `captureLead` AND `submitContact` now run the same gauntlet
 **before** any Supabase write or email send. Order matters: nothing spammy may reach
 `sendLeadAutoresponder`, which would otherwise mail a *forged* address from our domain and burn sender
