@@ -59,6 +59,15 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  // Short memorable alias for the paid landing page. Temporary (307) so the
+  // alias can be repointed at a different landing later without browsers
+  // caching the old target.
+  async redirects() {
+    return [
+      { source: "/landing-page", destination: "/100-leads", permanent: false },
+      { source: "/landing-page/:path*", destination: "/100-leads/:path*", permanent: false },
+    ];
+  },
 };
 
 export default nextConfig;
