@@ -14,7 +14,7 @@ import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { CtaBlock } from "@/components/sections/cta-block";
 import { JsonLd } from "@/components/seo/json-ld";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { buildMetadata, breadcrumbSchema, faqSchema } from "@/lib/seo";
 import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 import { team } from "@/lib/data/team";
@@ -67,11 +67,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const authorMember = team.find((m) => m.name === post.author);
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
+    "@id": `${siteConfig.url}/blog/${slug}#article`,
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.dateModified ?? post.date,
     author: authorMember
       ? { "@type": "Person", "@id": `${siteConfig.url}/about#${authorMember.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, name: authorMember.name }
       : { "@type": "Organization", "@id": `${siteConfig.url}/#organization`, name: siteConfig.name },
@@ -81,6 +82,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         ? post.coverImage
         : `${siteConfig.url}${post.coverImage.startsWith("/") ? "" : "/"}${post.coverImage}`
       : `${siteConfig.url}/opengraph-image`,
+    url: `${siteConfig.url}/blog/${slug}`,
+    isPartOf: { "@id": `${siteConfig.url}/#website` },
+    inLanguage: "en-CA",
     mainEntityOfPage: `${siteConfig.url}/blog/${slug}`,
   };
 
@@ -88,6 +92,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <>
       <JsonLd data={articleSchema} />
       <JsonLd data={breadcrumbSchema(crumbs)} />
+      {post.faqs?.length ? <JsonLd data={faqSchema(post.faqs)} /> : null}
       <PageHero eyebrow={post.category} title={post.title} intro={post.description} breadcrumbs={crumbs}>
         <div className="flex items-center gap-4 text-sm text-[var(--color-ink-faint)]">
           <span className="flex items-center gap-1.5"><CalendarDays size={14} /> {new Date(post.date).toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" })}</span>
@@ -204,3 +209,4 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     </>
   );
 }
+
