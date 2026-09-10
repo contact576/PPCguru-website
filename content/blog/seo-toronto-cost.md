@@ -81,7 +81,7 @@ At the time of review, Toronto-area providers publicly showed entry or starter o
 
 That does **not** make the midpoint an average. Public package pages are seller-published examples. They may exclude development, content, digital PR, software, extra locations or onboarding work. A low-looking package can become expensive once the missing work is added. A higher quote can be reasonable when it includes a senior strategist, developers, writers and promotion.
 
-Broader research points in the same direction. Ahrefs surveyed 439 SEO providers and found that monthly retainers were the most common model. It also found material differences between freelancer, consultant and agency fees. That study is global and reports many figures in US dollars, so it should be used as context rather than a Toronto price list. See the [Ahrefs SEO pricing study](https://ahrefs.com/blog/seo-pricing/).
+Broader research points in the same direction. Ahrefs surveyed 439 SEO providers and found that monthly retainers were the most common model. It also found material differences between freelancer, consultant and agency fees. That study is global and reports many figures in US dollars, so it should be used as context rather than a Toronto price list.
 
 ### Toronto SEO packages: what each budget should include
 
@@ -386,7 +386,7 @@ For those reasons, this article uses ranges for planning and labels them accordi
 
 Sources reviewed:
 
-- [Ahrefs: SEO pricing survey](https://ahrefs.com/blog/seo-pricing/)
+- Ahrefs: SEO pricing survey
 - [Google Search Central: tips for hiring an SEO](https://developers.google.com/search/docs/fundamentals/do-i-need-seo)
 - [Google Search Central: AI features and your website](https://developers.google.com/search/docs/appearance/ai-features)
 
