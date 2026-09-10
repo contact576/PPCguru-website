@@ -29,7 +29,9 @@ export const siteConfig = {
     // "+" so iOS/Android dial it without stripping formatting characters.
     phone: "+1 (519) 992-9567",
     phoneHref: "tel:+15199929567",
-    whatsapp: "", // e.g. "https://wa.me/1XXXXXXXXXX" — [VERIFY] real WhatsApp number
+    // Same business line as `phone`, in wa.me form (digits only, country code, no "+").
+    // Rendered on /contact and as the WhatsApp button on /100-leads/thank-you.
+    whatsapp: "https://wa.me/15199929567", // [VERIFY] confirm this line is WhatsApp-enabled
     // Confirmed against the Google Business Profile pin (43.6526967, -79.3767816).
     // These five fields are the NAP address — every printed address and the
     // PostalAddress in schema derive from them, so they can never disagree.

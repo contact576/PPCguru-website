@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, Inbox, Users, UserCheck, Settings, Search, ExternalLink, LogOut, Archive } from "lucide-react";
+import { FileText, Inbox, Target, Users, UserCheck, Settings, Search, ExternalLink, LogOut, Archive } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 import { cn } from "@/lib/utils";
 
 const TABS = [
   { href: "/admin", label: "Blog", icon: FileText },
   { href: "/admin/leads", label: "Leads", icon: Inbox },
+  { href: "/admin/landing-leads", label: "Landing leads", icon: Target },
   { href: "/admin/people", label: "People", icon: UserCheck },
   { href: "/admin/visitors", label: "Visitors", icon: Users },
   { href: "/admin/meta", label: "SEO / Meta", icon: Search },

@@ -10,7 +10,8 @@ import { offerForPath, masterOffer } from "@/lib/data/service-offers";
 // Pages where an auto-popup would cover the primary task — never auto-fire here
 // (an explicit CTA click can still open it via the `ppcg:open-offer` event).
 // `/admin` is included so the CMS is never interrupted by the offer popup.
-const SUPPRESS_ON = ["/contact", "/results", "/tools", "/admin"];
+// `/100-leads` is a paid landing page with its own funnel — a second offer would compete with it.
+const SUPPRESS_ON = ["/contact", "/results", "/tools", "/admin", "/100-leads"];
 const K_DONE = "ppcg_offer_done";
 // Suppression is SESSION-scoped: once shown/dismissed it stays quiet for the rest
 // of this visit, but a returning visitor on a new session sees the offer again.
