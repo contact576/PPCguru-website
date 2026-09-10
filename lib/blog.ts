@@ -25,18 +25,33 @@ export type PostMeta = {
   seoTitle?: string | null;
   description: string;
   date: string;
+  dateModified?: string | null;
   publishAt?: string | null;
   category: string;
   author: string;
   readingTime: string;
   coverImage?: string | null;
+  faqs?: PostFaq[];
 };
+
+export type PostFaq = { q: string; a: string };
 
 export type Post = PostMeta & { content: string };
 
 function readingTimeFor(content: string) {
   const words = content.trim().split(/\s+/).filter(Boolean).length;
   return `${Math.max(1, Math.round(words / 200))} min read`;
+}
+
+function normalizeFaqs(value: unknown): PostFaq[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const faqs = value.flatMap((entry) => {
+    if (!entry || typeof entry !== "object") return [];
+    const q = "q" in entry && typeof entry.q === "string" ? entry.q.trim() : "";
+    const a = "a" in entry && typeof entry.a === "string" ? entry.a.trim() : "";
+    return q && a ? [{ q, a }] : [];
+  });
+  return faqs.length ? faqs : undefined;
 }
 
 /* ── markdown (fallback) ─────────────────────────────────────────────────── */
@@ -50,11 +65,13 @@ function fileToPost(file: string): Post & { draft: boolean } {
     seoTitle: data.seoTitle ?? null,
     description: data.description ?? "",
     date: data.date ?? "2026-01-01",
+    dateModified: data.dateModified ?? data.date ?? "2026-01-01",
     publishAt: data.publishAt ?? null,
     category: data.category ?? "Marketing",
     author: data.author ?? "PPC Guru",
     readingTime: readingTimeFor(content),
     coverImage: data.coverImage ?? null,
+    faqs: normalizeFaqs(data.faqs),
     draft: data.draft === true,
     content,
   };
@@ -83,11 +100,13 @@ function dbToPost(p: DbPost): Post {
     seoTitle: p.seo_title ?? null,
     description: p.description ?? "",
     date: (p.published_at ?? p.created_at).slice(0, 10),
+    dateModified: (p.updated_at ?? p.published_at ?? p.created_at).slice(0, 10),
     publishAt: p.published_at ?? p.created_at,
     category: p.category ?? "Marketing",
     author: p.author ?? "PPC Guru",
     readingTime: readingTimeFor(p.content ?? ""),
     coverImage: p.cover_image,
+    faqs: undefined,
     content: p.content ?? "",
   };
 }
@@ -137,3 +156,4 @@ export async function getPost(slug: string): Promise<Post | null> {
 export async function getAllPostSlugs(): Promise<string[]> {
   return (await allPosts()).map((p) => p.slug);
 }
+
