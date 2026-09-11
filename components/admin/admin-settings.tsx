@@ -6,6 +6,7 @@ import { ArrowLeft, Loader2, Check, LogOut, Search } from "lucide-react";
 import { Logo } from "@/components/shared/logo";
 import type { CmsSettings } from "@/lib/settings";
 import type { IntegrationStatus } from "@/lib/system-status";
+import { EmailHealthPanel } from "@/components/admin/email-health";
 
 export function AdminSettings({
   settings,
@@ -136,6 +137,8 @@ export function AdminSettings({
             )}
           </div>
         </section>
+
+        <EmailHealthPanel />
 
         {/* ── Integration status ─────────────────────────────────────────── */}
         <section className="mt-8 rounded-[20px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8">

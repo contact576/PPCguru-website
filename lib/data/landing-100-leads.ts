@@ -133,3 +133,55 @@ export function logoLabel(filename: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+/** Header buttons shared by every landing page (ports to the main site's service pages). */
+export const LANDING_HEADER_LINKS = [
+  { label: "Google Ads", href: "/services/google-ads", brand: "google" },
+  { label: "Meta Ads", href: "/services/meta-ads", brand: "meta" },
+] as const;
+
+export type LogoIndustry = { id: string; label: string; logos: string[] };
+
+/**
+ * The client logos grouped by the industry / category each business is in, so
+ * the logo wall can show WHO we work with AND in which vertical (a visitor in
+ * construction looks for construction names, not pizza chains). Every file in
+ * `clientLogos` appears exactly once.
+ */
+export const logoIndustries: LogoIndustry[] = [
+  {
+    id: "hospitality",
+    label: "Restaurants, franchises & hospitality",
+    logos: ["boston-pizza.svg", "pizza-pizza.png", "little-caesars.svg", "mary-brown-s.svg", "pizza-nova.svg", "ginos-pizza.svg", "wing-machine.png", "cora-breakfast-lunch.webp", "marriott.svg", "best-western.svg", "choice-hotels.svg", "apna-tiffin-service.jpg", "bombay-chaat-saskatoon.png"],
+  },
+  {
+    id: "construction",
+    label: "Construction, renovation & trades",
+    logos: ["gcad-construction.png", "mdi-reno-and-construction-ltd.png", "mc-concrete-cutting-mc-construction.png", "project-pioneer-construction.jpg", "norths-construction.jpg", "vin-engineering-inc.png", "rj-cad-solutions-inc.png", "lavish-artigiano-inc.webp"],
+  },
+  {
+    id: "home-services",
+    label: "Home, comfort & auto services",
+    logos: ["ecocare-home-comfort.png", "a2z-comfort.png", "jk-appliance-repair-inc.webp", "apexshine-cleaning-inc.png", "gnc-facility-services.jpg", "acure-security-solutions.jpg", "mr-lube.png"],
+  },
+  {
+    id: "healthcare",
+    label: "Clinics, health & wellness",
+    logos: ["true-life-wellness-and-physiotherapy.png", "blockline-physiotherapy-wellness.png", "rehab2go.png", "rehab-clinic.png", "therapy-villa.png", "palmdale-health-center.png", "north-york-healthcare-associates.webp", "three-sisters-pharmacy.png", "upwell-homecare-inc-qualicare-peel.webp"],
+  },
+  {
+    id: "real-estate",
+    label: "Real estate & brokerages",
+    logos: ["re-max-canada.png", "century-21-canada.png", "royal-lepage-platinum-realty-brokerage.svg", "loyalty-real-estate-brokerage.webp", "one-percent-sold.png", "sold-by-kaushik-real-estate.svg", "xceed-homes.png"],
+  },
+  {
+    id: "professional",
+    label: "Immigration, finance & professional services",
+    logos: ["westway-immigration.png", "bindra-world-immigration-terminal-inc.jpg", "mina-yousefi-immigration-service-myis.jpg", "dave-financial-services-inc.webp", "global-financial-impact.svg", "ace-equity.png", "the-ups-store-604.svg", "xpertech.png", "btdt-beentheredonethat.webp", "millennial-events.webp"],
+  },
+  {
+    id: "education-retail",
+    label: "Education & retail",
+    logos: ["oxford-learning.svg", "scholars-ed.svg", "civia-jewels.svg"],
+  },
+];

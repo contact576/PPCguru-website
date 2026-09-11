@@ -38,7 +38,7 @@ export function SiteFooter() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1fr_1.1fr]">
           <div>
             <div style={{ marginBottom: 16 }}>
-              <Logo variant="light" size={44} />
+              <Logo variant="light" size={60} />
             </div>
             <p style={{ fontSize: 13.5, color: "#75766a", lineHeight: 1.6, maxWidth: 320 }}>
               A Google Partner &amp; Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA.
@@ -49,7 +49,7 @@ export function SiteFooter() {
                   can be verified at source (same link as the hero badge). */}
               <a href={GOOGLE_PARTNER_URL} target="_blank" rel="noopener noreferrer nofollow" aria-label="Google Partner — view our profile on Google Partners" style={{ display: "inline-flex", borderRadius: 10 }} className="transition-opacity hover:opacity-80">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/badges/google-partner.svg" alt="Google Partner" width={224} height={56} style={{ height: 38, width: "auto" }} />
+                <img src="/badges/google-partner-official.svg" alt="Google Partner" width={56} height={54} style={{ height: 52, width: "auto" }} />
               </a>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" width={252} height={56} style={{ height: 38, width: "auto" }} />

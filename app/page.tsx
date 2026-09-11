@@ -10,10 +10,11 @@ import {
   comparisonRows, rptDeliverables, rptKpis, homeCases, homeIndustries,
   homePricing,
 } from "@/lib/data/home";
-import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { GoogleReviews } from "@/components/home/google-reviews";
 import { ToolsOs } from "@/components/home/tools-os";
 import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
+import { CertificationsStrip, GoogleReviewsBlock } from "@/components/landing/trust";
+import { GOOGLE_PARTNER_BADGE } from "@/lib/data/certifications";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { HeroOffer } from "@/components/shared/hero-offer";
 import { performanceStats } from "@/lib/data/performance-stats";
@@ -116,7 +117,7 @@ export default function HomePage() {
               {/* Clickable → public Google Partners profile (same link everywhere the badge appears). */}
               <a href={GOOGLE_PARTNER_URL} target="_blank" rel="noopener noreferrer nofollow" aria-label="Google Partner — view our profile on Google Partners" className="transition-opacity hover:opacity-80" style={{ display: "inline-flex", flexShrink: 0, borderRadius: 10 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/badges/google-partner.svg" alt="Google Partner" width={224} height={56} style={{ height: 40, width: "auto", flexShrink: 0 }} />
+                <img src={GOOGLE_PARTNER_BADGE} alt="Google Partner" width={56} height={54} style={{ height: 54, width: "auto", flexShrink: 0 }} />
               </a>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" width={252} height={56} style={{ height: 40, width: "auto", flexShrink: 0 }} />
@@ -133,6 +134,9 @@ export default function HomePage() {
           <div data-reveal className="flex flex-col items-center gap-6">
             <ReviewRating />
             <AwardsStrip />
+            <div className="lp-root lp-inline" style={{ background: "transparent", width: "100%" }}>
+              <CertificationsStrip />
+            </div>
           </div>
         </div>
       </section>
@@ -476,7 +480,7 @@ export default function HomePage() {
             <Eyebrow>In their words</Eyebrow>
             <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What our clients <Em>actually say</Em></h2>
           </div>
-          <GoogleReviews fallback={<TestimonialCarousel />} />
+          <GoogleReviews fallback={<div className="lp-root lp-inline" style={{ background: "transparent" }}><GoogleReviewsBlock limit={6} heading={false} /></div>} />
         </div>
       </section>
 

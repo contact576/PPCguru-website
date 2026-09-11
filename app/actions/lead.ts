@@ -1,10 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLeadReturning, hasSupabase } from "@/lib/supabase";
-import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
-import { sendLeadToGhl, ghlConfigured } from "@/lib/gohighlevel";
+import { deliverLead } from "@/lib/lead-delivery";
 import { identifyVisitor } from "@/lib/identity";
 import { verifyTurnstile, turnstileConfigured } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
@@ -148,16 +146,11 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
   if (hasSupabase() && !leadId) {
     return { ok: false, message: "We couldn't save your request right now. Please try again shortly." };
   }
-  // Activating GoHighLevel replaces Zoho delivery. Until its credentials are
-  // configured, retain the existing Zoho path for a staged cutover.
-  const crmed = ghlConfigured()
-    ? await sendLeadToGhl({ ...record, submissionId: leadId ?? undefined, createdAt: new Date().toISOString() })
-    : await sendLeadToZoho(record);
-  const stored = leadId !== null;
 
   // They just told us who they are. Claim their anonymous history (this device
   // and any other device that used this email), and set the recognition cookie
   // so future visits arrive already identified. Best-effort — never throws.
+  // Stays in the request (it sets a cookie); everything below can run after.
   await identifyVisitor({
     sessionId: data.session_id,
     leadId,
@@ -165,38 +158,30 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
     name: data.name,
   });
 
-  const to = leadRecipients();
-  // Team notification (SMTP → Resend fallback; best-effort, never throws).
-  const emailed = await sendMail({
-    to,
-    replyTo: data.email,
-    subject: `New lead (${data.source || "site"}) — ${data.name} (${data.company})`,
-    text: [
-      `Source: ${data.source || "—"}`,
-      `Name: ${data.name}`,
-      `Business: ${data.company}`,
-      `Email: ${data.email}`,
-      `Phone: ${data.phone}`,
-      `Website: ${data.website || "—"}`,
-      `Services: ${servicesText}`,
-      `Budget: ${data.budget}`,
-      data.detail ? `\n${data.detail}` : "",
-    ].join("\n"),
+  // CRM + team notification + autoresponder — in parallel, and AFTER the
+  // response once the row is safe in Supabase (see lib/lead-delivery.ts).
+  const delivery = await deliverLead({
+    record,
+    leadId,
+    lead: { name: data.name, email: data.email },
+    notification: {
+      replyTo: data.email,
+      subject: `New lead (${data.source || "site"}) — ${data.name} (${data.company})`,
+      text: [
+        `Source: ${data.source || "—"}`,
+        `Name: ${data.name}`,
+        `Business: ${data.company}`,
+        `Email: ${data.email}`,
+        `Phone: ${data.phone}`,
+        `Website: ${data.website || "—"}`,
+        `Services: ${servicesText}`,
+        `Budget: ${data.budget}`,
+        data.detail ? `\n${data.detail}` : "",
+      ].join("\n"),
+    },
   });
-
-  // Fire the branded welcome/autoresponder TO the lead (best-effort, never throws).
-  await sendLeadAutoresponder({ name: data.name, email: data.email });
-
-  // A delivery channel is "configured" if it has keys. If at least one channel is
-  // configured but nothing actually got through (no email AND no DB row), the lead
-  // would be silently lost — surface an error so the visitor can reach us another way.
-  const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured() || ghlConfigured();
-  const anyDelivered = emailed || stored || crmed;
-  if (anyConfigured && !anyDelivered) {
+  if (!delivery.ok) {
     return { ok: false, message: "We couldn't submit that right now. Please email us directly." };
-  }
-  if (!anyDelivered) {
-    console.info("[lead] (no RESEND_API_KEY / no Supabase / no Zoho / no GHL) capture:", data);
   }
 
   return { ok: true, message: "Thanks — your report is unlocked and we'll be in touch shortly." };

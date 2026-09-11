@@ -9,7 +9,8 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Landing page leads", robots: { index: false, follow: false } };
 
 /**
- * /admin/landing-leads — every submission from the /100-leads funnel with the
+ * /admin/landing-leads — every submission from the /100-leads and
+ * /seo-visibility funnels with the
  * landing-specific answers (service area, business type, budget tier,
  * attribution) and a follow-up status. The same leads also appear in
  * /admin/leads (the canonical mirror) tagged `landing · 100-leads`.

@@ -102,7 +102,7 @@ export function SiteHeader() {
       }}
     >
       <div style={{ maxWidth: 1480, margin: "0 auto", padding: "0 20px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
-        <Logo href="/" variant="dark" size={38} />
+        <Logo href="/" variant="dark" size={54} />
 
         {/* Desktop nav */}
         <nav className="mono hidden lg:flex" aria-label="Primary" style={{ alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase" }}>
@@ -196,7 +196,7 @@ export function SiteHeader() {
         <div style={{ position: "fixed", inset: 0, height: "100dvh", zIndex: 90, background: "rgba(10,12,7,.6)", backdropFilter: "blur(4px)" }} onClick={() => setOpen(false)}>
           <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "min(92vw,380px)", height: "100dvh", background: "#f1efe3", borderLeft: "1px solid #dddbc9", padding: "22px 20px", display: "flex", flexDirection: "column", gap: 2, overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-              <Logo variant="dark" size={36} />
+              <Logo variant="dark" size={46} />
               <button onClick={() => setOpen(false)} aria-label="Close menu" style={{ border: "1px solid #c4c2b0", background: "transparent", width: 44, height: 44, borderRadius: 12, fontSize: 17, cursor: "pointer", color: "#14170e" }}>✕</button>
             </div>
 

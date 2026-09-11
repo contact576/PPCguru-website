@@ -30,6 +30,9 @@ export type LandingLeadInput = {
   location?: string;
   businessType?: string;
   budget?: string;
+  /** Landing-specific extra answers (e.g. SEO page: website, target search, goal). */
+  website?: string;
+  answers?: Record<string, string> | null;
   utm?: Record<string, string> | null;
 };
 
@@ -44,6 +47,8 @@ export type LandingLeadRow = {
   location: string | null;
   business_type: string | null;
   budget: string | null;
+  website: string | null;
+  answers: Record<string, string> | null;
   utm: Record<string, string> | null;
   status: LandingLeadStatus;
   created_at: string;
@@ -74,6 +79,8 @@ export async function saveLandingLead(input: LandingLeadInput): Promise<string |
         location: input.location || null,
         business_type: input.businessType || null,
         budget: input.budget || null,
+        website: input.website || null,
+        answers: input.answers && Object.keys(input.answers).length ? input.answers : null,
         utm: input.utm && Object.keys(input.utm).length ? input.utm : null,
       })
       .select("id")
@@ -138,6 +145,8 @@ export async function getLandingLeads(limit = 500): Promise<LandingLeadsResult> 
         location: pick("Location"),
         business_type: pick("Business type"),
         budget: pick("Budget") ?? ((r.budget as string) ?? null),
+        website: (r.website as string) || null,
+        answers: null,
         utm: null,
         status: "new" as const,
         created_at: String(r.created_at),

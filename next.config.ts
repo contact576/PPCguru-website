@@ -66,6 +66,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/landing-page", destination: "/100-leads", permanent: false },
       { source: "/landing-page/:path*", destination: "/100-leads/:path*", permanent: false },
+      { source: "/seo-landing-page", destination: "/seo-visibility", permanent: false },
+      { source: "/seo-landing-page/:path*", destination: "/seo-visibility/:path*", permanent: false },
     ];
   },
 };

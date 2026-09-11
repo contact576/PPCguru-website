@@ -26,14 +26,14 @@ import { submitLandingLead, type LandingLeadState } from "@/app/actions/landing-
 import { TurnstileField } from "@/components/shared/turnstile-field";
 import { SessionField } from "@/components/shared/session-field";
 import { track } from "@/lib/analytics";
-import {
-  BUSINESS_TYPES,
-  LANDING_BUDGETS,
-  LANDING_SOURCE,
-  campaignResults,
-  clientLogos,
-  logoLabel,
-} from "@/lib/data/landing-100-leads";
+import { BUSINESS_TYPES, LANDING_BUDGETS, LANDING_SOURCE, campaignResults } from "@/lib/data/landing-100-leads";
+import { GOOGLE_PARTNER_BADGE, GOOGLE_PARTNER_PROFILE_URL } from "@/lib/data/certifications";
+import { LandingHeader, LandingFooter } from "@/components/landing/landing-chrome";
+import { IndustryLogoWall, TrustSection } from "@/components/landing/trust";
+
+// Header/footer moved to landing-chrome.tsx (shared with /seo-visibility);
+// re-exported so existing imports keep working.
+export { LandingHeader, LandingFooter };
 
 /**
  * "100 Qualified Leads" paid-traffic landing page — ported from the standalone
@@ -317,34 +317,6 @@ function QualificationForm() {
   );
 }
 
-function LogoMarquee() {
-  const repeated = [...clientLogos, ...clientLogos];
-  return (
-    <section className="logo-proof" aria-labelledby="logos-title">
-      <div className="logo-proof-heading">
-        <p id="logos-title">
-          <strong>Trusted across 200+ businesses</strong>
-          <span>A selection of client brands, franchises and national names.</span>
-        </p>
-        <div className="proof-rating">
-          <BadgeCheck aria-hidden="true" />
-          <span>Real PPC Guru clients</span>
-        </div>
-      </div>
-      <div className="logo-viewport" aria-label="PPC Guru client logo carousel">
-        <div className="logo-track">
-          {repeated.map((file, index) => (
-            <figure className="logo-item" key={`${file}-${index}`} aria-hidden={index >= clientLogos.length}>
-              {/* eslint-disable-next-line @next/next/no-img-element -- 57 tiny mixed-format logos; next/image adds nothing here */}
-              <img src={`${LOGOS}/${file}`} alt={index < clientLogos.length ? logoLabel(file) : ""} loading="lazy" />
-            </figure>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function ResultsCarousel() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -597,45 +569,6 @@ function QualitySection() {
   );
 }
 
-/** `ctaHref`: on pages without the form (thank-you) the header CTA navigates back to the offer instead of scrolling. */
-export function LandingHeader({ ctaHref }: { ctaHref?: string } = {}) {
-  return (
-    <header className="site-header">
-      <a className="brand" href="#top" aria-label="PPC Guru home">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={`${LOGOS}/ppc-guru.png`} alt="PPC Guru" />
-      </a>
-      <div className="header-actions">
-        <span>Google Ads + Meta Ads</span>
-        {ctaHref ? (
-          <Link href={ctaHref}>
-            Get my lead plan <ArrowRight aria-hidden="true" />
-          </Link>
-        ) : (
-          <button type="button" onClick={scrollToForm}>
-            Get my lead plan <ArrowRight aria-hidden="true" />
-          </button>
-        )}
-      </div>
-    </header>
-  );
-}
-
-export function LandingFooter() {
-  return (
-    <footer className="site-footer">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={`${LOGOS}/ppc-guru.png`} alt="PPC Guru" />
-      <p>Performance advertising for local service businesses.</p>
-      <div>
-        <Link href="/privacy">Privacy</Link>
-        <Link href="/terms">Terms</Link>
-        <span>© {new Date().getFullYear()} PPC Guru</span>
-      </div>
-    </footer>
-  );
-}
-
 export function LeadsLanding() {
   return (
     <div className="lp-root">
@@ -678,6 +611,20 @@ export function LeadsLanding() {
                       <strong>$0</strong> management if missed
                     </span>
                   </div>
+                  <a
+                    className="hero-partner-badge"
+                    href={GOOGLE_PARTNER_PROFILE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    aria-label="Google Partner — view PPC Guru's profile on Google Partners"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={GOOGLE_PARTNER_BADGE} alt="Google Partner" width={56} height={54} />
+                    <span>
+                      <strong>Google Partner</strong>
+                      <small>Verified profile</small>
+                    </span>
+                  </a>
                   <button type="button" onClick={scrollToResults}>
                     See real results <ArrowRight aria-hidden="true" />
                   </button>
@@ -687,9 +634,10 @@ export function LeadsLanding() {
             </section>
           </div>
         </div>
-        <LogoMarquee />
+        <IndustryLogoWall />
         <ResultsCarousel />
         <QualitySection />
+        <TrustSection />
         <section className="final-cta" aria-labelledby="final-cta-title">
           <div>
             <p className="section-kicker">A 60-second fit check</p>

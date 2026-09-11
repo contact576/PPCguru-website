@@ -28,7 +28,9 @@ export type ReviewSource = {
 
 // [VERIFY-client] Fill rating + count from the REAL profiles, then set verified: true.
 export const reviewSources: ReviewSource[] = [
-  { key: "google", label: "Google", rating: null, count: null, url: "", verified: false },
+  // Real figures read from the PPC Guru Google Business Profile on 2026-09-12
+  // (48 five-star + 1 four-star). See lib/data/google-reviews.ts for the quotes.
+  { key: "google", label: "Google", rating: 5.0, count: 49, url: "https://www.google.com/maps/search/?api=1&query=PPC%20Guru&query_place_id=ChIJlfQi4wjL1IkRTPpkOAwOs80", verified: true },
   { key: "clutch", label: "Clutch", rating: null, count: null, url: "https://clutch.co/profile/ppc-guru", verified: false },
   { key: "trustpilot", label: "Trustpilot", rating: null, count: null, url: "https://www.trustpilot.com/review/ppcguru.ca", verified: false },
   { key: "g2", label: "G2", rating: null, count: null, url: "https://www.g2.com/products/ppc-guru", verified: false },

@@ -1,10 +1,8 @@
 "use server";
 
 import { z } from "zod";
-import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLeadReturning, hasSupabase } from "@/lib/supabase";
-import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
-import { sendLeadToGhl, ghlConfigured } from "@/lib/gohighlevel";
+import { deliverLead } from "@/lib/lead-delivery";
 import { identifyVisitor } from "@/lib/identity";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
@@ -117,11 +115,6 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   if (hasSupabase() && !leadId) {
     return { ok: false, message: "We couldn't save your request right now. Please try again shortly." };
   }
-  // GoHighLevel replaces Zoho once configured; keep Zoho active until cutover.
-  const crmed = ghlConfigured()
-    ? await sendLeadToGhl({ ...record, submissionId: leadId ?? undefined, createdAt: new Date().toISOString() })
-    : await sendLeadToZoho(record);
-  const stored = leadId !== null;
 
   // Retro-stitch their anonymous browsing to this identity + set the
   // recognition cookie. See lib/identity.ts. Best-effort — never throws.
@@ -132,39 +125,30 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
     name: data.name,
   });
 
-  // Team notification (SMTP → Resend fallback; best-effort, never throws).
-  const to = leadRecipients();
-  const emailed = await sendMail({
-    to,
-    replyTo: data.email,
-    subject: `New audit request from ${data.name}${data.company ? ` (${data.company})` : ""}`,
-    text: [
-      `Name: ${data.name}`,
-      `Email: ${data.email}`,
-      `Phone: ${data.phone || "—"}`,
-      `Company: ${data.company || "—"}`,
-      `Website: ${data.site_url || "—"}`,
-      `Budget: ${data.budget}`,
-      `Interested in: ${servicesText}`,
-      "",
-      data.message,
-    ].join("\n"),
+  // CRM + team notification + autoresponder — parallel, and deferred past the
+  // response once the row is stored (lib/lead-delivery.ts).
+  const delivery = await deliverLead({
+    record,
+    leadId,
+    lead: { name: data.name, email: data.email },
+    notification: {
+      replyTo: data.email,
+      subject: `New audit request from ${data.name}${data.company ? ` (${data.company})` : ""}`,
+      text: [
+        `Name: ${data.name}`,
+        `Email: ${data.email}`,
+        `Phone: ${data.phone || "—"}`,
+        `Company: ${data.company || "—"}`,
+        `Website: ${data.site_url || "—"}`,
+        `Budget: ${data.budget}`,
+        `Interested in: ${servicesText}`,
+        "",
+        data.message,
+      ].join("\n"),
+    },
   });
-
-  // Fire the branded welcome/autoresponder TO the person who submitted (best-effort).
-  await sendLeadAutoresponder({ name: data.name, email: data.email });
-
-  // If a delivery channel is configured but nothing got through, don't pretend it worked.
-  const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured() || ghlConfigured();
-  const anyDelivered = emailed || stored || crmed;
-  if (anyConfigured && !anyDelivered) {
+  if (!delivery.ok) {
     return { ok: false, message: "We couldn't send your message right now. Please email us directly." };
-  }
-  if (!anyDelivered) {
-    console.info("[contact] (no RESEND_API_KEY / no Supabase / no Zoho / no GHL) submission:", {
-      ...data,
-      turnstileToken: undefined,
-    });
   }
 
   return { ok: true, message: "Thanks — we've received your request and will be in touch within one business day." };

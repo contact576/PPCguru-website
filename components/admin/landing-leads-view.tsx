@@ -4,6 +4,40 @@ import { useMemo, useState } from "react";
 import { Search, Download, Inbox, AlertTriangle, ExternalLink } from "lucide-react";
 import { LANDING_LEAD_STATUSES, type LandingLeadRow, type LandingLeadStatus } from "@/lib/landing-leads";
 import { budgetLabel, businessTypeLabel, LANDING_PATH } from "@/lib/data/landing-100-leads";
+import { SEO_LANDING_PATH, SEO_LANDING_ID, seoGoalLabel, seoInvestmentLabel } from "@/lib/data/landing-seo";
+
+/** Per-landing rendering of the qualification answers (100-leads vs SEO). */
+function marketCell(r: LandingLeadRow) {
+  if (r.landing === SEO_LANDING_ID) {
+    const a = r.answers ?? {};
+    return (
+      <>
+        {a.search || r.location || "—"}
+        <span className="block text-xs text-[var(--color-ink-faint)]">
+          {seoGoalLabel(a.goal)}
+          {r.website ? ` · ${r.website}` : ""}
+        </span>
+      </>
+    );
+  }
+  return (
+    <>
+      {r.location || "—"}
+      <span className="block text-xs text-[var(--color-ink-faint)]">{businessTypeLabel(r.business_type)}</span>
+    </>
+  );
+}
+function budgetCell(r: LandingLeadRow) {
+  return r.landing === SEO_LANDING_ID ? seoInvestmentLabel(r.budget) : budgetLabel(r.budget);
+}
+function landingChip(landing: string) {
+  const seo = landing === SEO_LANDING_ID;
+  return (
+    <span className={`mono mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[.05em] ${seo ? "bg-[#e6f0ff] text-[#1f4b99]" : "bg-[#eef2dd] text-[#4f5f14]"}`}>
+      {seo ? "SEO visibility" : "100 leads"}
+    </span>
+  );
+}
 
 function fmt(ts: string) {
   const d = new Date(ts);
@@ -47,15 +81,16 @@ function attributionLabel(utm: Record<string, string> | null) {
 }
 
 function toCsv(rows: LandingLeadRow[]) {
-  const cols = ["created_at", "status", "name", "company", "email", "phone", "location", "business_type", "budget", "utm_source", "utm_medium", "utm_campaign", "gclid", "fbclid", "landing", "lead_id"];
+  const cols = ["created_at", "status", "landing", "name", "company", "email", "phone", "website", "location", "business_type", "budget", "answers", "utm_source", "utm_medium", "utm_campaign", "gclid", "fbclid", "lead_id"];
   const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const lines = [
     cols.join(","),
     ...rows.map((r) =>
       cols
         .map((c) => {
-          if (c === "business_type") return esc(businessTypeLabel(r.business_type));
-          if (c === "budget") return esc(budgetLabel(r.budget));
+          if (c === "business_type") return esc(r.landing === SEO_LANDING_ID ? "" : businessTypeLabel(r.business_type));
+          if (c === "budget") return esc(budgetCell(r));
+          if (c === "answers") return esc(Object.entries(r.answers ?? {}).map(([k, v]) => `${k}=${v}`).join("; "));
           if (c.startsWith("utm_") || c === "gclid" || c === "fbclid") return esc(r.utm?.[c]);
           return esc((r as unknown as Record<string, unknown>)[c]);
         })
@@ -83,7 +118,7 @@ export function LandingLeadsView({ rows: initialRows, fallback }: { rows: Landin
     return rows.filter((r) => {
       if (statusFilter !== "all" && r.status !== statusFilter) return false;
       if (!s) return true;
-      return [r.name, r.email, r.phone, r.company, r.location, businessTypeLabel(r.business_type), budgetLabel(r.budget), attributionLabel(r.utm)]
+      return [r.name, r.email, r.phone, r.company, r.location, r.website, r.landing, ...Object.values(r.answers ?? {}), businessTypeLabel(r.business_type), budgetCell(r), attributionLabel(r.utm)]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
@@ -135,9 +170,13 @@ export function LandingLeadsView({ rows: initialRows, fallback }: { rows: Landin
         <div>
           <h1 className="text-2xl font-bold text-[var(--color-ink)]">Landing page leads</h1>
           <p className="mt-1 text-sm text-[var(--color-ink-dim)]">
-            Every "100 qualified leads" application from{" "}
+            Every application from{" "}
             <a href={LANDING_PATH} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 underline decoration-dotted">
               {LANDING_PATH} <ExternalLink size={12} />
+            </a>{" "}
+            and{" "}
+            <a href={SEO_LANDING_PATH} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 underline decoration-dotted">
+              {SEO_LANDING_PATH} <ExternalLink size={12} />
             </a>{" "}
             — newest first. <strong>{rows.length}</strong> total · <strong>{today}</strong> today · <strong>{week}</strong> this week.
           </p>
@@ -200,8 +239,8 @@ export function LandingLeadsView({ rows: initialRows, fallback }: { rows: Landin
                 <th className="px-4 py-3 font-semibold">When</th>
                 <th className="px-4 py-3 font-semibold">Name / Business</th>
                 <th className="px-4 py-3 font-semibold">Contact</th>
-                <th className="px-4 py-3 font-semibold">Market</th>
-                <th className="px-4 py-3 font-semibold">Ad budget / mo</th>
+                <th className="px-4 py-3 font-semibold">Market / target</th>
+                <th className="px-4 py-3 font-semibold">Budget / mo</th>
                 <th className="px-4 py-3 font-semibold">Campaign</th>
                 <th className="px-4 py-3 font-semibold">Status</th>
               </tr>
@@ -216,6 +255,7 @@ export function LandingLeadsView({ rows: initialRows, fallback }: { rows: Landin
                     <td className="px-4 py-3 font-medium text-[var(--color-ink)]">
                       {r.name || "—"}
                       {r.company ? <span className="block text-xs font-normal text-[var(--color-ink-faint)]">{r.company}</span> : null}
+                      {landingChip(r.landing)}
                     </td>
                     <td className="px-4 py-3">
                       {r.email ? (
@@ -237,11 +277,8 @@ export function LandingLeadsView({ rows: initialRows, fallback }: { rows: Landin
                       ) : null}
                       {!r.email && !r.phone ? "—" : null}
                     </td>
-                    <td className="px-4 py-3 text-[var(--color-ink-dim)]">
-                      {r.location || "—"}
-                      <span className="block text-xs text-[var(--color-ink-faint)]">{businessTypeLabel(r.business_type)}</span>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-[var(--color-ink-dim)]">{budgetLabel(r.budget)}</td>
+                    <td className="px-4 py-3 text-[var(--color-ink-dim)]">{marketCell(r)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-[var(--color-ink-dim)]">{budgetCell(r)}</td>
                     <td className="max-w-[220px] px-4 py-3 text-xs text-[var(--color-ink-dim)]">{attr || <span className="text-[var(--color-ink-faint)]">direct / unknown</span>}</td>
                     <td className="px-4 py-3">
                       <select

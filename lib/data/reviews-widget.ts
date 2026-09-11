@@ -37,5 +37,6 @@ export const googleProfile = {
   url: "https://share.google/k2TGOZVdGt9YN3uHO",
   // Shown in the header badge. Update to your real figures when known.
   rating: 5.0,
-  count: null as number | null,
+  // Read from the listing 2026-09-12 (lib/data/google-reviews.ts).
+  count: 49 as number | null,
 };

@@ -27,10 +27,16 @@ export function getIntegrationStatus(): IntegrationStatus[] {
       detail: "Blog CMS + lead storage. Needs URL + service-role key.",
     },
     {
+      key: "smtp",
+      label: "Hostinger SMTP",
+      configured: Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS),
+      detail: "Primary channel for form notifications + autoresponders. Keys present ≠ delivery — see Email delivery above.",
+    },
+    {
       key: "resend",
       label: "Resend",
       configured: Boolean(process.env.RESEND_API_KEY),
-      detail: "Transactional email for form submissions.",
+      detail: "Fallback email channel. Only delivers once ppcguru.ca is verified in the Resend dashboard.",
     },
     {
       key: "zoho",

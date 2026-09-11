@@ -26,6 +26,11 @@ create table if not exists public.landing_page_leads (
   created_at    timestamptz not null default now()
 );
 
+-- Added 2026-09-12 for the /seo-visibility landing page (website + free-form
+-- answers such as the target search and goal). Safe to re-run.
+alter table public.landing_page_leads add column if not exists website text;
+alter table public.landing_page_leads add column if not exists answers jsonb;
+
 create index if not exists landing_page_leads_created_idx on public.landing_page_leads (created_at desc);
 create index if not exists landing_page_leads_status_idx  on public.landing_page_leads (status);
 
