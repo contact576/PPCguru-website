@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "logos:optimize": "node scripts/optimize-logos.mjs",
     "check:spam": "node --experimental-strip-types scripts/spam-filter-check.mts",
     "blog:check": "node --experimental-strip-types scripts/check-blog.mts",
     "crm:token": "node --env-file=.env.local --experimental-strip-types scripts/zoho-token.mts",
