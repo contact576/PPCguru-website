@@ -14,6 +14,7 @@ import { GoogleReviews } from "@/components/home/google-reviews";
 import { ToolsOs } from "@/components/home/tools-os";
 import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
 import { GoogleReviewsBlock } from "@/components/landing/trust";
+import { ClientLogoRow } from "@/components/home/client-logo-row";
 import { GOOGLE_PARTNER_BADGE } from "@/lib/data/certifications";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { HeroOffer } from "@/components/shared/hero-offer";
@@ -137,6 +138,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── CLIENTS: one moving row of every client logo + who they are ────── */}
+      <ClientLogoRow />
 
       {/* ── LIME TICKER ────────────────────────────────────────────────────── */}
       <div style={{ background: lime, color: ink, overflow: "hidden", padding: "16px 0", borderBottom: "1px solid #b6e62a" }}>

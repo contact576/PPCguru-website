@@ -134,6 +134,50 @@ export function logoLabel(filename: string): string {
     .join(" ");
 }
 
+/**
+ * Proper display names for the client logos. `logoLabel()` just title-cases the
+ * filename, which is fine for alt text but reads badly as on-page copy ("Mary
+ * Brown S", "Re Max Canada", "Jk Appliance Repair Inc"). Anything that doesn't
+ * title-case cleanly is spelled out here; the rest falls through to logoLabel().
+ * [VERIFY-client] confirm the legal/brand spelling before quoting these in ads.
+ */
+const LOGO_DISPLAY_NAMES: Record<string, string> = {
+  "mary-brown-s.svg": "Mary Brown's",
+  "ginos-pizza.svg": "Gino's Pizza",
+  "cora-breakfast-lunch.webp": "Cora Breakfast & Lunch",
+  "gcad-construction.png": "GCAD Construction",
+  "mdi-reno-and-construction-ltd.png": "MDI Reno & Construction",
+  "mc-concrete-cutting-mc-construction.png": "MC Concrete Cutting",
+  "norths-construction.jpg": "North's Construction",
+  "vin-engineering-inc.png": "VIN Engineering",
+  "rj-cad-solutions-inc.png": "RJ CAD Solutions",
+  "lavish-artigiano-inc.webp": "Lavish Artigiano",
+  "ecocare-home-comfort.png": "EcoCare Home Comfort",
+  "a2z-comfort.png": "A2Z Comfort",
+  "jk-appliance-repair-inc.webp": "JK Appliance Repair",
+  "apexshine-cleaning-inc.png": "ApexShine Cleaning",
+  "gnc-facility-services.jpg": "GNC Facility Services",
+  "mr-lube.png": "Mr. Lube",
+  "true-life-wellness-and-physiotherapy.png": "True Life Wellness & Physiotherapy",
+  "blockline-physiotherapy-wellness.png": "Blockline Physiotherapy & Wellness",
+  "rehab2go.png": "Rehab2Go",
+  "upwell-homecare-inc-qualicare-peel.webp": "Upwell Homecare (Qualicare Peel)",
+  "re-max-canada.png": "RE/MAX Canada",
+  "royal-lepage-platinum-realty-brokerage.svg": "Royal LePage Platinum Realty",
+  "sold-by-kaushik-real-estate.svg": "Sold by Kaushik Real Estate",
+  "bindra-world-immigration-terminal-inc.jpg": "Bindra World Immigration Terminal",
+  "mina-yousefi-immigration-service-myis.jpg": "Mina Yousefi Immigration (MYIS)",
+  "dave-financial-services-inc.webp": "Dave Financial Services",
+  "the-ups-store-604.svg": "The UPS Store 604",
+  "btdt-beentheredonethat.webp": "BTDT — BeenThereDoneThat",
+  "scholars-ed.svg": "Scholars Education",
+};
+
+/** Brand name for a logo file — curated where the filename doesn't title-case. */
+export function logoName(filename: string): string {
+  return LOGO_DISPLAY_NAMES[filename] ?? logoLabel(filename);
+}
+
 /** Header buttons shared by every landing page (ports to the main site's service pages). */
 export const LANDING_HEADER_LINKS = [
   { label: "Google Ads", href: "/services/google-ads", brand: "google" },

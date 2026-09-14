@@ -10,7 +10,7 @@ import {
   META_PARTNER_DIRECTORY_URL,
 } from "@/lib/data/certifications";
 import { featuredGoogleReviews, googleBusinessProfile, type GoogleReview } from "@/lib/data/google-reviews";
-import { logoIndustries, logoLabel } from "@/lib/data/landing-100-leads";
+import { logoIndustries, logoName } from "@/lib/data/landing-100-leads";
 
 /**
  * Trust blocks shared by the paid landing pages (and reused on the homepage):
@@ -230,7 +230,7 @@ export function IndustryLogoWall() {
                 <div className={gi % 2 ? "logo-track is-reverse" : "logo-track"} style={{ animationDuration: `${Math.max(40, items.length * 4.2)}s` }}>
                   {items.map((file, i) => (
                     <figure className="logo-item" key={`${file}-${i}`} aria-hidden={i >= group.logos.length}>
-                      <img src={`${LOGOS}/${file}`} alt={i < group.logos.length ? logoLabel(file) : ""} loading="lazy" />
+                      <img src={`${LOGOS}/${file}`} alt={i < group.logos.length ? logoName(file) : ""} loading="lazy" />
                     </figure>
                   ))}
                 </div>
@@ -253,7 +253,6 @@ export function TrustSection({ kicker = "Verified credentials", title }: { kicke
         <p>Every badge links to the public profile it comes from, so you can check each claim at source before you book a call.</p>
       </div>
       <PartnerBadges size={84} />
-      <CertificationsStrip />
       <GoogleReviewsBlock />
       <RegistriesStrip />
     </section>
