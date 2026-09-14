@@ -52,11 +52,11 @@ export const team: TeamMember[] = [
     // linkedin: "https://www.linkedin.com/in/...",
   },
   {
-    name: "Siddarath Sharma",
+    name: "Siddharth Sharma",
     role: "SEO Specialist",
-    bio: "Siddarath owns organic search — technical SEO, local search and content strategy — helping clients earn durable visibility that compounds alongside their paid campaigns.",
+    bio: "Siddharth works on technical SEO, local search and content strategy, helping clients build organic visibility alongside their paid campaigns.",
     focus: ["Technical SEO", "Local search", "Content strategy"],
-    // photo: "/team/siddarath-sharma.jpg",
+    // photo: "/team/siddharth-sharma.jpg",
     // linkedin: "https://www.linkedin.com/in/...",
   },
   {
