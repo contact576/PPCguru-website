@@ -13,7 +13,7 @@ import {
 import { GoogleReviews } from "@/components/home/google-reviews";
 import { ToolsOs } from "@/components/home/tools-os";
 import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
-import { CertificationsStrip, GoogleReviewsBlock } from "@/components/landing/trust";
+import { GoogleReviewsBlock } from "@/components/landing/trust";
 import { GOOGLE_PARTNER_BADGE } from "@/lib/data/certifications";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { HeroOffer } from "@/components/shared/hero-offer";
@@ -134,9 +134,6 @@ export default function HomePage() {
           <div data-reveal className="flex flex-col items-center gap-6">
             <ReviewRating />
             <AwardsStrip />
-            <div className="lp-root lp-inline" style={{ background: "transparent", width: "100%" }}>
-              <CertificationsStrip />
-            </div>
           </div>
         </div>
       </section>
