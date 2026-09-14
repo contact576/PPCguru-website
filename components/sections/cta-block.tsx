@@ -11,9 +11,13 @@ const ink = "#14170e", cream = "#f1efe3", lime = "#ceff3a";
 export function CtaBlock({
   title,
   intro = "Start with a free website audit — no contract, no setup fee. You'll get clear next steps before committing to anything.",
+  secondaryHref = "/tools/google-ads-calculator",
+  secondaryLabel = "Try the ROI calculator",
 }: {
   title?: React.ReactNode;
   intro?: React.ReactNode;
+  secondaryHref?: string;
+  secondaryLabel?: string;
 }) {
   return (
     <section style={{ background: lime, color: ink, position: "relative", overflow: "hidden" }}>
@@ -34,7 +38,7 @@ export function CtaBlock({
         <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>{intro}</p>
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 40 }}>
           <Link href={siteConfig.cta.primaryHref} className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>{siteConfig.cta.primaryLabel}</Link>
-          <Link href="/tools/google-ads-calculator" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>Try the ROI calculator</Link>
+          <Link href={secondaryHref} className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>{secondaryLabel}</Link>
           <Link href="/contact" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 26px", borderRadius: 14, display: "inline-flex", alignItems: "center", gap: 9 }}><span style={{ width: 9, height: 9, borderRadius: "50%", background: ink }} />WhatsApp Us</Link>
         </div>
         <p className="mono" style={{ fontSize: 11, color: "#3a4a10", marginTop: 28, letterSpacing: ".1em", textTransform: "uppercase" }}>No long-term contracts · You keep ownership of your accounts</p>

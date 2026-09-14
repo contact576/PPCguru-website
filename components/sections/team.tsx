@@ -4,6 +4,7 @@ import { team } from "@/lib/data/team";
 
 const initials = (name: string) =>
   name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+const teamAnchor = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
 /** "Meet the team" — data-driven (lib/data/team.ts), scales to any roster.
  *  Headshots when `photo` is set, otherwise the signature ink/lime monogram. */
@@ -21,7 +22,7 @@ export function TeamSection() {
       <div className={`mx-auto mt-12 grid gap-6 ${cols}`}>
         {team.map((m, i) => (
           <Reveal key={m.name} delay={i * 0.06}>
-            <div className="flex h-full flex-col rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
+            <div id={teamAnchor(m.name)} className="flex h-full scroll-mt-28 flex-col rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-7">
               <div className="flex items-center gap-4">
                 {m.photo ? (
                   // eslint-disable-next-line @next/next/no-img-element

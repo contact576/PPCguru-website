@@ -46,7 +46,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = await getPost(slug);
   if (!post) notFound();
 
-  const related = (await getAllPosts()).filter((p) => p.slug !== slug).slice(0, 3);
+  const otherPosts = (await getAllPosts()).filter((p) => p.slug !== slug);
+  const preferred = (post.relatedSlugs ?? [])
+    .map((relatedSlug) => otherPosts.find((p) => p.slug === relatedSlug))
+    .filter((p): p is (typeof otherPosts)[number] => Boolean(p));
+  const sameCategory = otherPosts.filter((p) => p.category === post.category && !preferred.some((item) => item.slug === p.slug));
+  const fallback = otherPosts.filter((p) => !preferred.some((item) => item.slug === p.slug) && !sameCategory.some((item) => item.slug === p.slug));
+  const related = [...preferred, ...sameCategory, ...fallback].slice(0, 3);
   const catLinks: Record<string, { label: string; href: string }[]> = {
     "Google Ads": [{ label: "Google Ads management", href: "/services/google-ads" }],
     "Meta Ads": [{ label: "Meta Ads management", href: "/services/meta-ads" }],
@@ -120,7 +126,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {canOptimizeImage(post.coverImage) ? (
               <Image
                 src={post.coverImage}
-                alt={post.title}
+                alt={post.coverImageAlt ?? post.title}
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 768px"
@@ -128,11 +134,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               />
             ) : (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={post.coverImage} alt={post.title} className="h-full w-full object-cover" />
+              <img src={post.coverImage} alt={post.coverImageAlt ?? post.title} className="h-full w-full object-cover" />
             )}
           </div>
         ) : null}
-        <article className="prose-blog mx-auto max-w-3xl">
+        <article className={"prose-blog mx-auto max-w-3xl " + (slug === "what-does-an-seo-audit-include-toronto" ? "seo-audit-article" : "")}>
           {/* rehypeRaw lets the CMS author use plain HTML alongside Markdown
               (blog content is admin-authored only, so raw HTML is trusted here);
               rehypeSlug + autolink give every heading a stable #id and a
@@ -151,6 +157,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 },
               ],
             ]}
+            components={{ table: ({ children }) => <div role="region" aria-label="Scrollable article table" tabIndex={0} className="overflow-x-auto rounded-xl border border-[var(--color-border)]"><table className="min-w-[680px]">{children}</table></div> }}
           >
             {post.content}
           </ReactMarkdown>
@@ -170,7 +177,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             )}
             <div>
               <p className="mono text-[11px] uppercase tracking-[.08em] text-[#5f6f17]">About the author</p>
-              <p className="head mt-1 text-[17px] text-[var(--color-ink)]">{authorMember.name} · <span className="text-[var(--color-ink-dim)]">{authorMember.role}</span></p>
+              <p className="head mt-1 text-[17px] text-[var(--color-ink)]"><Link href={"/about#" + authorMember.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")} className="hover:underline">{authorMember.name}</Link> · <span className="text-[var(--color-ink-dim)]">{authorMember.role}</span></p>
               <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{authorMember.bio}</p>
               {authorMember.linkedin && (
                 <a href={authorMember.linkedin} target="_blank" rel="noopener noreferrer" className="mono mt-3 inline-block text-[11px] font-bold uppercase tracking-[.06em] text-[var(--color-ink)] hover:text-[#5f6f17]">Connect on LinkedIn →</a>
@@ -205,7 +212,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </div>
       </Section>
-      <CtaBlock />
+      {slug === "what-does-an-seo-audit-include-toronto" ? (
+        <CtaBlock
+          title={<>Find the <span className="text-gradient">gaps</span><br />holding back your SEO</>}
+          intro="Start with a focused website review. We’ll help you separate urgent fixes from lower-priority tool warnings before you commit to ongoing work."
+          secondaryHref="/services/seo"
+          secondaryLabel="Explore SEO services"
+        />
+      ) : <CtaBlock />}
     </>
   );
 }

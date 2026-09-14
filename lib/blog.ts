@@ -31,6 +31,8 @@ export type PostMeta = {
   author: string;
   readingTime: string;
   coverImage?: string | null;
+  coverImageAlt?: string | null;
+  relatedSlugs?: string[];
   faqs?: PostFaq[];
 };
 
@@ -54,6 +56,12 @@ function normalizeFaqs(value: unknown): PostFaq[] | undefined {
   return faqs.length ? faqs : undefined;
 }
 
+function normalizeRelatedSlugs(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const slugs = value.filter((slug): slug is string => typeof slug === "string" && /^[a-z0-9-]+$/.test(slug));
+  return slugs.length ? [...new Set(slugs)] : undefined;
+}
+
 /* ── markdown (fallback) ─────────────────────────────────────────────────── */
 function fileToPost(file: string): Post & { draft: boolean } {
   const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf8");
@@ -71,6 +79,8 @@ function fileToPost(file: string): Post & { draft: boolean } {
     author: data.author ?? "PPC Guru",
     readingTime: readingTimeFor(content),
     coverImage: data.coverImage ?? null,
+    coverImageAlt: typeof data.coverImageAlt === "string" ? data.coverImageAlt.trim() : null,
+    relatedSlugs: normalizeRelatedSlugs(data.relatedSlugs),
     faqs: normalizeFaqs(data.faqs),
     draft: data.draft === true,
     content,
@@ -106,6 +116,8 @@ function dbToPost(p: DbPost): Post {
     author: p.author ?? "PPC Guru",
     readingTime: readingTimeFor(p.content ?? ""),
     coverImage: p.cover_image,
+    coverImageAlt: null,
+    relatedSlugs: undefined,
     faqs: undefined,
     content: p.content ?? "",
   };
