@@ -7,7 +7,7 @@ import { FaqList } from "@/components/home/faq-list";
 import { AuditForm } from "@/components/home/audit-form";
 import {
   tickerLoop, proofItems, proofPoints, sprintWeeks, homeServices, aiTasks, humanTasks,
-  comparisonRows, rptDeliverables, rptKpis, homeCases,
+  comparisonRows, rptDeliverables, rptKpis, homeCases, homeIndustries,
   homePricing,
 } from "@/lib/data/home";
 import { GoogleReviews } from "@/components/home/google-reviews";
@@ -423,6 +423,26 @@ export default function HomePage() {
                   <Link href={`/results/${c.slug}`} className="mono" style={{ fontSize: 10, fontWeight: 700, color: ink, letterSpacing: ".05em", textTransform: "uppercase" }}>View →</Link>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── INDUSTRIES ─────────────────────────────────────────────────────── */}
+      <section id="industries" style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
+        <div className={WRAP}>
+          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px", textAlign: "center" }}>
+            <Eyebrow>Who we help</Eyebrow>
+            <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Deep in local <Em>service</Em> verticals</h2>
+            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>Repeatable playbooks for the industries we know best — niche depth beats generalist agencies for local lead-gen.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
+            {homeIndustries.map((i) => (
+              <Link key={i.name} href={`/industries/${i.slug}`} data-reveal className="group transition-all hover:-translate-y-1 hover:shadow-tile" style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 18, padding: 22, display: "block" }}>
+                <div style={{ width: 46, height: 46, borderRadius: 13, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 21, marginBottom: 14 }}>{i.icon}</div>
+                <div className="head" style={{ fontSize: 16, marginBottom: 8, lineHeight: 1.05 }}>{i.name}</div>
+                <div style={{ fontSize: 12.5, color: "#54564a", lineHeight: 1.5 }}>{i.angle}</div>
+              </Link>
             ))}
           </div>
         </div>
