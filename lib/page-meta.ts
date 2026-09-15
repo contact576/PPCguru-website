@@ -3,6 +3,7 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/supabase";
 import { siteConfig } from "@/lib/site-config";
+import { stripTrailingSiteName } from "@/lib/seo";
 
 /**
  * Per-page SEO meta overrides, edited at /admin/meta and stored in the Supabase
@@ -139,8 +140,9 @@ export async function withMetaOverride(base: Metadata, path: string): Promise<Me
   const tw = { ...(base.twitter as Record<string, unknown> | undefined) };
 
   if (nonEmpty(o.title)) {
-    out.title = o.title;
-    const social = `${o.title} | ${siteConfig.name}`;
+    const title = stripTrailingSiteName(o.title);
+    out.title = title;
+    const social = `${title} | ${siteConfig.name}`;
     og.title = social;
     tw.title = social;
   }
@@ -160,3 +162,4 @@ export async function withMetaOverride(base: Metadata, path: string): Promise<Me
   if (Object.keys(tw).length) out.twitter = tw as Metadata["twitter"];
   return out;
 }
+
