@@ -1397,6 +1397,17 @@
 .lp-root .lp-hidden { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
 /* Server-side validation feedback. */
+/* "optional" tag next to a field label. */
+.lp-root .field-optional {
+  margin-left: 6px;
+  font-size: 10.5px;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 .lp-root .field-error { display: block; margin-top: 6px; font-size: 13px; font-style: normal; font-weight: 600; color: #b42318; }
 .lp-root .form-error { margin: 14px 0 0; padding: 12px 14px; border-radius: 12px; background: #fdeaea; color: #7a2626; font-size: 14px; font-weight: 600; }
 .lp-root .primary-button:disabled { cursor: not-allowed; }
@@ -1478,31 +1489,11 @@
    registries, real WhatsApp mark). Used by /100-leads and /seo-visibility.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Header: bigger original logo + platform buttons ─────────────────────── */
-.lp-root .site-header { gap: 18px; min-height: 96px; }
-.lp-root .brand { padding: 6px 12px; background: #fff; border: 1px solid #e6ead8; border-radius: 14px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05); }
-.lp-root .brand img { width: 236px; height: auto; }
-.lp-root .header-links { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-.lp-root .header-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 0 14px 0 8px;
-  border-radius: 999px;
-  border: 1.5px solid #d7dcc6;
-  background: #fff;
-  color: var(--ink);
-  font-size: 13px;
-  font-weight: 800;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
-}
-.lp-root .header-link:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); }
-.lp-root .header-link-google:hover { border-color: #4285f4; }
-.lp-root .header-link-meta:hover { border-color: #0866ff; }
-.lp-root .header-actions { gap: 14px; }
+/* ── Header: the original logo at a sane size, one CTA, no nav ───────────── */
+.lp-root .site-header { gap: 18px; min-height: 84px; }
+.lp-root .brand { padding: 5px 10px; background: #fff; border: 1px solid #e6ead8; border-radius: 12px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05); }
+.lp-root .brand img { width: 148px; height: auto; }
+.lp-root .header-actions { gap: 14px; margin-left: auto; }
 .lp-root .header-actions > a,
 .lp-root .header-actions button { white-space: nowrap; flex-shrink: 0; }
 
@@ -1525,21 +1516,17 @@
 .lp-root .hero-assurance .hero-partner-badge strong { font-size: 13px; font-weight: 900; }
 .lp-root .hero-assurance .hero-partner-badge small { font-size: 11px; color: var(--muted); }
 
-/* ── Industry logo wall (replaces the single marquee) ────────────────────── */
-.lp-root .industry-wall { padding: 34px 0 30px; }
-.lp-root .industry-rows { display: grid; gap: 16px; width: min(100% - 44px, 1200px); margin-inline: auto; }
-.lp-root .industry-row { display: grid; grid-template-columns: 220px 1fr; align-items: center; gap: 18px; }
-.lp-root .industry-label { margin: 0; display: grid; gap: 2px; }
-.lp-root .industry-label span { font-size: 13px; font-weight: 900; letter-spacing: -0.01em; }
-.lp-root .industry-label small { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-.lp-root .industry-row .logo-viewport { mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-.lp-root .industry-row .logo-track.is-reverse { animation-name: marquee-left; }
+/* ── Client logo wall — three unlabelled marquee rows ────────────────────── */
+.lp-root .logo-wall { padding: 34px 0 30px; }
+.lp-root .logo-rows { display: grid; gap: 12px; width: min(100% - 44px, 1200px); margin-inline: auto; }
+.lp-root .logo-rows .logo-viewport { mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+.lp-root .logo-rows .logo-track.is-reverse { animation-name: marquee-left; }
 @keyframes marquee-left {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
-.lp-root .industry-row .logo-item { width: 184px; height: 86px; padding: 10px 16px; border-radius: 14px; }
-.lp-root .industry-row .logo-item img { max-width: 150px; max-height: 60px; }
+.lp-root .logo-rows .logo-item { width: 178px; height: 82px; padding: 10px 16px; border-radius: 14px; }
+.lp-root .logo-rows .logo-item img { max-width: 146px; max-height: 58px; }
 
 /* ── Trust section ───────────────────────────────────────────────────────── */
 .lp-root .lp-trust {
@@ -1598,31 +1585,6 @@
 .lp-root .lp-partner-row.is-compact { gap: 10px; }
 .lp-root .lp-partner-row.is-compact .lp-partner-badge { padding: 8px 12px; border-radius: 14px; }
 
-/* Certifications */
-.lp-root .lp-cert-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.lp-root .lp-cert {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 16px;
-  border: 1.5px solid #dfe3d2;
-  background: #fff;
-  color: var(--ink);
-  text-decoration: none;
-  transition: border-color 140ms ease, transform 140ms ease;
-}
-.lp-root .lp-cert:hover { transform: translateY(-1px); }
-.lp-root .lp-cert-google:hover { border-color: #4285f4; }
-.lp-root .lp-cert-meta:hover { border-color: #0866ff; }
-.lp-root .lp-cert > span { display: grid; gap: 1px; min-width: 0; }
-.lp-root .lp-cert small { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.lp-root .lp-cert strong { font-size: 15px; font-weight: 900; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.lp-root .lp-cert i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 999px; background: #eef7d2; color: #4f7a00; }
-.lp-root .lp-cert i svg { width: 15px; height: 15px; }
-
-/* Google reviews */
 .lp-root .lp-reviews { display: grid; gap: 18px; }
 .lp-root .lp-reviews-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
 .lp-root .lp-google-pill {
@@ -1724,44 +1686,35 @@
 
 /* ── Embedding trust blocks inside the main site (homepage) ──────────────── */
 .lp-root.lp-inline { background: transparent; color: inherit; }
-.lp-root.lp-inline .lp-cert-grid { gap: 8px; }
 .lp-root.lp-inline .lp-review-card p { -webkit-line-clamp: 6; line-clamp: 6; }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 1100px) {
-  .lp-root .lp-cert-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lp-root .header-actions > span { display: none; }
 }
 @media (max-width: 980px) {
   .lp-root .lp-review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .lp-root .industry-row { grid-template-columns: 1fr; gap: 8px; }
   .lp-root .site-footer { grid-template-columns: 1fr; justify-items: start; gap: 16px; }
   .lp-root .site-footer-links { justify-content: flex-start; }
 }
 @media (max-width: 680px) {
   .lp-root .site-header { min-height: 72px; flex-wrap: wrap; gap: 10px; padding-block: 10px; }
   .lp-root .brand { padding: 5px 8px; border-radius: 10px; }
-  .lp-root .brand img { width: 168px; }
-  .lp-root .header-links { order: 3; width: 100%; margin-left: 0; }
-  .lp-root .header-link { flex: 1; justify-content: center; min-height: 40px; font-size: 12px; }
+  .lp-root .brand img { width: 116px; }
   .lp-root .header-actions { margin-left: auto; }
   .lp-root .hero-assurance .hero-partner-badge { width: 100%; justify-content: center; }
   .lp-root .lp-trust { padding: 44px 0 40px; gap: 26px; }
-  .lp-root .lp-cert-grid { grid-template-columns: 1fr 1fr; }
-  .lp-root .lp-cert { padding: 10px 12px; gap: 9px; }
-  .lp-root .lp-cert strong { font-size: 13px; }
   .lp-root .lp-review-grid { grid-template-columns: 1fr; }
   .lp-root .lp-partner-badge { width: 100%; }
-  .lp-root .industry-row .logo-item { width: 150px; height: 72px; }
-  .lp-root .industry-row .logo-item img { max-width: 120px; max-height: 48px; }
+  .lp-root .logo-rows .logo-item { width: 148px; height: 70px; }
+  .lp-root .logo-rows .logo-item img { max-width: 118px; max-height: 46px; }
   .lp-root .thanks-whatsapp > svg { width: 30px; height: 30px; }
 }
 @media (max-width: 400px) {
-  .lp-root .lp-cert-grid { grid-template-columns: 1fr; }
-  .lp-root .brand img { width: 150px; }
+  .lp-root .brand img { width: 118px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lp-root .industry-row .logo-track { animation: none; transform: none; }
+  .lp-root .logo-rows .logo-track { animation: none; transform: none; }
 }
 
 

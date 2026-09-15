@@ -24,7 +24,7 @@ import { TurnstileField } from "@/components/shared/turnstile-field";
 import { SessionField } from "@/components/shared/session-field";
 import { track } from "@/lib/analytics";
 import { LandingHeader, LandingFooter } from "@/components/landing/landing-chrome";
-import { IndustryLogoWall, TrustSection } from "@/components/landing/trust";
+import { ClientLogoWall, TrustSection } from "@/components/landing/trust";
 import { GOOGLE_PARTNER_BADGE, GOOGLE_PARTNER_PROFILE_URL } from "@/lib/data/certifications";
 import { SEO_GOALS, SEO_INVESTMENTS, SEO_LANDING_SOURCE, aiProofs } from "@/lib/data/landing-seo";
 
@@ -485,7 +485,7 @@ export function SeoLanding() {
             </section>
           </div>
         </div>
-        <IndustryLogoWall />
+        <ClientLogoWall />
         <ProofGallery />
         <MeasurementSection />
         <TrustSection />

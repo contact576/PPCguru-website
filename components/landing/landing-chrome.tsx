@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { BrandIcon } from "@/components/shared/brand-logos";
 import { PartnerBadges } from "@/components/landing/trust";
-import { LANDING_HEADER_LINKS } from "@/lib/data/landing-100-leads";
 
 /**
  * Header + footer shared by every paid landing page (/100-leads, /seo-visibility
- * and their thank-you pages). The original PPC Guru logo (big), Google Ads +
- * Meta Ads buttons, and one CTA. Styles live in app/100-leads/landing.css.
+ * and their thank-you pages): the PPC Guru logo and ONE call to action.
+ *
+ * Deliberately link-free — these are paid ad destinations, so the header
+ * carries no navigation off the page (the Google Ads / Meta Ads service links
+ * that used to sit here leaked paid traffic back into the main site). Only the
+ * legal links remain in the footer. Styles: app/100-leads/landing.css.
  */
 
 const LOGO = "/brand/ppc-guru-logo-720.png";
@@ -41,14 +43,6 @@ export function LandingHeader({
       <a className="brand" href="#top" aria-label="PPC Guru home">
         <img src={LOGO} alt="PPC Guru" width={720} height={251} fetchPriority="high" />
       </a>
-      <nav className="header-links" aria-label="Services">
-        {LANDING_HEADER_LINKS.map((l) => (
-          <Link key={l.href} href={l.href} className={`header-link header-link-${l.brand}`}>
-            <BrandIcon name={l.brand === "google" ? "Google Ads" : "Meta Ads"} size={22} radius={6} />
-            <span>{l.label}</span>
-          </Link>
-        ))}
-      </nav>
       <div className="header-actions">
         <span>{tagline}</span>
         {ctaHref ? (
@@ -74,11 +68,6 @@ export function LandingFooter({ tagline = "Performance advertising for local ser
       </div>
       <PartnerBadges size={54} compact />
       <div className="site-footer-links">
-        {LANDING_HEADER_LINKS.map((l) => (
-          <Link key={l.href} href={l.href}>
-            {l.label}
-          </Link>
-        ))}
         <Link href="/privacy">Privacy</Link>
         <Link href="/terms">Terms</Link>
         <span>© {new Date().getFullYear()} PPC Guru</span>

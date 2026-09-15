@@ -29,16 +29,16 @@ export function SiteFooter() {
   return (
     <footer id="footer" style={{ background: "#14170e", color: "#9a9b88" }}>
       <div style={{ maxWidth: 1480, margin: "0 auto", padding: "64px 20px 40px" }}>
-        {/* Industries we serve — carousel (swap to real client logos with consent) */}
+        {/* Client brands — one moving row, unlabelled (the "Industries we serve"
+            caption was wrong: these are clients, not verticals). */}
         <div style={{ marginBottom: 56, paddingBottom: 48, borderBottom: "1px solid rgba(241,239,227,.08)" }}>
-          <div className="mono" style={{ fontSize: 10.5, fontWeight: 700, color: "#75766a", letterSpacing: ".12em", textTransform: "uppercase", textAlign: "center", marginBottom: 18 }}>Industries we serve</div>
           <BrandMarquee />
         </div>
 
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.7fr_1fr_1fr_1fr_1.1fr]">
           <div>
             <div style={{ marginBottom: 16 }}>
-              <Logo variant="light" size={60} />
+              <Logo variant="light" size={48} />
             </div>
             <p style={{ fontSize: 13.5, color: "#75766a", lineHeight: 1.6, maxWidth: 320 }}>
               A Google Partner &amp; Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA.

@@ -11,6 +11,7 @@ import {
   ChartBar,
   Check,
   ClipboardList,
+  Globe,
   HardHat,
   HeartPulse,
   House,
@@ -29,7 +30,7 @@ import { track } from "@/lib/analytics";
 import { BUSINESS_TYPES, LANDING_BUDGETS, LANDING_SOURCE, campaignResults } from "@/lib/data/landing-100-leads";
 import { GOOGLE_PARTNER_BADGE, GOOGLE_PARTNER_PROFILE_URL } from "@/lib/data/certifications";
 import { LandingHeader, LandingFooter } from "@/components/landing/landing-chrome";
-import { IndustryLogoWall, TrustSection } from "@/components/landing/trust";
+import { ClientLogoWall, TrustSection } from "@/components/landing/trust";
 
 // Header/footer moved to landing-chrome.tsx (shared with /seo-visibility);
 // re-exported so existing imports keep working.
@@ -120,7 +121,7 @@ function Stepper({ step }: { step: number }) {
 
 function QualificationForm() {
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({ company: "", location: "", businessType: "", budget: "", name: "", email: "", phone: "" });
+  const [form, setForm] = useState({ company: "", location: "", website: "", businessType: "", budget: "", name: "", email: "", phone: "" });
   const [state, action, pending] = useActionState(submitLandingLead, initial);
   const utm = useAttribution();
 
@@ -136,7 +137,7 @@ function QualificationForm() {
   // them on the contact panel with an invisible error.
   useEffect(() => {
     const e = state.errors ?? {};
-    if (e.company || e.location) setStep(1);
+    if (e.company || e.location || e.website) setStep(1);
     else if (e.business_type || e.budget) setStep(2);
   }, [state.errors]);
 
@@ -184,6 +185,7 @@ function QualificationForm() {
           <>
             <input type="hidden" name="company" value={form.company} readOnly />
             <input type="hidden" name="location" value={form.location} readOnly />
+            <input type="hidden" name="website" value={form.website} readOnly />
           </>
         ) : null}
         <input type="hidden" name="business_type" value={form.businessType} readOnly />
@@ -212,6 +214,24 @@ function QualificationForm() {
                   <input name="location" value={form.location} onChange={updateField} onKeyDown={advanceOnEnter} placeholder="e.g. Toronto & GTA" autoComplete="address-level2" required />
                 </div>
                 {errors.location ? <em className="field-error">{errors.location}</em> : null}
+              </label>
+              <label>
+                <span>
+                  Website or Instagram <i className="field-optional">optional</i>
+                </span>
+                <div className="input-shell">
+                  <Globe aria-hidden="true" />
+                  <input
+                    name="website"
+                    value={form.website}
+                    onChange={updateField}
+                    onKeyDown={advanceOnEnter}
+                    placeholder="northstarheating.ca or @northstarheating"
+                    autoComplete="url"
+                    inputMode="url"
+                  />
+                </div>
+                {errors.website ? <em className="field-error">{errors.website}</em> : null}
               </label>
             </div>
             <button className="primary-button" type="button" disabled={!stepOneReady} onClick={() => goTo(2)}>
@@ -634,7 +654,7 @@ export function LeadsLanding() {
             </section>
           </div>
         </div>
-        <IndustryLogoWall />
+        <ClientLogoWall />
         <ResultsCarousel />
         <QualitySection />
         <TrustSection />

@@ -1,4 +1,4 @@
-import { logoIndustries, logoName } from "@/lib/data/landing-100-leads";
+import { clientLogos, logoName } from "@/lib/data/landing-100-leads";
 
 const LOGOS = "/landing/logos";
 const INK = "#14170e";
@@ -8,18 +8,15 @@ const CREAM = "#f1efe3";
 
 /**
  * Homepage client proof: every client logo we have, in ONE continuous moving
- * row (the landing pages split the same set across one row per industry — here
- * it's a single band), with the industries and the brands inside each spelled
- * out underneath so the wall reads as proof rather than decoration.
+ * row, with the brands spelled out underneath so the wall reads as proof
+ * rather than decoration.
  *
  * `.mq` (app/globals.css) animates translateX(-50%), so the track must hold the
  * list exactly twice — the second copy is aria-hidden. globals.css also carries
  * the prefers-reduced-motion guard that stops the animation.
  */
 export function ClientLogoRow() {
-  const all = logoIndustries.flatMap((group) =>
-    group.logos.map((file) => ({ file, industry: group.label }))
-  );
+  const all = clientLogos.map((file) => ({ file, name: logoName(file) }));
   // Two identical halves for the -50% loop; slow enough to actually read a logo.
   const track = [...all, ...all];
   const duration = Math.round(all.length * 2.4);
@@ -44,8 +41,8 @@ export function ClientLogoRow() {
             </h2>
           </div>
           <p style={{ fontSize: 14.5, color: "#54564a", lineHeight: 1.55, maxWidth: 430 }}>
-            {all.length} brands we run Google &amp; Meta Ads for, across {logoIndustries.length} industries — franchises,
-            national names and local businesses.
+            {all.length} brands we run Google &amp; Meta Ads for — franchises, national names and local
+            businesses.
           </p>
         </div>
       </div>
@@ -66,7 +63,7 @@ export function ClientLogoRow() {
               <figure
                 key={`${item.file}-${i}`}
                 aria-hidden={dupe}
-                title={dupe ? undefined : `${logoName(item.file)} — ${item.industry}`}
+                title={dupe ? undefined : item.name}
                 className="transition-colors duration-300 hover:border-[#c3c1ae]"
                 style={{
                   flexShrink: 0,
@@ -84,8 +81,10 @@ export function ClientLogoRow() {
               >
                 <img
                   src={`${LOGOS}/${item.file}`}
-                  alt={dupe ? "" : logoName(item.file)}
-                  loading="lazy"
+                  alt={dupe ? "" : item.name}
+                  /* Eager but low-priority — lazy tiles pop in blank as the marquee moves. */
+                  loading="eager"
+                  fetchPriority="low"
                   decoding="async"
                   style={{ maxHeight: 48, maxWidth: 136, width: "auto", objectFit: "contain" }}
                 />
@@ -95,37 +94,32 @@ export function ClientLogoRow() {
         </div>
       </div>
 
-      {/* The mention list: every moving logo named, under the industry it belongs to. */}
+      {/* Every moving logo named, in one flat list — no industry grouping. */}
       <div className="mx-auto max-w-[1480px] px-5 pb-14 pt-10 md:px-8 md:pb-20 md:pt-12">
-        <ul data-reveal className="grid gap-x-8 gap-y-7 sm:grid-cols-2 lg:grid-cols-4">
-          {logoIndustries.map((group) => (
-            <li key={group.id}>
-              <p
-                className="mono"
-                style={{
-                  fontSize: 10.5,
-                  letterSpacing: ".14em",
-                  textTransform: "uppercase",
-                  color: INK,
-                  fontWeight: 700,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  paddingBottom: 9,
-                  marginBottom: 10,
-                  borderBottom: "1px solid #dddbc9",
-                }}
-              >
-                <span>{group.label}</span>
-                <span style={{ color: "#8a8c7c", fontWeight: 600 }}>{group.logos.length}</span>
-              </p>
-              <p style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.65 }}>
-                {group.logos.map(logoName).join(" · ")}
-              </p>
+        <ul
+          data-reveal
+          className="flex flex-wrap justify-center gap-x-3 gap-y-3"
+          style={{ borderTop: "1px solid #dddbc9", paddingTop: 26 }}
+        >
+          {[...all].sort((a, b) => a.name.localeCompare(b.name)).map((item) => (
+            <li
+              key={item.file}
+              style={{
+                fontSize: 13,
+                color: "#454737",
+                background: "#fff",
+                border: "1px solid #e1dfcf",
+                borderRadius: 999,
+                padding: "6px 13px",
+                lineHeight: 1.2,
+              }}
+            >
+              {item.name}
             </li>
           ))}
         </ul>
       </div>
+
     </section>
   );
 }

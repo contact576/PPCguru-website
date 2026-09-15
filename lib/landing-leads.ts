@@ -62,29 +62,44 @@ function warnOnce(where: string, error: unknown) {
   console.warn(`[landing-leads] ${where} failed — has supabase/landing-leads.sql been run? ${msg}`);
 }
 
-/** Insert one structured landing row. Returns the new id, or null (never throws). */
+/**
+ * Insert one structured landing row. Returns the new id, or null (never throws).
+ *
+ * `website` / `answers` were added later (supabase/landing-leads.sql, 2026-09-12).
+ * Where that ALTER hasn't been run yet, Postgres rejects the whole insert — so a
+ * missing-column error retries without them rather than losing the market,
+ * business-type, budget and attribution answers as well.
+ */
 export async function saveLandingLead(input: LandingLeadInput): Promise<string | null> {
   const sb = supabaseAdmin();
   if (!sb) return null;
+
+  const base = {
+    lead_id: input.leadId || null,
+    landing: input.landing || "100-leads",
+    name: input.name || null,
+    email: input.email || null,
+    phone: input.phone || null,
+    company: input.company || null,
+    location: input.location || null,
+    business_type: input.businessType || null,
+    budget: input.budget || null,
+    utm: input.utm && Object.keys(input.utm).length ? input.utm : null,
+  };
+  const extras = {
+    website: input.website || null,
+    answers: input.answers && Object.keys(input.answers).length ? input.answers : null,
+  };
+
+  const insert = async (row: Record<string, unknown>) =>
+    sb.from("landing_page_leads").insert(row).select("id").single();
+
   try {
-    const { data, error } = await sb
-      .from("landing_page_leads")
-      .insert({
-        lead_id: input.leadId || null,
-        landing: input.landing || "100-leads",
-        name: input.name || null,
-        email: input.email || null,
-        phone: input.phone || null,
-        company: input.company || null,
-        location: input.location || null,
-        business_type: input.businessType || null,
-        budget: input.budget || null,
-        website: input.website || null,
-        answers: input.answers && Object.keys(input.answers).length ? input.answers : null,
-        utm: input.utm && Object.keys(input.utm).length ? input.utm : null,
-      })
-      .select("id")
-      .single();
+    let { data, error } = await insert({ ...base, ...extras });
+    if (error && /column .*(website|answers)/i.test(error.message ?? "")) {
+      warnOnce("insert", error);
+      ({ data, error } = await insert(base));
+    }
     if (error || !data) {
       warnOnce("insert", error);
       return null;

@@ -39,6 +39,8 @@ const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_c
 const schema = z.object({
   company: z.string().min(2, "Please enter your business name.").max(120),
   location: z.string().min(2, "Please enter your city or service area.").max(120),
+  /** Optional: website URL or Instagram handle — whichever the business actually has. */
+  website: z.string().max(200).optional().or(z.literal("")),
   business_type: z.enum(BUSINESS_TYPE_IDS, { message: "Please choose a business type." }),
   budget: z.enum(LANDING_BUDGET_IDS, { message: "Please choose a monthly ad budget." }),
   name: z.string().min(2, "Please enter your name.").max(100),
@@ -77,6 +79,18 @@ function parseUtm(raw: string | undefined): Record<string, string> {
   }
 }
 
+/**
+ * The "Website or Instagram" answer, stored as something clickable:
+ * "@handle" / "instagram.com/handle" → the profile URL, a bare domain → https://.
+ */
+function normaliseWebOrSocial(raw: string | undefined): string {
+  const v = (raw ?? "").trim();
+  if (!v) return "";
+  if (v.startsWith("@")) return `https://instagram.com/${v.slice(1).replace(/\/+$/, "")}`;
+  if (/^https?:\/\//i.test(v)) return v;
+  return `https://${v.replace(/^\/+/, "")}`;
+}
+
 function firstName(full: string) {
   return full.trim().split(/\s+/)[0] ?? "";
 }
@@ -90,6 +104,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   }
   const data = parsed.data;
   const source = data.source || LANDING_SOURCE;
+  const website = normaliseWebOrSocial(data.website);
   const thankYou = `${LANDING_THANK_YOU_PATH}?n=${encodeURIComponent(firstName(data.name))}&c=${encodeURIComponent(data.company)}`;
 
   // 1) Honeypot → pretend success (bots learn nothing; the redirect target is public anyway).
@@ -114,7 +129,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     name: data.name,
     email: data.email,
     phone: data.phone,
-    website: "",
+    website,
     message: `${data.company} ${data.location}`,
     renderedAt: data.renderedAt,
   });
@@ -138,12 +153,13 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     email: data.email,
     phone: data.phone,
     company: data.company,
-    website: "",
+    website,
     source,
     service: LANDING_SERVICE_LABEL,
     budget: `${budgetText} / month (ad budget)`,
     message: [
       `Location: ${data.location}`,
+      website ? `Website / Instagram: ${website}` : "",
       `Business type: ${typeLabel}`,
       `Budget: ${data.budget}`,
       attribution ? `Attribution: ${attribution}` : "",
@@ -165,6 +181,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     phone: data.phone,
     company: data.company,
     location: data.location,
+    website,
     businessType: data.business_type,
     budget: data.budget,
     utm,
@@ -187,6 +204,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
         `Name: ${data.name}`,
         `Business: ${data.company}`,
         `Service area: ${data.location}`,
+        website ? `Website / Instagram: ${website}` : "",
         `Business type: ${typeLabel}`,
         `Monthly ad budget: ${budgetText}`,
         `Email: ${data.email}`,

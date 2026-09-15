@@ -3,21 +3,21 @@ import { BrandIcon } from "@/components/shared/brand-logos";
 import { PlatformLogo } from "@/components/brand/platform-logo";
 import { earnedAwards } from "@/lib/data/reviews";
 import {
-  certifications,
   GOOGLE_PARTNER_BADGE,
   GOOGLE_PARTNER_PROFILE_URL,
   META_PARTNER_BADGE,
   META_PARTNER_DIRECTORY_URL,
 } from "@/lib/data/certifications";
 import { featuredGoogleReviews, googleBusinessProfile, type GoogleReview } from "@/lib/data/google-reviews";
-import { logoIndustries, logoName } from "@/lib/data/landing-100-leads";
+import { clientLogos, logoName } from "@/lib/data/landing-100-leads";
 
 /**
- * Trust blocks shared by the paid landing pages (and reused on the homepage):
- * partner badges, platform certifications, real Google reviews, the public
- * registries we're listed in, and the client logo wall grouped by industry.
- * All server-safe (no hooks) so they render inside the RSC landing pages and
- * inside client components alike. Styles: app/100-leads/landing.css (.lp-*).
+ * Trust blocks shared by the paid landing pages: the two official partner
+ * badges, real Google reviews, the public registries we're listed in, and the
+ * client logo wall. The Skillshop / Blueprint certification tiles were dropped
+ * (2026-09-15) — the badges and reviews carry the proof, the cert grid was
+ * clutter. All server-safe (no hooks) so they render inside the RSC landing
+ * pages and inside client components alike. Styles: app/100-leads/landing.css.
  */
 
 const LOGOS = "/landing/logos";
@@ -60,35 +60,6 @@ export function PartnerBadges({ size = 72, compact = false }: { size?: number; c
           </span>
         ) : null}
       </a>
-    </div>
-  );
-}
-
-/** Google Skillshop + Meta Blueprint certifications held by the team. */
-export function CertificationsStrip({ heading = true }: { heading?: boolean }) {
-  return (
-    <div className="lp-certs">
-      {heading ? (
-        <p className="lp-trust-label">
-          <BadgeCheck aria-hidden="true" /> Platform certifications
-        </p>
-      ) : null}
-      <ul className="lp-cert-grid">
-        {certifications.map((c) => (
-          <li key={c.id}>
-            <a href={c.url} target="_blank" rel="noopener noreferrer nofollow" className={`lp-cert lp-cert-${c.issuer}`} title={c.name}>
-              <BrandIcon name={c.issuer === "google" ? "Google Ads" : "Meta Ads"} size={34} radius={9} />
-              <span>
-                <small>{c.issuer === "google" ? "Google Ads certified" : "Meta certified"}</small>
-                <strong>{c.title}</strong>
-              </span>
-              <i aria-hidden="true">
-                <BadgeCheck />
-              </i>
-            </a>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
@@ -200,40 +171,45 @@ export function GoogleReviewsBlock({ limit = 6, reviews = featuredGoogleReviews,
   );
 }
 
-/** Client logo wall grouped by industry — each row scrolls independently. */
-export function IndustryLogoWall() {
+/**
+ * Client logo wall — three continuous rows over the full client list, no
+ * industry labels (the vertical grouping was dropped 2026-09-15). Each row
+ * holds its slice twice so the -50% marquee loops seamlessly.
+ */
+const LOGO_ROWS = 3;
+
+export function ClientLogoWall() {
+  const per = Math.ceil(clientLogos.length / LOGO_ROWS);
+  const rows = Array.from({ length: LOGO_ROWS }, (_, i) => clientLogos.slice(i * per, (i + 1) * per));
+
   return (
-    <section className="logo-proof industry-wall" aria-labelledby="logos-title">
+    <section className="logo-proof logo-wall" aria-labelledby="logos-title">
       <div className="logo-proof-heading">
         <p id="logos-title">
           <strong>Trusted across 200+ businesses</strong>
-          <span>Real PPC Guru clients, grouped by the industry they serve.</span>
+          <span>Real PPC Guru clients — franchises, national brands and local businesses.</span>
         </p>
         <div className="proof-rating">
           <BadgeCheck aria-hidden="true" />
-          <span>Franchises, national brands &amp; local businesses</span>
+          <span>Google Ads &amp; Meta Ads managed in-house</span>
         </div>
       </div>
-      <div className="industry-rows">
-        {logoIndustries.map((group, gi) => {
-          const repeats = Math.max(2, Math.ceil(14 / group.logos.length));
-          const items = Array.from({ length: repeats }, () => group.logos).flat();
+      <div className="logo-rows">
+        {rows.map((row, ri) => {
+          const items = [...row, ...row];
           return (
-            <div className="industry-row" key={group.id}>
-              <p className="industry-label">
-                <span>{group.label}</span>
-                <small>
-                  {group.logos.length} client{group.logos.length === 1 ? "" : "s"}
-                </small>
-              </p>
-              <div className="logo-viewport" aria-label={`${group.label} client logos`}>
-                <div className={gi % 2 ? "logo-track is-reverse" : "logo-track"} style={{ animationDuration: `${Math.max(40, items.length * 4.2)}s` }}>
-                  {items.map((file, i) => (
-                    <figure className="logo-item" key={`${file}-${i}`} aria-hidden={i >= group.logos.length}>
-                      <img src={`${LOGOS}/${file}`} alt={i < group.logos.length ? logoName(file) : ""} loading="lazy" />
-                    </figure>
-                  ))}
-                </div>
+            <div className="logo-viewport" key={ri} aria-label={ri === 0 ? "Client logos" : undefined}>
+              <div
+                className={ri % 2 ? "logo-track is-reverse" : "logo-track"}
+                style={{ animationDuration: `${Math.max(46, items.length * 3.4)}s` }}
+              >
+                {items.map((file, i) => (
+                  <figure className="logo-item" key={`${file}-${i}`} aria-hidden={i >= row.length}>
+                    {/* Eager, low priority: a marquee moves tiles in by transform, and
+                        lazy images pop in blank as they arrive. The whole set is ~0.6 MB. */}
+                    <img src={`${LOGOS}/${file}`} alt={i < row.length ? logoName(file) : ""} loading="eager" fetchPriority="low" decoding="async" />
+                  </figure>
+                ))}
               </div>
             </div>
           );
@@ -249,8 +225,8 @@ export function TrustSection({ kicker = "Verified credentials", title }: { kicke
     <section className="lp-trust" aria-labelledby="trust-title" id="credentials">
       <div className="lp-trust-head">
         <p className="section-kicker">{kicker}</p>
-        <h2 id="trust-title">{title ?? <>Certified. Partnered. <span>Reviewed by real clients.</span></>}</h2>
-        <p>Every badge links to the public profile it comes from, so you can check each claim at source before you book a call.</p>
+        <h2 id="trust-title">{title ?? <>Official partners. <span>Reviewed by real clients.</span></>}</h2>
+        <p>Every badge and review links to the public profile it comes from, so you can check each claim at source before you book a call.</p>
       </div>
       <PartnerBadges size={84} />
       <GoogleReviewsBlock />
