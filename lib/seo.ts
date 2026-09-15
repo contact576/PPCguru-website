@@ -5,6 +5,15 @@ import { aggregateReview, verifiedReviewUrls, awardUrls } from "./data/reviews";
 /** Content-freshness stamp for schema dateModified + visible "last reviewed". [VERIFY-client] bump on material revisions. */
 export const CONTENT_UPDATED_ISO = "2026-06-30";
 
+const escapedSiteName = siteConfig.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const trailingSiteName = new RegExp(`(?:\\s*\\|\\s*${escapedSiteName})+$`, "i");
+
+/** Keep page-level titles unbranded; the root metadata template adds the brand once. */
+export function stripTrailingSiteName(title: string): string {
+  const trimmed = title.trim();
+  return trimmed.replace(trailingSiteName, "").trim() || trimmed;
+}
+
 /** Build per-page metadata with sensible canonical + OG defaults. */
 export function buildMetadata(opts: {
   title: string;
@@ -14,18 +23,19 @@ export function buildMetadata(opts: {
   image?: string | null;
 }): Metadata {
   const url = `${siteConfig.url}${opts.path}`;
+  const title = stripTrailingSiteName(opts.title);
   const image = opts.image
     ? opts.image.startsWith("http")
       ? opts.image
       : `${siteConfig.url}${opts.image.startsWith("/") ? "" : "/"}${opts.image}`
     : null;
   return {
-    title: opts.title,
+    title,
     description: opts.description,
     keywords: opts.keywords,
     alternates: { canonical: opts.path },
     openGraph: {
-      title: `${opts.title} | ${siteConfig.name}`,
+      title: `${title} | ${siteConfig.name}`,
       description: opts.description,
       url,
       siteName: siteConfig.name,
@@ -34,7 +44,7 @@ export function buildMetadata(opts: {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${opts.title} | ${siteConfig.name}`,
+      title: `${title} | ${siteConfig.name}`,
       description: opts.description,
       ...(image ? { images: [image] } : {}),
     },
