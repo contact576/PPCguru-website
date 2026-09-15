@@ -89,6 +89,8 @@ export type AnalyticsEvent =
   | "trial_offer_click"
   | "phone_click"
   | "whatsapp_click"
+  /** Tap on the "Book a meeting" button / booking-calendar fallback link. */
+  | "booking_click"
   | "calculator_complete"
   | "popup_submit"
   | "service_card_click";

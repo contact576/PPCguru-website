@@ -29,7 +29,7 @@ export default async function SeoThankYouPage({ searchParams }: { searchParams: 
       kicker="Visibility check received"
       title="Thanks"
       titleEm="We’re checking how you show up right now."
-      lede={`We’ll capture how ${company || "your business"} appears${query ? ` for “${query}”` : ""} across Google, Maps and AI answers, then contact you to agree a measurable 30-day target. Want it faster? Call or WhatsApp us now.`}
+      lede={`We’ll capture how ${company || "your business"} appears${query ? ` for “${query}”` : ""} across Google, Maps and AI answers, then contact you to agree a measurable 30-day target. Want it faster? Book a time below — or call/WhatsApp us now.`}
       chips={[
         { Icon: Search, label: query || "Google Search + Maps" },
         { Icon: Bot, label: "AI-answer visibility" },

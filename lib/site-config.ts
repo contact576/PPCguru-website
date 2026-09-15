@@ -44,6 +44,18 @@ export const siteConfig = {
   },
 
   /**
+   * GoHighLevel booking calendar — the "Book a meeting" widget shown on the
+   * landing thank-you pages (and linkable anywhere). `widgetId` is the calendar
+   * id in the URL; the embed script (link.msgsndr.com/js/form_embed.js) resizes
+   * the iframe by matching it.
+   */
+  booking: {
+    widgetId: "zbrJAxyqqqT6te57YdYU",
+    url: "https://api.leadconnectorhq.com/widget/booking/zbrJAxyqqqT6te57YdYU",
+    embedScript: "https://link.msgsndr.com/js/form_embed.js",
+  },
+
+  /**
    * Google Business Profile. `mapUrl` is the public listing every printed
    * address links to (footer, contact page, `hasMap` in schema); `mapEmbedUrl`
    * is the matching Maps embed rendered on /contact. They must point at the

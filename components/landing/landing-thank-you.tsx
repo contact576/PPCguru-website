@@ -3,6 +3,7 @@ import { Check, type LucideIcon } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { LandingFooter, LandingHeader } from "@/components/landing/landing-chrome";
 import { ThankYouActions } from "@/components/landing/thank-you-actions";
+import { BookingCalendar } from "@/components/landing/booking-calendar";
 import { PartnerBadges, GoogleReviewsBlock } from "@/components/landing/trust";
 
 /**
@@ -89,6 +90,10 @@ export function LandingThankYou({
             </section>
           </div>
         </div>
+
+        {/* The booked meeting is the real conversion — calendar first, then the
+            explainer. */}
+        <BookingCalendar name={name} source={source} />
 
         <section className="thanks-next" aria-labelledby="next-title">
           <p className="section-kicker">What happens next</p>

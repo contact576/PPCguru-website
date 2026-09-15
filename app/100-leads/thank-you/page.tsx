@@ -32,7 +32,7 @@ export default async function ThankYouPage({ searchParams }: { searchParams: Pro
       kicker="Application received"
       title="You're in"
       titleEm="Your 100-lead plan starts now."
-      lede={`${company ? `${company} is in our review queue.` : "Your business is in our review queue."} Want to skip the wait? Call or WhatsApp us and we’ll walk through your lead criteria, market and budget today.`}
+      lede={`${company ? `${company} is in our review queue.` : "Your business is in our review queue."} Want to skip the wait? Book a time below — or call/WhatsApp us and we’ll walk through your lead criteria, market and budget today.`}
       chips={[
         { Icon: MapPin, label: "Canada & USA" },
         { Icon: Target, label: "100-lead target" },
