@@ -1,0 +1,4 @@
+# Archived legal evidence: never touch these bytes. The SHA-256 recorded in
+# legal-archive/**/manifest.json is the hash of the file exactly as written, so
+# any end-of-line conversion on checkout would break the evidence trail.
+legal-archive/** -text
