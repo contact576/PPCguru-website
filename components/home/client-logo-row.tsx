@@ -70,10 +70,10 @@ export function ClientLogoRow() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  height: 84,
-                  width: 176,
+                  height: 92,
+                  width: 184,
                   margin: "0 9px",
-                  padding: "0 20px",
+                  padding: "0 12px",
                   background: "#fff",
                   border: "1px solid #e1dfcf",
                   borderRadius: 18,
@@ -86,7 +86,7 @@ export function ClientLogoRow() {
                   loading="eager"
                   fetchPriority="low"
                   decoding="async"
-                  style={{ maxHeight: 48, maxWidth: 136, width: "auto", objectFit: "contain" }}
+                  style={{ maxHeight: 72, maxWidth: 158, width: "auto", objectFit: "contain" }}
                 />
               </figure>
             );

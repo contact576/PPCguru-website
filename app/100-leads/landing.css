@@ -721,10 +721,10 @@
 .lp-root .logo-viewport:focus-within .logo-track { animation-play-state: paused; }
 
 .lp-root .logo-item {
-  width: 150px;
-  height: 68px;
+  width: 156px;
+  height: 74px;
   margin: 0;
-  padding: 9px 14px;
+  padding: 7px 10px;
   display: grid;
   place-items: center;
   border: 1px solid #e6e7e0;
@@ -733,8 +733,8 @@
 }
 
 .lp-root .logo-item img {
-  max-width: 120px;
-  max-height: 46px;
+  max-width: 138px;
+  max-height: 60px;
   object-fit: contain;
 }
 
@@ -1304,8 +1304,8 @@
   .lp-root .logo-proof { padding: 27px 0 31px; }
   .lp-root .logo-proof-heading { margin-bottom: 20px; align-items: flex-start; flex-direction: column; gap: 10px; }
   .lp-root .logo-proof-heading > p { display: grid; gap: 3px; }
-  .lp-root .logo-item { width: 132px; height: 62px; }
-  .lp-root .logo-item img { max-width: 104px; max-height: 41px; }
+  .lp-root .logo-item { width: 138px; height: 68px; }
+  .lp-root .logo-item img { max-width: 122px; max-height: 54px; }
   .lp-root .logo-track { animation-duration: 60s; }
 
   .lp-root .results-section { padding: 62px 0 54px; }
@@ -1513,8 +1513,8 @@
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
-.lp-root .logo-rows .logo-item { width: 178px; height: 82px; padding: 10px 16px; border-radius: 14px; }
-.lp-root .logo-rows .logo-item img { max-width: 146px; max-height: 58px; }
+.lp-root .logo-rows .logo-item { width: 182px; height: 88px; padding: 7px 10px; border-radius: 14px; }
+.lp-root .logo-rows .logo-item img { max-width: 162px; max-height: 72px; }
 
 /* ── Trust section ───────────────────────────────────────────────────────── */
 .lp-root .lp-trust {
@@ -1676,8 +1676,8 @@
   .lp-root .hero-assurance.has-marks > div span { font-size: 10.5px; }
   .lp-root .lp-trust { padding: 44px 0 40px; gap: 26px; }
   .lp-root .lp-review-grid { grid-template-columns: 1fr; }
-  .lp-root .logo-rows .logo-item { width: 148px; height: 70px; }
-  .lp-root .logo-rows .logo-item img { max-width: 118px; max-height: 46px; }
+  .lp-root .logo-rows .logo-item { width: 152px; height: 76px; padding: 6px 8px; }
+  .lp-root .logo-rows .logo-item img { max-width: 136px; max-height: 62px; }
   .lp-root .thanks-whatsapp > svg { width: 30px; height: 30px; }
 }
 @media (max-width: 400px) {

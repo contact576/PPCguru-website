@@ -18,9 +18,9 @@ import { GOOGLE_PARTNER_BADGE, GOOGLE_PARTNER_PROFILE_URL, META_PARTNER_URL } fr
 type Size = "sm" | "md" | "lg";
 
 const SIZES: Record<Size, { mark: number; title: number; sub: number; basis: number; pad: string; gap: number; radius: number }> = {
-  sm: { mark: 38, title: 12.5, sub: 10.5, basis: 228, pad: "8px 14px 8px 8px", gap: 10, radius: 12 },
-  md: { mark: 48, title: 14.5, sub: 11.5, basis: 236, pad: "10px 16px 10px 10px", gap: 12, radius: 14 },
-  lg: { mark: 60, title: 16, sub: 12, basis: 290, pad: "12px 20px 12px 12px", gap: 14, radius: 16 },
+  sm: { mark: 46, title: 12.5, sub: 10.5, basis: 236, pad: "7px 14px 7px 7px", gap: 10, radius: 13 },
+  md: { mark: 58, title: 14.5, sub: 11.5, basis: 250, pad: "9px 16px 9px 9px", gap: 12, radius: 15 },
+  lg: { mark: 72, title: 16, sub: 12, basis: 304, pad: "11px 20px 11px 11px", gap: 14, radius: 18 },
 };
 
 function Card({
