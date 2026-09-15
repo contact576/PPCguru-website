@@ -7,6 +7,7 @@ import { caseStudies } from "@/lib/data/case-studies";
 import { tools } from "@/lib/data/tools";
 import { getAllPosts } from "@/lib/blog";
 import { allServiceIndustryPairs } from "@/lib/data/service-industry";
+import { CLIENT_TERMS_VERSIONS, clientTermsPath } from "@/lib/legal/client-service-terms";
 
 // Re-generate at most once a minute so newly published blog posts (read from
 // Supabase / markdown at request time) appear in the sitemap without a redeploy.
@@ -25,6 +26,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: now,
     changeFrequency: "weekly" as const,
     priority: path === "" ? 1 : 0.8,
+  }));
+
+  // Every published terms version stays indexable and permanent — an agreement
+  // can reference any of them, so none is ever dropped from the sitemap.
+  const termsRoutes = Object.values(CLIENT_TERMS_VERSIONS).map((v) => ({
+    url: `${base}${clientTermsPath(v.id)}`,
+    lastModified: new Date(`${v.effectiveDateIso}T00:00:00Z`),
+    changeFrequency: "yearly" as const,
+    priority: 0.4,
   }));
 
   const toolRoutes = tools.filter((t) => t.sitemap).map((t) => ({ url: `${base}/tools/${t.slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 }));
@@ -57,5 +67,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     newestPost && r.url === `${base}/blog` ? { ...r, lastModified: newestPost } : r,
   );
 
-  return [...staticRoutesDated, ...toolRoutes, ...serviceRoutes, ...serviceIndustryRoutes, ...industryRoutes, ...locationRoutes, ...caseRoutes, ...blogRoutes];
+  return [...staticRoutesDated, ...termsRoutes, ...toolRoutes, ...serviceRoutes, ...serviceIndustryRoutes, ...industryRoutes, ...locationRoutes, ...caseRoutes, ...blogRoutes];
 }
