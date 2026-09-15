@@ -47,10 +47,7 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: BLOCKED_CRAWLERS, disallow: "/" },
       { userAgent: "*", allow: "/", disallow: EXCLUDED_PATHS },
     ],
-    // The removal sitemap lists the hacked-in casino URLs (all 410 Gone) so
-    // Google re-crawls and drops them. Temporary — delete once the index is
-    // clean. Kept OUT of /sitemap.xml, which must only carry live pages.
-    sitemap: [`${siteConfig.url}/sitemap.xml`, `${siteConfig.url}/spam-removal-sitemap.xml`],
+    sitemap: `${siteConfig.url}/sitemap.xml`,
   };
 }
 
