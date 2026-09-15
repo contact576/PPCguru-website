@@ -14,7 +14,7 @@ import { trustFacts } from "@/lib/data/performance-stats";
 
 export async function generateMetadata(): Promise<Metadata> {
   return withMetaOverride(buildMetadata({
-  title: "Free Website Audit | PPC Guru",
+  title: "Free Website Audit",
   description:
     "Get a free, no-obligation website audit — conversion gaps, tracking problems, wasted ad spend and the first fixes we'd make. No contract, no setup fee. GTA & Canada.",
   path: "/free-audit",
