@@ -2,12 +2,7 @@ import { BadgeCheck, ExternalLink } from "lucide-react";
 import { BrandIcon } from "@/components/shared/brand-logos";
 import { PlatformLogo } from "@/components/brand/platform-logo";
 import { earnedAwards } from "@/lib/data/reviews";
-import {
-  GOOGLE_PARTNER_BADGE,
-  GOOGLE_PARTNER_PROFILE_URL,
-  META_PARTNER_BADGE,
-  META_PARTNER_DIRECTORY_URL,
-} from "@/lib/data/certifications";
+import { PartnerPair } from "@/components/shared/partner-pair";
 import { featuredGoogleReviews, googleBusinessProfile, type GoogleReview } from "@/lib/data/google-reviews";
 import { clientLogos, logoName } from "@/lib/data/landing-100-leads";
 
@@ -24,44 +19,13 @@ const LOGOS = "/landing/logos";
 
 /* eslint-disable @next/next/no-img-element -- badge artwork + client logos are tiny static assets */
 
-/** Official Google Partner badge (clickable → public profile) + Meta Business Partner badge. */
+/**
+ * The two partner badges, same size, same frame — see PartnerPair. `size` stays
+ * in px for the existing call sites (84 / 54 / 46) and maps onto the shared scale.
+ */
 export function PartnerBadges({ size = 72, compact = false }: { size?: number; compact?: boolean }) {
-  return (
-    <div className={compact ? "lp-partner-row is-compact" : "lp-partner-row"}>
-      <a
-        href={GOOGLE_PARTNER_PROFILE_URL}
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        className="lp-partner-badge lp-partner-google"
-        aria-label="Google Partner — view PPC Guru's profile on Google Partners"
-        title="Verified on Google Partners"
-      >
-        <img src={GOOGLE_PARTNER_BADGE} alt="Google Partner" width={size} height={Math.round(size * 0.957)} style={{ height: size, width: "auto" }} />
-        {!compact ? (
-          <span>
-            <strong>Google Partner</strong>
-            <small>Verified agency profile · ID 1117142019</small>
-          </span>
-        ) : null}
-      </a>
-      <a
-        href={META_PARTNER_DIRECTORY_URL}
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        className="lp-partner-badge lp-partner-meta"
-        aria-label="Meta Business Partner — view the Meta partner directory"
-        title="Meta Business Partner"
-      >
-        <img src={META_PARTNER_BADGE} alt="Meta Business Partner" width={252} height={56} style={{ height: Math.round(size * 0.72), width: "auto" }} />
-        {!compact ? (
-          <span>
-            <strong>Meta Business Partner</strong>
-            <small>Facebook &amp; Instagram ads partner program</small>
-          </span>
-        ) : null}
-      </a>
-    </div>
-  );
+  const scale = compact || size <= 56 ? "sm" : size >= 80 ? "lg" : "md";
+  return <PartnerPair size={scale} className={compact ? "lp-partner-row is-compact" : "lp-partner-row"} />;
 }
 
 /** Third-party directories / registries where PPC Guru is listed (linked to each profile). */

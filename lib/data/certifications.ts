@@ -26,7 +26,14 @@ export const GOOGLE_PARTNER_PROFILE_URL = `https://www.google.com/partners/agenc
 /** Official clickable badge artwork served by Google Partners (mirrored in /public/badges). */
 export const GOOGLE_PARTNER_BADGE = "/badges/google-partner-official.svg";
 export const META_PARTNER_BADGE = "/badges/meta-business-partner.svg";
-export const META_PARTNER_DIRECTORY_URL = "https://www.facebook.com/business/partner-directory";
+/**
+ * Where the Meta Business Partner badge points. Set 2026-09-15 to the client's
+ * own Drive folder holding the partner documentation — Meta's public directory
+ * search doesn't deep-link to a single agency, so the proof lives here.
+ */
+export const META_PARTNER_URL = "https://drive.google.com/drive/folders/1iXDLvUEAtihzXgrjJdIwuXUL-Bs9NQxy?usp=sharing";
+/** @deprecated use META_PARTNER_URL */
+export const META_PARTNER_DIRECTORY_URL = META_PARTNER_URL;
 
 export const certifications: Certification[] = [
   { id: "g-search", issuer: "google", title: "Search", name: "Google Ads Search Certification", url: "https://skillshop.withgoogle.com/" },

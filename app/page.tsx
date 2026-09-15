@@ -15,11 +15,10 @@ import { ToolsOs } from "@/components/home/tools-os";
 import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
 import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
 import { ClientLogoRow } from "@/components/home/client-logo-row";
-import { GOOGLE_PARTNER_BADGE } from "@/lib/data/certifications";
+import { PartnerPair } from "@/components/shared/partner-pair";
 import { LeadCtaButton } from "@/components/shared/lead-cta";
 import { HeroOffer } from "@/components/shared/hero-offer";
 import { performanceStats } from "@/lib/data/performance-stats";
-import { GOOGLE_PARTNER_URL } from "@/lib/data/logos";
 import { HeroVectors } from "@/components/shared/hero-vectors";
 import { StatCounter } from "@/components/ui/stat-counter";
 import { ScrollProgress } from "@/components/home/scroll-progress";
@@ -114,15 +113,10 @@ export default function HomePage() {
               <Link href="#calculator" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 26px", borderRadius: 14 }}>Try ROI Calculator</Link>
             </div>
             <HeroOffer className="mt-7 max-w-lg" badge="Free website audit" line="Get a free website and ad-account audit — no contract, no setup fee, no obligation." credit />
-            <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 40, flexWrap: "wrap" }}>
-              {/* Clickable → public Google Partners profile (same link everywhere the badge appears). */}
-              <a href={GOOGLE_PARTNER_URL} target="_blank" rel="noopener noreferrer nofollow" aria-label="Google Partner — view our profile on Google Partners" className="transition-opacity hover:opacity-80" style={{ display: "inline-flex", flexShrink: 0, borderRadius: 10 }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={GOOGLE_PARTNER_BADGE} alt="Google Partner" width={56} height={54} style={{ height: 54, width: "auto", flexShrink: 0 }} />
-              </a>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/badges/meta-business-partner.svg" alt="Meta Business Partner" width={252} height={56} style={{ height: 40, width: "auto", flexShrink: 0 }} />
-              <div className="mono" style={{ fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.6 }}>Performance marketing · GTA</div>
+            <div style={{ marginTop: 40 }}>
+              {/* Both partner badges in one frame each, so they read as a matched pair. */}
+              <PartnerPair size="sm" style={{ maxWidth: 520 }} />
+              <div className="mono" style={{ marginTop: 13, fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.6 }}>Performance marketing · GTA</div>
             </div>
           </GsapHeroReveal>
           <HeroDashboard />

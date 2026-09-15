@@ -25,7 +25,7 @@ import { SessionField } from "@/components/shared/session-field";
 import { track } from "@/lib/analytics";
 import { LandingHeader, LandingFooter } from "@/components/landing/landing-chrome";
 import { ClientLogoWall, TrustSection } from "@/components/landing/trust";
-import { GOOGLE_PARTNER_BADGE, GOOGLE_PARTNER_PROFILE_URL } from "@/lib/data/certifications";
+import { PartnerPair } from "@/components/shared/partner-pair";
 import { SEO_GOALS, SEO_INVESTMENTS, SEO_LANDING_SOURCE, aiProofs } from "@/lib/data/landing-seo";
 
 /**
@@ -469,17 +469,12 @@ export function SeoLanding() {
                       <strong>200+ businesses</strong> trusted PPC Guru
                     </span>
                   </div>
-                  <a className="hero-partner-badge" href={GOOGLE_PARTNER_PROFILE_URL} target="_blank" rel="noopener noreferrer nofollow" aria-label="Google Partner — view PPC Guru's profile on Google Partners">
-                    <img src={GOOGLE_PARTNER_BADGE} alt="Google Partner" width={56} height={54} />
-                    <span>
-                      <strong>Google Partner</strong>
-                      <small>Verified profile</small>
-                    </span>
-                  </a>
                   <button type="button" onClick={scrollToProof}>
                     See captured answers <ArrowRight aria-hidden="true" />
                   </button>
                 </div>
+                {/* Both partner badges, same frame — see components/shared/partner-pair.tsx. */}
+                <PartnerPair size="sm" style={{ marginTop: 14, maxWidth: 470 }} />
               </div>
               <VisibilityForm />
             </section>

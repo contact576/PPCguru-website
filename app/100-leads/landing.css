@@ -1497,24 +1497,12 @@
 .lp-root .header-actions > a,
 .lp-root .header-actions button { white-space: nowrap; flex-shrink: 0; }
 
-/* ── Hero: clickable Google Partner badge in the assurance row ───────────── */
-.lp-root .hero-assurance .hero-partner-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 14px 6px 6px;
-  border-radius: 999px;
-  border: 1.5px solid #d7dcc6;
-  background: #fff;
-  color: var(--ink);
-  text-decoration: none;
-  transition: border-color 140ms ease, transform 140ms ease;
-}
-.lp-root .hero-assurance .hero-partner-badge:hover { border-color: #4285f4; transform: translateY(-1px); }
-.lp-root .hero-assurance .hero-partner-badge img { width: 52px; height: auto; }
-.lp-root .hero-assurance .hero-partner-badge span { display: grid; line-height: 1.15; }
-.lp-root .hero-assurance .hero-partner-badge strong { font-size: 13px; font-weight: 900; }
-.lp-root .hero-assurance .hero-partner-badge small { font-size: 11px; color: var(--muted); }
+/* ── Hero assurance: the two dimensional number tiles ────────────────────── */
+/* The number now lives IN the mark (components/landing/hero-marks.tsx), so the
+   label beside it is a two-line caption rather than a 22px figure. */
+.lp-root .hero-assurance .hero-mark { width: 46px; height: 46px; flex: 0 0 46px; }
+.lp-root .hero-assurance.has-marks > div strong { font-size: 13.5px; font-weight: 900; line-height: 1.15; }
+.lp-root .hero-assurance.has-marks > div span { font-size: 11.5px; gap: 2px; }
 
 /* ── Client logo wall — three unlabelled marquee rows ────────────────────── */
 .lp-root .logo-wall { padding: 34px 0 30px; }
@@ -1561,29 +1549,10 @@
 }
 .lp-root .lp-trust-label svg { width: 17px; height: 17px; color: #719900; }
 
-/* Partner badges */
+/* Partner badges — the cards themselves are components/shared/partner-pair.tsx
+   (identical frames for Google and Meta); only the row spacing lives here. */
 .lp-root .lp-partner-row { display: flex; flex-wrap: wrap; gap: 14px; }
-.lp-root .lp-partner-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 22px 14px 14px;
-  border-radius: 20px;
-  border: 1.5px solid #dfe3d2;
-  background: #fff;
-  color: var(--ink);
-  text-decoration: none;
-  transition: border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
-}
-.lp-root .lp-partner-badge:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.1); }
-.lp-root .lp-partner-google:hover { border-color: #4285f4; }
-.lp-root .lp-partner-meta:hover { border-color: #0866ff; }
-.lp-root .lp-partner-badge img { display: block; }
-.lp-root .lp-partner-badge > span { display: grid; gap: 2px; line-height: 1.2; }
-.lp-root .lp-partner-badge strong { font-size: 16px; font-weight: 900; letter-spacing: -0.01em; }
-.lp-root .lp-partner-badge small { font-size: 12px; color: var(--muted); }
 .lp-root .lp-partner-row.is-compact { gap: 10px; }
-.lp-root .lp-partner-row.is-compact .lp-partner-badge { padding: 8px 12px; border-radius: 14px; }
 
 .lp-root .lp-reviews { display: grid; gap: 18px; }
 .lp-root .lp-reviews-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
@@ -1702,10 +1671,11 @@
   .lp-root .brand { padding: 5px 8px; border-radius: 10px; }
   .lp-root .brand img { width: 116px; }
   .lp-root .header-actions { margin-left: auto; }
-  .lp-root .hero-assurance .hero-partner-badge { width: 100%; justify-content: center; }
+  .lp-root .hero-assurance .hero-mark { width: 38px; height: 38px; flex: 0 0 38px; }
+  .lp-root .hero-assurance.has-marks > div strong { font-size: 12.5px; }
+  .lp-root .hero-assurance.has-marks > div span { font-size: 10.5px; }
   .lp-root .lp-trust { padding: 44px 0 40px; gap: 26px; }
   .lp-root .lp-review-grid { grid-template-columns: 1fr; }
-  .lp-root .lp-partner-badge { width: 100%; }
   .lp-root .logo-rows .logo-item { width: 148px; height: 70px; }
   .lp-root .logo-rows .logo-item img { max-width: 118px; max-height: 46px; }
   .lp-root .thanks-whatsapp > svg { width: 30px; height: 30px; }

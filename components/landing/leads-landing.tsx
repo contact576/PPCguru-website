@@ -18,7 +18,6 @@ import {
   Lock,
   MapPin,
   ShieldCheck,
-  Target,
   TrendingUp,
   X,
   type LucideIcon,
@@ -28,8 +27,9 @@ import { TurnstileField } from "@/components/shared/turnstile-field";
 import { SessionField } from "@/components/shared/session-field";
 import { track } from "@/lib/analytics";
 import { BUSINESS_TYPES, LANDING_BUDGETS, LANDING_SOURCE, campaignResults } from "@/lib/data/landing-100-leads";
-import { GOOGLE_PARTNER_BADGE, GOOGLE_PARTNER_PROFILE_URL } from "@/lib/data/certifications";
+import { PartnerPair } from "@/components/shared/partner-pair";
 import { LandingHeader, LandingFooter } from "@/components/landing/landing-chrome";
+import { HundredMark, ZeroFeeMark } from "@/components/landing/hero-marks";
 import { ClientLogoWall, TrustSection } from "@/components/landing/trust";
 
 // Header/footer moved to landing-chrome.tsx (shared with /seo-visibility);
@@ -618,37 +618,25 @@ export function LeadsLanding() {
                     <Check aria-hidden="true" /> Your ad accounts stay yours
                   </span>
                 </div>
-                <div className="hero-assurance">
+                <div className="hero-assurance has-marks">
                   <div>
-                    <Target aria-hidden="true" />
+                    <HundredMark />
                     <span>
-                      <strong>100</strong> agreed-quality leads
+                      <strong>Qualified leads</strong> agreed before launch
                     </span>
                   </div>
                   <div>
-                    <ShieldCheck aria-hidden="true" />
+                    <ZeroFeeMark />
                     <span>
-                      <strong>$0</strong> management if missed
+                      <strong>Management fee</strong> if we miss the target
                     </span>
                   </div>
-                  <a
-                    className="hero-partner-badge"
-                    href={GOOGLE_PARTNER_PROFILE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    aria-label="Google Partner — view PPC Guru's profile on Google Partners"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={GOOGLE_PARTNER_BADGE} alt="Google Partner" width={56} height={54} />
-                    <span>
-                      <strong>Google Partner</strong>
-                      <small>Verified profile</small>
-                    </span>
-                  </a>
                   <button type="button" onClick={scrollToResults}>
                     See real results <ArrowRight aria-hidden="true" />
                   </button>
                 </div>
+                {/* Both partner badges, same frame — see components/shared/partner-pair.tsx. */}
+                <PartnerPair size="sm" style={{ marginTop: 14, maxWidth: 470 }} />
               </div>
               <QualificationForm />
             </section>
