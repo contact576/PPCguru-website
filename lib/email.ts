@@ -44,7 +44,30 @@ export type MailInput = {
   text?: string;
   replyTo?: string;
   headers?: Record<string, string>;
+  /** Allow the Resend shared-sender rescue below when both channels reject the
+   *  message. Only for INTERNAL mail (lead notifications) — never for anything
+   *  addressed to the customer, which must not be re-routed to the team. */
+  rescue?: boolean;
 };
+
+/* ── Last-resort rescue channel ──────────────────────────────────────────────
+   As of 2026-09-16 BOTH real channels are dead at the provider, not in code:
+     • Hostinger answers hello@ppcguru.ca with
+       "554 5.7.1 Outbound sending is disabled for this account";
+     • Resend answers every send from ppcguru.ca with
+       403 "The ppcguru.ca domain is not verified".
+   So lead notifications were being written to Supabase and then silently
+   dropped. Resend always accepts its own shared sender addressed to the
+   account owner, so an INTERNAL message that nothing else would take is
+   re-sent from there rather than lost. Delete this block once ppcguru.ca is
+   verified at resend.com/domains (or Hostinger re-enables outbound). */
+const RESCUE_FROM = () => process.env.RESEND_RESCUE_FROM || "PPC Guru <onboarding@resend.dev>";
+const RESCUE_TO = () => process.env.RESEND_RESCUE_TO || "marketing@ppcguru.ca";
+
+/** Resend rejections that mean "this sender identity isn't allowed yet". */
+function isResendIdentityError(message: string): boolean {
+  return /domain is not verified|only send testing emails/i.test(message);
+}
 
 /* ── SMTP circuit breaker ────────────────────────────────────────────────────
    Hostinger answers a mailbox whose outbound sending has been disabled with a
@@ -149,6 +172,10 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
       // The SDK resolves (never throws) on a 4xx — e.g. "domain is not verified".
       if (error) {
         console.error("[email] Resend rejected the message:", error.message);
+        if (msg.rescue && isResendIdentityError(error.message)) {
+          const rescued = await rescueSend(resend, msg);
+          if (rescued) return true;
+        }
         return false;
       }
       return true;
@@ -158,6 +185,45 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
   }
 
   return false;
+}
+
+/**
+ * Re-send an internal notification from Resend's shared sender to the Resend
+ * account owner, keeping the original recipient list and Reply-To in the body
+ * so the team can still reply straight to the lead.
+ */
+async function rescueSend(resend: import("resend").Resend, msg: MailInput): Promise<boolean> {
+  const intended = Array.isArray(msg.to) ? msg.to.join(", ") : msg.to;
+  const to = RESCUE_TO();
+  try {
+    const { error } = await resend.emails.send({
+      from: RESCUE_FROM(),
+      to: [to],
+      subject: msg.subject,
+      text: [
+        msg.text ?? msg.subject,
+        "",
+        "———",
+        `Delivered via the Resend shared sender because ppcguru.ca is not verified and Hostinger has outbound disabled on ${process.env.SMTP_USER ?? "the SMTP mailbox"}.`,
+        `Intended recipients: ${intended}`,
+        msg.replyTo ? `Reply to: ${msg.replyTo}` : "",
+      ]
+        .filter((l) => l !== "")
+        .join("\n"),
+      html: undefined,
+      replyTo: msg.replyTo,
+      headers: msg.headers,
+    });
+    if (error) {
+      console.error("[email] rescue send rejected:", error.message);
+      return false;
+    }
+    console.warn(`[email] lead notification rescued to ${to} (intended: ${intended}) — verify ppcguru.ca at resend.com/domains to stop this.`);
+    return true;
+  } catch (err) {
+    console.error("[email] rescue send failed:", err instanceof Error ? err.message : err);
+    return false;
+  }
 }
 
 /* ── Delivery health probe (admin panel) ────────────────────────────────────
@@ -215,6 +281,7 @@ export async function sendTestNotification(): Promise<{ ok: boolean; detail: str
   const t0 = Date.now();
   const ok = await sendMail({
     to,
+    rescue: true,
     subject: "[Test] PPC Guru form notifications are working",
     text: `This is a delivery test sent from the website admin at ${new Date().toISOString()}.\nRecipients: ${to.join(", ")}\nIf you can read this, lead notifications will arrive here.`,
   });

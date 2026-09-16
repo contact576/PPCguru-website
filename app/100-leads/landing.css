@@ -144,7 +144,7 @@
   font-weight: 900;
 }
 
-.lp-root .header-actions > a,
+.lp-root .header-actions > a svg,
 .lp-root .header-actions button svg { width: 18px; height: 18px; }
 
 .lp-root .hero-section {
@@ -1366,7 +1366,7 @@
 @media (max-width: 350px) {
   .lp-root .header-actions > a,
   .lp-root .header-actions button { padding-inline: 11px; }
-  .lp-root .header-actions > a,
+  .lp-root .header-actions > a svg,
   .lp-root .header-actions button svg { display: none; }
   .lp-root .hero-copy h1 { font-size: 43px; }
   .lp-root .hero-assurance { grid-template-columns: 1fr; }
@@ -1532,6 +1532,27 @@
    registries, real WhatsApp mark). Used by /100-leads and /seo-visibility.
    ═══════════════════════════════════════════════════════════════════════ */
 
+/* ── Header: platform MARKS instead of the words "Google Ads + Meta Ads" ──
+   A white capsule that twins the logo chip on the left. It keeps its own
+   class so the `.header-actions > span` tagline rules (including the
+   display:none at 1100px) don't apply to it. */
+.lp-root .header-actions > .header-platforms {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 13px;
+  border: 1px solid #e6ead8;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+.lp-root .header-platform { display: inline-flex; align-items: center; gap: 9px; }
+/* BrandIcon puts every mark on its own bordered white chip; inside this white
+   capsule that reads as a box-in-a-box, so flatten it and let the logos show. */
+.lp-root .header-platform > span { background: transparent !important; border-color: transparent !important; }
+.lp-root .header-platform svg { display: block; }
+.lp-root .header-platform i { font-style: normal; font-size: 14px; font-weight: 900; color: #9aa291; }
+
 /* ── Header: the original logo at a sane size, one CTA, no nav ───────────── */
 .lp-root .site-header { gap: 18px; min-height: 84px; }
 .lp-root .brand { padding: 5px 10px; background: #fff; border: 1px solid #e6ead8; border-radius: 12px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05); }
@@ -1685,7 +1706,7 @@
 .lp-root .lp-registry small { font-size: 9.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
 /* ── Footer: logo + badges + links ───────────────────────────────────────── */
-.lp-root .site-footer { grid-template-columns: auto auto 1fr; gap: 26px; padding: 22px 0; }
+.lp-root .site-footer { grid-template-columns: auto 1fr; gap: 26px; padding: 22px 0; }
 .lp-root .site-footer-brand { display: grid; gap: 6px; }
 .lp-root .site-footer-brand img { width: 190px; height: auto; }
 .lp-root .site-footer-brand p { margin: 0; color: var(--muted); font-size: 12px; }
@@ -1693,7 +1714,8 @@
 .lp-root .site-footer-links a { color: var(--ink); text-decoration: none; }
 
 /* ── Thank-you extras ────────────────────────────────────────────────────── */
-.lp-root .thanks-badges { display: flex; justify-content: center; margin-top: 18px; }
+.lp-root .thanks-badges { display: flex; justify-content: center; margin-top: 22px; }
+.lp-root .thanks-badges .lp-partner-row { justify-content: center; width: 100%; max-width: 660px; }
 .lp-root .thanks-whatsapp > svg { width: 34px; height: 34px; }
 
 /* ── Embedding trust blocks inside the main site (homepage) ──────────────── */
@@ -1711,6 +1733,8 @@
 }
 @media (max-width: 680px) {
   .lp-root .site-header { min-height: 72px; flex-wrap: wrap; gap: 10px; padding-block: 10px; }
+  .lp-root .header-actions > .header-platforms { gap: 6px; padding: 4px 10px; }
+  .lp-root .header-platform { gap: 6px; }
   .lp-root .brand { padding: 5px 8px; border-radius: 10px; }
   .lp-root .brand img { width: 116px; }
   .lp-root .header-actions { margin-left: auto; }

@@ -183,16 +183,17 @@ export function ClientLogoWall() {
   );
 }
 
-/** The full credentials block used under the proof section on every landing page. */
-export function TrustSection({ kicker = "Verified credentials", title }: { kicker?: string; title?: React.ReactNode }) {
+/** The reviews + registries block under the proof section on every landing page.
+ *  The partner badges were pulled out of here (and out of the footer) on
+ *  2026-09-16 — they were showing twice at the bottom of the page. */
+export function TrustSection({ kicker = "Verified by real clients", title }: { kicker?: string; title?: React.ReactNode }) {
   return (
     <section className="lp-trust" aria-labelledby="trust-title" id="credentials">
       <div className="lp-trust-head">
         <p className="section-kicker">{kicker}</p>
-        <h2 id="trust-title">{title ?? <>Official partners. <span>Reviewed by real clients.</span></>}</h2>
-        <p>Every badge and review links to the public profile it comes from, so you can check each claim at source before you book a call.</p>
+        <h2 id="trust-title">{title ?? <>Reviewed by real clients. <span>Listed on public registries.</span></>}</h2>
+        <p>Every review and listing links to the public profile it comes from, so you can check each claim at source before you book a call.</p>
       </div>
-      <PartnerBadges size={84} />
       <GoogleReviewsBlock />
       <RegistriesStrip />
     </section>

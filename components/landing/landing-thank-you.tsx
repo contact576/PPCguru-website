@@ -42,6 +42,7 @@ export function LandingThankYou({
   source,
   headerCtaLabel,
   headerTagline,
+  headerPlatforms,
   footerTagline,
 }: {
   name: string;
@@ -49,7 +50,8 @@ export function LandingThankYou({
   title: string;
   titleEm: string;
   lede: string;
-  chips: ThankYouChip[];
+  /** Optional summary pills under the call/WhatsApp buttons. Omit for none. */
+  chips?: ThankYouChip[];
   steps: ThankYouStep[];
   whatsappOpener: string;
   backHref: string;
@@ -57,13 +59,15 @@ export function LandingThankYou({
   source: string;
   headerCtaLabel: string;
   headerTagline: string;
+  /** Ad-platform marks beside the header CTA; `[]` falls back to the tagline text. */
+  headerPlatforms?: string[];
   footerTagline: string;
 }) {
   return (
     <div className="lp-root">
       <div className="site-shell" id="top">
         <div className="hero-surface">
-          <LandingHeader ctaHref={backHref} ctaLabel={headerCtaLabel} tagline={headerTagline} />
+          <LandingHeader ctaHref={backHref} ctaLabel={headerCtaLabel} tagline={headerTagline} platforms={headerPlatforms} />
           <div className="lp-main">
             <section className="thanks-hero" aria-labelledby="thanks-title">
               <div className="thanks-card">
@@ -76,15 +80,17 @@ export function LandingThankYou({
                 </h1>
                 <p className="thanks-lede">{lede}</p>
                 <ThankYouActions phoneLabel={siteConfig.contact.phone} phoneHref={siteConfig.contact.phoneHref} whatsappHref={whatsappLink(whatsappOpener)} source={source} />
-                <div className="success-summary">
-                  {chips.map(({ Icon, label }) => (
-                    <span key={label}>
-                      <Icon aria-hidden="true" /> {label}
-                    </span>
-                  ))}
-                </div>
+                {chips?.length ? (
+                  <div className="success-summary">
+                    {chips.map(({ Icon, label }) => (
+                      <span key={label}>
+                        <Icon aria-hidden="true" /> {label}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
                 <div className="thanks-badges">
-                  <PartnerBadges size={46} compact />
+                  <PartnerBadges size={84} />
                 </div>
               </div>
             </section>

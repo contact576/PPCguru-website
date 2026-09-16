@@ -49,6 +49,7 @@ export default async function SeoThankYouPage({ searchParams }: { searchParams: 
       source="landing:seo-visibility:thank-you"
       headerCtaLabel="Get my visibility plan"
       headerTagline="SEO + AI visibility"
+      headerPlatforms={[]}
       footerTagline="Search visibility for local and service businesses."
     />
   );

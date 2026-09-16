@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CalendarCheck, ClipboardList, MapPin, ShieldCheck, Target } from "lucide-react";
+import { CalendarCheck, ClipboardList, ShieldCheck } from "lucide-react";
 import "../landing.css";
 import { LandingThankYou, cleanParam } from "@/components/landing/landing-thank-you";
 import { LANDING_PATH, LANDING_THANK_YOU_PATH } from "@/lib/data/landing-100-leads";
@@ -33,11 +33,6 @@ export default async function ThankYouPage({ searchParams }: { searchParams: Pro
       title="You're in"
       titleEm="Your 100-lead plan starts now."
       lede={`${company ? `${company} is in our review queue.` : "Your business is in our review queue."} Want to skip the wait? Book a time below — or call/WhatsApp us and we’ll walk through your lead criteria, market and budget today.`}
-      chips={[
-        { Icon: MapPin, label: "Canada & USA" },
-        { Icon: Target, label: "100-lead target" },
-        { Icon: ShieldCheck, label: "$0 fee if missed" },
-      ]}
       steps={[
         { Icon: ClipboardList, title: "We review your market", copy: `Within one business day we check search demand, competition and lead costs${company ? ` around ${company}` : ""}.` },
         { Icon: CalendarCheck, title: "A 15-minute qualification call", copy: "We agree what a qualified lead means for you — service, service area, contact details and intent." },

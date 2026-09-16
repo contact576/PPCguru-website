@@ -58,7 +58,7 @@ export async function fanOut(input: DeliveryInput): Promise<DeliveryResult> {
     safe("crm", crm, false),
     safe(
       "team email",
-      sendMail({ to: leadRecipients(), replyTo: notification.replyTo, subject: notification.subject, text: notification.text }),
+      sendMail({ to: leadRecipients(), replyTo: notification.replyTo, subject: notification.subject, text: notification.text, rescue: true }),
       false,
     ),
     safe("autoresponder", sendLeadAutoresponder(lead), false),

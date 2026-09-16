@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { PartnerBadges } from "@/components/landing/trust";
+import { BrandIcon } from "@/components/shared/brand-logos";
 
 /**
  * Header + footer shared by every paid landing page (/100-leads, /seo-visibility
@@ -15,6 +15,11 @@ import { PartnerBadges } from "@/components/landing/trust";
  */
 
 const LOGO = "/brand/ppc-guru-logo-720.png";
+
+/** Ad platforms shown as MARKS (not the words "Google Ads + Meta Ads") next to
+ *  the header CTA. `tagline` stays as the accessible name for the row. Pass
+ *  `platforms={[]}` on pages whose tagline isn't a platform list (/seo-visibility). */
+const HEADER_PLATFORMS = ["Google Ads", "Meta Ads"];
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -32,11 +37,13 @@ export function LandingHeader({
   ctaLabel = "Get my lead plan",
   formId = "qualification",
   tagline = "Google Ads + Meta Ads",
+  platforms = HEADER_PLATFORMS,
 }: {
   ctaHref?: string;
   ctaLabel?: string;
   formId?: string;
   tagline?: string;
+  platforms?: string[];
 } = {}) {
   return (
     <header className="site-header">
@@ -44,7 +51,18 @@ export function LandingHeader({
         <img src={LOGO} alt="PPC Guru" width={720} height={251} fetchPriority="high" />
       </a>
       <div className="header-actions">
-        <span>{tagline}</span>
+        {platforms.length ? (
+          <span className="header-platforms" role="img" aria-label={tagline} title={tagline}>
+            {platforms.map((name, i) => (
+              <span key={name} className="header-platform">
+                {i > 0 ? <i aria-hidden="true">+</i> : null}
+                <BrandIcon name={name} size={30} radius={8} />
+              </span>
+            ))}
+          </span>
+        ) : (
+          <span>{tagline}</span>
+        )}
         {ctaHref ? (
           <Link href={ctaHref}>
             {ctaLabel} <ArrowRight aria-hidden="true" />
@@ -59,6 +77,9 @@ export function LandingHeader({
   );
 }
 
+/** No partner badges down here: they sit in the hero (landing) and in the
+ *  thank-you card, and repeating them above + below the footer rule was the
+ *  duplication the client flagged (2026-09-16). */
 export function LandingFooter({ tagline = "Performance advertising for local service businesses." }: { tagline?: string } = {}) {
   return (
     <footer className="site-footer">
@@ -66,7 +87,6 @@ export function LandingFooter({ tagline = "Performance advertising for local ser
         <img src={LOGO} alt="PPC Guru" width={720} height={251} loading="lazy" />
         <p>{tagline}</p>
       </div>
-      <PartnerBadges size={54} compact />
       <div className="site-footer-links">
         <Link href="/privacy">Privacy</Link>
         <Link href="/terms">Terms</Link>
