@@ -1532,26 +1532,22 @@
    registries, real WhatsApp mark). Used by /100-leads and /seo-visibility.
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Header: platform MARKS instead of the words "Google Ads + Meta Ads" ──
+/* ── Header: the official Google Ads + Meta logos beside the CTA ─────────────
    A white capsule that twins the logo chip on the left. It keeps its own
-   class so the `.header-actions > span` tagline rules (including the
+   class so the old `.header-actions > span` tagline rules (including the
    display:none at 1100px) don't apply to it. */
 .lp-root .header-actions > .header-platforms {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 7px 13px;
+  gap: 16px;
+  padding: 9px 18px;
   border: 1px solid #e6ead8;
   border-radius: 999px;
   background: #fff;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
 }
-.lp-root .header-platform { display: inline-flex; align-items: center; gap: 9px; }
-/* BrandIcon puts every mark on its own bordered white chip; inside this white
-   capsule that reads as a box-in-a-box, so flatten it and let the logos show. */
-.lp-root .header-platform > span { background: transparent !important; border-color: transparent !important; }
-.lp-root .header-platform svg { display: block; }
-.lp-root .header-platform i { font-style: normal; font-size: 14px; font-weight: 900; color: #9aa291; }
+.lp-root .header-platforms img { display: block; width: auto; height: 26px; }
+.lp-root .header-platforms img + img { height: 20px; padding-left: 16px; border-left: 1px solid #e6ead8; box-sizing: content-box; }
 
 /* ── Header: the original logo at a sane size, one CTA, no nav ───────────── */
 .lp-root .site-header { gap: 18px; min-height: 84px; }
@@ -1733,8 +1729,9 @@
 }
 @media (max-width: 680px) {
   .lp-root .site-header { min-height: 72px; flex-wrap: wrap; gap: 10px; padding-block: 10px; }
-  .lp-root .header-actions > .header-platforms { gap: 6px; padding: 4px 10px; }
-  .lp-root .header-platform { gap: 6px; }
+  .lp-root .header-actions > .header-platforms { gap: 10px; padding: 8px 12px; }
+  .lp-root .header-platforms img { height: 20px; }
+  .lp-root .header-platforms img + img { height: 15px; padding-left: 10px; }
   .lp-root .brand { padding: 5px 8px; border-radius: 10px; }
   .lp-root .brand img { width: 116px; }
   .lp-root .header-actions { margin-left: auto; }

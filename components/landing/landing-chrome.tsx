@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { BrandIcon } from "@/components/shared/brand-logos";
 
 /**
  * Header + footer shared by every paid landing page (/100-leads, /seo-visibility
@@ -16,10 +15,15 @@ import { BrandIcon } from "@/components/shared/brand-logos";
 
 const LOGO = "/brand/ppc-guru-logo-720.png";
 
-/** Ad platforms shown as MARKS (not the words "Google Ads + Meta Ads") next to
- *  the header CTA. `tagline` stays as the accessible name for the row. Pass
- *  `platforms={[]}` on pages whose tagline isn't a platform list (/seo-visibility). */
-const HEADER_PLATFORMS = ["Google Ads", "Meta Ads"];
+/** The OFFICIAL Google Ads + Meta logos shown beside the header CTA (artwork in
+ *  public/badges/, the brands' own marks — not redrawn icons). Pages that
+ *  aren't about these platforms pass `platforms={[]}` and the slot is empty:
+ *  no tagline text next to the button (client request 2026-09-16). */
+export type HeaderPlatform = { src: string; alt: string; width: number; height: number };
+const HEADER_PLATFORMS: HeaderPlatform[] = [
+  { src: "/badges/google-ads-logo.svg", alt: "Google Ads", width: 910, height: 230 },
+  { src: "/badges/meta-logo.svg", alt: "Meta", width: 948, height: 191 },
+];
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -30,20 +34,18 @@ function scrollTo(id: string) {
 /**
  * `ctaHref`: on pages without the form (thank-you) the CTA navigates back to the
  * offer instead of scrolling. `formId`: the element the CTA scrolls to.
- * `tagline`: the small label next to the buttons on desktop.
+ * `platforms`: official logos beside the CTA; `[]` renders nothing there.
  */
 export function LandingHeader({
   ctaHref,
   ctaLabel = "Get my lead plan",
   formId = "qualification",
-  tagline = "Google Ads + Meta Ads",
   platforms = HEADER_PLATFORMS,
 }: {
   ctaHref?: string;
   ctaLabel?: string;
   formId?: string;
-  tagline?: string;
-  platforms?: string[];
+  platforms?: HeaderPlatform[];
 } = {}) {
   return (
     <header className="site-header">
@@ -52,17 +54,12 @@ export function LandingHeader({
       </a>
       <div className="header-actions">
         {platforms.length ? (
-          <span className="header-platforms" role="img" aria-label={tagline} title={tagline}>
-            {platforms.map((name, i) => (
-              <span key={name} className="header-platform">
-                {i > 0 ? <i aria-hidden="true">+</i> : null}
-                <BrandIcon name={name} size={30} radius={8} />
-              </span>
+          <span className="header-platforms">
+            {platforms.map((p) => (
+              <img key={p.src} src={p.src} alt={p.alt} width={p.width} height={p.height} />
             ))}
           </span>
-        ) : (
-          <span>{tagline}</span>
-        )}
+        ) : null}
         {ctaHref ? (
           <Link href={ctaHref}>
             {ctaLabel} <ArrowRight aria-hidden="true" />

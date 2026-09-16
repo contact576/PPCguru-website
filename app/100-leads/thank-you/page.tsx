@@ -46,7 +46,6 @@ export default async function ThankYouPage({ searchParams }: { searchParams: Pro
       backHref={`${LANDING_PATH}#qualification`}
       source="landing:100-leads:thank-you"
       headerCtaLabel="Get my lead plan"
-      headerTagline="Google Ads + Meta Ads"
       footerTagline="Performance advertising for local service businesses."
     />
   );

@@ -432,7 +432,7 @@ export function SeoLanding() {
     <div className="lp-root lp-seo">
       <div className="site-shell" id="top">
         <div className="hero-surface">
-          <LandingHeader ctaLabel="Get my visibility plan" formId="visibility-check" tagline="SEO + AI visibility" platforms={[]} />
+          <LandingHeader ctaLabel="Get my visibility plan" formId="visibility-check" platforms={[]} />
           <div className="lp-main">
             <section className="hero-section">
               <div className="hero-copy">

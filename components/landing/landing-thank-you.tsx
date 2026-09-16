@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Check, type LucideIcon } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
-import { LandingFooter, LandingHeader } from "@/components/landing/landing-chrome";
+import { LandingFooter, LandingHeader, type HeaderPlatform } from "@/components/landing/landing-chrome";
 import { ThankYouActions } from "@/components/landing/thank-you-actions";
 import { BookingCalendar } from "@/components/landing/booking-calendar";
 import { PartnerBadges, GoogleReviewsBlock } from "@/components/landing/trust";
@@ -41,7 +41,6 @@ export function LandingThankYou({
   backHref,
   source,
   headerCtaLabel,
-  headerTagline,
   headerPlatforms,
   footerTagline,
 }: {
@@ -58,16 +57,15 @@ export function LandingThankYou({
   /** analytics source for the call / WhatsApp taps, e.g. "landing:100-leads:thank-you". */
   source: string;
   headerCtaLabel: string;
-  headerTagline: string;
-  /** Ad-platform marks beside the header CTA; `[]` falls back to the tagline text. */
-  headerPlatforms?: string[];
+  /** Official platform logos beside the header CTA; `[]` shows none. */
+  headerPlatforms?: HeaderPlatform[];
   footerTagline: string;
 }) {
   return (
     <div className="lp-root">
       <div className="site-shell" id="top">
         <div className="hero-surface">
-          <LandingHeader ctaHref={backHref} ctaLabel={headerCtaLabel} tagline={headerTagline} platforms={headerPlatforms} />
+          <LandingHeader ctaHref={backHref} ctaLabel={headerCtaLabel} platforms={headerPlatforms} />
           <div className="lp-main">
             <section className="thanks-hero" aria-labelledby="thanks-title">
               <div className="thanks-card">
