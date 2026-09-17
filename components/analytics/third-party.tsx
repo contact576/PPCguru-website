@@ -75,27 +75,27 @@ if(l.readyState==="complete"){idle();}else{c.addEventListener("load",idle,{once:
         />
       )}
       {/*
-        Meta Pixel: the standard base code, with fbevents.js deferred off the
-        critical path exactly like Clarity above. The fbq stub (and so the queued
-        init + PageView) is installed synchronously. A visitor who declined the
-        cookie notice gets consent revoked before init, so nothing is sent.
+        Meta Pixel: Meta's standard base code, loaded immediately — NOT deferred
+        like Clarity. Meta Pixel Helper and Events Manager's website check look
+        right after load, and a deferred fbevents.js made them report "No pixel
+        found" on the landing pages. A visitor who declined the cookie notice
+        gets consent revoked before init, so nothing is sent.
       */}
       {META_PIXEL_ID && (
         <script
           id="meta-pixel-init"
           dangerouslySetInnerHTML={{
-            __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
-var loaded=0,load=function(){if(loaded)return;loaded=1;t=b.createElement(e);t.async=!0;t.src=v;
-s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);};
-var idle=function(){if(f.requestIdleCallback){f.requestIdleCallback(load,{timeout:3000});}else{f.setTimeout(load,1200);}};
-if(b.readyState==="complete"){idle();}else{f.addEventListener("load",idle,{once:true});}
-["pointerdown","keydown","touchstart"].forEach(function(x){f.addEventListener(x,load,{once:true,passive:true});});
-}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+            __html: `!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
 try{if(localStorage.getItem('ppcg_cookie_consent')==='declined'){fbq('consent','revoke');}}catch(e){}
-fbq('init','${META_PIXEL_ID}');
-fbq('track','PageView');`,
+fbq('init', '${META_PIXEL_ID}');
+fbq('track', 'PageView');`,
           }}
         />
       )}
@@ -103,18 +103,23 @@ fbq('track','PageView');`,
   );
 }
 
-/** GTM's <noscript> fallback — must be the first element inside <body>. */
+/** GTM + Meta Pixel <noscript> fallbacks — must be the first element inside <body>. */
 export function GtmNoScript() {
-  if (!GTM_ID) return null;
   return (
     <noscript>
-      <iframe
-        src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
-        height="0"
-        width="0"
-        style={{ display: "none", visibility: "hidden" }}
-        title="Google Tag Manager"
-      />
+      {META_PIXEL_ID && (
+        // eslint-disable-next-line @next/next/no-img-element -- Meta's standard noscript beacon
+        <img height="1" width="1" style={{ display: "none" }} alt="" src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`} />
+      )}
+      {GTM_ID && (
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+          height="0"
+          width="0"
+          style={{ display: "none", visibility: "hidden" }}
+          title="Google Tag Manager"
+        />
+      )}
     </noscript>
   );
 }
