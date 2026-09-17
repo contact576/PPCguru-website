@@ -18,7 +18,7 @@ import { CtaBlock } from "@/components/sections/cta-block";
 import { TrustBadgeBar, ServiceIntro } from "@/components/sections/service-aeo";
 import { getAccent, accentVars } from "@/lib/data/themes";
 import { JsonLd } from "@/components/seo/json-ld";
-import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { buildMetadata, locationAreaServedSchema, servicePageGraphSchema } from "@/lib/seo";
 import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
 
@@ -59,31 +59,30 @@ export default async function LocationServicePage({ params }: { params: Promise<
     { name: `${s.name} in ${c.name}`, path: `/${city}/${service}` },
   ];
 
-  // LocalBusiness schema for the city
-  const localSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: `${siteConfig.name} — ${s.name} in ${c.name}`,
-    description: `${s.name} for ${c.name} service businesses.`,
-    areaServed: [{ "@type": "City", name: c.name }, ...c.neighbourhoods.map((n) => ({ "@type": "Place", name: n }))],
-    url: `${siteConfig.url}/${city}/${service}`,
-    // priceRange intentionally omitted — we publish no prices, so an invented range would over-claim.
-    address: { "@type": "PostalAddress", addressLocality: c.name, addressRegion: c.region, addressCountry: "CA" },
-    ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phone } : {}),
-    ...(localContent?.knowsAbout ? { knowsAbout: localContent.knowsAbout } : {}),
-    parentOrganization: { "@id": `${siteConfig.url}/#organization` },
-  };
   const cityDef =
     localContent?.definition ??
     `${s.name} in ${c.name} means running ${s.name.toLowerCase()} campaigns built specifically for the ${c.name}, ${c.region} market. ${siteConfig.name} is a Google Partner and Meta Business Partner serving ${c.name} service businesses across ${c.region} and Canada — engineering ${s.name.toLowerCase()} around booked jobs and local demand, not clicks.`;
   const cityDefHeading = localContent?.definitionHeading ?? `What is ${s.name} in ${c.name}?`;
+  const pageFaqs = localContent?.faqs ?? fullService.faqs;
+  const localSchema = servicePageGraphSchema({
+    name: `${s.name} in ${c.name}`,
+    description: cityDef,
+    path: `/${city}/${service}`,
+    faqs: pageFaqs,
+    crumbs,
+    areaServed: locationAreaServedSchema(c),
+    serviceType:
+      service === "google-ads"
+        ? ["Google Ads management", "Pay-per-click advertising management", "Google Search Ads", "Performance Max management"]
+        : [s.name],
+    relatedServicePath: `/services/${service}`,
+  });
 
   const otherCities = cities.filter((x) => x.slug !== city).slice(0, 6);
 
   return (
     <div style={accentVars(service)}>
       <JsonLd data={localSchema} />
-      <JsonLd data={breadcrumbSchema(crumbs)} />
 
       <PageHero
         eyebrow={`${c.name}, ${c.region}`}
@@ -195,8 +194,9 @@ export default async function LocationServicePage({ params }: { params: Promise<
 
       <LeadBand source={`location:${city}/${service}`} title={`Get a free ${c.name} audit`} />
 
-      <FaqAccordion faqs={localContent?.faqs ?? fullService.faqs} title={`${s.name} in ${c.name} — questions`} />
+      <FaqAccordion faqs={pageFaqs} title={`${s.name} in ${c.name} — questions`} emitSchema={false} />
       <CtaBlock title={`Grow your ${c.name} business with ${s.name.toLowerCase()}`} intro={localContent?.ctaIntro} />
     </div>
   );
 }
+

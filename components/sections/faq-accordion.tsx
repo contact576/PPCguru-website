@@ -11,15 +11,17 @@ export function FaqAccordion({
   faqs,
   heading = true,
   title = "Questions, answered",
+  emitSchema = true,
 }: {
   faqs: { q: string; a: string }[];
   heading?: boolean;
   title?: string;
+  emitSchema?: boolean;
 }) {
   const [open, setOpen] = useState<number | null>(0);
   return (
     <Section>
-      <JsonLd data={faqSchema(faqs)} />
+      {emitSchema ? <JsonLd data={faqSchema(faqs)} /> : null}
       <div className="mx-auto max-w-3xl">
         {heading ? <SectionHeading eyebrow="FAQ" title={title} /> : null}
         <div className="mt-12 divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
@@ -54,3 +56,4 @@ export function FaqAccordion({
     </Section>
   );
 }
+

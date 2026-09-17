@@ -36,7 +36,7 @@ const SERVICE_PLATFORM: Record<string, PlatformId> = {
   "ai-automation": "google-search",
 };
 import { JsonLd } from "@/components/seo/json-ld";
-import { buildMetadata, serviceSchema, breadcrumbSchema } from "@/lib/seo";
+import { buildMetadata, seoAreaServedSchema, servicePageGraphSchema } from "@/lib/seo";
 import { withMetaOverride } from "@/lib/page-meta";
 import { serviceArt } from "@/components/illustrations/service-art";
 
@@ -67,6 +67,20 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const ctaCls = "inline-flex items-center justify-center gap-2 rounded-[14px] bg-[var(--accent)] px-6 py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-[var(--accent-strong)]";
   const content = getServiceContent(slug);
   const schemaDesc = content?.definition ?? service.description;
+  const pageFaqs = content?.faqs ?? service.faqs;
+  const pageSchema = servicePageGraphSchema({
+    name: service.name,
+    description: schemaDesc,
+    path: `/services/${slug}`,
+    faqs: pageFaqs,
+    crumbs,
+    ...(slug === "seo"
+      ? {
+          areaServed: seoAreaServedSchema(),
+          serviceType: ["Search engine optimization", "Local SEO", "Google Business Profile optimization"],
+        }
+      : {}),
+  });
   const siRows = industriesForService(slug).flatMap((iSlug) => {
     const a = getServiceIndustryAngle(slug, iSlug);
     return a ? [{ industrySlug: iSlug, label: serviceIndustryLabel(slug, iSlug), href: `/services/${slug}/${iSlug}`, angle: a }] : [];
@@ -76,8 +90,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   if (slug === "google-ads") {
     return (
       <>
-        <JsonLd data={serviceSchema({ name: service.name, description: schemaDesc, path: `/services/${slug}` })} />
-        <JsonLd data={breadcrumbSchema(crumbs)} />
+        <JsonLd data={pageSchema} />
         <GoogleAdsFlagship service={service} />
       </>
     );
@@ -85,8 +98,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   return (
     <div style={accentVars(slug)}>
-      <JsonLd data={serviceSchema({ name: service.name, description: schemaDesc, path: `/services/${slug}` })} />
-      <JsonLd data={breadcrumbSchema(crumbs)} />
+      <JsonLd data={pageSchema} />
 
       <PageHero eyebrow="Service" title={service.name} intro={service.hero} breadcrumbs={crumbs} accent={getAccent(slug)} art={serviceArt(slug)}>
         <div>
@@ -328,9 +340,10 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
       <LeadBand source={offer.formSource} title={offer.ctaLabel.replace(/^Get my /, "Get your ")} blurb={offer.popupBody} ctaLabel={offer.ctaLabel} />
 
-      <FaqAccordion faqs={content?.faqs ?? service.faqs} title={`${service.name} — questions`} />
+      <FaqAccordion faqs={pageFaqs} title={`${service.name} — questions`} emitSchema={false} />
       <LastReviewed />
       <CtaBlock />
     </div>
   );
 }
+

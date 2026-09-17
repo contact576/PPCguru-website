@@ -115,8 +115,9 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
         </Section>
       )}
       {content?.comparison && <ComparisonTable rows={content.comparison} serviceName="Google Ads management" />}
-      <FaqAccordion faqs={content?.faqs ?? service.faqs} title="Google Ads Management — questions" />
+      <FaqAccordion faqs={content?.faqs ?? service.faqs} title="Google Ads Management — questions" emitSchema={false} />
       <CtaBlock />
     </div>
   );
 }
+
