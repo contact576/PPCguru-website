@@ -16,6 +16,8 @@ export const siteConfig = {
   trustLine: "Toronto's AI-first performance marketing agency — Google-trained, AI-powered, GTA-based.",
   description:
     "PPC Guru is a Google Partner & Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA. AI-augmented Google Ads, Meta Ads, SEO and creative.",
+  schemaDescription:
+    "PPC Guru is a Toronto-based digital marketing agency providing Google Ads, Meta Ads, SEO, conversion rate optimization and web development services in Toronto, across the Greater Toronto Area, Ottawa, Canada and the United States.",
 
   // Positioning
   founded: 2021,
@@ -38,7 +40,7 @@ export const siteConfig = {
     streetAddress: "55 Queen Street East",
     addressLocality: "Toronto",
     addressRegion: "ON",
-    postalCode: "M5C 1R8",
+    postalCode: "M5C 1R6",
     addressCountry: "CA",
     hours: "Mon–Fri, 9:00 AM – 6:00 PM ET",
   },
@@ -64,6 +66,8 @@ export const siteConfig = {
    */
   maps: {
     mapUrl: "https://maps.app.goo.gl/A5RsDnYeByur6KVV8",
+    latitude: 43.6526967,
+    longitude: -79.3767816,
     mapEmbedUrl:
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.782338362125!2d-79.3767816!3d43.6526967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4cb08e322f495%3A0xcdb30e0c3864fa4c!2sPPC%20Guru!5e0!3m2!1sen!2sin!4v1788364563849!5m2!1sen!2sin",
   },
@@ -93,7 +97,7 @@ export const siteConfig = {
   // organizationSchema() filters empties + bare roots, so real URLs here light up sameAs.
   social: {
     instagram: "", // TODO(client) e.g. https://www.instagram.com/ppcguru
-    linkedin: "", // TODO(client) e.g. https://www.linkedin.com/company/ppcguru
+    linkedin: "https://www.linkedin.com/company/ppc-guru/",
     facebook: "", // TODO(client) e.g. https://www.facebook.com/ppcguru
   },
 } as const;
@@ -202,3 +206,4 @@ export const nav: NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
+
