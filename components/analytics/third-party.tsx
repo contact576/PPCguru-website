@@ -1,5 +1,5 @@
 /**
- * Third-party analytics: Google Tag Manager + Microsoft Clarity.
+ * Third-party analytics: Google Tag Manager + Microsoft Clarity + Meta Pixel.
  *
  * Rendered once in the root layout, so both load on EVERY page.
  *
@@ -16,13 +16,19 @@
  * v2 denial for GTM, clarity('consent', false) for Clarity).
  *
  * IDs are env-overridable so a staging deploy can point elsewhere:
- *   NEXT_PUBLIC_GTM_ID / NEXT_PUBLIC_CLARITY_ID
+ *   NEXT_PUBLIC_GTM_ID / NEXT_PUBLIC_CLARITY_ID / NEXT_PUBLIC_META_PIXEL_ID
+ *
+ * Meta: the Pixel sends PageView (first load here, client navigations from
+ * <VisitorTracker>); the Lead goes server-side via the Conversions API
+ * (lib/meta-capi.ts), so each lead is counted once.
  */
 
 export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "GTM-NRX9BRWF";
 export const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || "xpxkvrbt7j";
+/** "PPC Pixels" dataset in the PPC Guru business (ad account 978235853371610). */
+export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "813865793503374";
 
-/** GTM + Clarity loaders. Render inside <head>. */
+/** GTM + Clarity + Meta Pixel loaders. Render inside <head>. */
 export function AnalyticsScripts() {
   return (
     <>
@@ -68,6 +74,31 @@ if(l.readyState==="complete"){idle();}else{c.addEventListener("load",idle,{once:
           }}
         />
       )}
+      {/*
+        Meta Pixel: the standard base code, with fbevents.js deferred off the
+        critical path exactly like Clarity above. The fbq stub (and so the queued
+        init + PageView) is installed synchronously. A visitor who declined the
+        cookie notice gets consent revoked before init, so nothing is sent.
+      */}
+      {META_PIXEL_ID && (
+        <script
+          id="meta-pixel-init"
+          dangerouslySetInnerHTML={{
+            __html: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+var loaded=0,load=function(){if(loaded)return;loaded=1;t=b.createElement(e);t.async=!0;t.src=v;
+s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);};
+var idle=function(){if(f.requestIdleCallback){f.requestIdleCallback(load,{timeout:3000});}else{f.setTimeout(load,1200);}};
+if(b.readyState==="complete"){idle();}else{f.addEventListener("load",idle,{once:true});}
+["pointerdown","keydown","touchstart"].forEach(function(x){f.addEventListener(x,load,{once:true,passive:true});});
+}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+try{if(localStorage.getItem('ppcg_cookie_consent')==='declined'){fbq('consent','revoke');}}catch(e){}
+fbq('init','${META_PIXEL_ID}');
+fbq('track','PageView');`,
+          }}
+        />
+      )}
     </>
   );
 }
@@ -99,15 +130,20 @@ export function ConsentSignal() {
 var v=localStorage.getItem('ppcg_cookie_consent');
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
+function mark(x){document.cookie='ppcg_consent='+x+';path=/;max-age=31536000;SameSite=Lax';}
 function deny(){
   gtag('consent','update',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied'});
   if(window.clarity){window.clarity('consent',false);}
+  if(window.fbq){window.fbq('consent','revoke');}
+  mark('declined');
 }
 if(v==='declined'){deny();}
 window.addEventListener('ppcg:consent',function(e){
   if(e.detail==='declined'){deny();}
   else{gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
-       if(window.clarity){window.clarity('consent');}}
+       if(window.clarity){window.clarity('consent');}
+       if(window.fbq){window.fbq('consent','grant');}
+       mark('accepted');}
 });
 }catch(e){}})();`;
   return <script id="ppcg-consent-signal" dangerouslySetInnerHTML={{ __html: js }} />;

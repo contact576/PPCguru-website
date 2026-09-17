@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, CircleCheck } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { LeadForm } from "@/components/shared/lead-form";
 import { masterOffer } from "@/lib/data/service-offers";
@@ -48,7 +48,8 @@ export function LeadBand({
         <div className="rounded-[22px] border border-[#dddbc9] bg-white p-6 md:p-7">
           {done ? (
             <div className="py-8 text-center">
-              <h3 className="text-2xl font-bold">Thanks 🎉</h3>
+              <CircleCheck aria-hidden className="mx-auto mb-3 h-11 w-11 text-[#6f7d22]" />
+              <h3 className="text-2xl font-bold">Thanks</h3>
               <p className="mt-3 text-[var(--color-ink-dim)]">We&apos;ve got your details and will reply within one business day.</p>
             </div>
           ) : (

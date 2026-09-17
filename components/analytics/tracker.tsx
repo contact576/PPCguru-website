@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { sendEvent } from "@/lib/analytics";
 
@@ -14,10 +14,14 @@ import { sendEvent } from "@/lib/analytics";
  */
 export function VisitorTracker() {
   const pathname = usePathname();
+  const firstLoad = useRef(true);
 
   // Pageview on first load + every client navigation.
   useEffect(() => {
     sendEvent("pageview", { path: pathname });
+    // Meta Pixel: the base code already tracked the first load's PageView.
+    if (firstLoad.current) firstLoad.current = false;
+    else (window as { fbq?: (...a: unknown[]) => void }).fbq?.("track", "PageView");
   }, [pathname]);
 
   // Delegated click capture across the whole document.

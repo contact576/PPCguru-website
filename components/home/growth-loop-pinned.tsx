@@ -86,7 +86,7 @@ export function GrowthLoopPinned() {
           {growthLoop.map((l) => (
             <div key={l.num} data-step style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 22, padding: 26 }}>
               <div className="head" style={{ fontSize: 42, color: "rgba(111,125,34,.3)", marginBottom: 14 }}>{l.num}</div>
-              <div style={{ width: 46, height: 46, borderRadius: 12, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 21, marginBottom: 16 }}>{l.icon}</div>
+              <div style={{ width: 46, height: 46, borderRadius: 12, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}><l.icon size={22} strokeWidth={2} aria-hidden /></div>
               <div className="head" style={{ fontSize: 19, marginBottom: 9 }}>{l.title}</div>
               <div style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.55, marginBottom: 16 }}>{l.desc}</div>
               <div style={{ height: 3, background: "#e3e0d0", borderRadius: 999, overflow: "hidden" }}>

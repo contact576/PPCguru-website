@@ -3,6 +3,7 @@ import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from
 import { hasSupabase, type LeadInput } from "@/lib/supabase";
 import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
 import { sendLeadToGhl, ghlConfigured } from "@/lib/gohighlevel";
+import { readMetaContext, sendMetaLead, type MetaContext } from "@/lib/meta-capi";
 
 /**
  * Post-save fan-out shared by every lead form (contact, pop-up/tools, the paid
@@ -48,8 +49,8 @@ async function safe<T>(label: string, p: Promise<T>, fallback: T): Promise<T> {
   }
 }
 
-/** Run CRM + team email + autoresponder concurrently. Never throws. */
-export async function fanOut(input: DeliveryInput): Promise<DeliveryResult> {
+/** Run CRM + team email + autoresponder (+ Meta Conversions API Lead) concurrently. Never throws. */
+export async function fanOut(input: DeliveryInput, meta?: MetaContext): Promise<DeliveryResult> {
   const { record, leadId, notification, lead } = input;
   const crm = ghlConfigured()
     ? sendLeadToGhl({ ...record, submissionId: leadId ?? undefined, createdAt: new Date().toISOString() })
@@ -62,6 +63,7 @@ export async function fanOut(input: DeliveryInput): Promise<DeliveryResult> {
       false,
     ),
     safe("autoresponder", sendLeadAutoresponder(lead), false),
+    meta ? safe("meta capi", sendMetaLead({ eventId: leadId, email: record.email, phone: record.phone, name: record.name, source: record.source }, meta), false) : false,
   ]);
   if (!emailed) {
     console.error(
@@ -83,14 +85,16 @@ export type DeliveryOutcome =
  */
 export async function deliverLead(input: DeliveryInput): Promise<DeliveryOutcome> {
   const stored = input.leadId !== null;
+  // Headers/cookies are request-scoped: read them now, before `after()`.
+  const meta = await readMetaContext();
   if (stored) {
     after(async () => {
-      await fanOut(input);
+      await fanOut(input, meta);
     });
     return { ok: true };
   }
 
-  const result = await fanOut(input);
+  const result = await fanOut(input, meta);
   const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured() || ghlConfigured();
   const anyDelivered = result.emailed || result.crmed;
   if (anyConfigured && !anyDelivered) return { ok: false, reason: "undelivered" };

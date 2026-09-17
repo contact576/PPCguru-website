@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useLenis } from "lenis/react";
-import { X } from "lucide-react";
+import { X, CircleCheck } from "lucide-react";
 import { LeadForm } from "@/components/shared/lead-form";
 
 /**
@@ -66,7 +66,8 @@ export function LeadCtaButton({
             <div data-lenis-prevent className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-6 sm:p-7">
               {done ? (
                 <div className="py-6 text-center">
-                  <h3 className="text-2xl font-bold">You&apos;re in 🎉</h3>
+                  <CircleCheck aria-hidden className="mx-auto mb-3 h-11 w-11 text-[#6f7d22]" />
+                  <h3 className="text-2xl font-bold">You&apos;re in</h3>
                   <p className="mt-3 text-[var(--color-ink-dim)]">We&apos;ll review your details and be in touch shortly.</p>
                   <button onClick={() => setOpen(false)} className="mt-5 rounded-full border border-[var(--color-border)] px-5 py-2 text-sm font-semibold">Close</button>
                 </div>

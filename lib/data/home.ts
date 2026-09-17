@@ -4,18 +4,23 @@
  *
  * HONESTY: case studies / testimonials / credentials are clearly-labelled
  * representative or "verify before launch" content — no fabricated client proof.
- * Icons are emoji to match the handoff exactly.
+ * Icons are lucide line icons (industry icons match app/industries/[slug]).
  */
+
+import {
+  Search, BarChart3, Map as MapIcon, CalendarDays, Hammer, FlaskConical, Rocket,
+  Activity, HeartPulse, Smile, Wind, Droplets, Zap, Home, Plane, Building2, Scale, Sparkles,
+} from "lucide-react";
 
 export const tickerLoop = [
   "Google Ads", "Meta Ads", "SEO", "Landing Pages", "CRO", "CRM", "Transparent Reporting",
 ];
 
 export const proofItems = [
-  { icon: "🔍", title: "Account Waste Snapshot", desc: "Search terms eating budget, low-intent campaigns, broken or missing conversion tracking, and landing-page friction — quantified, before you pay us a cent." },
-  { icon: "📊", title: "Benchmark Comparison", desc: "Your CPC, CPL, conversion rate and cost-per-booked-job vs your industry range — so you know whether budget, targeting, offer or landing page is the real bottleneck." },
-  { icon: "🗺️", title: "Growth Opportunity Map", desc: "Quick-win campaigns, fresh creative angles, local-SEO gaps, and the retargeting and follow-up you're leaving on the table." },
-  { icon: "📅", title: "90-Day Scaling Plan", desc: "Days 1–7 audit & tracking, 8–30 restructure & launch, 31–60 optimize & expand, 61–90 scale winners & automate reporting." },
+  { icon: Search, title: "Account Waste Snapshot", desc: "Search terms eating budget, low-intent campaigns, broken or missing conversion tracking, and landing-page friction — quantified, before you pay us a cent." },
+  { icon: BarChart3, title: "Benchmark Comparison", desc: "Your CPC, CPL, conversion rate and cost-per-booked-job vs your industry range — so you know whether budget, targeting, offer or landing page is the real bottleneck." },
+  { icon: MapIcon, title: "Growth Opportunity Map", desc: "Quick-win campaigns, fresh creative angles, local-SEO gaps, and the retargeting and follow-up you're leaving on the table." },
+  { icon: CalendarDays, title: "90-Day Scaling Plan", desc: "Days 1–7 audit & tracking, 8–30 restructure & launch, 31–60 optimize & expand, 61–90 scale winners & automate reporting." },
 ];
 
 // Smaller, secondary trust points (weekly reporting, ownership, etc.).
@@ -33,22 +38,23 @@ export const sprintWeeks = [
   { num: "04", week: "Week 4", title: "Scaling Plan & Reporting Dashboard", desc: "A clear growth roadmap and a live reporting dashboard you actually own." },
 ];
 
+// Real platform logos (files in /public/platforms) shown on each service card.
 export const homeServices = [
-  { icon: "🔍", title: "Google Ads Management", href: "/services/google-ads", outcome: "Search, Performance Max & Shopping engineered for booked jobs — not vanity clicks.", deliverables: ["Search-term & negative buildout", "Conversion tracking review", "Weekly optimization"], bestFor: "High-intent search" },
-  { icon: "📣", title: "Meta Ads Management", href: "/services/meta-ads", outcome: "Lead-gen campaigns and scroll-stopping creative across Facebook & Instagram.", deliverables: ["Audience & retargeting funnels", "Creative testing program", "Lead-form vs LP testing"], bestFor: "Demand generation" },
-  { icon: "📈", title: "SEO & Local Search", href: "/services/seo", outcome: "Technical SEO, location pages and Google Business Profile that compound over time.", deliverables: ["Technical SEO audit", "Local map-pack optimization", "Content & rankings tracking"], bestFor: "Long-term compounding" },
-  { icon: "🎨", title: "Creative Production", href: "/services/creative", outcome: "Scroll-stopping static, carousel and short-form video creative — AI-accelerated.", deliverables: ["Static & carousel ads", "Short-form video", "Continuous creative testing"], bestFor: "Paid social scale" },
-  { icon: "🖥️", title: "Websites & Landing Pages", href: "/services/web-design", outcome: "Conversion-focused websites and landing pages that turn clicks into leads.", deliverables: ["Landing-page design & build", "CRO & A/B testing", "Form-friction removal"], bestFor: "Lifting conversion rate" },
-  { icon: "⚙️", title: "CRM & Marketing Operations", href: "/services/crm", outcome: "Pipelines, lead routing and reporting that close the loop on every lead.", deliverables: ["Speed-to-lead automation", "Pipeline & lead routing", "Closed-loop reporting"], bestFor: "Turning leads into jobs" },
-  { icon: "📊", title: "Tracking & Analytics", href: "/services", outcome: "GA4, GTM and conversion tracking you can actually trust to make decisions.", deliverables: ["GA4 & GTM setup/audit", "Conversion & call tracking", "Looker Studio dashboards"], bestFor: "Trustworthy measurement" },
-  { icon: "🔁", title: "Remarketing Campaigns", href: "/services", outcome: "Bring back the high-intent visitors who didn't convert the first time.", deliverables: ["Audience segmentation", "Cross-platform retargeting", "Frequency & spend control"], bestFor: "Recovering lost demand" },
+  { logos: ["google-ads"], title: "Google Ads Management", href: "/services/google-ads", outcome: "Search, Performance Max & Shopping engineered for booked jobs — not vanity clicks.", deliverables: ["Search-term & negative buildout", "Conversion tracking review", "Weekly optimization"], bestFor: "High-intent search" },
+  { logos: ["meta", "instagram"], title: "Meta Ads Management", href: "/services/meta-ads", outcome: "Lead-gen campaigns and scroll-stopping creative across Facebook & Instagram.", deliverables: ["Audience & retargeting funnels", "Creative testing program", "Lead-form vs LP testing"], bestFor: "Demand generation" },
+  { logos: ["google", "google-maps"], title: "SEO & Local Search", href: "/services/seo", outcome: "Technical SEO, location pages and Google Business Profile that compound over time.", deliverables: ["Technical SEO audit", "Local map-pack optimization", "Content & rankings tracking"], bestFor: "Long-term compounding" },
+  { logos: ["tiktok", "youtube"], title: "Creative Production", href: "/services/creative", outcome: "Scroll-stopping static, carousel and short-form video creative — AI-accelerated.", deliverables: ["Static & carousel ads", "Short-form video", "Continuous creative testing"], bestFor: "Paid social scale" },
+  { logos: ["wordpress", "figma"], title: "Websites & Landing Pages", href: "/services/web-design", outcome: "Conversion-focused websites and landing pages that turn clicks into leads.", deliverables: ["Landing-page design & build", "CRO & A/B testing", "Form-friction removal"], bestFor: "Lifting conversion rate" },
+  { logos: ["zoho", "whatsapp"], title: "CRM & Marketing Operations", href: "/services/crm", outcome: "Pipelines, lead routing and reporting that close the loop on every lead.", deliverables: ["Speed-to-lead automation", "Pipeline & lead routing", "Closed-loop reporting"], bestFor: "Turning leads into jobs" },
+  { logos: ["google-analytics", "google-tag-manager"], title: "Tracking & Analytics", href: "/services", outcome: "GA4, GTM and conversion tracking you can actually trust to make decisions.", deliverables: ["GA4 & GTM setup/audit", "Conversion & call tracking", "Looker Studio dashboards"], bestFor: "Trustworthy measurement" },
+  { logos: ["google-ads", "meta"], title: "Remarketing Campaigns", href: "/services", outcome: "Bring back the high-intent visitors who didn't convert the first time.", deliverables: ["Audience segmentation", "Cross-platform retargeting", "Frequency & spend control"], bestFor: "Recovering lost demand" },
 ];
 
 export const growthLoop = [
-  { num: "01", icon: "🔍", title: "Audit", desc: "A deep, AI-augmented audit of accounts, tracking, website and competitors — quantifying exactly where money leaks." },
-  { num: "02", icon: "🏗️", title: "Build", desc: "We rebuild campaigns, creative and landing pages around your most profitable services and cost per booked job." },
-  { num: "03", icon: "🧪", title: "Optimize", desc: "Weekly testing across creative, keywords and audiences — more tests than a traditional agency can run." },
-  { num: "04", icon: "🚀", title: "Scale", desc: "We reinvest savings into what works, report on revenue (not vanity metrics), and compound month over month." },
+  { num: "01", icon: Search, title: "Audit", desc: "A deep, AI-augmented audit of accounts, tracking, website and competitors — quantifying exactly where money leaks." },
+  { num: "02", icon: Hammer, title: "Build", desc: "We rebuild campaigns, creative and landing pages around your most profitable services and cost per booked job." },
+  { num: "03", icon: FlaskConical, title: "Optimize", desc: "Weekly testing across creative, keywords and audiences — more tests than a traditional agency can run." },
+  { num: "04", icon: Rocket, title: "Scale", desc: "We reinvest savings into what works, report on revenue (not vanity metrics), and compound month over month." },
 ];
 
 export const aiTasks = ["Search-term clustering", "Negative keyword discovery", "Ad copy variations", "Creative testing ideas", "Landing-page CRO checks", "Competitor ad review", "Reporting summaries", "Budget anomaly detection"];
@@ -85,18 +91,18 @@ export const homeCases = [
 ];
 
 export const homeIndustries = [
-  { slug: "physiotherapy", name: "Physiotherapy & Rehab", icon: "🦵", angle: "High-intent patients searching for treatment now." },
-  { slug: "healthcare-clinics", name: "Healthcare & Clinics", icon: "🩺", angle: "Patient acquisition for specialists & wellness." },
-  { slug: "dental", name: "Dental & Orthodontics", icon: "🦷", angle: "Win high-value implant & cosmetic cases." },
-  { slug: "hvac", name: "HVAC & Home Comfort", icon: "❄️", angle: "Emergency calls, seasonal & service-area targeting." },
-  { slug: "plumbing", name: "Plumbing", icon: "🔧", angle: "Be the first call for emergencies and projects." },
-  { slug: "electrical", name: "Electrical", icon: "⚡", angle: "Steady residential & commercial leads that convert." },
-  { slug: "construction-renovation", name: "Construction & Reno", icon: "🏗️", angle: "High-ticket leads for renovators and builders." },
-  { slug: "roofing", name: "Roofing", icon: "🏠", angle: "Own storm-season demand & replacement jobs." },
-  { slug: "immigration", name: "Immigration Consulting", icon: "🛂", angle: "High-intent search & trust-focused landing pages." },
-  { slug: "real-estate", name: "Real Estate", icon: "🏡", angle: "Booked buyer/seller leads with clear attribution." },
-  { slug: "law-firms", name: "Legal & Professional", icon: "⚖️", angle: "High-value case enquiries with qualification forms." },
-  { slug: "med-spa", name: "Med Spa & Aesthetics", icon: "💆", angle: "High-value cosmetic & aesthetic bookings." },
+  { slug: "physiotherapy", name: "Physiotherapy & Rehab", icon: Activity, angle: "High-intent patients searching for treatment now." },
+  { slug: "healthcare-clinics", name: "Healthcare & Clinics", icon: HeartPulse, angle: "Patient acquisition for specialists & wellness." },
+  { slug: "dental", name: "Dental & Orthodontics", icon: Smile, angle: "Win high-value implant & cosmetic cases." },
+  { slug: "hvac", name: "HVAC & Home Comfort", icon: Wind, angle: "Emergency calls, seasonal & service-area targeting." },
+  { slug: "plumbing", name: "Plumbing", icon: Droplets, angle: "Be the first call for emergencies and projects." },
+  { slug: "electrical", name: "Electrical", icon: Zap, angle: "Steady residential & commercial leads that convert." },
+  { slug: "construction-renovation", name: "Construction & Reno", icon: Hammer, angle: "High-ticket leads for renovators and builders." },
+  { slug: "roofing", name: "Roofing", icon: Home, angle: "Own storm-season demand & replacement jobs." },
+  { slug: "immigration", name: "Immigration Consulting", icon: Plane, angle: "High-intent search & trust-focused landing pages." },
+  { slug: "real-estate", name: "Real Estate", icon: Building2, angle: "Booked buyer/seller leads with clear attribution." },
+  { slug: "law-firms", name: "Legal & Professional", icon: Scale, angle: "High-value case enquiries with qualification forms." },
+  { slug: "med-spa", name: "Med Spa & Aesthetics", icon: Sparkles, angle: "High-value cosmetic & aesthetic bookings." },
 ];
 
 // chip styling helper status → colors

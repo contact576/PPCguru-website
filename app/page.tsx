@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Zap, Search, Bot, Brain, FileText, ListChecks, KeyRound } from "lucide-react";
 import { anchorForHref, serviceLinks, hubLinks } from "@/lib/data/internal-links";
 import { RevealInit } from "@/components/home/reveal-init";
 import { HeroDashboard } from "@/components/home/hero-dashboard";
@@ -155,7 +156,7 @@ export default function HomePage() {
           <div className="grid gap-[18px] sm:grid-cols-2">
             {proofItems.map((it) => (
               <div key={it.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28 }}>
-                <div style={{ width: 52, height: 52, borderRadius: 14, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 23, marginBottom: 18 }}>{it.icon}</div>
+                <div style={{ width: 52, height: 52, borderRadius: 14, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}><it.icon size={24} strokeWidth={2} aria-hidden /></div>
                 <div className="head" style={{ fontSize: 20, marginBottom: 8 }}>{it.title}</div>
                 <div style={{ fontSize: 14.5, color: "#54564a", lineHeight: 1.55 }}>{it.desc}</div>
               </div>
@@ -188,7 +189,7 @@ export default function HomePage() {
         <div className={WRAP} style={{ position: "relative" }}>
           <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.2fr]">
             <div data-reveal>
-              <Eyebrow>⚡ Free website audit</Eyebrow>
+              <Eyebrow><Zap size={13} aria-hidden style={{ display: "inline", verticalAlign: "-2px", marginRight: 6 }} />Free website audit</Eyebrow>
               <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>See what your site is <Em>losing</Em> before you commit</h2>
               <p style={{ fontSize: 17, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 460 }}>We audit your website and ad accounts free — the conversion gaps, tracking problems and wasted spend, with the fixes we&rsquo;d make first. Judge us on the plan, not promises. No contract, no setup fee, no obligation.</p>
               <div style={{ display: "flex", gap: 13, flexWrap: "wrap", marginTop: 30 }}>
@@ -221,7 +222,7 @@ export default function HomePage() {
         <div className={WRAP} style={{ position: "relative" }}>
           <div className="grid items-center gap-12 lg:grid-cols-[0.78fr_1.22fr]">
             <div data-reveal>
-              <Eyebrow color={coral}>🔎 Free PPC waste audit</Eyebrow>
+              <Eyebrow color={coral}><Search size={13} aria-hidden style={{ display: "inline", verticalAlign: "-2px", marginRight: 6 }} />Free PPC waste audit</Eyebrow>
               <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>Find the <Em color={coral}>leaks</Em> in your budget</h2>
               <p style={{ fontSize: 16.5, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 420 }}>Enter a few numbers to see a directional estimate of where spend may be leaking — and what a realistic improvement could look like.</p>
               <ul style={{ listStyle: "none", padding: 0, margin: "26px 0 0", display: "flex", flexDirection: "column", gap: 13 }}>
@@ -248,7 +249,12 @@ export default function HomePage() {
             {homeServices.map((s) => (
               <div key={s.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 18, padding: 20, display: "flex", flexDirection: "column" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-                  <span style={{ width: 44, height: 44, borderRadius: 13, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>{s.icon}</span>
+                  <span style={{ height: 44, padding: "0 10px", gap: 8, borderRadius: 13, background: "#fff", border: "1px solid #dddbc9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {s.logos.map((l) => (
+                      // eslint-disable-next-line @next/next/no-img-element -- tiny static SVGs, no optimisation needed
+                      <img key={l} src={`/platforms/${l}.svg`} alt="" width={l === "zoho" ? 48 : 24} height={24} style={{ height: 24, width: "auto", display: "block" }} />
+                    ))}
+                  </span>
                   <span className="mono" style={{ fontSize: 8.5, color: "#8a8c72", letterSpacing: ".07em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "4px 7px", borderRadius: 6 }}>{s.bestFor}</span>
                 </div>
                 <div className="head" style={{ fontSize: 16.5, marginBottom: 7, lineHeight: 1.2 }}>{s.title}</div>
@@ -279,7 +285,7 @@ export default function HomePage() {
           <div className="grid gap-[18px] lg:grid-cols-2">
             <div data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 24, padding: 28 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22 }}>
-                <span style={{ width: 46, height: 46, borderRadius: 13, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>🤖</span>
+                <span style={{ width: 46, height: 46, borderRadius: 13, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", }}><Bot size={22} aria-hidden /></span>
                 <div><div className="head" style={{ fontSize: 19 }}>AI handles the volume</div><div className="mono" style={{ fontSize: 10, color: "#8a8c72", letterSpacing: ".08em", textTransform: "uppercase" }}>Always-on · every account</div></div>
               </div>
               <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -290,7 +296,7 @@ export default function HomePage() {
             </div>
             <div data-reveal style={{ background: ink, border: `1px solid ${ink}`, borderRadius: 24, padding: 28 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22 }}>
-                <span style={{ width: 46, height: 46, borderRadius: 13, background: "rgba(206,255,58,.16)", color: lime, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>🧠</span>
+                <span style={{ width: 46, height: 46, borderRadius: 13, background: "rgba(206,255,58,.16)", color: lime, display: "flex", alignItems: "center", justifyContent: "center", }}><Brain size={22} aria-hidden /></span>
                 <div><div className="head" style={{ fontSize: 19, color: cream }}>Humans own the judgment</div><div className="mono" style={{ fontSize: 10, color: "#9a9b88", letterSpacing: ".08em", textTransform: "uppercase" }}>Strategy · money · client</div></div>
               </div>
               <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -335,7 +341,7 @@ export default function HomePage() {
               </tbody>
             </table>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 22 }}>
-              {["📄 Weekly report", "✅ Tracking checklist", "🔑 Account ownership"].map((c) => <span key={c} className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#4f5f14", border: "1px solid #cfe39a", padding: "6px 10px", borderRadius: 8, letterSpacing: ".05em", textTransform: "uppercase" }}>{c}</span>)}
+              {([[FileText, "Weekly report"], [ListChecks, "Tracking checklist"], [KeyRound, "Account ownership"]] as const).map(([Icon, c]) => <span key={c} className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, fontWeight: 600, color: "#4f5f14", border: "1px solid #cfe39a", padding: "6px 10px", borderRadius: 8, letterSpacing: ".05em", textTransform: "uppercase" }}><Icon size={12} aria-hidden />{c}</span>)}
             </div>
           </div>
         </div>
@@ -433,7 +439,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
             {homeIndustries.map((i) => (
               <Link key={i.name} href={`/industries/${i.slug}`} data-reveal className="group transition-all hover:-translate-y-1 hover:shadow-tile" style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 18, padding: 22, display: "block" }}>
-                <div style={{ width: 46, height: 46, borderRadius: 13, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 21, marginBottom: 14 }}>{i.icon}</div>
+                <div style={{ width: 46, height: 46, borderRadius: 13, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}><i.icon size={22} strokeWidth={2} aria-hidden /></div>
                 <div className="head" style={{ fontSize: 16, marginBottom: 8, lineHeight: 1.05 }}>{i.name}</div>
                 <div style={{ fontSize: 12.5, color: "#54564a", lineHeight: 1.5 }}>{i.angle}</div>
               </Link>
