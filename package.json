@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "logos:optimize": "node scripts/optimize-logos.mjs",
     "check:spam": "node --experimental-strip-types scripts/spam-filter-check.mts",
+    "schema:check": "node scripts/check-homepage-schema.mjs && node scripts/check-service-schema.mjs",
     "blog:check": "node --experimental-strip-types scripts/check-blog.mts",
     "crm:token": "node --env-file=.env.local --experimental-strip-types scripts/zoho-token.mts",
     "crm:verify": "node --env-file=.env.local --experimental-strip-types scripts/zoho-verify.mts",
@@ -65,3 +66,4 @@
     "typescript": "^5.7.0"
   }
 }
+
