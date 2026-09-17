@@ -161,6 +161,7 @@ export async function captureLead(_prev: LeadState, formData: FormData): Promise
   // CRM + team notification + autoresponder — in parallel, and AFTER the
   // response once the row is safe in Supabase (see lib/lead-delivery.ts).
   const delivery = await deliverLead({
+    eventId: formData.get("event_id"),
     record,
     leadId,
     lead: { name: data.name, email: data.email },

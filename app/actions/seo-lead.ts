@@ -170,6 +170,7 @@ export async function submitSeoLead(_prev: SeoLeadState, formData: FormData): Pr
   await identifyVisitor({ sessionId: data.session_id, leadId, email: data.email, name: data.name });
 
   const delivery = await deliverLead({
+    eventId: formData.get("event_id"),
     record,
     leadId,
     lead: { name: data.name, email: data.email },

@@ -1,5 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import { META_PIXEL_ID } from "@/components/analytics/third-party";
+import type { ConversionContext } from "@/lib/conversion-context";
 
 /**
  * Meta Conversions API — server-side `Lead` for every website form.
@@ -28,39 +29,6 @@ export function metaCapiConfigured(): boolean {
   return Boolean(process.env.META_CAPI_ACCESS_TOKEN && META_PIXEL_ID);
 }
 
-/** Request-scoped signals. Must be read during the action, not inside `after()`. */
-export type MetaContext = {
-  ip?: string;
-  userAgent?: string;
-  fbp?: string;
-  fbc?: string;
-  sourceUrl?: string;
-  declined: boolean;
-};
-
-export async function readMetaContext(): Promise<MetaContext> {
-  try {
-    const { headers, cookies } = await import("next/headers");
-    const [h, c] = await Promise.all([headers(), cookies()]);
-    const sourceUrl = h.get("referer") || undefined;
-    let fbc = c.get("_fbc")?.value;
-    if (!fbc && sourceUrl) {
-      const fbclid = new URL(sourceUrl).searchParams.get("fbclid");
-      if (fbclid) fbc = `fb.1.${Date.now()}.${fbclid}`;
-    }
-    return {
-      ip: h.get("x-forwarded-for")?.split(",")[0].trim() || h.get("x-real-ip") || undefined,
-      userAgent: h.get("user-agent") || undefined,
-      fbp: c.get("_fbp")?.value,
-      fbc,
-      sourceUrl,
-      declined: c.get("ppcg_consent")?.value === "declined",
-    };
-  } catch {
-    return { declined: false };
-  }
-}
-
 const sha = (v: string) => createHash("sha256").update(v).digest("hex");
 
 /** Meta wants digits only with country code; the site's leads are CA/US. */
@@ -71,14 +39,14 @@ function normPhone(raw?: string): string | undefined {
 }
 
 export type MetaLead = {
-  eventId?: string | null;
+  eventId?: string;
   email?: string;
   phone?: string;
   name?: string;
   source?: string;
 };
 
-export async function sendMetaLead(lead: MetaLead, ctx: MetaContext): Promise<boolean> {
+export async function sendMetaLead(lead: MetaLead, ctx: ConversionContext): Promise<boolean> {
   if (!metaCapiConfigured() || ctx.declined) return false;
 
   const [first, ...rest] = (lead.name || "").trim().toLowerCase().split(/\s+/);

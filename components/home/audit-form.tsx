@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { captureLead } from "@/app/actions/lead";
-import { trackLead } from "@/lib/analytics";
+import { trackLead, leadEventId } from "@/lib/analytics";
 import { TurnstileField } from "@/components/shared/turnstile-field";
 import { SERVICE_OPTIONS, BUDGET_OPTIONS } from "@/lib/data/form-options";
 
@@ -93,6 +93,7 @@ export function AuditForm() {
     fd.set("detail", `Main issue: ${issue || "—"} · Preferred contact: ${contact}`);
     fd.set("turnstileToken", token);
     fd.set("renderedAt", renderedAt);
+    fd.set("event_id", leadEventId());
     const res = await captureLead({ ok: false, message: "" }, fd);
     setSubmitting(false);
     if (res.ok) {

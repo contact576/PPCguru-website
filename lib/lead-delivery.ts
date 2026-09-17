@@ -3,7 +3,9 @@ import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from
 import { hasSupabase, type LeadInput } from "@/lib/supabase";
 import { sendLeadToZoho, zohoConfigured } from "@/lib/zoho";
 import { sendLeadToGhl, ghlConfigured } from "@/lib/gohighlevel";
-import { readMetaContext, sendMetaLead, type MetaContext } from "@/lib/meta-capi";
+import { sendMetaLead } from "@/lib/meta-capi";
+import { sendOpenAiLead } from "@/lib/openai-capi";
+import { readConversionContext, cleanEventId, type ConversionContext } from "@/lib/conversion-context";
 
 /**
  * Post-save fan-out shared by every lead form (contact, pop-up/tools, the paid
@@ -36,6 +38,8 @@ export type DeliveryInput = {
   notification: Notification;
   /** Who gets the branded autoresponder. */
   lead: { name?: string; email?: string };
+  /** The form's hidden `event_id` — the browser pixels fire with the same id. */
+  eventId?: FormDataEntryValue | null;
 };
 
 export type DeliveryResult = { crmed: boolean; emailed: boolean; autoresponded: boolean };
@@ -49,9 +53,10 @@ async function safe<T>(label: string, p: Promise<T>, fallback: T): Promise<T> {
   }
 }
 
-/** Run CRM + team email + autoresponder (+ Meta Conversions API Lead) concurrently. Never throws. */
-export async function fanOut(input: DeliveryInput, meta?: MetaContext): Promise<DeliveryResult> {
+/** Run CRM + team email + autoresponder (+ Meta and OpenAI conversion APIs) concurrently. Never throws. */
+export async function fanOut(input: DeliveryInput, ctx?: ConversionContext): Promise<DeliveryResult> {
   const { record, leadId, notification, lead } = input;
+  const conversion = { eventId: cleanEventId(input.eventId) ?? leadId ?? undefined, email: record.email, phone: record.phone, name: record.name, source: record.source };
   const crm = ghlConfigured()
     ? sendLeadToGhl({ ...record, submissionId: leadId ?? undefined, createdAt: new Date().toISOString() })
     : sendLeadToZoho(record);
@@ -63,7 +68,8 @@ export async function fanOut(input: DeliveryInput, meta?: MetaContext): Promise<
       false,
     ),
     safe("autoresponder", sendLeadAutoresponder(lead), false),
-    meta ? safe("meta capi", sendMetaLead({ eventId: leadId, email: record.email, phone: record.phone, name: record.name, source: record.source }, meta), false) : false,
+    ctx ? safe("meta capi", sendMetaLead(conversion, ctx), false) : false,
+    ctx ? safe("openai capi", sendOpenAiLead(conversion, ctx), false) : false,
   ]);
   if (!emailed) {
     console.error(
@@ -86,15 +92,15 @@ export type DeliveryOutcome =
 export async function deliverLead(input: DeliveryInput): Promise<DeliveryOutcome> {
   const stored = input.leadId !== null;
   // Headers/cookies are request-scoped: read them now, before `after()`.
-  const meta = await readMetaContext();
+  const ctx = await readConversionContext();
   if (stored) {
     after(async () => {
-      await fanOut(input, meta);
+      await fanOut(input, ctx);
     });
     return { ok: true };
   }
 
-  const result = await fanOut(input, meta);
+  const result = await fanOut(input, ctx);
   const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured() || ghlConfigured();
   const anyDelivered = result.emailed || result.crmed;
   if (anyConfigured && !anyDelivered) return { ok: false, reason: "undelivered" };

@@ -193,6 +193,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   // redirect once the row is stored (lib/lead-delivery.ts). This is what makes
   // the thank-you page appear immediately instead of after 10+ s of SMTP.
   const delivery = await deliverLead({
+    eventId: formData.get("event_id"),
     record,
     leadId,
     lead: { name: data.name, email: data.email },

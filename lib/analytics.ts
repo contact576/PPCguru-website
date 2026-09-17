@@ -105,14 +105,43 @@ export function trackPageViewed(path: string) {
   });
 }
 
+const EID_KEY = "ppcg_lead_eid";
+
 /**
- * A lead form succeeded. OpenAI Measurement Pixel `lead_created`.
- * (Meta's Lead goes server-side via the Conversions API — lib/meta-capi.ts.)
- * Consent is enforced inside the pixel (ConsentSignal sets it).
+ * The conversion event id for the next lead from this tab. Every lead form posts
+ * it as a hidden `event_id` (see SessionField); the server sends it to the
+ * OpenAI + Meta conversion APIs and trackLead() fires the pixel with the same
+ * id, so the platforms count the lead once.
  */
-export function trackLead() {
+export function leadEventId(): string {
+  try {
+    let id = sessionStorage.getItem(EID_KEY);
+    if (!id) {
+      id = crypto.randomUUID();
+      sessionStorage.setItem(EID_KEY, id);
+    }
+    return id;
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * A lead form succeeded: OpenAI Measurement Pixel `lead_created`, deduped with
+ * the server-side event. Consent is enforced inside the pixel (ConsentSignal).
+ * `requireId` (thank-you pages) skips reloads/direct visits that had no submit.
+ */
+export function trackLead({ requireId = false } = {}) {
   if (typeof window === "undefined") return;
-  (window as { oaiq?: Oaiq }).oaiq?.("measure", "lead_created", { type: "customer_action" });
+  let id: string | null = null;
+  try {
+    id = sessionStorage.getItem(EID_KEY);
+    sessionStorage.removeItem(EID_KEY); // next lead gets a fresh id
+  } catch {
+    /* storage unavailable */
+  }
+  if (requireId && !id) return;
+  (window as { oaiq?: Oaiq }).oaiq?.("measure", "lead_created", { type: "customer_action" }, id ? { event_id: id } : undefined);
 }
 
 /** Back-compat helper used across the app — now forwards to the first-party beacon. */

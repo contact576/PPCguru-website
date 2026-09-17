@@ -26,7 +26,7 @@ export function VisitorTracker() {
       trackPageViewed(pathname);
     }
     // The /100-leads and /seo-visibility actions redirect here on success.
-    if (pathname.endsWith("/thank-you")) trackLead();
+    if (pathname.endsWith("/thank-you")) trackLead({ requireId: true });
   }, [pathname]);
 
   // Delegated click capture across the whole document.

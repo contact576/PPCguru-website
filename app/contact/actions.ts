@@ -128,6 +128,7 @@ export async function submitContact(_prev: ContactState, formData: FormData): Pr
   // CRM + team notification + autoresponder — parallel, and deferred past the
   // response once the row is stored (lib/lead-delivery.ts).
   const delivery = await deliverLead({
+    eventId: formData.get("event_id"),
     record,
     leadId,
     lead: { name: data.name, email: data.email },
