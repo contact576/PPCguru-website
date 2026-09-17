@@ -6,6 +6,7 @@ import { submitContact, type ContactState } from "@/app/contact/actions";
 import { TurnstileField } from "@/components/shared/turnstile-field";
 import { SessionField } from "@/components/shared/session-field";
 import { SERVICE_OPTIONS, BUDGET_OPTIONS } from "@/lib/data/form-options";
+import { trackLead } from "@/lib/analytics";
 
 const initial: ContactState = { ok: false, message: "" };
 
@@ -14,7 +15,7 @@ export function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (state.ok) formRef.current?.reset();
+    if (state.ok) { formRef.current?.reset(); trackLead(); }
   }, [state.ok]);
 
   // Tokens are single-use — issue a fresh challenge after a rejected submit.

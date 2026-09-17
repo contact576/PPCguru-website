@@ -1,5 +1,6 @@
 /**
- * Third-party analytics: Google Tag Manager + Microsoft Clarity + Meta Pixel.
+ * Third-party analytics: Google Tag Manager + Microsoft Clarity + Meta Pixel +
+ * OpenAI (ChatGPT Ads) Measurement Pixel.
  *
  * Rendered once in the root layout, so both load on EVERY page.
  *
@@ -27,8 +28,11 @@ export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "GTM-NRX9BRWF";
 export const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || "xpxkvrbt7j";
 /** "PPC Pixels" dataset in the PPC Guru business (ad account 978235853371610). */
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "813865793503374";
+/** ChatGPT Ads Measurement Pixel. It does NOT auto-track: page_viewed is sent
+ *  here (first load) + <VisitorTracker> (navigations), lead_created by trackLead(). */
+export const OPENAI_PIXEL_ID = process.env.NEXT_PUBLIC_OPENAI_PIXEL_ID || "VaW8hbc5GLhy5y8FWYNcYt";
 
-/** GTM + Clarity + Meta Pixel loaders. Render inside <head>. */
+/** GTM + Clarity + Meta Pixel + OpenAI pixel loaders. Render inside <head>. */
 export function AnalyticsScripts() {
   return (
     <>
@@ -99,6 +103,19 @@ fbq('track', 'PageView');`,
           }}
         />
       )}
+
+      {/* OpenAI Measurement Pixel: vendor snippet verbatim, then consent + page_viewed. */}
+      {OPENAI_PIXEL_ID && (
+        <script
+          id="openai-pixel-init"
+          dangerouslySetInnerHTML={{
+            __html: `!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");
+try{if(localStorage.getItem('ppcg_cookie_consent')==='declined'){oaiq("consent",false);}}catch(e){}
+oaiq("init",{pixelId:"${OPENAI_PIXEL_ID}",debug:true});
+oaiq("measure","page_viewed",{type:"contents",contents:[{id:location.pathname,name:document.title,content_type:"page"}]});`,
+          }}
+        />
+      )}
     </>
   );
 }
@@ -140,6 +157,7 @@ function deny(){
   gtag('consent','update',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied'});
   if(window.clarity){window.clarity('consent',false);}
   if(window.fbq){window.fbq('consent','revoke');}
+  if(window.oaiq){window.oaiq('consent',false);}
   mark('declined');
 }
 if(v==='declined'){deny();}
@@ -148,6 +166,7 @@ window.addEventListener('ppcg:consent',function(e){
   else{gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
        if(window.clarity){window.clarity('consent');}
        if(window.fbq){window.fbq('consent','grant');}
+       if(window.oaiq){window.oaiq('consent',true);}
        mark('accepted');}
 });
 }catch(e){}})();`;

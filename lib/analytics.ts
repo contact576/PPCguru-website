@@ -95,6 +95,26 @@ export type AnalyticsEvent =
   | "popup_submit"
   | "service_card_click";
 
+type Oaiq = (...args: unknown[]) => void;
+
+/** OpenAI (ChatGPT Ads) page_viewed — the pixel doesn't auto-track page views. */
+export function trackPageViewed(path: string) {
+  (window as { oaiq?: Oaiq }).oaiq?.("measure", "page_viewed", {
+    type: "contents",
+    contents: [{ id: path, name: document.title, content_type: "page" }],
+  });
+}
+
+/**
+ * A lead form succeeded. OpenAI Measurement Pixel `lead_created`.
+ * (Meta's Lead goes server-side via the Conversions API — lib/meta-capi.ts.)
+ * Consent is enforced inside the pixel (ConsentSignal sets it).
+ */
+export function trackLead() {
+  if (typeof window === "undefined") return;
+  (window as { oaiq?: Oaiq }).oaiq?.("measure", "lead_created", { type: "customer_action" });
+}
+
 /** Back-compat helper used across the app — now forwards to the first-party beacon. */
 export function track(event: AnalyticsEvent, payload: Record<string, unknown> = {}) {
   const target =

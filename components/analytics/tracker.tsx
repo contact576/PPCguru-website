@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { sendEvent } from "@/lib/analytics";
+import { sendEvent, trackLead, trackPageViewed } from "@/lib/analytics";
 
 /**
  * Site-wide, consent-aware visitor tracker. Mounted once in the root layout.
@@ -19,9 +19,14 @@ export function VisitorTracker() {
   // Pageview on first load + every client navigation.
   useEffect(() => {
     sendEvent("pageview", { path: pathname });
-    // Meta Pixel: the base code already tracked the first load's PageView.
+    // Meta + OpenAI pixels: their base code already tracked the first load.
     if (firstLoad.current) firstLoad.current = false;
-    else (window as { fbq?: (...a: unknown[]) => void }).fbq?.("track", "PageView");
+    else {
+      (window as { fbq?: (...a: unknown[]) => void }).fbq?.("track", "PageView");
+      trackPageViewed(pathname);
+    }
+    // The /100-leads and /seo-visibility actions redirect here on success.
+    if (pathname.endsWith("/thank-you")) trackLead();
   }, [pathname]);
 
   // Delegated click capture across the whole document.

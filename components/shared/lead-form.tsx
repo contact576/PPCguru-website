@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { captureLead, type LeadState } from "@/app/actions/lead";
 import { TurnstileField } from "@/components/shared/turnstile-field";
 import { SessionField } from "@/components/shared/session-field";
-import { track } from "@/lib/analytics";
+import { track, trackLead } from "@/lib/analytics";
 import { SERVICE_OPTIONS, BUDGET_OPTIONS } from "@/lib/data/form-options";
 
 const initial: LeadState = { ok: false, message: "" };
@@ -27,7 +27,7 @@ export function LeadForm({
   onDone: () => void;
 }) {
   const [state, action, pending] = useActionState(captureLead, initial);
-  useEffect(() => { if (state.ok) { track("popup_submit", { source }); onDone(); } }, [state.ok, source, onDone]);
+  useEffect(() => { if (state.ok) { track("popup_submit", { source }); trackLead(); onDone(); } }, [state.ok, source, onDone]);
 
   // Turnstile tokens are single-use: after a rejected submit the old token is
   // spent, so bump the reset key to issue a fresh challenge before the retry.

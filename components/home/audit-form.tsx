@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { captureLead } from "@/app/actions/lead";
+import { trackLead } from "@/lib/analytics";
 import { TurnstileField } from "@/components/shared/turnstile-field";
 import { SERVICE_OPTIONS, BUDGET_OPTIONS } from "@/lib/data/form-options";
 
@@ -96,6 +97,7 @@ export function AuditForm() {
     setSubmitting(false);
     if (res.ok) {
       track("audit_form_submit", { needs: needs.join(", "), spend, issue });
+      trackLead();
       setDone(true);
     } else {
       // Spent token → force a fresh challenge before they retry.
