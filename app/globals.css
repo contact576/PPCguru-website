@@ -513,7 +513,12 @@
 .logo-link { transition: transform .3s cubic-bezier(.22,1,.36,1); }
 .logo-link:hover { transform: translateY(-1px) scale(1.02); }
 
+/* ── Route-change fade (app/template.tsx — client navigations only) ─────────── */
+@keyframes pageEnter { from { opacity: 0; } }
+.page-enter { animation: pageEnter .35s cubic-bezier(.22,1,.36,1); }
+
 @media (prefers-reduced-motion: reduce) {
+  .page-enter { animation: none; }
   .btn-shine:hover::after { animation: none; }
   .ambient-glow { animation: none; }
   .logo-link:hover { transform: none; }
@@ -523,4 +528,20 @@
   .mq { animation: none !important; }
   [data-reveal], [data-reveal].reveal-armed { opacity: 1 !important; transform: none !important; transition: none !important; }
   .scribble path { animation: none !important; stroke-dashoffset: 0 !important; }
+}
+
+/* ── Homepage client logo marquee (components/home/client-logo-row.tsx) ────
+   114 tiles + 57 pills: shared classes instead of per-element inline styles
+   keep ~40KB of repeated style attributes out of the HTML and RSC payload. */
+.logo-tile {
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  height: 92px; width: 184px; margin: 0 9px; padding: 0 12px;
+  background: #fff; border: 1px solid #e1dfcf; border-radius: 18px;
+  transition: border-color .3s;
+}
+.logo-tile:hover { border-color: #c3c1ae; }
+.logo-tile img { max-height: 72px; max-width: 158px; width: auto; object-fit: contain; }
+.logo-pill {
+  font-size: 13px; color: #454737; background: #fff; border: 1px solid #e1dfcf;
+  border-radius: 999px; padding: 6px 13px; line-height: 1.2;
 }

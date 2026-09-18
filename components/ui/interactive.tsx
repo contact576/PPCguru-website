@@ -27,60 +27,6 @@ function useFinePointer() {
 }
 
 /**
- * CursorGlow — a soft lime ring that trails the pointer and swells over
- * interactive elements. Additive (the native cursor stays visible), so it never
- * harms usability. Renders nothing on touch / reduced-motion. Mounted once in
- * the root layout.
- */
-export function CursorGlow() {
-  const enabled = useFinePointer();
-  const x = useMotionValue(-100);
-  const y = useMotionValue(-100);
-  const ringX = useSpring(x, { stiffness: 350, damping: 28, mass: 0.4 });
-  const ringY = useSpring(y, { stiffness: 350, damping: 28, mass: 0.4 });
-  const scale = useSpring(1, { stiffness: 300, damping: 20 });
-  const opacity = useSpring(0, { stiffness: 300, damping: 30 });
-
-  useEffect(() => {
-    if (!enabled) return;
-    const move = (e: PointerEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
-      opacity.set(1);
-      const interactive = (e.target as Element | null)?.closest(
-        "a, button, [data-cursor], input, textarea, select, label"
-      );
-      scale.set(interactive ? 1.7 : 1);
-    };
-    const leave = () => opacity.set(0);
-    window.addEventListener("pointermove", move, { passive: true });
-    document.addEventListener("pointerleave", leave);
-    return () => {
-      window.removeEventListener("pointermove", move);
-      document.removeEventListener("pointerleave", leave);
-    };
-  }, [enabled, x, y, scale, opacity]);
-
-  if (!enabled) return null;
-
-  return (
-    <motion.div
-      aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[9999] h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full"
-      style={{
-        x: ringX,
-        y: ringY,
-        scale,
-        opacity,
-        border: "1px solid var(--color-olive, #6f7d22)",
-        background: "radial-gradient(circle, rgba(206,255,58,.12), transparent 72%)",
-        mixBlendMode: "multiply",
-      }}
-    />
-  );
-}
-
-/**
  * Magnetic — nudges its child toward the pointer on hover. Use on primary CTAs.
  * Falls back to a plain wrapper on touch / reduced-motion.
  */

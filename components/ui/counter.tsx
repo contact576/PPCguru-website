@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useInView, useMotionValue, useSpring, useReducedMotion } from "motion/react";
 
-/** Animated count-up KPI number that runs once when scrolled into view. */
+/**
+ * Animated count-up KPI number that runs once when scrolled into view.
+ * IntersectionObserver + requestAnimationFrame (ease-out over 1.6s) — no
+ * animation library, so it stays off the homepage's JS critical path.
+ */
 export function Counter({
   value,
   prefix = "",
@@ -18,37 +21,39 @@ export function Counter({
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const reduce = useReducedMotion();
-  const mv = useMotionValue(0);
-  const spring = useSpring(mv, { duration: 1600, bounce: 0 });
-
-  const format = (n: number) =>
-    prefix + n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
 
   useEffect(() => {
-    if (!inView) return;
-    // Respect reduced-motion: show the final value instantly, skip the spring.
-    if (reduce) {
-      if (ref.current) ref.current.textContent = format(value);
-      return;
-    }
-    mv.set(value);
-  }, [inView, value, mv, reduce]); // eslint-disable-line react-hooks/exhaustive-deps
+    const el = ref.current;
+    if (!el) return;
+    const format = (n: number) =>
+      prefix + n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
 
-  useEffect(() => {
-    return spring.on("change", (latest) => {
-      if (ref.current) {
-        ref.current.textContent =
-          prefix +
-          latest.toLocaleString("en-US", {
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
-          }) +
-          suffix;
-      }
-    });
-  }, [spring, prefix, suffix, decimals]);
+    let frame = 0;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        io.disconnect();
+        // Respect reduced-motion: show the final value instantly.
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          el.textContent = format(value);
+          return;
+        }
+        const start = performance.now();
+        const tick = (now: number) => {
+          const t = Math.min(1, (now - start) / 1600);
+          el.textContent = format(value * (1 - Math.pow(1 - t, 3)));
+          if (t < 1) frame = requestAnimationFrame(tick);
+        };
+        frame = requestAnimationFrame(tick);
+      },
+      { rootMargin: "-60px" },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [value, prefix, suffix, decimals]);
 
   return (
     <span ref={ref} className={className}>

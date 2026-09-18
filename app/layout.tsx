@@ -11,7 +11,7 @@ import { OfferPopup } from "@/components/shared/offer-popup";
 import { CookieConsent } from "@/components/shared/cookie-consent";
 import { VisitorTracker } from "@/components/analytics/tracker";
 import { AnalyticsScripts, GtmNoScript, ConsentSignal } from "@/components/analytics/third-party";
-import { CursorGlow } from "@/components/ui/interactive";
+import { CursorGlow } from "@/components/ui/cursor-glow";
 import { SiteGraphJsonLd } from "@/components/seo/json-ld";
 import { ChromeGate } from "@/components/layout/chrome-gate";
 

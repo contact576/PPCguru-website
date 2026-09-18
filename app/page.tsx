@@ -252,7 +252,7 @@ export default function HomePage() {
                   <span style={{ height: 44, padding: "0 10px", gap: 8, borderRadius: 13, background: "#fff", border: "1px solid #dddbc9", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     {s.logos.map((l) => (
                       // eslint-disable-next-line @next/next/no-img-element -- tiny static SVGs, no optimisation needed
-                      <img key={l} src={`/platforms/${l}.svg`} alt="" width={l === "zoho" ? 48 : 24} height={24} style={{ height: 24, width: "auto", display: "block" }} />
+                      <img key={l} src={`/platforms/${l}.svg`} alt="" width={l === "zoho" ? 48 : 24} height={24} loading="lazy" decoding="async" style={{ height: 24, width: "auto", display: "block" }} />
                     ))}
                   </span>
                   <span className="mono" style={{ fontSize: 8.5, color: "#8a8c72", letterSpacing: ".07em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "4px 7px", borderRadius: 6 }}>{s.bestFor}</span>

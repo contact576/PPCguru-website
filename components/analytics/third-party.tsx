@@ -36,6 +36,29 @@ export const OPENAI_PIXEL_ID = process.env.NEXT_PUBLIC_OPENAI_PIXEL_ID || "VaW8h
 export function AnalyticsScripts() {
   return (
     <>
+      {/*
+        Tag loader gate. Every vendor snippet below still runs INLINE and in
+        full (dataLayer / fbq / oaiq stubs, init + PageView calls), so events
+        queue from the first millisecond and the IDs stay in the raw HTML for
+        Tag Assistant / Pixel Helper. Only the vendor LIBRARY download
+        (gtm.js, fbevents.js, oaiq.min.js) waits for __ppcgAfterLoad: window
+        load + idle (max 2s), or the visitor's first interaction, whichever
+        comes first. Measured 2026-09-18: fetching and running those libraries
+        during first paint cost ~15-20 mobile Lighthouse points and ~4s of LCP.
+        Must stay ABOVE the snippets that call it.
+      */}
+      <script
+        id="ppcg-after-load"
+        dangerouslySetInnerHTML={{
+          __html: `(function(w,d){var q=[],done=0;
+function run(){if(done)return;done=1;for(var i=0;i<q.length;i++){try{q[i]()}catch(e){}}q=[];}
+w.__ppcgAfterLoad=function(f){done?f():q.push(f);};
+var idle=function(){if(w.requestIdleCallback){w.requestIdleCallback(run,{timeout:2000});}else{w.setTimeout(run,1);}};
+if(d.readyState==="complete"){idle();}else{w.addEventListener("load",idle,{once:true});}
+["pointerdown","keydown","touchstart"].forEach(function(e){w.addEventListener(e,run,{once:true,passive:true});});
+})(window,document);`,
+        }}
+      />
       {GTM_ID && (
         <script
           id="gtm-init"
@@ -43,7 +66,7 @@ export function AnalyticsScripts() {
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;w.__ppcgAfterLoad(function(){f.parentNode.insertBefore(j,f);});
 })(window,document,'script','dataLayer','${GTM_ID}');`,
           }}
         />
@@ -79,11 +102,12 @@ if(l.readyState==="complete"){idle();}else{c.addEventListener("load",idle,{once:
         />
       )}
       {/*
-        Meta Pixel: Meta's standard base code, loaded immediately — NOT deferred
-        like Clarity. Meta Pixel Helper and Events Manager's website check look
-        right after load, and a deferred fbevents.js made them report "No pixel
-        found" on the landing pages. A visitor who declined the cookie notice
-        gets consent revoked before init, so nothing is sent.
+        Meta Pixel: Meta's standard base code. fbevents.js is fetched at window
+        load via __ppcgAfterLoad — NOT on first interaction like Clarity: Meta
+        Pixel Helper and Events Manager's website check look right after load,
+        and an interaction-gated fbevents.js made them report "No pixel found"
+        on the landing pages. A visitor who declined the cookie notice gets
+        consent revoked before init, so nothing is sent.
       */}
       {META_PIXEL_ID && (
         <script
@@ -95,7 +119,7 @@ n.callMethod.apply(n,arguments):n.queue.push(arguments)};
 if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
 n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
+f.__ppcgAfterLoad(function(){s.parentNode.insertBefore(t,s)})}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 try{if(localStorage.getItem('ppcg_cookie_consent')==='declined'){fbq('consent','revoke');}}catch(e){}
 fbq('init', '${META_PIXEL_ID}');
@@ -109,7 +133,7 @@ fbq('track', 'PageView');`,
         <script
           id="openai-pixel-init"
           dangerouslySetInnerHTML={{
-            __html: `!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");
+            __html: `!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];w.__ppcgAfterLoad(function(){f.parentNode.insertBefore(j,f)})}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");
 try{if(localStorage.getItem('ppcg_cookie_consent')==='declined'){oaiq("consent",false);}}catch(e){}
 oaiq("init",{pixelId:"${OPENAI_PIXEL_ID}",debug:true});
 oaiq("measure","page_viewed",{type:"contents",contents:[{id:location.pathname,name:document.title,content_type:"page"}]});`,

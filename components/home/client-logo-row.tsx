@@ -1,7 +1,12 @@
 import { clientLogos, logoName } from "@/lib/data/landing-100-leads";
+import { clientLogosWebp } from "@/lib/data/client-logos-webp";
+import { LoadImagesNearView } from "@/components/shared/load-images-near-view";
 
 const LOGOS = "/landing/logos";
 const INK = "#14170e";
+/** Smaller WebP where one exists (scripts/optimize-client-logos-webp.mjs), else the original. */
+const logoSrc = (file: string) =>
+  clientLogosWebp.has(file) ? `${LOGOS}/opt/${file.replace(/.[^.]+$/, ".webp")}` : `${LOGOS}/${file}`;
 const CREAM = "#f1efe3";
 
 /* eslint-disable @next/next/no-img-element -- client logos are tiny static assets */
@@ -48,7 +53,7 @@ export function ClientLogoRow() {
       </div>
 
       {/* One row, full-bleed, faded at both edges so logos enter and leave cleanly. */}
-      <div
+      <LoadImagesNearView
         className="mt-9 md:mt-11"
         aria-label="Client logos"
         style={{
@@ -64,35 +69,19 @@ export function ClientLogoRow() {
                 key={`${item.file}-${i}`}
                 aria-hidden={dupe}
                 title={dupe ? undefined : item.name}
-                className="transition-colors duration-300 hover:border-[#c3c1ae]"
-                style={{
-                  flexShrink: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: 92,
-                  width: 184,
-                  margin: "0 9px",
-                  padding: "0 12px",
-                  background: "#fff",
-                  border: "1px solid #e1dfcf",
-                  borderRadius: 18,
-                }}
+                className="logo-tile"
               >
                 <img
-                  src={`${LOGOS}/${item.file}`}
+                  data-src={logoSrc(item.file)}
                   alt={dupe ? "" : item.name}
-                  /* Eager but low-priority — lazy tiles pop in blank as the marquee moves. */
-                  loading="eager"
-                  fetchPriority="low"
+                  /* src is set by LoadImagesNearView just before the row scrolls in. */
                   decoding="async"
-                  style={{ maxHeight: 72, maxWidth: 158, width: "auto", objectFit: "contain" }}
                 />
               </figure>
             );
           })}
         </div>
-      </div>
+      </LoadImagesNearView>
 
       {/* Every moving logo named, in one flat list — no industry grouping. */}
       <div className="mx-auto max-w-[1480px] px-5 pb-14 pt-10 md:px-8 md:pb-20 md:pt-12">
@@ -102,18 +91,7 @@ export function ClientLogoRow() {
           style={{ borderTop: "1px solid #dddbc9", paddingTop: 26 }}
         >
           {[...all].sort((a, b) => a.name.localeCompare(b.name)).map((item) => (
-            <li
-              key={item.file}
-              style={{
-                fontSize: 13,
-                color: "#454737",
-                background: "#fff",
-                border: "1px solid #e1dfcf",
-                borderRadius: 999,
-                padding: "6px 13px",
-                lineHeight: 1.2,
-              }}
-            >
+            <li key={item.file} className="logo-pill">
               {item.name}
             </li>
           ))}
