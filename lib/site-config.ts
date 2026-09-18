@@ -92,13 +92,13 @@ export const siteConfig = {
     secondaryHref: "/tools/google-ads-calculator",
   },
 
-  // Social — TODO(client): add real profile URLs. Left EMPTY on purpose — placeholder
-  // platform-root URLs must never ship into schema `sameAs` (a broken entity signal);
-  // organizationSchema() filters empties + bare roots, so real URLs here light up sameAs.
+  // Owner-confirmed organization profiles. Keep canonical, public profile URLs only;
+  // organizationSchema() filters empties + bare platform roots from schema `sameAs`.
   social: {
-    instagram: "", // TODO(client) e.g. https://www.instagram.com/ppcguru
+    instagram: "https://www.instagram.com/ppcguru.ca/",
     linkedin: "https://www.linkedin.com/company/ppc-guru/",
-    facebook: "", // TODO(client) e.g. https://www.facebook.com/ppcguru
+    facebook: "https://www.facebook.com/PPCguru.ca/",
+    youtube: "https://www.youtube.com/@Ppcguru",
   },
 } as const;
 

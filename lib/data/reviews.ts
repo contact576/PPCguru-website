@@ -57,6 +57,26 @@ export const aggregateReview: { ratingValue: number; reviewCount: number; source
 /** Profile URLs of verified review sources — usable in Organization.sameAs. */
 export const verifiedReviewUrls = reviewSources.filter((s) => s.verified && s.url).map((s) => s.url);
 
+/**
+ * Owner-confirmed third-party business profiles. These identify the same organization,
+ * but do not verify any rating or review count and therefore stay independent of AggregateRating gating.
+ * Keep canonical URLs only; never retain analytics query parameters in schema identifiers.
+ */
+export const reviewProfileUrls = [
+  "https://clutch.co/profile/ppc-guru",
+  "https://www.trustpilot.com/review/ppcguru.ca",
+  "https://www.goodfirms.co/company/ppc-guru",
+  "https://themanifest.com/company/ppc-guru",
+  "https://www.sortlist.com/agency/ppc-guru",
+  "https://www.provenexpert.com/en-us/ppc-guru/",
+  "https://itprofiles.com/company/ppc-guru",
+  "https://techbehemoths.com/company/ppc-guru",
+  "https://www.g2.com/products/ppc-guru",
+  "https://www.bbb.org/ca/on/toronto/profile/digital-marketing/ppc-guru-0107-1420487",
+  "https://www.designrush.com/agency/profile/ppc-guru",
+  "https://www.agencyspotter.com/ppc-guru/",
+] as const;
+
 export type Award = {
   name: string;
   /** Small qualifier under the name, e.g. "Partner program". */
