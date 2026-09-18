@@ -40,7 +40,7 @@ export default function LocationsPage() {
               <div className="mt-5 flex flex-wrap gap-2.5">
                 {locationServices.map((s) => (
                   <Link key={s.slug} href={`/${c.slug}/${s.slug}`} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-4 py-2 text-xs uppercase tracking-[.05em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]">
-                    {s.name}
+                    {c.slug === "toronto" && s.slug === "google-ads" ? "Google Ads Management in Toronto" : s.name}
                   </Link>
                 ))}
               </div>

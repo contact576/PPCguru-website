@@ -116,7 +116,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
       {/* Trust strip + answer-first definition + per-service stats (AEO / E-E-A-T) */}
       <TrustBadgeBar />
-      {content?.definition && <ServiceIntro name={service.name} definition={content.definition} heading={content.definitionHeading} />}
+      {content?.definition && <ServiceIntro name={service.name} definition={content.definition} heading={content.definitionHeading} link={content.definitionLink} />}
       <ServiceStatBand slug={slug} />
 
       {/* Revenue calculator — moved high (the strongest hook: "what could I make?") */}

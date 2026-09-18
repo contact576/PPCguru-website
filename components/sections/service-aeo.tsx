@@ -5,6 +5,7 @@ import { StatCounter } from "@/components/ui/stat-counter";
 import { Reveal } from "@/components/ui/reveal";
 import { getServiceStats, serviceCredentials } from "@/lib/data/service-stats";
 import { trustFacts } from "@/lib/data/performance-stats";
+import { InlineLinkText, type InlineLink } from "@/components/shared/inline-link-text";
 
 /**
  * Answer-first definitional block — the FIRST body section on a service page.
@@ -13,12 +14,14 @@ import { trustFacts } from "@/lib/data/performance-stats";
  * biggest AEO/LLM-citation win: it gives answer engines a self-contained passage
  * to lift for "what is X" / "best X agency in Canada" queries.
  */
-export function ServiceIntro({ name, definition, heading }: { name: string; definition: string; heading?: string }) {
+export function ServiceIntro({ name, definition, heading, link }: { name: string; definition: string; heading?: string; link?: InlineLink }) {
   return (
     <Section className="!pb-0">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="head text-[clamp(1.5rem,3vw,2rem)] text-[var(--color-ink)]">{heading ?? `What is ${name}?`}</h2>
-        <p className="mt-4 text-[17px] leading-relaxed text-[var(--color-ink-dim)]">{definition}</p>
+        <p className="mt-4 text-[17px] leading-relaxed text-[var(--color-ink-dim)]">
+          <InlineLinkText text={definition} link={link} />
+        </p>
       </div>
     </Section>
   );

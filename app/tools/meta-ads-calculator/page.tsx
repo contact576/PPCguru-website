@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { AdCalculator } from "@/components/tools/ad-calculator";
@@ -27,7 +28,10 @@ export default function MetaAdsCalculatorPage() {
       <Section className="!pt-10">
         <AdCalculator platform="meta" />
       </Section>
-      <CtaBlock title="Want a predictable lead channel on Meta?" intro="Book a free Meta Ads audit and we'll map out the offer, creative and targeting to get you there." />
+      <CtaBlock
+        title="Want a predictable lead channel on Meta?"
+        intro={<>Estimates are a starting point. Our <Link href="/services/meta-ads" className="font-semibold underline underline-offset-4">Meta Ads management services</Link> connect the offer, creative, targeting and conversion tracking to qualified lead outcomes.</>}
+      />
     </>
   );
 }

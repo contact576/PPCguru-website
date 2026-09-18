@@ -1,4 +1,4 @@
-﻿---
+---
 title: "What Does an SEO Audit Include? Toronto Owner's Checklist"
 seoTitle: "What Does an SEO Audit Include? Toronto Checklist"
 description: "See what a useful SEO audit should check, what the report should deliver, and how Toronto businesses can compare free and paid audits before hiring."
@@ -139,7 +139,7 @@ Sometimes a free review is exactly the right first step. It can help you identif
 
 But **free versus paid does not define quality on its own**. Ask what is included in the specific offer. Will you receive a written summary? Which pages are reviewed? Is the work based on public information only, or on your account data? Who explains the findings? Are fixes included or separately scoped?
 
-PPC Guru's [SEO service page](https://ppcguru.ca/services/seo) offers a free website audit. Before requesting one—or accepting any agency's offer—confirm the exact scope and expected deliverable. This article is a checklist for evaluating an audit; it does not promise that the free review includes every check described above.
+PPC Guru's SEO service page offers a free website audit. Before requesting one—or accepting any agency's offer—confirm the exact scope and expected deliverable. This article is a checklist for evaluating an audit; it does not promise that the free review includes every check described above.
 
 ## Seven questions to ask the agency before you hire
 
@@ -200,4 +200,4 @@ Ask for the first three actions, the evidence behind each one, the affected page
 
 An SEO audit should leave you with a clearer decision, not just a larger spreadsheet. For a Toronto business, that means knowing which pages and local touchpoints matter, which findings are verified, what the business should fix first, and who is accountable for the work.
 
-If you want PPC Guru to review your website, start with the [SEO and local search service page](https://ppcguru.ca/services/seo) and ask what the free review will include for your specific site. You can use the seven questions above with us—or with any agency you consider.
+If you want PPC Guru to review your website, start with the SEO and local search service page and ask what the free review will include for your specific site. You can use the seven questions above with us—or with any agency you consider.

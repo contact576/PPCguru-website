@@ -148,7 +148,7 @@ coverImage: >-
  	<li style="font-weight: 400;" aria-level="1"><b>Positive reviews:</b><span style="font-weight: 400;"> thank them, personalize the reply, reinforce the service.</span></li>
  	<li style="font-weight: 400;" aria-level="1"><b>Negative reviews:</b><span style="font-weight: 400;"> stay calm, own the concern, take detail offline, explain the fix.</span></li>
 </ul>
-<span style="font-weight: 400;">Review and Google Business Profile work sits inside our</span><a href="https://ppcguru.ca/services/seo"> <span style="font-weight: 400;">SEO and local search service</span></a><span style="font-weight: 400;">.</span>
+<span style="font-weight: 400;">Review and Google Business Profile work sits inside our SEO and local search service.</span>
 <h2><b>Pillar 5: First-Party Data (The One Most Businesses Skip)</b></h2>
 <i><span style="font-weight: 400;">CRM · attribution</span></i>
 
@@ -182,7 +182,7 @@ coverImage: >-
 <h2><b>How PPC Guru Turns Marketing Into Revenue</b></h2>
 <span style="font-weight: 400;">We work backward from your business, not from traffic: which services have the best margins, what you can pay to win a customer, which leads become customers. The whole process is measured in booked jobs and revenue.</span>
 
-<span style="font-weight: 400;">As a Google Partner and Meta Business Partner, we run</span><a href="https://ppcguru.ca/services/google-ads"> <span style="font-weight: 400;">Google Ads</span></a><span style="font-weight: 400;">,</span><a href="https://ppcguru.ca/services/meta-ads"> <span style="font-weight: 400;">Meta Ads</span></a><span style="font-weight: 400;">,</span><a href="https://ppcguru.ca/services/seo"> <span style="font-weight: 400;">SEO</span></a><span style="font-weight: 400;">, and</span><a href="https://ppcguru.ca/services/crm"> <span style="font-weight: 400;">CRM</span></a><span style="font-weight: 400;"> as one accountable team.</span>
+<span style="font-weight: 400;">As a Google Partner and Meta Business Partner, we run</span><a href="https://ppcguru.ca/services/google-ads"> <span style="font-weight: 400;">Google Ads</span></a><span style="font-weight: 400;">,</span><span style="font-weight: 400;">Meta Ads</span><span style="font-weight: 400;">,</span><span style="font-weight: 400;">SEO</span><span style="font-weight: 400;">, and</span><a href="https://ppcguru.ca/services/crm"> <span style="font-weight: 400;">CRM</span></a><span style="font-weight: 400;"> as one accountable team.</span>
 
 <b>Get a free, no-obligation audit</b><span style="font-weight: 400;"> of your Google Business Profile, ads, and site.</span><a href="https://ppcguru.ca/free-audit"> <span style="font-weight: 400;">Get my free audit</span></a><span style="font-weight: 400;"> or</span><a href="https://ppcguru.ca/contact"> <span style="font-weight: 400;">message us</span></a><span style="font-weight: 400;">. More on the</span><a href="https://ppcguru.ca/blog"> <span style="font-weight: 400;">PPC Guru blog</span></a><span style="font-weight: 400;">.</span>
 <h2><b>Frequently Asked Questions</b></h2>

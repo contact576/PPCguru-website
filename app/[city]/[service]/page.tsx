@@ -5,6 +5,7 @@ import { Check, ArrowRight, MapPin } from "lucide-react";
 import { allLocationParams, getCity, getLocationService, cities, locationServices } from "@/lib/data/locations";
 import { getService } from "@/lib/data/services";
 import { getLocationServiceContent } from "@/lib/data/location-service-content";
+import { getLocationParentLink } from "@/lib/data/location-parent-links";
 import { CityServiceArt } from "@/components/illustrations/hero-art";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
@@ -21,6 +22,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, locationAreaServedSchema, servicePageGraphSchema } from "@/lib/seo";
 import { withMetaOverride } from "@/lib/page-meta";
 import { siteConfig } from "@/lib/site-config";
+import { InlineLinkText } from "@/components/shared/inline-link-text";
 
 // Only render the city×service combos we define; everything else 404s.
 export const dynamicParams = false;
@@ -52,6 +54,7 @@ export default async function LocationServicePage({ params }: { params: Promise<
   const fullService = getService(service);
   if (!c || !s || !fullService) notFound();
   const localContent = getLocationServiceContent(city, service);
+  const parentLink = getLocationParentLink(city, service);
 
   const crumbs = [
     { name: "Home", path: "/" },
@@ -105,7 +108,10 @@ export default async function LocationServicePage({ params }: { params: Promise<
           <div>
             <SectionHeading align="left" eyebrow="Why local matters" title={`${s.name} built for the ${c.name} market`} />
             {localContent ? (
-              <p className="mt-6 text-[var(--color-ink-dim)]">{localContent.whyLocal}</p>
+              <p className="mt-6 text-[var(--color-ink-dim)]">
+                <InlineLinkText text={localContent.whyLocal} link={localContent.whyLocalLink} />
+                {parentLink ? <>{" "}<InlineLinkText text={parentLink.sentence} link={parentLink} /></> : null}
+              </p>
             ) : (
               <>
                 <p className="mt-6 text-[var(--color-ink-dim)]">{c.context}</p>
@@ -135,11 +141,13 @@ export default async function LocationServicePage({ params }: { params: Promise<
                 </li>
               ))}
             </ul>
-            <div className="mt-8">
-              <Button href={`/services/${fullService.slug}`} variant="outline">
-                Full {fullService.name} details <ArrowRight size={16} />
-              </Button>
-            </div>
+            {!localContent?.whyLocalLink && !parentLink ? (
+              <div className="mt-8">
+                <Button href={`/services/${fullService.slug}`} variant="outline">
+                  Full {fullService.name} details <ArrowRight size={16} />
+                </Button>
+              </div>
+            ) : null}
           </div>
 
           <aside className="h-fit rounded-[22px] border border-[#dddbc9] bg-[#fbfaf2] p-6">

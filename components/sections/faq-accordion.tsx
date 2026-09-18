@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { JsonLd } from "@/components/seo/json-ld";
+import { InlineLinkText, type InlineLink } from "@/components/shared/inline-link-text";
 import { faqSchema } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,7 @@ export function FaqAccordion({
   title = "Questions, answered",
   emitSchema = true,
 }: {
-  faqs: { q: string; a: string }[];
+  faqs: { q: string; a: string; link?: InlineLink }[];
   heading?: boolean;
   title?: string;
   emitSchema?: boolean;
@@ -46,7 +47,9 @@ export function FaqAccordion({
                     isOpen ? "grid-rows-[1fr] pb-5" : "grid-rows-[0fr]"
                   )}
                 >
-                  <p className="min-h-0 text-[var(--color-ink-dim)]">{f.a}</p>
+                  <p className="min-h-0 text-[var(--color-ink-dim)]">
+                    <InlineLinkText text={f.a} link={f.link} />
+                  </p>
                 </div>
               </div>
             );

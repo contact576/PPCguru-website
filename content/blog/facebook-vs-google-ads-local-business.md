@@ -83,4 +83,4 @@ One warning: if your total budget is small (say under $1,500/month), running bot
 
 ## Figure out the right mix for you
 
-The "Google or Facebook" debate has a different answer for a plumber than it does for a yoga studio. If you want a clear recommendation based on your job value, urgency, and budget, [book a free audit](/contact) and we'll map it out. You can also dig into how we run [Google Ads](/services/google-ads) and [Meta Ads](/services/meta-ads) for local service businesses. The goal is the same either way: more booked jobs at a price that makes sense.
+The "Google or Facebook" debate has a different answer for a plumber than it does for a yoga studio. If you want a clear recommendation based on your job value, urgency, and budget, [book a free audit](/contact) and we'll map it out. You can also dig into how we run [Google Ads](/services/google-ads) and [Meta Ads management for local businesses](/services/meta-ads). The goal is the same either way: more booked jobs at a price that makes sense.

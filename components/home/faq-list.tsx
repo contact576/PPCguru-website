@@ -4,6 +4,7 @@ import { useState } from "react";
 import { homeFaqs } from "@/lib/data/home";
 import { JsonLd } from "@/components/seo/json-ld";
 import { faqSchema } from "@/lib/seo";
+import { InlineLinkText } from "@/components/shared/inline-link-text";
 
 /** Compact two-column FAQ accordion (1 column on mobile). One item open at a time. */
 export function FaqList() {
@@ -26,7 +27,9 @@ export function FaqList() {
                 <span style={{ flexShrink: 0, width: 24, height: 24, borderRadius: 7, background: isOpen ? "#ceff3a" : "transparent", color: isOpen ? "#14170e" : "#6f7d22", border: `1px solid ${isOpen ? "#ceff3a" : "#cfe39a"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, transition: "transform .25s,background .2s", transform: `rotate(${isOpen ? "45deg" : "0deg"})` }}>+</span>
               </button>
               <div style={{ maxHeight: isOpen ? 360 : 0, overflow: "hidden", transition: "max-height .35s ease" }}>
-                <p style={{ padding: "0 18px 18px", fontSize: 13.5, color: "#54564a", lineHeight: 1.6 }}>{f.a}</p>
+                <p style={{ padding: "0 18px 18px", fontSize: 13.5, color: "#54564a", lineHeight: 1.6 }}>
+                  <InlineLinkText text={f.a} link={f.link} />
+                </p>
               </div>
             </div>
           );

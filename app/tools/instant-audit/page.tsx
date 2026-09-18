@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { InstantAudit } from "@/components/tools/instant-audit";
@@ -27,7 +28,10 @@ export default function InstantAuditPage() {
       <Section className="!pt-10">
         <InstantAudit />
       </Section>
-      <CtaBlock title="Want the full picture?" intro="The instant audit checks your page. A full audit checks your live ad accounts, wasted spend and conversion tracking — book yours free." />
+      <CtaBlock
+        title="Want the full picture?"
+        intro={<>The instant audit checks one page. Our <Link href="/services/seo" className="font-semibold underline underline-offset-4">SEO and local-search services</Link> examine technical access, content, local visibility and measurement across the wider site.</>}
+      />
     </>
   );
 }

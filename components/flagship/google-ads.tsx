@@ -75,7 +75,7 @@ export function GoogleAdsFlagship({ service }: { service: Service }) {
       </section>
 
       <TrustBadgeBar />
-      {content?.definition && <ServiceIntro name="Google Ads management" definition={content.definition} heading={content.definitionHeading} />}
+      {content?.definition && <ServiceIntro name="Google Ads management" definition={content.definition} heading={content.definitionHeading} link={content.definitionLink} />}
       <ServiceStatBand slug="google-ads" />
 
       {/* Revenue calculator — high on the page (strongest hook) */}

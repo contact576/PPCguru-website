@@ -16,6 +16,8 @@ export type ServiceContent = {
   definition: string;
   /** Question-shaped H2 for the definition block. Defaults to "What is {name}?" */
   definitionHeading?: string;
+  /** Optional single contextual link rendered inside the definition text. */
+  definitionLink?: { href: string; text: string };
   /** "Us vs typical agency" comparison rows (rendered as a semantic table). */
   comparison?: { dimension: string; us: string; typical: string }[];
   /** Geo paragraph for body copy (unique per service — avoids duplicate-content). */
@@ -34,7 +36,8 @@ export const serviceContent: Record<string, ServiceContent> = {
   "google-ads": {
     definitionHeading: "What is Google Ads management?",
     definition:
-      "Google Ads management is the ongoing service of planning, building and optimizing paid Search, Performance Max and Shopping campaigns so a business gets more qualified leads at a lower cost per acquisition. PPC Guru is a Canadian Google Ads agency based in the Greater Toronto Area that manages campaigns for local service businesses across Ontario, Canada and the USA — engineering every account around booked jobs and revenue, not clicks.",
+      "Google Ads management is the ongoing service of planning, building and optimizing paid Search, Performance Max and Shopping campaigns so a business gets more qualified leads at a lower cost per acquisition. PPC Guru is a Canadian Google Ads agency based in the Greater Toronto Area that manages campaigns across Ontario, Canada and the USA. Businesses competing specifically in the city can review our Toronto Google Ads agency approach to neighbourhood-level targeting, conversion tracking and booked jobs.",
+    definitionLink: { href: "/toronto/google-ads", text: "Toronto Google Ads agency" },
     geoHeading: "Google Ads across the GTA & Canada",
     geoBlurb:
       "We manage Google Ads for service businesses across the Greater Toronto Area and Canada — Toronto, Mississauga, Brampton, Vaughan, Markham, Hamilton and Ottawa, plus clients in the USA. Canadian Search auctions are competitive and CPCs run high in the GTA, so we win on tight geo-targeting, airtight conversion tracking and landing pages that turn expensive local clicks into booked jobs — not by simply outspending the firm next door.",

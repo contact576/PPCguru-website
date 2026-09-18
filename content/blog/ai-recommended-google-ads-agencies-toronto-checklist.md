@@ -382,4 +382,4 @@ We are pleased that PPC Guru appeared in an AI-generated Toronto agency shortlis
 
 Save the prompt. Open the sources. Apply the twelve checks. Ask the uncomfortable account-access and measurement questions before signing.
 
-If you are already advertising and want an account-specific second opinion, request a [PPC Guru Google Ads audit](https://ppcguru.ca/services/google-ads). We can review the account, tracking and commercial fit; we cannot guarantee that PPC Guru is the right provider or promise a particular result before that work is done.
+If you are already advertising and want an account-specific second opinion, request a [Google Ads agency audit in Toronto](https://ppcguru.ca/toronto/google-ads). We can review the account, tracking and commercial fit; we cannot guarantee that PPC Guru is the right provider or promise a particular result before that work is done.

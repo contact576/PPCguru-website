@@ -40,7 +40,7 @@ You already paid for the lead. Letting it go cold is paying full price for nothi
 
 ## Why this hits paid ads hardest
 
-When you run [Google Ads](/services/google-ads) or [Meta Ads](/services/meta-ads), you're often catching people at the exact moment of high intent - sometimes an emergency. Those leads have the shortest shelf life of all. An emergency [HVAC](/industries/hvac) lead that sits for two hours is almost always gone.
+When you run [Google Ads](/services/google-ads) or [Meta Ads lead-generation campaigns](/services/meta-ads), you're often catching people at the exact moment of high intent - sometimes an emergency. Those leads have the shortest shelf life of all. An emergency [HVAC](/industries/hvac) lead that sits for two hours is almost always gone.
 
 It also distorts your numbers. If you measure your campaign by cost per lead but your follow-up is slow, you'll wrongly conclude the ads aren't working. The ads are fine. The handoff is broken.
 

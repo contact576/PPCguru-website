@@ -49,11 +49,15 @@ export const differentiators: { title: string; body: string }[] = [
 ];
 
 /** Homepage / sitewide FAQ. */
-export const companyFaqs: { q: string; a: string }[] = [
+export const companyFaqs: { q: string; a: string; link?: { href: string; text: string } }[] = [
   { q: "What does PPC Guru actually do?", a: `${siteConfig.name} is a ${siteConfig.trust.serviceArea} digital marketing agency. We manage Google Ads, Meta (Facebook & Instagram) ads, SEO, creative and the CRM/automation that turns leads into booked jobs — for local service businesses.` },
   { q: "Are you really a Google and Meta partner?", a: "Yes — we're a Google Partner and a Meta Business Partner, which means verified platform expertise and direct access to platform support and betas." },
   { q: "What's the 'AI-first' part really mean for me?", a: "It means faster turnaround, more creative and keyword testing, and sharper reporting — because we use AI to do the heavy lifting, with human strategists directing and reviewing everything. You get the benefit (more output, lower cost); we own the tooling." },
   { q: "Which industries do you specialize in?", a: "Healthcare and physiotherapy, home services (HVAC, plumbing, electrical), construction and renovation, immigration, real estate, and adjacent local service verticals." },
-  { q: "Where are you based and who do you serve?", a: `We're based in the Greater Toronto Area (${siteConfig.contact.addressLocality}, ON) and serve clients across Canada and the USA, with deep local expertise in the GTA.` },
+  {
+    q: "Where are you based and who do you serve?",
+    a: `We're based in the Greater Toronto Area (${siteConfig.contact.addressLocality}, ON) and serve clients across Canada and the USA, with deep local expertise in the GTA. For businesses competing within the city, explore our Google Ads services for Toronto businesses.`,
+    link: { href: "/toronto/google-ads", text: "Google Ads services for Toronto businesses" },
+  },
   { q: "How do I get started?", a: "Book a free audit. We'll review your accounts, tracking and competitors and show you exactly where the opportunity is — no obligation." },
 ];
