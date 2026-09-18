@@ -119,7 +119,16 @@ function Stepper({ step }: { step: number }) {
   );
 }
 
-function QualificationForm() {
+/** Copy that differs per landing page; defaults are the /100-leads wording. */
+export type QualificationCopy = { source: string; topline: string; stepTwoLede: string; submitLabel: string };
+const DEFAULT_COPY: QualificationCopy = {
+  source: LANDING_SOURCE,
+  topline: "100-lead fit check",
+  stepTwoLede: "These answers help us judge whether a 100-lead target is realistic.",
+  submitLabel: "See if I qualify",
+};
+
+export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: QualificationCopy } = {}) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ company: "", location: "", website: "", businessType: "", budget: "", name: "", email: "", phone: "" });
   const [state, action, pending] = useActionState(submitLandingLead, initial);
@@ -151,7 +160,7 @@ function QualificationForm() {
   const stepTwoReady = Boolean(form.businessType && form.budget);
 
   const goTo = (next: number) => {
-    if (next === 2 && step === 1) track("audit_form_start", { source: LANDING_SOURCE });
+    if (next === 2 && step === 1) track("audit_form_start", { source: copy.source });
     setStep(next);
   };
 
@@ -168,7 +177,7 @@ function QualificationForm() {
     <section className="lead-form" id="qualification" aria-labelledby="qualification-title">
       <div className="form-topline">
         <span>
-          <BadgeCheck aria-hidden="true" /> 100-lead fit check
+          <BadgeCheck aria-hidden="true" /> {copy.topline}
         </span>
         <strong>{step} of 3</strong>
       </div>
@@ -177,7 +186,7 @@ function QualificationForm() {
       <form action={action} noValidate={step !== 3}>
         {/* Honeypot + attribution + first-party session id. */}
         <input type="text" name="company_website" tabIndex={-1} autoComplete="off" className="lp-hidden" aria-hidden />
-        <input type="hidden" name="source" value={LANDING_SOURCE} />
+        <input type="hidden" name="source" value={copy.source} />
         <input type="hidden" name="utm" value={utm} readOnly />
         <SessionField />
         {/* Answers from earlier steps ride along as hidden fields. */}
@@ -248,7 +257,7 @@ function QualificationForm() {
             <div className="form-heading">
               <p className="form-kicker">Build the right campaign</p>
               <h2>What best describes {form.company || "your business"}?</h2>
-              <p>These answers help us judge whether a 100-lead target is realistic.</p>
+              <p>{copy.stepTwoLede}</p>
             </div>
             <fieldset className="choice-fieldset">
               <legend>Business type</legend>
@@ -324,7 +333,7 @@ function QualificationForm() {
                 <ArrowLeft aria-hidden="true" /> Back
               </button>
               <button className="primary-button" type="submit" disabled={pending}>
-                {pending ? "Checking your fit…" : "See if I qualify"} <ArrowRight aria-hidden="true" />
+                {pending ? "Checking your fit…" : copy.submitLabel} <ArrowRight aria-hidden="true" />
               </button>
             </div>
             <p className="consent-copy">

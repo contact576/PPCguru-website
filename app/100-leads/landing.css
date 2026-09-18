@@ -760,6 +760,7 @@
 
 .lp-root .results-heading h2,
 .lp-root .quality-copy h2,
+.lp-root .gta-cities h2,
 .lp-root .final-cta h2 {
   margin: 12px 0 0;
   font-family: "Arial Black", Inter, Aptos, sans-serif;
@@ -2143,3 +2144,35 @@
     width: 23px;
     border-radius: 999px;
     background: #2f75c7;}.lp-root.lp-seo .proof-conversion { margin-top: 25px;}}@media (max-width: 370px) {.lp-root.lp-seo .mobile-proof-card > header { grid-template-columns: 30px minmax(0, 1fr) auto;}.lp-root.lp-seo .mobile-proof-card > header small { display: inline-flex;}.lp-root.lp-seo .mobile-proof-card > header h3 { font-size: 12px;}}
+
+/* /gta-marketing-agency — the GTA city grid (everything else reuses the rules above). */
+.lp-root.lp-gta .gta-cities {
+  width: min(100% - 44px, 1200px);
+  margin-inline: auto;
+  padding: 20px 0 92px;
+}
+.lp-root.lp-gta .gta-cities h2 span { color: #6e8e15; }
+.lp-root.lp-gta .gta-cities ul {
+  margin: 30px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+}
+.lp-root.lp-gta .gta-cities li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  font-weight: 800;
+  font-size: 14px;
+}
+.lp-root.lp-gta .gta-cities li svg { width: 16px; height: 16px; flex: none; color: #6e8e15; }
+@media (max-width: 680px) {
+  .lp-root.lp-gta .gta-cities { width: min(100% - 30px, 1200px); padding-bottom: 64px; }
+  .lp-root.lp-gta .gta-cities ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

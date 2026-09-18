@@ -18,6 +18,13 @@ import {
   budgetLabel,
   businessTypeLabel,
 } from "@/lib/data/landing-100-leads";
+import { GTA_LANDING_ID, GTA_LANDING_SERVICE_LABEL, GTA_LANDING_SOURCE, GTA_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-gta";
+
+/** Pages that share this form, keyed by their hidden `source` value. */
+const PAGES = {
+  [LANDING_SOURCE]: { landing: "100-leads", thankYou: LANDING_THANK_YOU_PATH, service: LANDING_SERVICE_LABEL, subject: "100-leads landing lead" },
+  [GTA_LANDING_SOURCE]: { landing: GTA_LANDING_ID, thankYou: GTA_LANDING_THANK_YOU_PATH, service: GTA_LANDING_SERVICE_LABEL, subject: "GTA agency landing lead" },
+} as const;
 
 /**
  * Server action behind the /100-leads three-step qualification form.
@@ -104,8 +111,9 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   }
   const data = parsed.data;
   const source = data.source || LANDING_SOURCE;
+  const page = PAGES[source as keyof typeof PAGES] ?? PAGES[LANDING_SOURCE];
   const website = normaliseWebOrSocial(data.website);
-  const thankYou = `${LANDING_THANK_YOU_PATH}?n=${encodeURIComponent(firstName(data.name))}&c=${encodeURIComponent(data.company)}`;
+  const thankYou = `${page.thankYou}?n=${encodeURIComponent(firstName(data.name))}&c=${encodeURIComponent(data.company)}`;
 
   // 1) Honeypot → pretend success (bots learn nothing; the redirect target is public anyway).
   if (data.company_website) redirect(thankYou);
@@ -155,7 +163,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     company: data.company,
     website,
     source,
-    service: LANDING_SERVICE_LABEL,
+    service: page.service,
     budget: `${budgetText} / month (ad budget)`,
     message: [
       `Location: ${data.location}`,
@@ -175,7 +183,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   // The structured landing row (best-effort — the lead is already safe above).
   await saveLandingLead({
     leadId,
-    landing: "100-leads",
+    landing: page.landing,
     name: data.name,
     email: data.email,
     phone: data.phone,
@@ -199,7 +207,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     lead: { name: data.name, email: data.email },
     notification: {
       replyTo: data.email,
-      subject: `🔥 100-leads landing lead — ${data.name} (${data.company}, ${data.location})`,
+      subject: `🔥 ${page.subject} — ${data.name} (${data.company}, ${data.location})`,
       text: [
         `Source: ${source}`,
         `Name: ${data.name}`,

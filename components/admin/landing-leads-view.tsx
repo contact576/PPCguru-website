@@ -5,6 +5,7 @@ import { Search, Download, Inbox, AlertTriangle, ExternalLink } from "lucide-rea
 import { LANDING_LEAD_STATUSES, type LandingLeadRow, type LandingLeadStatus } from "@/lib/landing-leads";
 import { budgetLabel, businessTypeLabel, LANDING_PATH } from "@/lib/data/landing-100-leads";
 import { SEO_LANDING_PATH, SEO_LANDING_ID, seoGoalLabel, seoInvestmentLabel } from "@/lib/data/landing-seo";
+import { GTA_LANDING_ID } from "@/lib/data/landing-gta";
 
 /** Per-landing rendering of the qualification answers (100-leads vs SEO). */
 function marketCell(r: LandingLeadRow) {
@@ -32,9 +33,10 @@ function budgetCell(r: LandingLeadRow) {
 }
 function landingChip(landing: string) {
   const seo = landing === SEO_LANDING_ID;
+  const gta = landing === GTA_LANDING_ID;
   return (
-    <span className={`mono mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[.05em] ${seo ? "bg-[#e6f0ff] text-[#1f4b99]" : "bg-[#eef2dd] text-[#4f5f14]"}`}>
-      {seo ? "SEO visibility" : "100 leads"}
+    <span className={`mono mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[.05em] ${seo ? "bg-[#e6f0ff] text-[#1f4b99]" : gta ? "bg-[#fdeede] text-[#8a4b12]" : "bg-[#eef2dd] text-[#4f5f14]"}`}>
+      {seo ? "SEO visibility" : gta ? "GTA agency" : "100 leads"}
     </span>
   );
 }

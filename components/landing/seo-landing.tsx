@@ -285,7 +285,7 @@ function VisibilityForm() {
 }
 
 /* eslint-disable @next/next/no-img-element -- supplied JPEG screenshots + badge artwork */
-function ProofGallery() {
+export function ProofGallery({ onCta = scrollToForm, ctaLabel = "Check my search visibility" }: { onCta?: () => void; ctaLabel?: string } = {}) {
   const [active, setActive] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -363,8 +363,8 @@ function ProofGallery() {
 
       <div className="proof-conversion">
         <p>Want to know what customers may find about your business?</p>
-        <button className="primary-button" type="button" onClick={scrollToForm}>
-          Check my search visibility <ArrowRight aria-hidden="true" />
+        <button className="primary-button" type="button" onClick={onCta}>
+          {ctaLabel} <ArrowRight aria-hidden="true" />
         </button>
       </div>
 

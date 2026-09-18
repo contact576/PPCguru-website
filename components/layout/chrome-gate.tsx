@@ -9,5 +9,6 @@ export function ChromeGate({ children }: { children: React.ReactNode }) {
   // Paid-traffic landing pages carry their own header/footer (components/landing).
   if (pathname === "/100-leads" || pathname.startsWith("/100-leads/")) return null;
   if (pathname === "/seo-visibility" || pathname.startsWith("/seo-visibility/")) return null;
+  if (pathname === "/gta-marketing-agency" || pathname.startsWith("/gta-marketing-agency/")) return null;
   return <>{children}</>;
 }
