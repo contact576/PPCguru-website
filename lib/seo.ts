@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "./site-config";
-import { verifiedReviewUrls, awardUrls } from "./data/reviews";
+import { verifiedReviewUrls, reviewProfileUrls } from "./data/reviews";
 import { GOOGLE_PARTNER_PROFILE_URL, META_PARTNER_URL } from "./data/certifications";
 import { cities, type City } from "./data/locations";
 
@@ -141,11 +141,9 @@ export function organizationSchema() {
   const sameAs = [
     ...new Set(
       ([
-        siteConfig.social.instagram,
-        siteConfig.social.linkedin,
-        siteConfig.social.facebook,
+        ...Object.values(siteConfig.social),
         ...verifiedReviewUrls,
-        ...awardUrls.filter((url) => url !== GOOGLE_PARTNER_PROFILE_URL),
+        ...reviewProfileUrls,
       ] as string[]).filter((u) => Boolean(u) && !/^https?:\/\/[^/]+\/?$/.test(u)),
     ),
   ];

@@ -28,8 +28,9 @@ import { GsapHeroReveal } from "@/components/home/gsap-hero";
 import { GrowthLoopPinned } from "@/components/home/growth-loop-pinned";
 import { GsapText } from "@/components/shared/gsap-text";
 import { BlogPosts } from "@/components/home/blog-section";
+import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, homepageSchema } from "@/lib/seo";
 import { withMetaOverride } from "@/lib/page-meta";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -69,6 +70,8 @@ function Em({ children, color = "#5d6b1a" }: { children: React.ReactNode; color?
 
 export default function HomePage() {
   return (
+    <>
+      <JsonLd data={homepageSchema()} />
     <div style={{ position: "relative", overflowX: "hidden", background: cream }}>
       <ScrollProgress />
       <RevealInit />
@@ -575,5 +578,6 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+    </>
   );
 }
