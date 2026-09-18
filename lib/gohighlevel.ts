@@ -13,6 +13,10 @@ export type GhlLead = {
   budget?: string;
   service?: string;
   message?: string;
+  /** Paid-touch context saved separately so GHL workflows can use it. */
+  attribution?: Record<string, string>;
+  /** Shared OpenAI browser/server conversion id for reconciliation. */
+  openAiEventId?: string;
   /** Stable Supabase lead row ID. Reuse it when retrying this submission. */
   submissionId?: string;
   createdAt?: string;
@@ -98,6 +102,19 @@ function tagsFor(lead: GhlLead, backfill: boolean): string[] {
     : (process.env.GHL_LEAD_TAGS || "website-lead").split(",").map((tag) => tag.trim()).filter(Boolean);
   const source = slugTag(lead.source || "website");
   tags.push((backfill ? "form-backfill-" : "form-") + (source || "website"));
+  if (!backfill) {
+    const attribution = lead.attribution ?? {};
+    const dynamicTags = [
+      ["traffic", attribution.utm_source],
+      ["campaign", attribution.utm_campaign],
+      ["adgroup", attribution.utm_term],
+      ["ad", attribution.utm_content],
+    ] as const;
+    for (const [prefix, value] of dynamicTags) {
+      const normalized = value ? slugTag(value) : "";
+      if (normalized) tags.push(`${prefix}-${normalized}`);
+    }
+  }
   return [...new Set(tags)];
 }
 
@@ -110,9 +127,10 @@ export function ghlCustomFieldReference(value: string): { id: string } | { key: 
 }
 
 function contactPayload(lead: GhlLead): Record<string, unknown> {
+  const trafficSource = lead.attribution?.utm_source?.trim().toLowerCase();
   const payload: Record<string, unknown> = {
     locationId: process.env.GHL_LOCATION_ID?.trim(),
-    source: lead.source?.trim() || "PPC Guru Website",
+    source: trafficSource === "chatgpt" ? "ChatGPT Ads" : lead.source?.trim() || "PPC Guru Website",
     createNewIfDuplicateAllowed: false,
     country: process.env.GHL_DEFAULT_COUNTRY || "CA",
   };
@@ -155,7 +173,7 @@ function contactPayload(lead: GhlLead): Record<string, unknown> {
  * and `lib/` is type-checked so a `./x.ts` specifier is not allowed either.
  */
 
-type FieldSlot = "budget" | "services" | "message";
+type FieldSlot = "budget" | "services" | "message" | "attribution" | "openai_event_id";
 
 type FieldSpec = {
   slot: FieldSlot;
@@ -171,7 +189,30 @@ const FIELD_SPECS: FieldSpec[] = [
   { slot: "budget", name: "Budget", dataType: "TEXT", envVar: "GHL_CUSTOM_FIELD_BUDGET", value: (l) => l.budget },
   { slot: "services", name: "Services Interested In", dataType: "LARGE_TEXT", envVar: "GHL_CUSTOM_FIELD_SERVICES", value: (l) => l.service },
   { slot: "message", name: "Message", dataType: "LARGE_TEXT", envVar: "GHL_CUSTOM_FIELD_MESSAGE", value: (l) => l.message },
+  {
+    slot: "attribution",
+    name: "Attribution Details",
+    dataType: "LARGE_TEXT",
+    envVar: "GHL_CUSTOM_FIELD_ATTRIBUTION",
+    value: (l) => attributionText(l.attribution),
+  },
+  {
+    slot: "openai_event_id",
+    name: "OpenAI Event ID",
+    dataType: "TEXT",
+    envVar: "GHL_CUSTOM_FIELD_OPENAI_EVENT_ID",
+    value: (l) => l.openAiEventId,
+  },
 ];
+
+function attributionText(attribution: Record<string, string> | undefined): string | undefined {
+  if (!attribution) return undefined;
+  const text = Object.entries(attribution)
+    .filter(([, value]) => value?.trim())
+    .map(([key, value]) => `${key}=${value.trim()}`)
+    .join("\n");
+  return text || undefined;
+}
 
 type LocationField = { id?: string; name?: string; fieldKey?: string; dataType?: string };
 type FieldMap = Partial<Record<FieldSlot, string>>;
@@ -221,18 +262,24 @@ function autoCreateEnabled(): boolean {
  *
  * Returns an empty map on any failure — the caller then simply skips fields.
  */
-export async function resolveFieldMap(): Promise<FieldMap> {
-  if (cachedFields && Date.now() - cachedFields.at < cachedFields.ttl) return cachedFields.map;
+export async function resolveFieldMap(requestedSpecs: FieldSpec[] = FIELD_SPECS): Promise<FieldMap> {
+  if (
+    cachedFields &&
+    Date.now() - cachedFields.at < cachedFields.ttl &&
+    requestedSpecs.every((spec) => cachedFields?.map[spec.slot])
+  ) {
+    return cachedFields.map;
+  }
   if (fieldsInFlight) return fieldsInFlight;
 
   fieldsInFlight = (async () => {
-    const map: FieldMap = {};
+    const map: FieldMap = { ...(cachedFields?.map ?? {}) };
     for (const spec of FIELD_SPECS) {
       const pinned = process.env[spec.envVar]?.trim();
       if (pinned) map[spec.slot] = pinned;
     }
 
-    const needed = FIELD_SPECS.filter((spec) => !map[spec.slot]);
+    const needed = requestedSpecs.filter((spec) => !map[spec.slot]);
     if (!needed.length) {
       cachedFields = { map, at: Date.now(), ttl: FIELD_CACHE_TTL_MS };
       return map;
@@ -268,7 +315,7 @@ export async function resolveFieldMap(): Promise<FieldMap> {
     }
 
     // Anything still unmapped means a create was refused; retry that soon.
-    const complete = FIELD_SPECS.every((spec) => map[spec.slot]);
+    const complete = requestedSpecs.every((spec) => map[spec.slot]);
     cachedFields = { map, at: Date.now(), ttl: complete ? FIELD_CACHE_TTL_MS : FIELD_FAILURE_TTL_MS };
     return map;
   })().finally(() => {
@@ -288,14 +335,16 @@ export async function resolveFieldMap(): Promise<FieldMap> {
  * rejection. The right spelling then costs one call forever after.
  */
 async function syncCustomFields(contactId: string, lead: GhlLead): Promise<boolean> {
+  const activeSpecs = FIELD_SPECS.filter((spec) => spec.value(lead)?.trim());
+  if (!activeSpecs.length) return false;
   let map: FieldMap;
   try {
-    map = await resolveFieldMap();
+    map = await resolveFieldMap(activeSpecs);
   } catch {
     return false;
   }
 
-  const values = FIELD_SPECS.map((spec) => ({ id: map[spec.slot], value: spec.value(lead)?.trim() }))
+  const values = activeSpecs.map((spec) => ({ id: map[spec.slot], value: spec.value(lead)?.trim() }))
     .filter((entry): entry is { id: string; value: string } => Boolean(entry.id && entry.value));
   if (!values.length) return false;
 
@@ -332,6 +381,8 @@ function noteBodyFor(lead: GhlLead): string {
     lead.website ? "Website: " + lead.website : undefined,
     lead.service ? "Interested in: " + lead.service : undefined,
     lead.budget ? "Budget: " + lead.budget : undefined,
+    lead.openAiEventId ? "OpenAI event ID: " + lead.openAiEventId : undefined,
+    attributionText(lead.attribution) ? "Attribution:\n" + attributionText(lead.attribution) : undefined,
     lead.message ? "Message:\n" + lead.message : undefined,
   ].filter(Boolean).join("\n");
 }

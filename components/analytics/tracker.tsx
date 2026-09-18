@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { sendEvent } from "@/lib/analytics";
+import { sendEvent, trackOpenAiLeadCreated, trackOpenAiPageViewed } from "@/lib/analytics";
 
 /**
  * Site-wide, consent-aware visitor tracker. Mounted once in the root layout.
@@ -18,6 +18,10 @@ export function VisitorTracker() {
   // Pageview on first load + every client navigation.
   useEffect(() => {
     sendEvent("pageview", { path: pathname });
+    trackOpenAiPageViewed();
+    if (pathname.endsWith("/thank-you")) {
+      trackOpenAiLeadCreated(new URLSearchParams(window.location.search).get("eid"));
+    }
   }, [pathname]);
 
   // Delegated click capture across the whole document.

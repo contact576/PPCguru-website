@@ -91,6 +91,53 @@ try {
   assert.equal(initial.fieldsSynced, true);
   done();
 
+  process.env.GHL_CUSTOM_FIELD_ATTRIBUTION = "field-attribution-id";
+  process.env.GHL_CUSTOM_FIELD_OPENAI_EVENT_ID = "field-openai-event-id";
+  const attributedLead = {
+    ...lead,
+    submissionId: "row-attributed",
+    openAiEventId: "lead-event-123",
+    attribution: {
+      utm_source: "chatgpt",
+      utm_campaign: "campaign-123",
+      utm_term: "adgroup-456",
+      utm_content: "ad-789",
+      oppref: "opaque-click-reference",
+    },
+  };
+  const attributedMarker = "[PPCGuru submission:row-attributed]";
+  steps = [
+    { ...contact, inspect: (body) => assert.equal(body.source, "ChatGPT Ads") },
+    { ...updateFields, inspect: (body) => {
+      assert.deepEqual(body.customFields, [
+        { id: "field-budget-id", field_value: "test budget" },
+        { id: "field-services-id", field_value: "test service" },
+        { id: "field-message-id", field_value: "test message" },
+        {
+          id: "field-attribution-id",
+          field_value: "utm_source=chatgpt\nutm_campaign=campaign-123\nutm_term=adgroup-456\nutm_content=ad-789\noppref=opaque-click-reference",
+        },
+        { id: "field-openai-event-id", field_value: "lead-event-123" },
+      ]);
+    } },
+    emptyNotes,
+    { ...createNote, inspect: (body) => {
+      assert.ok(String(body.body).startsWith(attributedMarker + "\n"));
+      assert.ok(String(body.body).includes("OpenAI event ID: lead-event-123"));
+      assert.ok(String(body.body).includes("oppref=opaque-click-reference"));
+    } },
+    { ...addTags, inspect: (body) => assert.deepEqual(body.tags, [
+      "website-lead",
+      "form-popup-audit",
+      "traffic-chatgpt",
+      "campaign-campaign-123",
+      "adgroup-adgroup-456",
+      "ad-ad-789",
+    ]) },
+  ];
+  assert.equal((await syncLeadToGhl(attributedLead)).ok, true);
+  done();
+
   steps = [contact, updateFields,
     { ...emptyNotes, data: { notes: [{ id: "test-note", body: marker + "\npreviously delivered" }] } },
     { ...addTags, inspect: (body) => assert.deepEqual(body.tags, ["website-backfill", "form-backfill-popup-audit"]) },
@@ -223,7 +270,7 @@ try {
   assert.ok(backfillLogs.some((line) => line.includes("DRY RUN")));
   assert.equal(backfillLogs.some((line) => line.includes("same@example.invalid")), false);
   console.log = realLog;
-  console.log("PASS: 16 offline checks (GHL delivery, custom-field discovery/creation/caching, fields never gating a lead, preserved tags, note identity, failure/retry behavior, private logs, paginated dry-run backfill).");
+  console.log("PASS: 17 offline checks (GHL delivery, paid-touch attribution, custom-field discovery/creation/caching, fields never gating a lead, preserved tags, note identity, failure/retry behavior, private logs, paginated dry-run backfill).");
 } finally {
   globalThis.fetch = realFetch;
   console.warn = realWarn;
