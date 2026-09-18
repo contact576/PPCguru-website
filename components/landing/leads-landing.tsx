@@ -25,7 +25,7 @@ import {
 import { submitLandingLead, type LandingLeadState } from "@/app/actions/landing-lead";
 import { TurnstileField } from "@/components/shared/turnstile-field";
 import { SessionField } from "@/components/shared/session-field";
-import { track } from "@/lib/analytics";
+import { attributionSnapshot, track } from "@/lib/analytics";
 import {
   BUSINESS_TYPES,
   LANDING_BUDGETS,
@@ -72,20 +72,12 @@ function useReducedMotion() {
   return reduced;
 }
 
-/** utm_* / click ids / referrer from the landing URL → one hidden JSON field. */
+/** Current or retained paid-touch attribution → one hidden JSON field. */
 function useAttribution() {
   const [utm, setUtm] = useState("");
   useEffect(() => {
     try {
-      const params = new URLSearchParams(window.location.search);
-      const out: Record<string, string> = {};
-      for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "msclkid"]) {
-        const v = params.get(k);
-        if (v) out[k] = v;
-      }
-      if (document.referrer) out.referrer = document.referrer;
-      out.path = window.location.pathname + window.location.search;
-      setUtm(JSON.stringify(out));
+      setUtm(JSON.stringify(attributionSnapshot()));
     } catch {
       /* attribution is a nice-to-have */
     }

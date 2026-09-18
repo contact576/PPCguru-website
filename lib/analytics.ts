@@ -17,6 +17,31 @@
 
 const CONSENT_KEY = "ppcg_cookie_consent";
 const SID_KEY = "ppcg_sid";
+const ATTRIBUTION_KEY = "ppcg_attribution_v1";
+const LEAD_EVENT_KEY = "ppcg_lead_eid";
+const ATTRIBUTION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+
+const ATTRIBUTION_PARAMS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "gclid",
+  "fbclid",
+  "msclkid",
+  "oppref",
+  "oa_ad_account_id",
+  "oa_campaign_id",
+  "oa_ad_group_id",
+  "oa_ad_id",
+] as const;
+
+declare global {
+  interface Window {
+    oaiq?: (...args: unknown[]) => void;
+  }
+}
 
 /** Stable, first-party anonymous session id (localStorage). Not a tracking cookie. */
 export function sessionId(): string | undefined {
@@ -42,17 +67,90 @@ export function consentState(): "accepted" | "declined" | null {
   }
 }
 
-function readUtm(): Record<string, string> {
+type StoredAttribution = {
+  captured_at: number;
+  values: Record<string, string>;
+};
+
+/**
+ * Captures the latest attributable landing touch and retains it for the same
+ * 30-day window used by the campaign. Direct return visits reuse that touch;
+ * a later tagged visit replaces it. An explicit analytics decline disables
+ * persistence, while the current URL values can still accompany a form the
+ * visitor intentionally submits.
+ */
+export function attributionSnapshot(): Record<string, string> {
   try {
     const p = new URLSearchParams(location.search);
-    const out: Record<string, string> = {};
-    for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid"]) {
+    const current: Record<string, string> = {};
+    for (const k of ATTRIBUTION_PARAMS) {
       const v = p.get(k);
-      if (v) out[k] = v.slice(0, 200);
+      if (v) current[k] = v.slice(0, 300);
     }
-    return out;
+
+    if (Object.keys(current).length) {
+      current.landing_path = location.pathname;
+      if (document.referrer) current.referrer = document.referrer.slice(0, 300);
+      if (consentState() !== "declined") {
+        const stored: StoredAttribution = { captured_at: Date.now(), values: current };
+        localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(stored));
+      }
+      return current;
+    }
+
+    if (consentState() !== "declined") {
+      const raw = localStorage.getItem(ATTRIBUTION_KEY);
+      if (raw) {
+        const stored = JSON.parse(raw) as StoredAttribution;
+        if (stored?.captured_at && Date.now() - stored.captured_at <= ATTRIBUTION_TTL_MS && stored.values) {
+          return stored.values;
+        }
+        localStorage.removeItem(ATTRIBUTION_KEY);
+      }
+    }
+    return {};
   } catch {
     return {};
+  }
+}
+
+/** One stable id per pending form submission, shared by browser and server. */
+export function leadEventId(): string | undefined {
+  try {
+    let id = sessionStorage.getItem(LEAD_EVENT_KEY);
+    if (!id) {
+      id = crypto?.randomUUID?.() ?? `lead_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      sessionStorage.setItem(LEAD_EVENT_KEY, id);
+    }
+    return id;
+  } catch {
+    return undefined;
+  }
+}
+
+export function trackOpenAiPageViewed(): void {
+  if (typeof window === "undefined" || consentState() === "declined") return;
+  try {
+    window.oaiq?.("measure", "page_viewed", { type: "contents" });
+  } catch {
+    /* measurement must never break navigation */
+  }
+}
+
+/**
+ * Browser fallback for a lead already accepted by the server. The success URL
+ * supplies the exact id used by CAPI; spam/failed submissions never receive it.
+ */
+export function trackOpenAiLeadCreated(eventId: string | null | undefined): void {
+  if (typeof window === "undefined" || !eventId || consentState() === "declined") return;
+  try {
+    const sentKey = `${LEAD_EVENT_KEY}_sent_${eventId}`;
+    if (sessionStorage.getItem(sentKey)) return;
+    window.oaiq?.("measure", "lead_created", { type: "customer_action" }, { event_id: eventId });
+    sessionStorage.setItem(sentKey, "1");
+    if (sessionStorage.getItem(LEAD_EVENT_KEY) === eventId) sessionStorage.removeItem(LEAD_EVENT_KEY);
+  } catch {
+    /* measurement must never break the thank-you page */
   }
 }
 
@@ -69,7 +167,7 @@ export function sendEvent(event: string, extra: { target?: string; path?: string
       target: extra.target,
       session_id: sessionId(),
       consent: consent === "accepted",
-      utm: readUtm(),
+      utm: attributionSnapshot(),
     });
     const url = "/api/track";
     if (navigator.sendBeacon) {

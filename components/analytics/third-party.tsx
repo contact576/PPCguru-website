@@ -1,5 +1,6 @@
 /**
- * Third-party analytics: Google Tag Manager + Microsoft Clarity.
+ * Third-party analytics: Google Tag Manager, Microsoft Clarity and the OpenAI
+ * Measurement Pixel used by PPC Guru's ChatGPT ads.
  *
  * Rendered once in the root layout, so both load on EVERY page.
  *
@@ -21,6 +22,8 @@
 
 export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || "GTM-NRX9BRWF";
 export const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID || "xpxkvrbt7j";
+export const OPENAI_ADS_PIXEL_ID = process.env.NEXT_PUBLIC_OPENAI_ADS_PIXEL_ID || "VaW8hbc5GLhy5y8FWYNcYt";
+const OPENAI_ADS_DEBUG = process.env.NEXT_PUBLIC_OPENAI_ADS_DEBUG === "true";
 
 /** GTM + Clarity loaders. Render inside <head>. */
 export function AnalyticsScripts() {
@@ -35,6 +38,21 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${GTM_ID}');`,
+          }}
+        />
+      )}
+
+      {OPENAI_ADS_PIXEL_ID && (
+        <script
+          id="openai-ads-pixel"
+          dangerouslySetInnerHTML={{
+            __html: `(function(w,d,s,u,p,debug){
+if(!w.oaiq){var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;
+var js=d.createElement(s);js.async=true;js.src=u;
+var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(js,f);}
+try{if(localStorage.getItem('ppcg_cookie_consent')==='declined'){w.oaiq('consent',false);}}catch(e){}
+w.oaiq('init',{pixelId:p,debug:debug});
+})(window,document,'script','https://bzrcdn.openai.com/sdk/oaiq.min.js','${OPENAI_ADS_PIXEL_ID}',${OPENAI_ADS_DEBUG});`,
           }}
         />
       )}
@@ -102,12 +120,14 @@ function gtag(){dataLayer.push(arguments);}
 function deny(){
   gtag('consent','update',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied'});
   if(window.clarity){window.clarity('consent',false);}
+  if(window.oaiq){window.oaiq('consent',false);}
 }
 if(v==='declined'){deny();}
 window.addEventListener('ppcg:consent',function(e){
   if(e.detail==='declined'){deny();}
   else{gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
-       if(window.clarity){window.clarity('consent');}}
+       if(window.clarity){window.clarity('consent');}
+       if(window.oaiq){window.oaiq('consent',true);}}
 });
 }catch(e){}})();`;
   return <script id="ppcg-consent-signal" dangerouslySetInnerHTML={{ __html: js }} />;

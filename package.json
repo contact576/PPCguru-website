@@ -16,7 +16,8 @@
     "ghl:verify": "node --env-file=.env.local --experimental-strip-types scripts/ghl-verify.mts",
     "ghl:backfill": "node --env-file=.env.local --experimental-strip-types scripts/ghl-backfill.mts",
     "check:lead-routing": "node scripts/check-form-routing.mjs",
-    "check:ghl": "node --experimental-strip-types scripts/ghl-check.mts"
+    "check:ghl": "node --experimental-strip-types scripts/ghl-check.mts",
+    "check:openai-ads": "node --experimental-strip-types scripts/openai-ads-check.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.104.2",

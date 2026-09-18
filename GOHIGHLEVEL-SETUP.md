@@ -78,12 +78,14 @@ row IDs. Replaying one saved row should reuse its existing note.
 | `GHL_ASSIGNED_USER_ID` | unset | Assign submitted contacts to this HighLevel user. |
 | `GHL_CUSTOM_FIELD_BUDGET` | unset | Budget custom-field reference. |
 | `GHL_CUSTOM_FIELD_SERVICES` | unset | Services custom-field reference. |
-| `GHL_CUSTOM_FIELD_SOURCE` | unset | Form-source custom-field reference. |
+| `GHL_CUSTOM_FIELD_MESSAGE` | unset | Message custom-field reference. |
+| `GHL_CUSTOM_FIELD_ATTRIBUTION` | unset | Complete UTM, click-reference and landing-page context. |
+| `GHL_CUSTOM_FIELD_OPENAI_EVENT_ID` | unset | Shared OpenAI browser/server conversion event ID. |
 
-Prefer a custom-field ID. `id:<id>` also works. For a key, use `contact.example`
-or the explicit `key:<field-key>` syntax. Payloads use `fieldValue`, with the
-reference sent as `id` or `key` as appropriate. Without mappings, the note still
-contains all supplied form details, source, submission ID and timestamp.
+Prefer a custom-field ID. `id:<id>` also works. When a mapping is blank, the
+integration reuses a field with the expected display name or creates it on the
+first relevant lead. Field delivery is best-effort: the contact and its complete
+note remain the recovery record if the sub-account rejects custom fields.
 
 The integration pins the supported `Version: 2021-07-28` contract. Do not change
 `GHL_API_VERSION` without rechecking the contact, note and tag API contracts.
@@ -92,6 +94,10 @@ The integration pins the supported `Version: 2021-07-28` contract. Do not change
 
 Live submissions add `website-lead` and a source tag such as `form-contact` or
 `form-popup-audit`. Additive tags preserve any existing customer or pipeline tags.
+Attributed submissions also add bounded `traffic-*`, `campaign-*`, `adgroup-*`
+and `ad-*` tags so ChatGPT Ads leads can be filtered and routed without parsing
+the note. The standard HighLevel source is set to `ChatGPT Ads` when
+`utm_source=chatgpt`; other forms keep their existing source.
 The **Contact Tag / Tag Added** trigger can react when these tags are first added;
 adding an already-present tag is not a reliable event for every repeat submission.
 These API writes are not native HighLevel form submissions.

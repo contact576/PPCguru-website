@@ -1,7 +1,9 @@
 "use server";
 
 import { z } from "zod";
+import { randomUUID } from "node:crypto";
 import { redirect } from "next/navigation";
+import { cookies, headers } from "next/headers";
 import { leadRecipients, sendMail, emailConfigured, sendLeadAutoresponder } from "@/lib/email";
 import { saveLeadReturning, hasSupabase } from "@/lib/supabase";
 import { saveLandingLead } from "@/lib/landing-leads";
@@ -11,6 +13,8 @@ import { identifyVisitor } from "@/lib/identity";
 import { verifyTurnstile, turnstileConfigured } from "@/lib/turnstile";
 import { scoreSubmission, logBlocked } from "@/lib/spam-filter";
 import { rateLimit, clientIpFromHeaders } from "@/lib/rate-limit";
+import { sendOpenAiLeadCreated } from "@/lib/openai-ads";
+import { siteConfig } from "@/lib/site-config";
 import {
   BUSINESS_TYPE_IDS,
   LANDING_BUDGET_IDS,
@@ -36,7 +40,24 @@ import {
  */
 
 /** Attribution keys we keep from the landing URL. Anything else is dropped. */
-const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "msclkid", "referrer", "path"] as const;
+const UTM_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "gclid",
+  "fbclid",
+  "msclkid",
+  "oppref",
+  "oa_ad_account_id",
+  "oa_campaign_id",
+  "oa_ad_group_id",
+  "oa_ad_id",
+  "referrer",
+  "landing_path",
+  "path",
+] as const;
 
 const schema = z.object({
   company: z.string().min(2, "Please enter your business name.").max(120),
@@ -50,6 +71,8 @@ const schema = z.object({
   /** JSON string built client-side from the landing URL (see LeadsLanding). */
   utm: z.string().max(2000).optional().or(z.literal("")),
   session_id: z.string().max(64).optional().or(z.literal("")),
+  event_id: z.string().max(200).optional().or(z.literal("")),
+  measurement_consent: z.enum(["accepted", "implicit", "declined"]).optional().default("implicit"),
   // Honeypot — must be empty.
   company_website: z.string().max(0).optional().or(z.literal("")),
   // Anti-spam fields supplied by <TurnstileField />.
@@ -92,6 +115,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   }
   const data = parsed.data;
   const source = data.source || LANDING_SOURCE;
+  const eventId = data.event_id?.trim() || randomUUID();
   const thankYou = `${LANDING_THANK_YOU_PATH}?n=${encodeURIComponent(firstName(data.name))}&c=${encodeURIComponent(data.company)}`;
 
   // 1) Honeypot → pretend success (bots learn nothing; the redirect target is public anyway).
@@ -172,8 +196,30 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     utm,
   });
 
+  const requestHeaders = await headers();
+  const requestCookies = await cookies();
+  const measurementEvent = {
+    eventId,
+    email: data.email,
+    phone: data.phone,
+    name: data.name,
+    externalId: leadId ?? undefined,
+    oppref: utm.oppref || requestCookies.get("__oppref")?.value,
+    obref: requestCookies.get("__obref")?.value,
+    sourceUrl: new URL(LANDING_THANK_YOU_PATH, siteConfig.url).toString(),
+    ipAddress: ip,
+    userAgent: requestHeaders.get("user-agent") ?? undefined,
+    measurementConsent: data.measurement_consent,
+  } as const;
+
   const crmed = ghlConfigured()
-    ? await sendLeadToGhl({ ...record, submissionId: leadId ?? undefined, createdAt: new Date().toISOString() })
+    ? await sendLeadToGhl({
+        ...record,
+        submissionId: leadId ?? undefined,
+        createdAt: new Date().toISOString(),
+        attribution: utm,
+        openAiEventId: eventId,
+      })
     : await sendLeadToZoho(record);
   const stored = leadId !== null;
 
@@ -201,7 +247,6 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   });
 
   await sendLeadAutoresponder({ name: data.name, email: data.email });
-
   const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured() || ghlConfigured();
   const anyDelivered = emailed || stored || crmed;
   if (anyConfigured && !anyDelivered) {
@@ -209,7 +254,12 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   }
   if (!anyDelivered) {
     console.info("[landing-lead] (no RESEND_API_KEY / no Supabase / no CRM) capture:", data);
+    redirect(thankYou);
   }
 
-  redirect(thankYou);
+  // Only count an accepted lead after at least one durable delivery path has
+  // succeeded. The browser event on the success page is the fallback.
+  await sendOpenAiLeadCreated(measurementEvent);
+
+  redirect(`${thankYou}&eid=${encodeURIComponent(eventId)}`);
 }
