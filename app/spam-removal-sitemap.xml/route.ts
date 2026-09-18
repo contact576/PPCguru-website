@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/site-config";
  * Deliberately a SEPARATE sitemap from `/sitemap.xml`: dead URLs must never sit
  * in the main sitemap, but Google will not re-crawl a page just because it
  * vanished — it can sit in the index for months. Submitting this file in Search
- * Console (Indexing → Sitemaps) puts all 48 URLs back in the crawl queue at
+ * Console (Indexing → Sitemaps) puts every listed URL back in the crawl queue at
  * once, Googlebot hits the 410, and they drop out.
  *
  * Expect Search Console to report these as errors/"not indexed" — that is the
