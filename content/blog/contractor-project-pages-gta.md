@@ -42,7 +42,7 @@ A useful project story does not need to reveal private client details. It does n
 5. **Clarify the result without overclaiming.** State what was completed and what the client can now use, not a made-up “100% satisfaction” claim.
 6. **Offer the next relevant step.** Link to the service page and a quote or consultation route, with a note on which project types and locations the contractor accepts.
 
-The page should read like someone who was responsible for the project can stand behind it. If the team cannot verify a line, remove or qualify it.
+The page should read like someone who was responsible for the project can stand behind it. If the team cannot verify a line, remove or qualify it. When project pages, service pages and enquiry paths need to be planned as one system, [website design and development for service businesses](https://ppcguru.ca/services/web-design) can address the underlying architecture instead of adding isolated pages.
 
 ## How should project, service and GTA location pages link together?
 

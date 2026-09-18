@@ -38,7 +38,7 @@ export const comparisons: Comparison[] = [
     bottomLine:
       "Start with Google Ads to capture demand; add Meta to build it once tracking and budget allow. Most growing service businesses end up running both.",
     related: [
-      { label: "Google Ads management", href: "/services/google-ads" },
+      { label: "Model Google Ads economics", href: "/tools/google-ads-calculator" },
       { label: "Meta Ads management", href: "/services/meta-ads" },
     ],
   },
@@ -60,7 +60,7 @@ export const comparisons: Comparison[] = [
     bottomLine:
       "If wasted spend costs more than a management fee, an agency usually wins on ROI. We work month-to-month and you keep full ownership of your accounts — so there's no lock-in risk in trying it.",
     related: [
-      { label: "How we run Google Ads", href: "/services/google-ads" },
+      { label: "Audit your ad account", href: "/free-audit" },
       { label: "Get a free audit", href: "/contact" },
     ],
   },
@@ -82,7 +82,7 @@ export const comparisons: Comparison[] = [
     bottomLine:
       "Run Google Ads for immediate leads while SEO compounds underneath. PPC funds the data; SEO lowers your blended cost per lead over time.",
     related: [
-      { label: "Google Ads management", href: "/services/google-ads" },
+      { label: "Google Ads management for immediate demand", href: "/services/google-ads" },
       { label: "SEO & Local Search", href: "/services/seo" },
     ],
   },

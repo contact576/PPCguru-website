@@ -29,7 +29,7 @@ export type ServiceContent = {
   /** Keyword-rich eyebrow for the industries block. Defaults to "Who we serve". */
   industriesHeading?: string;
   /** Expanded FAQ set — replaces the thin service.faqs when present. */
-  faqs?: { q: string; a: string }[];
+  faqs?: { q: string; a: string; link?: { href: string; text: string } }[];
 };
 
 export const serviceContent: Record<string, ServiceContent> = {
@@ -179,9 +179,29 @@ export const serviceContent: Record<string, ServiceContent> = {
   },
 };
 
+const serviceFaqLinkOverrides: Record<string, { question: string; answer: string; href: string; text: string }> = {
+  "cro-landing-pages": {
+    question: "Will you use my existing website or build separate landing pages?",
+    answer:
+      "Usually we start with dedicated, message-matched landing pages for your campaigns plus CRO on your highest-traffic existing pages — that's the fastest path to a lower cost per lead. You rarely need a whole new site. When the wider site is the bottleneck, our full website design and development service covers the complete information architecture, build, performance and tracking foundation.",
+    href: "/services/web-design",
+    text: "full website design and development",
+  },
+};
+
 export function getServiceContent(slug: string): ServiceContent | undefined {
   const base = serviceContent[slug];
   if (!base) return undefined;
   const faqData = serviceFaq[slug];
-  return faqData ? { ...base, ...faqData } : base;
+  const merged = faqData ? { ...base, ...faqData } : base;
+  const override = serviceFaqLinkOverrides[slug];
+  if (!override || !merged.faqs) return merged;
+  return {
+    ...merged,
+    faqs: merged.faqs.map((faq) =>
+      faq.q === override.question
+        ? { q: faq.q, a: override.answer, link: { href: override.href, text: override.text } }
+        : faq,
+    ),
+  };
 }

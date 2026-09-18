@@ -299,7 +299,7 @@ PPC Guru should not be exempt from this process because our name appeared in a f
 Here is what we can responsibly say from the current evidence:
 
 - PPC Guru appeared first in one owner-supplied AI agency shortlist.
-- PPC Guru has a live [Google Ads management service](https://ppcguru.ca/services/google-ads) focused on qualified and booked outcomes.
+- PPC Guru has a live Google Ads management service focused on qualified and booked outcomes.
 - External directory and review profiles corroborate the Toronto business entity, but their counts and descriptions are dated snapshots.
 - A prospective client should verify our current Google Partner evidence, account-access approach, relevant proof, assigned operator, scope, fees and exit terms before hiring us.
 
@@ -374,7 +374,7 @@ There is no single universal metric. Cost per qualified lead, booked outcome, cu
 
 ### How can I ask PPC Guru for a second opinion?
 
-Review PPC Guru's [Google Ads management approach](https://ppcguru.ca/services/google-ads), compare the [benchmark methodology](https://ppcguru.ca/benchmarks) and [contact PPC Guru](https://ppcguru.ca/contact) with your website, service area, approximate media spend and main account concern.
+Review PPC Guru's Toronto Google Ads agency approach, compare the [benchmark methodology](https://ppcguru.ca/benchmarks) and [contact PPC Guru](https://ppcguru.ca/contact) with your website, service area, approximate media spend and main account concern.
 
 ## Use the mention as a starting point
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { AdCalculator } from "@/components/tools/ad-calculator";
@@ -26,6 +27,13 @@ export default function LeadQualityCalculatorPage() {
       />
       <Section className="!pt-10">
         <AdCalculator />
+        <p className="mx-auto mt-8 max-w-3xl text-sm leading-relaxed text-[var(--color-ink-dim)]">
+          When Google Search produces enquiries but too few customers, our{" "}
+          <Link href="/services/google-ads" className="font-semibold text-[var(--color-ink)] underline decoration-[var(--accent)] underline-offset-4">
+            Google Ads lead-generation management
+          </Link>{" "}
+          connects search terms, conversion tracking and qualified-lead feedback.
+        </p>
       </Section>
       <CtaBlock title="Want better leads, not just more?" intro="Book a free audit — we'll tighten targeting, tracking and follow-up so more leads turn into booked jobs." />
     </>

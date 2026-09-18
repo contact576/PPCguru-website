@@ -126,9 +126,15 @@ export default function BenchmarksPage() {
           <p className="text-xs text-[var(--color-ink-faint)]">{BENCHMARK_DISCLAIMER}</p>
           <p className="text-xs text-[var(--color-ink-faint)]">Sources: {BENCHMARK_SOURCES.join(" · ")}.</p>
         </div>
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-8 flex flex-wrap items-center gap-4">
           <Link href="/tools/google-ads-calculator" className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-5 py-2.5 text-xs uppercase tracking-[.05em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]">Model your own numbers →</Link>
-          <Link href="/services/google-ads" className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-5 py-2.5 text-xs uppercase tracking-[.05em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]">Google Ads management →</Link>
+          <p className="max-w-2xl text-sm leading-relaxed text-[var(--color-ink-dim)]">
+            When you are ready to replace averages with account-level evidence, our{" "}
+            <Link href="/services/google-ads" className="font-semibold text-[var(--color-ink)] underline decoration-[var(--color-lime)] underline-offset-4">
+              Google Ads management for Canadian service businesses
+            </Link>{" "}
+            is measured against qualified leads, customers and revenue.
+          </p>
         </div>
       </Section>
 

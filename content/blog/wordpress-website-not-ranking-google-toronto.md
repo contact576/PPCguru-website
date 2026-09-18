@@ -252,7 +252,7 @@ Review:
 
 Google generates title links automatically from several page and link signals, so keep the title element, visible heading and internal anchors consistent. Its [title-link guidance](https://developers.google.com/search/docs/appearance/title-link) also recommends one clear, descriptive main title rather than boilerplate or keyword stuffing.
 
-**Fix:** Measure qualified actions, not just sessions. If clicks rise but enquiries do not, improve the offer and conversion path before producing more traffic. PPC Guru can also review the site's [design and landing-page experience](/services/web-design) when the bottleneck sits beyond rankings.
+**Fix:** Measure qualified actions, not just sessions. If clicks rise but enquiries do not, improve the offer and conversion path before producing more traffic. PPC Guru can also review the site's [conversion-focused website design](/services/web-design) when the bottleneck sits beyond rankings.
 
 ## A practical priority scorecard
 

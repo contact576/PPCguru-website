@@ -65,7 +65,7 @@ Here is what a 2% versus 8% conversion rate does to a $10 CPC:
 
 Same ad, same click cost - a 4x difference in CPL, decided entirely by the page. Common fixes:
 
-- Send clicks to a **dedicated landing page**, not your homepage.
+- Send clicks to a [dedicated, conversion-focused landing page](/services/web-design), not your homepage.
 - Match the page headline to the ad ("AC Repair in Vaughan" ad -> "AC Repair in Vaughan" page).
 - Put the phone number and form above the fold.
 - Add proof: reviews, certifications, service area, response time.
@@ -104,4 +104,4 @@ You do not need to live in the account. Fifteen minutes a week covers most of it
 
 ## The fast way to find your leaks
 
-If you would rather not dig through reports, a structured audit will surface the waste quickly. Our free [instant audit](/tools/instant-audit) flags the most common leaks in minutes, and a [free human audit](/contact) digs into the search terms, tracking, and landing pages that move your cost per lead the most. You can also see how we run [Google Ads](/services/google-ads) for GTA service businesses. The cheapest lead is the one you stop wasting money to *not* get.
+If you would rather not dig through reports, a structured audit will surface the waste quickly. Our free [instant audit](/tools/instant-audit) flags the most common leaks in minutes, and a [free human audit](/contact) digs into the search terms, tracking, and landing pages that move your cost per lead the most. You can also see how we run [Google Ads management for GTA service businesses](/services/google-ads). The cheapest lead is the one you stop wasting money to *not* get.

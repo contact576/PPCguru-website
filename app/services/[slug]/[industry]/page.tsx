@@ -7,6 +7,7 @@ import { getIndustry } from "@/lib/data/industries";
 import {
   allServiceIndustryPairs, getServiceIndustryAngle, serviceIndustryLabel, serviceShortName, industryShortName,
 } from "@/lib/data/service-industry";
+import { getServiceIndustryParentAnchor } from "@/lib/data/service-industry-parent-links";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { Magnetic } from "@/components/ui/interactive";
@@ -70,6 +71,7 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
   const offer = getServiceOffer(slug) ?? genericOffer;
   const iShort = industryShortName[industry] ?? ind.name;
   const label = serviceIndustryLabel(slug, industry);
+  const parentAnchor = getServiceIndustryParentAnchor(slug, industry);
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Services", path: "/services" },
@@ -157,9 +159,20 @@ export default async function ServiceIndustryPage({ params }: { params: Promise<
       {/* Reciprocal internal links */}
       <Section className="!pt-0">
         <div className="flex flex-wrap gap-3">
-          <Link href={`/services/${slug}`} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-5 py-2.5 text-xs uppercase tracking-[.05em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]">
-            ← All {sShort} services
-          </Link>
+          {parentAnchor ? (
+            <p className="max-w-3xl text-sm leading-relaxed text-[var(--color-ink-dim)]">
+              {slug === "web-design"
+                ? "For complete website strategy, design, development and tracking beyond this industry use case, explore our "
+                : "For the broader campaign structure, tracking and ongoing optimization, explore our "}
+              <Link href={`/services/${slug}`} className="font-semibold text-[var(--color-ink)] underline decoration-[var(--accent)] underline-offset-4">
+                {parentAnchor}
+              </Link>.
+            </p>
+          ) : (
+            <Link href={`/services/${slug}`} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-5 py-2.5 text-xs uppercase tracking-[.05em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]">
+              ← All {sShort} services
+            </Link>
+          )}
           <Link href={`/industries/${industry}`} className="mono rounded-full border border-[var(--color-border-bright)] bg-white px-5 py-2.5 text-xs uppercase tracking-[.05em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]">
             {ind.name} marketing →
           </Link>

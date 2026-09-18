@@ -110,7 +110,7 @@ coverImage: >-
 
 <b>Paid search puts you at the top when someone is searching right now.</b><span style="font-weight: 400;"> SEO compounds slowly. Paid search captures demand today, when the intent is hot: "emergency plumber Toronto," "dentist North York accepting patients."</span>
 
-<b>Match geography to what you can service.</b><span style="font-weight: 400;"> Split campaigns by market (Toronto, North York, Scarborough, Mississauga, Vaughan, Brampton) so you can compare cost per customer by area, not just clicks. That is the core of our</span><a href="https://ppcguru.ca/services/google-ads"> <span style="font-weight: 400;">Google Ads management</span></a><span style="font-weight: 400;">.</span>
+<b>Match geography to what you can service.</b><span style="font-weight: 400;"> Split campaigns by market (Toronto, North York, Scarborough, Mississauga, Vaughan, Brampton) so you can compare cost per customer by area, not just clicks. That is the core of our</span><a href="https://ppcguru.ca/toronto/google-ads"> <span style="font-weight: 400;">Google Ads management in Toronto</span></a><span style="font-weight: 400;">.</span>
 
 <b>Sort keywords by intent.</b><span style="font-weight: 400;"> "How much does a basement renovation cost?" and "basement contractor near me" touch the same topic but sit at very different points in the journey. Push budget toward the queries closest to a sale.</span>
 
@@ -182,7 +182,7 @@ coverImage: >-
 <h2><b>How PPC Guru Turns Marketing Into Revenue</b></h2>
 <span style="font-weight: 400;">We work backward from your business, not from traffic: which services have the best margins, what you can pay to win a customer, which leads become customers. The whole process is measured in booked jobs and revenue.</span>
 
-<span style="font-weight: 400;">As a Google Partner and Meta Business Partner, we run</span><a href="https://ppcguru.ca/services/google-ads"> <span style="font-weight: 400;">Google Ads</span></a><span style="font-weight: 400;">,</span><span style="font-weight: 400;">Meta Ads</span><span style="font-weight: 400;">,</span><span style="font-weight: 400;">SEO</span><span style="font-weight: 400;">, and</span><a href="https://ppcguru.ca/services/crm"> <span style="font-weight: 400;">CRM</span></a><span style="font-weight: 400;"> as one accountable team.</span>
+<span style="font-weight: 400;">As a Google Partner and Meta Business Partner, we run Google Ads, Meta Ads, SEO, and</span><a href="https://ppcguru.ca/services/crm"> <span style="font-weight: 400;">CRM</span></a><span style="font-weight: 400;"> as one accountable team.</span>
 
 <b>Get a free, no-obligation audit</b><span style="font-weight: 400;"> of your Google Business Profile, ads, and site.</span><a href="https://ppcguru.ca/free-audit"> <span style="font-weight: 400;">Get my free audit</span></a><span style="font-weight: 400;"> or</span><a href="https://ppcguru.ca/contact"> <span style="font-weight: 400;">message us</span></a><span style="font-weight: 400;">. More on the</span><a href="https://ppcguru.ca/blog"> <span style="font-weight: 400;">PPC Guru blog</span></a><span style="font-weight: 400;">.</span>
 <h2><b>Frequently Asked Questions</b></h2>

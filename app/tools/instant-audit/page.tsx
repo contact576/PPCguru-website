@@ -30,7 +30,7 @@ export default function InstantAuditPage() {
       </Section>
       <CtaBlock
         title="Want the full picture?"
-        intro={<>The instant audit checks one page. Our <Link href="/services/seo" className="font-semibold underline underline-offset-4">SEO and local-search services</Link> examine technical access, content, local visibility and measurement across the wider site.</>}
+        intro={<>The instant audit checks one page. Our <Link href="/services/seo" className="font-semibold underline underline-offset-4">SEO and local-search services</Link> examine technical access and visibility across the wider site; when speed, structure or the enquiry path needs rebuilding, explore our <Link href="/services/web-design" className="font-semibold underline underline-offset-4">website design for service businesses</Link>.</>}
       />
     </>
   );

@@ -227,7 +227,7 @@ No. Search-result features can change click behaviour, but that does not make qu
 
 When website traffic is up but leads are down, the quickest path to clarity is a shared audit of search demand, landing pages, tracking and actual enquiry handling.
 
-If **website traffic is up but leads are down**, PPC Guru can review that chain for a Toronto or GTA service business and identify whether the next investment belongs in [SEO](/services/seo), [website and landing-page work](/services/web-design), analytics or sales follow-up. [Request a practical review](/contact); we will not recommend more traffic until the current path has been tested.
+If **website traffic is up but leads are down**, PPC Guru can review that chain for a Toronto or GTA service business and identify whether the next investment belongs in [SEO](/services/seo), [conversion-focused website and landing-page work](/services/web-design), analytics or sales follow-up. [Request a practical review](/contact); we will not recommend more traffic until the current path has been tested.
 
 ## Sources and review note
 

@@ -22,6 +22,16 @@ import { team } from "@/lib/data/team";
 export const revalidate = 60;
 export const dynamicParams = true;
 
+function articleLinksTo(content: string, href: string) {
+  const destinations = [href, siteConfig.url + href];
+  return destinations.some(
+    (destination) =>
+      content.includes(`](${destination})`) ||
+      content.includes(`href="${destination}"`) ||
+      content.includes(`href='${destination}'`),
+  );
+}
+
 export async function generateStaticParams() {
   return (await getAllPostSlugs()).map((slug) => ({ slug }));
 }
@@ -60,7 +70,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     Conversion: [{ label: "Landing Pages & CRO", href: "/services/cro-landing-pages" }],
     AI: [{ label: "AI Automation", href: "/services/ai-automation" }],
   };
-  const svcLinks = catLinks[post.category] ?? [{ label: "Explore all services", href: "/services" }];
+  const svcLinks = (catLinks[post.category] ?? [{ label: "Explore all services", href: "/services" }])
+    .filter((link) => !articleLinksTo(post.content, link.href));
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Blog", path: "/blog" },

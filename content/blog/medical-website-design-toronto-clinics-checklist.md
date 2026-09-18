@@ -15,7 +15,7 @@ Medical website design for Toronto clinics should be judged by one practical out
 
 A patient usually makes a practical decision before any clinical decision: “Is this clinic relevant to me? Can I trust what I am reading? What should I do next?”
 
-If those answers are hard to find, the patient may leave even when the clinic itself is an excellent fit. A useful clinic website helps the right person find the right service, understand the next step, judge credibility, contact the clinic safely and receive a clear confirmation. PPC Guru's [website and landing-page work](https://ppcguru.ca/services/web-design) starts with that path—not a beauty contest.
+If those answers are hard to find, the patient may leave even when the clinic itself is an excellent fit. A useful clinic website helps the right person find the right service, understand the next step, judge credibility, contact the clinic safely and receive a clear confirmation. PPC Guru's [medical website and landing-page design](https://ppcguru.ca/services/web-design) starts with that path—not a beauty contest.
 
 This medical website design checklist shows Toronto and GTA clinic teams where that path can break before they pay for more traffic or a full rebuild.
 

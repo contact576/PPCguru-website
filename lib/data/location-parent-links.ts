@@ -5,11 +5,61 @@ export type LocationParentLink = {
 };
 
 /**
- * One editorial link from each Meta Ads and SEO city page to its Canada-wide
+ * One editorial link from each Google Ads, Meta Ads and SEO city page to its Canada-wide
  * parent. City-specific anchors stay on the city page; these anchors describe
  * the broader service so the hierarchy is clear without geographic cannibalization.
  */
 const locationParentLinks: Record<string, LocationParentLink> = {
+  "toronto/google-ads": {
+    sentence: "Businesses serving markets beyond Toronto can connect this city strategy with our Canada-wide Google Ads management framework.",
+    href: "/services/google-ads",
+    text: "Canada-wide Google Ads management",
+  },
+  "mississauga/google-ads": {
+    sentence: "Teams advertising beyond Mississauga can review our Google Ads services for Canadian businesses while preserving local campaign control.",
+    href: "/services/google-ads",
+    text: "Google Ads services for Canadian businesses",
+  },
+  "brampton/google-ads": {
+    sentence: "For campaigns extending beyond Brampton, our Canadian Google Ads management services provide the broader account and measurement framework.",
+    href: "/services/google-ads",
+    text: "Canadian Google Ads management services",
+  },
+  "ottawa/google-ads": {
+    sentence: "Organizations operating in several markets can review our Google Ads campaign management across Canada while keeping Ottawa targeting specific.",
+    href: "/services/google-ads",
+    text: "Google Ads campaign management across Canada",
+  },
+  "vaughan/google-ads": {
+    sentence: "Businesses expanding outside Vaughan can connect this local plan with our full-service Google Ads management approach.",
+    href: "/services/google-ads",
+    text: "full-service Google Ads management",
+  },
+  "markham/google-ads": {
+    sentence: "Multi-market teams can use our Google Ads management for Canadian businesses without flattening Markham into a generic audience.",
+    href: "/services/google-ads",
+    text: "Google Ads management for Canadian businesses",
+  },
+  "hamilton/google-ads": {
+    sentence: "Companies serving customers beyond Hamilton can review our professional Google Ads services for the wider campaign structure.",
+    href: "/services/google-ads",
+    text: "professional Google Ads services",
+  },
+  "etobicoke/google-ads": {
+    sentence: "Companies covering several regions can pair this district-level strategy with our Google Ads management for service businesses across Canada.",
+    href: "/services/google-ads",
+    text: "Google Ads management for service businesses",
+  },
+  "north-york/google-ads": {
+    sentence: "Organizations advertising outside North York can connect this Toronto-area plan with our broader Canada-wide Google Ads strategy.",
+    href: "/services/google-ads",
+    text: "Canada-wide Google Ads strategy",
+  },
+  "scarborough/google-ads": {
+    sentence: "Businesses targeting markets beyond Scarborough can review our Google Search advertising management approach while keeping local campaigns distinct.",
+    href: "/services/google-ads",
+    text: "Google Search advertising management",
+  },
   "toronto/meta-ads": {
     sentence: "Businesses operating beyond the city can compare this local approach with our Canada-wide Meta Ads management framework.",
     href: "/services/meta-ads",

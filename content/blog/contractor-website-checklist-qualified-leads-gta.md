@@ -235,7 +235,7 @@ This contractor website checklist is deliberately stricter than a visual review.
 | **Google Ads** | The ad made a specific promise | Preserve message match, make the action clear and measure downstream quality |
 | **Google Business Profile or direct** | The visitor may be comparing local options or returning | Keep contact, hours, area and business details consistent; route them to the right service |
 
-The same homepage does not need to carry every conversation. Clear [website design and development](https://ppcguru.ca/services/web-design) architecture can give priority services their own path, while [Google Ads management](https://ppcguru.ca/services/google-ads) and [SEO services](https://ppcguru.ca/services/seo) send traffic to the most relevant destination.
+The same homepage does not need to carry every conversation. Clear [website design and development for contractors](https://ppcguru.ca/services/web-design) can give priority services their own path, while [Google Ads management](https://ppcguru.ca/services/google-ads) and [SEO services](https://ppcguru.ca/services/seo) send traffic to the most relevant destination.
 
 Use the contractor website checklist separately for each important source-to-page path; one strong referral journey does not prove that a paid-search journey works.
 

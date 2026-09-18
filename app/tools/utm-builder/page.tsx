@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { UtmBuilder } from "@/components/tools/utm-builder";
@@ -26,6 +27,13 @@ export default function UtmBuilderPage() {
       />
       <Section className="!pt-10">
         <UtmBuilder />
+        <p className="mx-auto mt-8 max-w-3xl text-sm leading-relaxed text-[var(--color-ink-dim)]">
+          Clean campaign tags support attribution, but Google Ads optimization also needs reliable conversion actions and qualified-lead feedback. See how our{" "}
+          <Link href="/services/google-ads" className="font-semibold text-[var(--color-ink)] underline decoration-[var(--color-lime)] underline-offset-4">
+            Google Ads measurement and management
+          </Link>{" "}
+          connects clicks with business outcomes.
+        </p>
       </Section>
       <CtaBlock title="Tracking a mess?" intro="Book a free audit — we'll set up GA4, conversion tracking and UTM hygiene so your data is finally trustworthy." />
     </>

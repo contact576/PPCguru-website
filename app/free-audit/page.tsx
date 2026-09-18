@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Check, ArrowRight } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
@@ -89,6 +90,13 @@ export default function FreeAuditPage() {
             </div>
           ))}
         </div>
+        <p className="mt-7 max-w-3xl text-sm leading-relaxed text-[var(--color-ink-dim)]">
+          If the audit shows that structure, speed or the enquiry journey is the main bottleneck, our{" "}
+          <Link href="/services/web-design" className="font-semibold text-[var(--color-ink)] underline decoration-[var(--color-lime)] underline-offset-4">
+            conversion-focused website design and development
+          </Link>{" "}
+          addresses the wider build rather than treating each symptom separately.
+        </p>
       </Section>
 
       {/* How the audit works */}

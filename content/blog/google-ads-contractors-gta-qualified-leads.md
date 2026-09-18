@@ -217,7 +217,7 @@ Review them frequently enough to control material waste and learn from real dema
 
 ### Can PPC Guru review an existing contractor account?
 
-Yes. A useful review should examine service and location boundaries, search terms, landing pages, conversion definitions and the path from enquiry to qualified work. Start with PPC Guru's [Google Ads services](https://ppcguru.ca/services/google-ads) and bring the account goals plus the business's current lead-qualification rules.
+Yes. A useful review should examine service and location boundaries, search terms, landing pages, conversion definitions and the path from enquiry to qualified work. Bring the account goals plus the business's current lead-qualification rules so the review can distinguish campaign volume from qualified-job performance.
 
 ## Method and review status
 

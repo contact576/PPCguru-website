@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { PageHero } from "@/components/shared/page-hero";
 import { PartnerBadges } from "@/components/shared/partner-badges";
@@ -53,7 +54,12 @@ export default function AboutPage() {
 
       {/* Founder experience */}
       <Section>
-        <SectionHeading align="left" eyebrow="Founder experience" title={<>Enterprise Google Ads <span className="text-gradient">pedigree</span></>} intro="The thinking behind PPC Guru comes from years inside the Google Ads ecosystem — now applied to local and growth-focused businesses." />
+        <SectionHeading
+          align="left"
+          eyebrow="Founder experience"
+          title={<>Enterprise Google Ads <span className="text-gradient">pedigree</span></>}
+          intro={<>The thinking behind PPC Guru comes from years inside the Google Ads ecosystem — now applied through our <Link href="/services/google-ads" className="font-semibold text-[var(--color-ink)] underline decoration-[var(--color-lime)] underline-offset-4">Canada-wide Google Ads management</Link> for local and growth-focused businesses.</>}
+        />
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {founderStats.map((s) => (
             <div key={s.label} className="rounded-[20px] border border-[#dddbc9] bg-[#fbfaf2] p-7">

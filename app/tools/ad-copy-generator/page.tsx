@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { AdCopyGenerator } from "@/components/tools/ad-copy-generator";
@@ -26,6 +27,13 @@ export default function AdCopyGeneratorPage() {
       />
       <Section className="!pt-10">
         <AdCopyGenerator />
+        <p className="mx-auto mt-8 max-w-3xl text-sm leading-relaxed text-[var(--color-ink-dim)]">
+          AI drafts are a starting point; search terms, offer fit and conversion data determine what should keep running. Our{" "}
+          <Link href="/services/google-ads" className="font-semibold text-[var(--color-ink)] underline decoration-[var(--color-lime)] underline-offset-4">
+            Google Ads campaign management
+          </Link>{" "}
+          turns tested messaging into measurable lead-generation campaigns.
+        </p>
       </Section>
       <CtaBlock />
     </>

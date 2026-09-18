@@ -54,9 +54,9 @@ export const hubLinks = {
 export const serviceLinks: Record<string, LinkTarget> = {
   "google-ads": {
     href: "/services/google-ads",
-    keyword: "Google Ads management Toronto",
+    keyword: "Google Ads management Canada",
     anchor: "Google Ads management",
-    variants: ["Google Ads agency in the GTA", "Google Ads management in Toronto", "Google Ads services"],
+    variants: ["Canada-wide Google Ads management", "Google Ads services for Canadian businesses", "professional Google Ads services"],
   },
   "meta-ads": {
     href: "/services/meta-ads",
@@ -78,9 +78,9 @@ export const serviceLinks: Record<string, LinkTarget> = {
   },
   "web-design": {
     href: "/services/web-design",
-    keyword: "landing page & web design Toronto",
-    anchor: "landing page design",
-    variants: ["landing page & web design", "conversion-focused web design", "websites & landing pages"],
+    keyword: "website design and development Canada",
+    anchor: "website design and development",
+    variants: ["conversion-focused web design", "websites and landing-page builds", "website design for service businesses"],
   },
   crm: {
     href: "/services/crm",

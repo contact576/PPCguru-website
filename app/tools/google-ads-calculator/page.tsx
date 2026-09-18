@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHero } from "@/components/shared/page-hero";
 import { Section } from "@/components/ui/section";
 import { AdCalculator } from "@/components/tools/ad-calculator";
@@ -26,6 +27,13 @@ export default function GoogleAdsCalculatorPage() {
       />
       <Section className="!pt-10">
         <AdCalculator platform="google-search" />
+        <p className="mx-auto mt-8 max-w-3xl text-sm leading-relaxed text-[var(--color-ink-dim)]">
+          Estimates are most useful when the account is structured around qualified leads and booked work. See how our{" "}
+          <Link href="/services/google-ads" className="font-semibold text-[var(--color-ink)] underline decoration-[var(--accent)] underline-offset-4">
+            Google Ads management for service businesses
+          </Link>{" "}
+          connects budget, tracking and ongoing optimization.
+        </p>
       </Section>
       <CtaBlock title="Want to actually hit these numbers?" intro="Book a free Google Ads audit and we'll show you exactly how to close the gap between benchmark and reality." />
     </>
