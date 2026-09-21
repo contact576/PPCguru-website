@@ -13,7 +13,7 @@ import { ArrowRight } from "lucide-react";
  * legal links remain in the footer. Styles: app/100-leads/landing.css.
  */
 
-const LOGO = "/brand/ppc-guru-logo-720.png";
+const LOGO = "/brand/ppc-guru-logo-420.webp";
 
 /** The OFFICIAL Google Ads + Meta logos shown beside the header CTA (artwork in
  *  public/badges/, the brands' own marks — not redrawn icons). Pages that
@@ -26,7 +26,9 @@ const HEADER_PLATFORMS: HeaderPlatform[] = [
 ];
 
 function scrollTo(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  const form = document.getElementById(id);
+  form?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  form?.querySelector<HTMLElement>("h2")?.focus({ preventScroll: true });
 }
 
 /* eslint-disable @next/next/no-img-element -- brand PNG */
@@ -49,8 +51,8 @@ export function LandingHeader({
 } = {}) {
   return (
     <header className="site-header">
-      <a className="brand" href="#top" aria-label="PPC Guru home">
-        <img src={LOGO} alt="PPC Guru" width={720} height={251} fetchPriority="high" />
+      <a className="brand" href="#top" aria-label="PPC Guru — back to top">
+        <img src={LOGO} alt="PPC Guru" width={420} height={146} fetchPriority="high" />
       </a>
       <div className="header-actions">
         {platforms.length ? (
@@ -81,7 +83,7 @@ export function LandingFooter({ tagline = "Performance advertising for local ser
   return (
     <footer className="site-footer">
       <div className="site-footer-brand">
-        <img src={LOGO} alt="PPC Guru" width={720} height={251} loading="lazy" />
+        <img src={LOGO} alt="PPC Guru" width={420} height={146} loading="lazy" />
         <p>{tagline}</p>
       </div>
       <div className="site-footer-links">

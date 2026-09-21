@@ -40,6 +40,8 @@ export type DeliveryInput = {
   lead: { name?: string; email?: string };
   /** The form's hidden `event_id` — the browser pixels fire with the same id. */
   eventId?: FormDataEntryValue | null;
+  /** Paid landing pages may only confirm a lead accepted by a durable channel. */
+  requireDelivery?: boolean;
 };
 
 export type DeliveryResult = { crmed: boolean; emailed: boolean; autoresponded: boolean };
@@ -53,10 +55,18 @@ async function safe<T>(label: string, p: Promise<T>, fallback: T): Promise<T> {
   }
 }
 
+async function sendConversions(input: DeliveryInput, ctx: ConversionContext): Promise<void> {
+  const { record, leadId } = input;
+  const conversion = { eventId: cleanEventId(input.eventId) ?? leadId ?? undefined, email: record.email, phone: record.phone, name: record.name, source: record.source };
+  await Promise.all([
+    safe("meta capi", sendMetaLead(conversion, ctx), false),
+    safe("openai capi", sendOpenAiLead(conversion, ctx), false),
+  ]);
+}
+
 /** Run CRM + team email + autoresponder (+ Meta and OpenAI conversion APIs) concurrently. Never throws. */
 export async function fanOut(input: DeliveryInput, ctx?: ConversionContext): Promise<DeliveryResult> {
   const { record, leadId, notification, lead } = input;
-  const conversion = { eventId: cleanEventId(input.eventId) ?? leadId ?? undefined, email: record.email, phone: record.phone, name: record.name, source: record.source };
   const crm = ghlConfigured()
     ? sendLeadToGhl({ ...record, submissionId: leadId ?? undefined, createdAt: new Date().toISOString() })
     : sendLeadToZoho(record);
@@ -67,9 +77,10 @@ export async function fanOut(input: DeliveryInput, ctx?: ConversionContext): Pro
       sendMail({ to: leadRecipients(), replyTo: notification.replyTo, subject: notification.subject, text: notification.text, rescue: true }),
       false,
     ),
-    safe("autoresponder", sendLeadAutoresponder(lead), false),
-    ctx ? safe("meta capi", sendMetaLead(conversion, ctx), false) : false,
-    ctx ? safe("openai capi", sendOpenAiLead(conversion, ctx), false) : false,
+    // Strict forms without a saved row wait for a team/CRM acknowledgement
+    // before telling the visitor that their request has been received.
+    !input.requireDelivery || leadId !== null ? safe("autoresponder", sendLeadAutoresponder(lead), false) : false,
+    ctx ? sendConversions(input, ctx) : undefined,
   ]);
   if (!emailed) {
     console.error(
@@ -100,10 +111,20 @@ export async function deliverLead(input: DeliveryInput): Promise<DeliveryOutcome
     return { ok: true };
   }
 
-  const result = await fanOut(input, ctx);
+  // With no database, wait for an email/CRM acknowledgement before counting a
+  // strict landing submission as a conversion. Failed delivery is not a lead.
+  const result = await fanOut(input, input.requireDelivery ? undefined : ctx);
   const anyConfigured = emailConfigured() || hasSupabase() || zohoConfigured() || ghlConfigured();
   const anyDelivered = result.emailed || result.crmed;
-  if (anyConfigured && !anyDelivered) return { ok: false, reason: "undelivered" };
+  if ((input.requireDelivery || anyConfigured) && !anyDelivered) return { ok: false, reason: "undelivered" };
+  if (input.requireDelivery && anyDelivered) {
+    after(async () => {
+      await Promise.all([
+        safe("autoresponder", sendLeadAutoresponder(input.lead), false),
+        sendConversions(input, ctx),
+      ]);
+    });
+  }
   if (!anyDelivered) {
     console.info("[lead-delivery] (no email / Supabase / CRM configured) capture:", input.record);
   }

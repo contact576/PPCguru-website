@@ -10,7 +10,7 @@ export const GTA_LANDING_THANK_YOU_PATH = "/gta-marketing-agency/thank-you";
 export const GTA_LANDING_SOURCE = "landing:gta-agency";
 /** `landing_page_leads.landing` value. */
 export const GTA_LANDING_ID = "gta-agency";
-export const GTA_LANDING_SERVICE_LABEL = "GTA marketing agency (Google Ads + Meta Ads + SEO)";
+export const GTA_LANDING_SERVICE_LABEL = "GTA marketing agency (Google Ads + Meta Ads)";
 
 export const GTA_CITIES = [
   "Toronto",

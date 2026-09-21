@@ -131,17 +131,20 @@ export function leadEventId(): string {
  * the server-side event. Consent is enforced inside the pixel (ConsentSignal).
  * `requireId` (thank-you pages) skips reloads/direct visits that had no submit.
  */
-export function trackLead({ requireId = false } = {}) {
-  if (typeof window === "undefined") return;
+export function trackLead({ requireId = false, expectedEventId }: { requireId?: boolean; expectedEventId?: string } = {}): boolean {
+  if (typeof window === "undefined") return false;
   let id: string | null = null;
   try {
     id = sessionStorage.getItem(EID_KEY);
+    if (expectedEventId && id !== expectedEventId) return false;
     sessionStorage.removeItem(EID_KEY); // next lead gets a fresh id
   } catch {
     /* storage unavailable */
   }
-  if (requireId && !id) return;
+  if (expectedEventId && id !== expectedEventId) return false;
+  if (requireId && !id) return false;
   (window as { oaiq?: Oaiq }).oaiq?.("measure", "lead_created", { type: "customer_action" }, id ? { event_id: id } : undefined);
+  return true;
 }
 
 /** Back-compat helper used across the app — now forwards to the first-party beacon. */

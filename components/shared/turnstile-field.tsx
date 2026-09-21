@@ -75,11 +75,14 @@ export function TurnstileField({
   action,
   /** For forms that build FormData by hand instead of posting the DOM form. */
   onToken,
+  renderedAt: formRenderedAt,
 }: {
   resetKey?: string | number;
   className?: string;
   action?: string;
   onToken?: (token: string) => void;
+  /** Multi-step forms start timing on their first panel, before this widget mounts. */
+  renderedAt?: string;
 }) {
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const hostRef = useRef<HTMLDivElement>(null);
@@ -138,7 +141,7 @@ export function TurnstileField({
   const hidden = (
     <>
       <input type="hidden" name="turnstileToken" value={token} />
-      <input type="hidden" name="renderedAt" value={renderedAt} />
+      <input type="hidden" name="renderedAt" value={formRenderedAt || renderedAt} />
     </>
   );
 
@@ -151,7 +154,7 @@ export function TurnstileField({
       <div ref={hostRef} />
       {failed && (
         <p className="text-[11px] text-[var(--color-ink-faint)]">
-          Couldn&apos;t load the robot check. You can still submit — or email us directly.
+          Couldn&apos;t load the robot check. Please refresh this page and try again, or email us directly.
         </p>
       )}
       {hidden}

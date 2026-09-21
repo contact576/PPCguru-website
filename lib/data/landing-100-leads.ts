@@ -1,3 +1,5 @@
+import { GTA_EXTRA_BUSINESS_TYPES, GTA_EXTRA_BUDGETS } from "@/lib/landing-lead-fields";
+
 /**
  * Data for the "100 Qualified Leads" paid-traffic landing page (/100-leads) —
  * ported from the standalone Vite build on branch `landing-page`.
@@ -36,11 +38,11 @@ export const BUSINESS_TYPE_IDS = BUSINESS_TYPES.map((b) => b.id) as [BusinessTyp
 export const LANDING_BUDGET_IDS = LANDING_BUDGETS.map((b) => b.id) as [LandingBudgetId, ...LandingBudgetId[]];
 
 export function businessTypeLabel(id: string | null | undefined): string {
-  return BUSINESS_TYPES.find((b) => b.id === id)?.label ?? (id || "—");
+  return BUSINESS_TYPES.find((b) => b.id === id)?.label ?? GTA_EXTRA_BUSINESS_TYPES.find((b) => b.id === id)?.label ?? (id || "—");
 }
 
 export function budgetLabel(id: string | null | undefined): string {
-  return LANDING_BUDGETS.find((b) => b.id === id)?.label ?? (id || "—");
+  return LANDING_BUDGETS.find((b) => b.id === id)?.label ?? GTA_EXTRA_BUDGETS.find((b) => b.id === id)?.label ?? (id || "—");
 }
 
 /** Files under /public/landing/logos — 57 supplied client logos (+ ppc-guru.png, the brand mark). */
