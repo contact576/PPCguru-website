@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
+import { siteConfig } from "@/lib/site-config";
 
 /**
  * Header + footer shared by every paid landing page (/100-leads, /seo-visibility
@@ -78,13 +79,24 @@ export function LandingHeader({
 
 /** No partner badges down here: they sit in the hero (landing) and in the
  *  thank-you card, and repeating them above + below the footer rule was the
- *  duplication the client flagged (2026-09-16). */
+ *  duplication the client flagged (2026-09-16).
+ *
+ *  Both inboxes are shown (client request 2026-09-22): sales@ first because a
+ *  paid-traffic visitor reading the footer is asking to buy, contact@ second as
+ *  the general line. Addresses come from siteConfig so they can never drift
+ *  from the rest of the site. mailto only — still no navigation off the page. */
 export function LandingFooter({ tagline = "Performance advertising for local service businesses." }: { tagline?: string } = {}) {
   return (
     <footer className="site-footer">
       <div className="site-footer-brand">
         <img src={LOGO} alt="PPC Guru" width={420} height={146} loading="lazy" />
         <p>{tagline}</p>
+        <p className="site-footer-contact">
+          <Mail aria-hidden="true" />
+          <a href={`mailto:${siteConfig.contact.salesEmail}`}>{siteConfig.contact.salesEmail}</a>
+          <span aria-hidden="true">·</span>
+          <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>
+        </p>
       </div>
       <div className="site-footer-links">
         <Link href="/privacy">Privacy</Link>

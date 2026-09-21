@@ -1709,6 +1709,21 @@
 .lp-root .site-footer-brand p { margin: 0; color: var(--muted); font-size: 12px; }
 .lp-root .site-footer-links { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 16px; color: var(--muted); font-size: 12px; font-weight: 600; }
 .lp-root .site-footer-links a { color: var(--ink); text-decoration: none; }
+/* sales@ / contact@ under the tagline — the only reachable contact in the
+   footer, so the addresses read at body weight, not as fine print. */
+.lp-root .site-footer-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.lp-root .site-footer-contact > svg { width: 14px; height: 14px; flex: none; }
+.lp-root .site-footer-contact a { color: var(--ink); text-decoration: none; border-bottom: 1px solid #dfe3d2; }
+.lp-root .site-footer-contact a:hover { border-bottom-color: var(--ink); }
 
 /* ── Thank-you extras ────────────────────────────────────────────────────── */
 .lp-root .thanks-badges { display: flex; justify-content: center; margin-top: 22px; }

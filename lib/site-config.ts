@@ -26,6 +26,9 @@ export const siteConfig = {
   // Contact — client-confirmed public details.
   contact: {
     email: "contact@ppcguru.ca", // [VERIFY] confirm real inbox before launch
+    // Sales inbox, shown beside `email` on the paid landing pages so an ad
+    // visitor can reach the sales desk directly instead of the general line.
+    salesEmail: "sales@ppcguru.ca",
     // Real business line. `phone` is what a human reads, `phoneHref` is the
     // dial string — keep them in sync, and keep phoneHref digits-only after the
     // "+" so iOS/Android dial it without stripping formatting characters.
