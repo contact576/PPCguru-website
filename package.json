@@ -18,6 +18,7 @@
     "ghl:verify": "node --env-file=.env.local --experimental-strip-types scripts/ghl-verify.mts",
     "ghl:backfill": "node --env-file=.env.local --experimental-strip-types scripts/ghl-backfill.mts",
     "check:lead-routing": "node scripts/check-form-routing.mjs",
+    "check:landing-lead": "node scripts/check-landing-lead.mjs",
     "check:ghl": "node --experimental-strip-types scripts/ghl-check.mts",
     "terms:archive": "node --experimental-strip-types scripts/archive-terms.mts"
   },

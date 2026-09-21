@@ -2,6 +2,7 @@
 
 import { useActionState, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { unstable_rethrow } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -18,6 +19,7 @@ import {
   Lock,
   MapPin,
   ShieldCheck,
+  ShoppingBag,
   TrendingUp,
   X,
   type LucideIcon,
@@ -31,6 +33,9 @@ import { PartnerPair } from "@/components/shared/partner-pair";
 import { LandingHeader, LandingFooter } from "@/components/landing/landing-chrome";
 import { HundredMark, ZeroFeeMark } from "@/components/landing/hero-marks";
 import { ClientLogoWall, TrustSection } from "@/components/landing/trust";
+import { GTA_EXTRA_BUSINESS_TYPES, GTA_EXTRA_BUDGETS, LANDING_CHANNELS, isValidLeadPhone, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
+import { GTA_LANDING_SOURCE } from "@/lib/data/landing-gta";
+import { siteConfig } from "@/lib/site-config";
 
 // Header/footer moved to landing-chrome.tsx (shared with /seo-visibility);
 // re-exported so existing imports keep working.
@@ -56,6 +61,8 @@ const TYPE_ICONS: Record<string, LucideIcon> = {
   construction: HardHat,
   healthcare: HeartPulse,
   professional: Briefcase,
+  "retail-ecommerce": ShoppingBag,
+  other: Building2,
 };
 
 const steps = ["Business", "Campaign", "Contact"];
@@ -80,12 +87,12 @@ function useAttribution() {
     try {
       const params = new URLSearchParams(window.location.search);
       const out: Record<string, string> = {};
-      for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid", "msclkid"]) {
+      for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "gbraid", "wbraid", "fbclid", "msclkid"]) {
         const v = params.get(k);
-        if (v) out[k] = v;
+        if (v) out[k] = v.slice(0, 300);
       }
-      if (document.referrer) out.referrer = document.referrer;
-      out.path = window.location.pathname + window.location.search;
+      if (document.referrer) out.referrer = document.referrer.slice(0, 300);
+      out.path = window.location.pathname;
       setUtm(JSON.stringify(out));
     } catch {
       /* attribution is a nice-to-have */
@@ -109,7 +116,7 @@ function Stepper({ step }: { step: number }) {
         const number = index + 1;
         const complete = number < step;
         return (
-          <li key={label} className={number === step ? "is-current" : complete ? "is-complete" : ""}>
+          <li key={label} aria-current={number === step ? "step" : undefined} className={number === step ? "is-current" : complete ? "is-complete" : ""}>
             <span>{complete ? <Check aria-hidden="true" /> : number}</span>
             <small>{label}</small>
           </li>
@@ -120,7 +127,7 @@ function Stepper({ step }: { step: number }) {
 }
 
 /** Copy that differs per landing page; defaults are the /100-leads wording. */
-export type QualificationCopy = { source: string; topline: string; stepTwoLede: string; submitLabel: string };
+export type QualificationCopy = { source: string; topline: string; stepTwoLede: string; submitLabel: string; collectChannel?: boolean };
 const DEFAULT_COPY: QualificationCopy = {
   source: LANDING_SOURCE,
   topline: "100-lead fit check",
@@ -129,10 +136,31 @@ const DEFAULT_COPY: QualificationCopy = {
 };
 
 export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: QualificationCopy } = {}) {
+  const isGta = copy.source === GTA_LANDING_SOURCE;
+  const businessTypes = isGta ? [...BUSINESS_TYPES, ...GTA_EXTRA_BUSINESS_TYPES] : BUSINESS_TYPES;
+  const budgets = isGta ? [...LANDING_BUDGETS, ...GTA_EXTRA_BUDGETS] : LANDING_BUDGETS;
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({ company: "", location: "", website: "", businessType: "", budget: "", name: "", email: "", phone: "" });
-  const [state, action, pending] = useActionState(submitLandingLead, initial);
+  const [form, setForm] = useState({ company: "", location: "", website: "", businessType: "", budget: "", channel: "", name: "", email: "", phone: "" });
+  const [state, action, pending] = useActionState(async (previous: LandingLeadState, data: FormData) => {
+    try {
+      return await submitLandingLead(previous, data);
+    } catch (error) {
+      // Preserve Next's successful redirect; network/server failures stay recoverable.
+      unstable_rethrow(error);
+      return { ok: false, message: "We couldn't confirm your request. Please try again, or contact us directly." };
+    }
+  }, initial);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [renderedAt, setRenderedAt] = useState("");
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const previousStep = useRef(1);
   const utm = useAttribution();
+
+  useEffect(() => { setRenderedAt(String(Date.now())); }, []);
+  useEffect(() => {
+    if (previousStep.current !== step) headingRef.current?.focus();
+    previousStep.current = step;
+  }, [step]);
 
   // Turnstile tokens are single-use: after a rejected submit, issue a fresh
   // challenge before the retry.
@@ -146,22 +174,47 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
   // them on the contact panel with an invisible error.
   useEffect(() => {
     const e = state.errors ?? {};
+    setErrors(e);
     if (e.company || e.location || e.website) setStep(1);
-    else if (e.business_type || e.budget) setStep(2);
+    else if (e.business_type || e.budget || e.channel) setStep(2);
   }, [state.errors]);
 
   const updateField = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
+    setErrors((current) => ({ ...current, [name]: "" }));
   };
-  const choose = (name: "businessType" | "budget", value: string) => setForm((current) => ({ ...current, [name]: value }));
+  const choose = (name: "businessType" | "budget" | "channel", value: string) => {
+    setForm((current) => ({ ...current, [name]: value }));
+    setErrors((current) => ({ ...current, [name === "businessType" ? "business_type" : name]: "" }));
+  };
 
-  const stepOneReady = Boolean(form.company.trim() && form.location.trim());
-  const stepTwoReady = Boolean(form.businessType && form.budget);
+  const stepOneReady = form.company.trim().length >= 2 && form.location.trim().length >= 2;
+  const stepTwoReady = Boolean(form.businessType && form.budget && (!copy.collectChannel || form.channel));
 
   const goTo = (next: number) => {
+    if (pending) return;
+    if (next === 2 && step === 1) {
+      if (!stepOneReady) return;
+      if (normaliseWebOrSocial(form.website) === null) {
+        setErrors((current) => ({ ...current, website: "Enter a website such as yourbusiness.ca or an Instagram @handle." }));
+        return;
+      }
+    }
+    if (next === 3 && !stepTwoReady) return;
     if (next === 2 && step === 1) track("audit_form_start", { source: copy.source });
     setStep(next);
+  };
+
+  /** Arrow keys move between the options in each single-selection group. */
+  const chooseWithArrow = (event: React.KeyboardEvent<HTMLButtonElement>, name: "businessType" | "budget" | "channel", options: readonly { id: string }[]) => {
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const current = options.findIndex(({ id }) => id === form[name]);
+    const delta = event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1;
+    const next = event.key === "Home" ? 0 : event.key === "End" ? options.length - 1 : (Math.max(current, 0) + delta + options.length) % options.length;
+    choose(name, options[next].id);
+    event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>("[role=radio]")[next]?.focus();
   };
 
   /** Enter on a step-1 field advances the step instead of submitting the whole form. */
@@ -170,8 +223,6 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
     event.preventDefault();
     if (stepOneReady) goTo(2);
   };
-
-  const errors = state.errors ?? {};
 
   return (
     <section className="lead-form" id="qualification" aria-labelledby="qualification-title">
@@ -183,7 +234,21 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
       </div>
       <Stepper step={step} />
 
-      <form action={action} noValidate={step !== 3}>
+      <form action={action} noValidate={step !== 3} aria-busy={pending} onSubmit={(event) => {
+        if (step !== 3 || pending) {
+          event.preventDefault();
+          if (!pending) goTo(step + 1);
+          return;
+        }
+        const contactErrors: Record<string, string> = {};
+        if (form.name.trim().length < 2) contactErrors.name = "Please enter your name.";
+        if (!isValidLeadPhone(form.phone)) contactErrors.phone = "Please enter a valid phone number, including the area code.";
+        if (Object.keys(contactErrors).length) {
+          event.preventDefault();
+          setErrors(contactErrors);
+          event.currentTarget.querySelector<HTMLInputElement>(`[name=${Object.keys(contactErrors)[0]}]`)?.focus();
+        }
+      }}>
         {/* Honeypot + attribution + first-party session id. */}
         <input type="text" name="company_website" tabIndex={-1} autoComplete="off" className="lp-hidden" aria-hidden />
         <input type="hidden" name="source" value={copy.source} />
@@ -199,30 +264,37 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
         ) : null}
         <input type="hidden" name="business_type" value={form.businessType} readOnly />
         <input type="hidden" name="budget" value={form.budget} readOnly />
+        {copy.collectChannel ? <input type="hidden" name="channel" value={form.channel} readOnly /> : null}
+        {state.message && !state.ok ? (
+          <p className="form-error" role="alert">
+            {state.message}
+            {!state.errors ? <> You can also <a className="underline" href={siteConfig.contact.phoneHref}>call {siteConfig.contact.phone}</a> or <a className="underline" href={`mailto:${siteConfig.contact.email}`}>email {siteConfig.contact.email}</a>.</> : null}
+          </p>
+        ) : null}
 
         {step === 1 && (
           <div className="form-panel">
             <div className="form-heading">
               <p className="form-kicker">Let’s start with your market</p>
-              <h2 id="qualification-title">Where should we send the leads?</h2>
-              <p>Tell us which business and service area we would be advertising.</p>
+              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGta ? "Tell us about your business" : "Where should we send the leads?"}</h2>
+              <p>{isGta ? "Share your business and service area so we can shape your Google and Meta growth plan." : "Tell us which business and service area we would be advertising."}</p>
             </div>
             <div className="input-stack">
               <label>
                 <span>Business name</span>
                 <div className="input-shell">
                   <Building2 aria-hidden="true" />
-                  <input name="company" value={form.company} onChange={updateField} onKeyDown={advanceOnEnter} placeholder="e.g. Northstar Heating" autoComplete="organization" required />
+                  <input name="company" value={form.company} onChange={updateField} onKeyDown={advanceOnEnter} placeholder="e.g. Northstar Heating" autoComplete="organization" minLength={2} maxLength={120} aria-invalid={Boolean(errors.company)} aria-describedby={errors.company ? "company-error" : undefined} required />
                 </div>
-                {errors.company ? <em className="field-error">{errors.company}</em> : null}
+                {errors.company ? <em className="field-error" id="company-error">{errors.company}</em> : null}
               </label>
               <label>
                 <span>Primary city or service area</span>
                 <div className="input-shell">
                   <MapPin aria-hidden="true" />
-                  <input name="location" value={form.location} onChange={updateField} onKeyDown={advanceOnEnter} placeholder="e.g. Toronto & GTA" autoComplete="address-level2" required />
+                  <input name="location" value={form.location} onChange={updateField} onKeyDown={advanceOnEnter} placeholder="e.g. Toronto & GTA" autoComplete="address-level2" minLength={2} maxLength={120} aria-invalid={Boolean(errors.location)} aria-describedby={errors.location ? "location-error" : undefined} required />
                 </div>
-                {errors.location ? <em className="field-error">{errors.location}</em> : null}
+                {errors.location ? <em className="field-error" id="location-error">{errors.location}</em> : null}
               </label>
               <label>
                 <span>
@@ -238,13 +310,16 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
                     placeholder="northstarheating.ca or @northstarheating"
                     autoComplete="url"
                     inputMode="url"
+                    maxLength={200}
+                    aria-invalid={Boolean(errors.website)}
+                    aria-describedby={errors.website ? "website-error" : undefined}
                   />
                 </div>
-                {errors.website ? <em className="field-error">{errors.website}</em> : null}
+                {errors.website ? <em className="field-error" id="website-error">{errors.website}</em> : null}
               </label>
             </div>
             <button className="primary-button" type="button" disabled={!stepOneReady} onClick={() => goTo(2)}>
-              Map my lead market <ArrowRight aria-hidden="true" />
+              {isGta ? "Continue" : "Map my lead market"} <ArrowRight aria-hidden="true" />
             </button>
             <p className="form-reassurance">
               <Lock aria-hidden="true" /> No credit card, contract or account access needed.
@@ -256,17 +331,17 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
           <div className="form-panel">
             <div className="form-heading">
               <p className="form-kicker">Build the right campaign</p>
-              <h2>What best describes {form.company || "your business"}?</h2>
+              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>What best describes {form.company || "your business"}?</h2>
               <p>{copy.stepTwoLede}</p>
             </div>
             <fieldset className="choice-fieldset">
               <legend>Business type</legend>
               <div className="choice-grid" role="radiogroup" aria-label="Business type">
-                {BUSINESS_TYPES.map(({ id, label }) => {
+                {businessTypes.map(({ id, label }, index) => {
                   const Icon = TYPE_ICONS[id] ?? Briefcase;
                   const selected = form.businessType === id;
                   return (
-                    <button key={id} type="button" className={selected ? "choice-card is-selected" : "choice-card"} role="radio" aria-checked={selected} onClick={() => choose("businessType", id)}>
+                    <button key={id} type="button" className={selected ? "choice-card is-selected" : "choice-card"} role="radio" aria-checked={selected} tabIndex={selected || (!form.businessType && index === 0) ? 0 : -1} onKeyDown={(event) => chooseWithArrow(event, "businessType", businessTypes)} onClick={() => choose("businessType", id)}>
                       <Icon aria-hidden="true" />
                       <span>{label}</span>
                       <i>{selected && <Check aria-hidden="true" />}</i>
@@ -277,16 +352,29 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
               {errors.business_type ? <em className="field-error">{errors.business_type}</em> : null}
             </fieldset>
             <fieldset className="choice-fieldset budget-fieldset">
-              <legend>Monthly ad budget</legend>
+              <legend>{copy.collectChannel ? "Monthly ad budget (CAD)" : "Monthly ad budget"}</legend>
               <div className="budget-grid" role="radiogroup" aria-label="Monthly ad budget">
-                {LANDING_BUDGETS.map(({ id, label }) => (
-                  <button key={id} type="button" className={form.budget === id ? "budget-choice is-selected" : "budget-choice"} role="radio" aria-checked={form.budget === id} onClick={() => choose("budget", id)}>
+                {budgets.map(({ id, label }, index) => (
+                  <button key={id} type="button" className={form.budget === id ? "budget-choice is-selected" : "budget-choice"} style={id === "recommend" ? { gridColumn: "1 / -1" } : undefined} role="radio" aria-checked={form.budget === id} tabIndex={form.budget === id || (!form.budget && index === 0) ? 0 : -1} onKeyDown={(event) => chooseWithArrow(event, "budget", budgets)} onClick={() => choose("budget", id)}>
                     {label}
                   </button>
                 ))}
               </div>
               {errors.budget ? <em className="field-error">{errors.budget}</em> : null}
             </fieldset>
+            {copy.collectChannel ? (
+              <fieldset className="choice-fieldset budget-fieldset">
+                <legend>Which channels are you interested in?</legend>
+                <div className="budget-grid" role="radiogroup" aria-label="Advertising channels">
+                  {LANDING_CHANNELS.map(({ id, label }, index) => (
+                    <button key={id} type="button" className={form.channel === id ? "budget-choice is-selected" : "budget-choice"} role="radio" aria-checked={form.channel === id} tabIndex={form.channel === id || (!form.channel && index === 0) ? 0 : -1} onKeyDown={(event) => chooseWithArrow(event, "channel", LANDING_CHANNELS)} onClick={() => choose("channel", id)}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                {errors.channel ? <em className="field-error">{errors.channel}</em> : null}
+              </fieldset>
+            ) : null}
             <div className="form-actions">
               <button className="secondary-button" type="button" onClick={() => goTo(1)}>
                 <ArrowLeft aria-hidden="true" /> Back
@@ -302,38 +390,33 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
           <div className="form-panel">
             <div className="form-heading">
               <p className="form-kicker">Last step</p>
-              <h2>Where should we send your lead plan?</h2>
-              <p>We’ll use this to arrange a short qualification call—not to spam you.</p>
+              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGta ? "Where can we reach you?" : "Where should we send your lead plan?"}</h2>
+              <p>{isGta ? "We’ll use these details to arrange a short call about your growth plan." : "We’ll use this to arrange a short qualification call—not to spam you."}</p>
             </div>
             <div className="input-stack compact-fields">
               <label>
                 <span>Your name</span>
-                <input name="name" value={form.name} onChange={updateField} autoComplete="name" required />
-                {errors.name ? <em className="field-error">{errors.name}</em> : null}
+                <input name="name" value={form.name} onChange={updateField} autoComplete="name" minLength={2} maxLength={100} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? "name-error" : undefined} disabled={pending} required />
+                {errors.name ? <em className="field-error" id="name-error">{errors.name}</em> : null}
               </label>
               <label>
                 <span>Work email</span>
-                <input name="email" type="email" value={form.email} onChange={updateField} autoComplete="email" required />
-                {errors.email ? <em className="field-error">{errors.email}</em> : null}
+                <input name="email" type="email" value={form.email} onChange={updateField} autoComplete="email" maxLength={254} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? "email-error" : undefined} disabled={pending} required />
+                {errors.email ? <em className="field-error" id="email-error">{errors.email}</em> : null}
               </label>
               <label>
                 <span>Phone number</span>
-                <input name="phone" type="tel" value={form.phone} onChange={updateField} autoComplete="tel" required />
-                {errors.phone ? <em className="field-error">{errors.phone}</em> : null}
+                <input name="phone" type="tel" value={form.phone} onChange={updateField} autoComplete="tel" minLength={7} maxLength={40} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? "phone-error" : undefined} disabled={pending} required />
+                {errors.phone ? <em className="field-error" id="phone-error">{errors.phone}</em> : null}
               </label>
             </div>
-            <TurnstileField resetKey={attempt} />
-            {state.message && !state.ok ? (
-              <p className="form-error" role="alert">
-                {state.message}
-              </p>
-            ) : null}
+            <TurnstileField resetKey={attempt} renderedAt={renderedAt} />
             <div className="form-actions">
               <button className="secondary-button" type="button" onClick={() => goTo(2)} disabled={pending}>
                 <ArrowLeft aria-hidden="true" /> Back
               </button>
               <button className="primary-button" type="submit" disabled={pending}>
-                {pending ? "Checking your fit…" : copy.submitLabel} <ArrowRight aria-hidden="true" />
+                {pending ? "Sending your request…" : copy.submitLabel} <ArrowRight aria-hidden="true" />
               </button>
             </div>
             <p className="consent-copy">

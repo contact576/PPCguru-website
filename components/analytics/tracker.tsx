@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { sendEvent, trackLead, trackPageViewed } from "@/lib/analytics";
+import { GTA_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-gta";
 
 /**
  * Site-wide, consent-aware visitor tracker. Mounted once in the root layout.
@@ -26,7 +27,8 @@ export function VisitorTracker() {
       trackPageViewed(pathname);
     }
     // The /100-leads and /seo-visibility actions redirect here on success.
-    if (pathname.endsWith("/thank-you")) trackLead({ requireId: true });
+    // GTA uses ConfirmedLandingConversion, which requires a server receipt.
+    if (pathname.endsWith("/thank-you") && pathname !== GTA_LANDING_THANK_YOU_PATH) trackLead({ requireId: true });
   }, [pathname]);
 
   // Delegated click capture across the whole document.

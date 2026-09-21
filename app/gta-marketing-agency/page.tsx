@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../100-leads/landing.css";
+import "./gta.css";
 import { GtaLanding } from "@/components/landing/gta-landing";
 import { GTA_LANDING_PATH } from "@/lib/data/landing-gta";
 
@@ -10,13 +11,13 @@ import { GTA_LANDING_PATH } from "@/lib/data/landing-gta";
  * offer-popup.tsx). Noindex — it's an ad destination.
  */
 export const metadata: Metadata = {
-  title: "Toronto & GTA Marketing Agency — Google Ads, Meta Ads, SEO",
-  description: "PPC Guru is the 5-star rated Toronto marketing agency for Google Ads, Meta Ads and SEO. Get a free growth plan for your GTA business.",
+  title: "Google Ads + Meta Ads Agency in Toronto & GTA",
+  description: "Google Ads and Meta Ads, one accountable team. Get a free growth plan for your GTA business with PPC Guru. Your accounts stay yours. No obligation.",
   robots: { index: false, follow: false },
   alternates: { canonical: GTA_LANDING_PATH },
   openGraph: {
-    title: "The GTA's 5-star marketing agency | PPC Guru",
-    description: "Google Ads, Meta Ads and SEO run as one plan for businesses across Toronto and the GTA.",
+    title: "Google Ads + Meta Ads. One team. | PPC Guru",
+    description: "More of the right leads for your GTA business. Start with a free Google and Meta growth plan.",
     url: GTA_LANDING_PATH,
     type: "website",
   },

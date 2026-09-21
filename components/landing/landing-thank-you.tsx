@@ -43,6 +43,7 @@ export function LandingThankYou({
   headerCtaLabel,
   headerPlatforms,
   footerTagline,
+  className = "",
 }: {
   name: string;
   kicker: string;
@@ -60,9 +61,10 @@ export function LandingThankYou({
   /** Official platform logos beside the header CTA; `[]` shows none. */
   headerPlatforms?: HeaderPlatform[];
   footerTagline: string;
+  className?: string;
 }) {
   return (
-    <div className="lp-root">
+    <div className={`lp-root ${className}`.trim()}>
       <div className="site-shell" id="top">
         <div className="hero-surface">
           <LandingHeader ctaHref={backHref} ctaLabel={headerCtaLabel} platforms={headerPlatforms} />
