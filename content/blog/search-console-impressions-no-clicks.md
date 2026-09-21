@@ -48,6 +48,8 @@ A page averaging far below the top results will often collect impressions withou
 
 If competing results solve a different task, improve the page's task fit. A service page cannot satisfy a detailed “how much does an SEO audit include?” question merely by repeating the keyword.
 
+When competing results repeatedly serve the buyer better, use our [SEO competitor-analysis framework](/blog/seo-competitor-analysis-toronto-service-businesses) to decide whether the current page needs improvement or whether a genuinely different resource is missing.
+
 ### Check 4: rewrite the snippet only when it is the bottleneck
 
 When the correct page appears prominently for a relevant query yet gets weak clicks, read the title as a buyer would. Does it name the service and Toronto/GTA relevance? Does it distinguish this page from other agency claims? Is it accurate? A clear page title and a useful on-page introduction give Google better material to present, although Google may generate the displayed title or snippet differently from your metadata ([Google title-link guidance](https://developers.google.com/search/docs/appearance/title-link), [snippet guidance](https://developers.google.com/search/docs/appearance/snippet)).
@@ -67,3 +69,4 @@ For a quick review, select five commercially relevant queries, record the URL, t
 If you want help turning the report into an ordered worklist, [request a PPC Guru website review](https://ppcguru.ca/free-audit). Share your priority service pages and the queries you care about; confirm the scope of the free review before expecting a full analytics or technical audit.
 
 *Source check: 14 September 2026. The five-check diagnostic is an editorial framework, not a claim that Google uses this sequence to rank pages.*
+
