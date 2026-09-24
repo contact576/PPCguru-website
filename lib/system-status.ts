@@ -30,13 +30,15 @@ export function getIntegrationStatus(): IntegrationStatus[] {
       key: "smtp",
       label: "Hostinger SMTP",
       configured: Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS),
-      detail: "Primary channel for form notifications + autoresponders. Keys present ≠ delivery — see Email delivery above.",
+      detail: process.env.EMAIL_PROVIDER === "resend"
+        ? "Bypassed: direct Resend delivery is selected."
+        : "Primary channel for form notifications + autoresponders. Keys present ≠ delivery — see Email delivery above.",
     },
     {
       key: "resend",
       label: "Resend",
       configured: Boolean(process.env.RESEND_API_KEY),
-      detail: "Fallback email channel. Only delivers once ppcguru.ca is verified in the Resend dashboard.",
+      detail: `${process.env.EMAIL_PROVIDER === "resend" ? "Selected email channel" : "Fallback email channel"}. Requires the sender domain to be verified in Resend.`,
     },
     {
       key: "zoho",

@@ -109,7 +109,7 @@ export function EmailHealthPanel() {
 
       {result ? (
         <p className={`mt-4 rounded-lg px-3.5 py-3 text-sm ${result.ok ? "bg-[#eef2dd] text-[#4f5f14]" : "bg-[#fdeaea] text-[#7a2626]"}`}>
-          {result.ok ? "Test delivered — " : "Test failed — "}
+          {result.ok ? "Test accepted — " : "Test incomplete — "}
           {result.detail}
         </p>
       ) : null}

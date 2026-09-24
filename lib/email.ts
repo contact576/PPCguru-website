@@ -2,8 +2,9 @@
  * Server-only email helpers. `leadRecipients()` is the single source of truth
  * for where contact / lead notifications are delivered.
  *
- * Default: the team distribution list (contact + sales + marketing). Override
- * with CONTACT_TO_EMAIL — a comma-separated list, e.g.
+ * Sales + contact always receive team notifications. CONTACT_TO_EMAIL adds
+ * configured recipients; when empty, marketing is also included by default.
+ * Example comma-separated list:
  *   CONTACT_TO_EMAIL="contact@ppcguru.ca,sales@ppcguru.ca"
  */
 
@@ -12,14 +13,15 @@ const DEFAULT_RECIPIENTS = [
   "sales@ppcguru.ca",
   "marketing@ppcguru.ca",
 ];
+const REQUIRED_RECIPIENTS = ["sales@ppcguru.ca", "contact@ppcguru.ca"];
 
-/** Recipients for form-submission notification emails (always ≥1 address). */
+/** Every lead form uses the mandatory pair plus configured extras. */
 export function leadRecipients(): string[] {
   const parsed = (process.env.CONTACT_TO_EMAIL ?? "")
     .split(",")
-    .map((s) => s.trim())
+    .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
-  return parsed.length ? parsed : DEFAULT_RECIPIENTS;
+  return [...new Set([...REQUIRED_RECIPIENTS, ...(parsed.length ? parsed : DEFAULT_RECIPIENTS)])];
 }
 
 /** The "from" address used on all outbound mail. For SMTP this must match the
@@ -34,7 +36,7 @@ function smtpConfigured(): boolean {
 
 /** True when at least one real delivery channel (SMTP or Resend) is configured. */
 export function emailConfigured(): boolean {
-  return smtpConfigured() || Boolean(process.env.RESEND_API_KEY);
+  return (process.env.EMAIL_PROVIDER !== "resend" && smtpConfigured()) || Boolean(process.env.RESEND_API_KEY);
 }
 
 export type MailInput = {
@@ -123,18 +125,23 @@ async function smtpTransporter(): Promise<Transporter> {
 /**
  * Single outbound-mail entry point. Prefers Hostinger SMTP (nodemailer) when
  * configured, falls back to Resend, otherwise logs. Best-effort: never throws,
- * returns true only when a provider accepted the message.
+ * EMAIL_PROVIDER=resend skips SMTP entirely. Returns true only when providers
+ * accepted every intended recipient; acceptance is not proof of inbox delivery.
  */
 export async function sendMail(msg: MailInput): Promise<boolean> {
   const from = fromAddress();
+  let pending = [...new Set((Array.isArray(msg.to) ? msg.to : [msg.to])
+    .flatMap((address) => address.split(","))
+    .map((address) => address.trim().toLowerCase()).filter(Boolean))];
+  if (!pending.length) return false;
 
   // 1) SMTP (Hostinger) — preferred, unless the breaker is open.
-  if (smtpConfigured() && Date.now() >= smtpDownUntil) {
+  if (process.env.EMAIL_PROVIDER !== "resend" && smtpConfigured() && Date.now() >= smtpDownUntil) {
     try {
       const transporter = await smtpTransporter();
       const info = await transporter.sendMail({
         from,
-        to: Array.isArray(msg.to) ? msg.to.join(", ") : msg.to,
+        to: pending.join(", "),
         subject: msg.subject,
         html: msg.html,
         text: msg.text,
@@ -142,7 +149,10 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
         headers: msg.headers,
       });
       if (info.rejected?.length) console.warn("[email] SMTP rejected recipients:", info.rejected);
-      if (info.accepted?.length) return true;
+      const accepted = new Set((info.accepted ?? []).map((recipient: string | { address: string }) =>
+        (typeof recipient === "string" ? recipient : recipient.address).toLowerCase()));
+      pending = pending.filter((address) => !accepted.has(address));
+      if (!pending.length) return true;
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       console.error("[email] SMTP send failed:", message);
@@ -162,7 +172,8 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
       const resend = new Resend(process.env.RESEND_API_KEY);
       const { error } = await resend.emails.send({
         from,
-        to: Array.isArray(msg.to) ? msg.to : [msg.to],
+        // Retry only recipients SMTP did not accept, avoiding duplicate mail.
+        to: pending,
         subject: msg.subject,
         html: msg.html,
         text: msg.text ?? msg.subject,
@@ -174,7 +185,9 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
         console.error("[email] Resend rejected the message:", error.message);
         if (msg.rescue && isResendIdentityError(error.message)) {
           const rescued = await rescueSend(resend, msg);
-          if (rescued) return true;
+          // An owner-only rescue alert is useful, but cannot stand in for
+          // acceptance by the required sales + contact destinations.
+          if (rescued && pending.every((address) => address === RESCUE_TO().trim().toLowerCase())) return true;
         }
         return false;
       }
@@ -241,7 +254,9 @@ export type EmailChannelHealth = {
 export async function probeEmailHealth(): Promise<EmailChannelHealth[]> {
   const out: EmailChannelHealth[] = [];
   const t0 = Date.now();
-  if (!smtpConfigured()) {
+  if (process.env.EMAIL_PROVIDER === "resend") {
+    out.push({ channel: "smtp", configured: smtpConfigured(), ok: false, detail: "SMTP is bypassed because EMAIL_PROVIDER=resend selects direct Resend delivery.", ms: 0 });
+  } else if (!smtpConfigured()) {
     out.push({ channel: "smtp", configured: false, ok: false, detail: "SMTP_HOST / SMTP_USER / SMTP_PASS not set.", ms: 0 });
   } else {
     try {
@@ -287,8 +302,8 @@ export async function sendTestNotification(): Promise<{ ok: boolean; detail: str
   });
   const b = smtpBreakerState();
   const detail = ok
-    ? `Delivered to ${to.join(", ")} in ${Date.now() - t0} ms.`
-    : `Nothing accepted the message.${b.lastError ? ` SMTP said: ${b.lastError}.` : ""} Resend is rejected until ppcguru.ca is verified at resend.com/domains.`;
+    ? `Accepted for ${to.join(", ")} in ${Date.now() - t0} ms. Check the recipient inboxes to confirm delivery.`
+    : `Not all intended recipients accepted the message.${b.lastError ? ` SMTP said: ${b.lastError}.` : ""} An owner-only rescue alert does not confirm team delivery. Check the sender's domain verification and provider delivery logs.`;
   return { ok, detail };
 }
 
