@@ -7,6 +7,9 @@
  *   CONTACT_TO_EMAIL="contact@ppcguru.ca,sales@ppcguru.ca"
  */
 
+import { z } from "zod";
+import { supabaseAdmin } from "@/lib/supabase";
+
 const DEFAULT_RECIPIENTS = [
   "contact@ppcguru.ca",
   "sales@ppcguru.ca",
@@ -30,6 +33,13 @@ export function fromAddress(): string {
 
 function smtpConfigured(): boolean {
   return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
+}
+
+/** IANA example/testing domains must never receive real provider traffic. */
+function recipientAllowed(address: string): boolean {
+  if (!z.email().safeParse(address).success) return false;
+  const domain = address.slice(address.lastIndexOf("@") + 1).toLowerCase();
+  return !/(^|\.)(example\.(com|net|org)|invalid|test|localhost|example)$/.test(domain);
 }
 
 /** True when at least one real delivery channel (SMTP or Resend) is configured. */
@@ -75,8 +85,9 @@ function isResendIdentityError(message: string): boolean {
    this, EVERY form submission paid for a full SMTP connect + auth + rejected
    DATA round-trip TWICE (team notification + autoresponder) before falling
    back to Resend — that was most of the "submit button takes forever". A
-   permanent (5xx) rejection now trips the breaker: SMTP is skipped for the
-   next ten minutes and the Resend fallback is tried immediately. */
+   permanent (5xx) rejection trips the breaker. Account/sender blocks stay
+   paused for this process until an explicit admin test; other failures pause
+   ten minutes. SMTP_ENABLED=false also preserves the pause across restarts. */
 const SMTP_BREAKER_MS = 10 * 60_000;
 let smtpDownUntil = 0;
 let smtpLastError = "";
@@ -91,6 +102,10 @@ function isPermanentSmtpError(err: unknown): boolean {
   if (typeof e?.responseCode === "number" && e.responseCode >= 500) return true;
   if (e?.code === "EAUTH") return true;
   return /outbound sending is disabled|authentication failed|invalid login/i.test(e?.message ?? "");
+}
+
+function isSenderBlocked(message: string): boolean {
+  return /outbound sending is disabled|sender blocked|account (?:is )?suspended/i.test(message);
 }
 
 // One transporter per process — nodemailer pools the connection, so back-to-back
@@ -126,15 +141,21 @@ async function smtpTransporter(): Promise<Transporter> {
  * returns true only when a provider accepted the message.
  */
 export async function sendMail(msg: MailInput): Promise<boolean> {
+  const recipients = (Array.isArray(msg.to) ? msg.to : [msg.to])
+    .flatMap((address) => address.split(",")).map((address) => address.trim());
+  if (!recipients.length || recipients.some((address) => !recipientAllowed(address))) {
+    console.warn("[email] Suppressed mail to an invalid or reserved recipient; lead capture is unchanged.");
+    return false;
+  }
   const from = fromAddress();
 
   // 1) SMTP (Hostinger) — preferred, unless the breaker is open.
-  if (smtpConfigured() && Date.now() >= smtpDownUntil) {
+  if (process.env.SMTP_ENABLED !== "false" && smtpConfigured() && Date.now() >= smtpDownUntil) {
     try {
       const transporter = await smtpTransporter();
       const info = await transporter.sendMail({
         from,
-        to: Array.isArray(msg.to) ? msg.to.join(", ") : msg.to,
+        to: recipients.join(", "),
         subject: msg.subject,
         html: msg.html,
         text: msg.text,
@@ -147,9 +168,11 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
       const message = err instanceof Error ? err.message : String(err);
       console.error("[email] SMTP send failed:", message);
       if (isPermanentSmtpError(err)) {
-        smtpDownUntil = Date.now() + SMTP_BREAKER_MS;
+        smtpDownUntil = isSenderBlocked(message) ? Number.MAX_SAFE_INTEGER : Date.now() + SMTP_BREAKER_MS;
         smtpLastError = message;
-        console.error(`[email] SMTP looks permanently broken — skipping it for ${SMTP_BREAKER_MS / 60_000} min and using Resend.`);
+        console.error(isSenderBlocked(message)
+          ? "[email] SMTP sender blocked; automatic retries paused. Resolve with provider, then use the admin test. Set SMTP_ENABLED=false to retain this pause across restarts."
+          : `[email] SMTP rejected mail — skipping it for ${SMTP_BREAKER_MS / 60_000} min and using Resend.`);
       }
       // fall through to Resend if available
     }
@@ -162,7 +185,7 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
       const resend = new Resend(process.env.RESEND_API_KEY);
       const { error } = await resend.emails.send({
         from,
-        to: Array.isArray(msg.to) ? msg.to : [msg.to],
+        to: recipients,
         subject: msg.subject,
         html: msg.html,
         text: msg.text ?? msg.subject,
@@ -195,6 +218,7 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
 async function rescueSend(resend: import("resend").Resend, msg: MailInput): Promise<boolean> {
   const intended = Array.isArray(msg.to) ? msg.to.join(", ") : msg.to;
   const to = RESCUE_TO();
+  if (!recipientAllowed(to)) return false;
   try {
     const { error } = await resend.emails.send({
       from: RESCUE_FROM(),
@@ -241,7 +265,11 @@ export type EmailChannelHealth = {
 export async function probeEmailHealth(): Promise<EmailChannelHealth[]> {
   const out: EmailChannelHealth[] = [];
   const t0 = Date.now();
-  if (!smtpConfigured()) {
+  if (process.env.SMTP_ENABLED === "false") {
+    out.push({ channel: "smtp", configured: smtpConfigured(), ok: false, detail: "SMTP paused by SMTP_ENABLED=false. Resolve the provider suspension before enabling and sending one controlled admin test.", ms: 0 });
+  } else if (smtpBreakerState().tripped) {
+    out.push({ channel: "smtp", configured: smtpConfigured(), ok: false, detail: `SMTP retries paused after rejection: ${smtpLastError}. Resolve the provider issue before using Send test email.`, ms: 0 });
+  } else if (!smtpConfigured()) {
     out.push({ channel: "smtp", configured: false, ok: false, detail: "SMTP_HOST / SMTP_USER / SMTP_PASS not set.", ms: 0 });
   } else {
     try {
@@ -277,6 +305,12 @@ export async function probeEmailHealth(): Promise<EmailChannelHealth[]> {
 
 /** Send a real test notification to the team list; returns the outcome. */
 export async function sendTestNotification(): Promise<{ ok: boolean; detail: string }> {
+  // Only this authenticated, explicit action retries a blocked sender. The
+  // operator's SMTP_ENABLED=false switch still wins, even for a test.
+  if (process.env.SMTP_ENABLED !== "false") {
+    smtpDownUntil = 0;
+    smtpLastError = "";
+  }
   const to = leadRecipients();
   const t0 = Date.now();
   const ok = await sendMail({
@@ -286,8 +320,11 @@ export async function sendTestNotification(): Promise<{ ok: boolean; detail: str
     text: `This is a delivery test sent from the website admin at ${new Date().toISOString()}.\nRecipients: ${to.join(", ")}\nIf you can read this, lead notifications will arrive here.`,
   });
   const b = smtpBreakerState();
+  const smtpStatus = process.env.SMTP_ENABLED === "false"
+    ? " SMTP remains paused by SMTP_ENABLED=false."
+    : b.tripped ? ` SMTP still rejected the test: ${b.lastError}.` : "";
   const detail = ok
-    ? `Delivered to ${to.join(", ")} in ${Date.now() - t0} ms.`
+    ? `A mail provider accepted the test in ${Date.now() - t0} ms.${smtpStatus} Check actual inbox delivery and hPanel before declaring Hostinger recovered; the fallback may have accepted it instead.`
     : `Nothing accepted the message.${b.lastError ? ` SMTP said: ${b.lastError}.` : ""} Resend is rejected until ppcguru.ca is verified at resend.com/domains.`;
   return { ok, detail };
 }
@@ -309,7 +346,8 @@ const BUSINESS = {
 const C = { ink: "#14170e", lime: "#ceff3a", cream: "#f1efe3", olive: "#5f6f17", dim: "#54564a", faint: "#8a8c72" };
 
 function autoresponderHtml(name: string): string {
-  const first = (name || "there").trim().split(/\s+/)[0];
+  const first = (name || "there").trim().split(/\s+/)[0]
+    .replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]!));
   const unsub = `mailto:${BUSINESS.email}?subject=Unsubscribe`;
   return `<!doctype html><html><body style="margin:0;background:${C.cream};font-family:Arial,Helvetica,sans-serif;color:${C.ink};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.cream};padding:28px 12px;">
@@ -379,9 +417,26 @@ function autoresponderText(name: string): string {
  */
 export async function sendLeadAutoresponder(lead: { name?: string; email?: string }): Promise<boolean> {
   if (!lead.email || !emailConfigured()) return false;
+  const email = lead.email.trim().toLowerCase();
+  if (!recipientAllowed(email)) return false;
+  // Atomic, durable claim: repeated/concurrent forms cannot mail one address
+  // more than once in 24 hours. If the optional receipt is unsafe to send,
+  // preserve lead capture, CRM delivery and the team's notification.
+  const sb = supabaseAdmin();
+  if (!sb) return false;
+  try {
+    const { data, error } = await sb.rpc("claim_lead_autoresponder", { recipient: email });
+    if (error || data !== true) {
+      console.warn(error ? "[email] Autoresponder claim unavailable; receipt suppressed." : "[email] Duplicate autoresponder suppressed.");
+      return false;
+    }
+  } catch {
+    console.warn("[email] Autoresponder claim failed; receipt suppressed.");
+    return false;
+  }
   const name = lead.name || "";
   return sendMail({
-    to: lead.email,
+    to: email,
     subject: "Thanks — here's what happens next 🚀",
     html: autoresponderHtml(name),
     text: autoresponderText(name),

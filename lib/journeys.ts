@@ -59,7 +59,8 @@ const HIGH_INTENT_HITS = 3;
 const HIGH_INTENT_WINDOW_DAYS = 7;
 
 /**
- * Master kill switch — set JOURNEYS_ENABLED=false to silence all automation.
+ * Optional follow-up requires explicit JOURNEYS_ENABLED=true. Identity storage
+ * and lead capture do not depend on this flag.
  *
  * Also hard-requires a signing secret: without one every unsubscribe link we
  * send would be rejected on click (see `unsubConfigured`), and mailing someone
@@ -67,7 +68,7 @@ const HIGH_INTENT_WINDOW_DAYS = 7;
  * failure mode.
  */
 export function journeysEnabled(): boolean {
-  return process.env.JOURNEYS_ENABLED !== "false" && emailConfigured() && unsubConfigured();
+  return process.env.JOURNEYS_ENABLED === "true" && emailConfigured() && unsubConfigured();
 }
 
 /* ── Unsubscribe tokens ─────────────────────────────────────────────────── */

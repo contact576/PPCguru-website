@@ -63,12 +63,17 @@ function harness(action, overrides = {}) {
   const calls = { store: [], ghl: [], zoho: [], identify: [], mail: [], autoresponder: [] };
   const persisted = new Map();
   const events = [];
+  const deferred = [];
   const spy = (key, result) => async (value) => {
     calls[key].push(structuredClone(value));
     events.push(key);
     return result;
   };
   const imports = {
+    'next/server': { after: (job) => deferred.push(job) },
+    '@/lib/meta-capi': { sendMetaLead: async () => false },
+    '@/lib/openai-capi': { sendOpenAiLead: async () => false },
+    '@/lib/conversion-context': { readConversionContext: async () => ({ declined: true }), cleanEventId: () => null },
     zod,
     '@/lib/data/form-options': options,
     '@/lib/email': {
@@ -110,8 +115,13 @@ function harness(action, overrides = {}) {
       clientIpFromHeaders: async () => '192.0.2.1',
     },
   };
+  imports['@/lib/lead-delivery'] = compileModule('lib/lead-delivery.ts', imports);
   const fn = compileModule(action.file, imports)[action.exportName];
-  return { config, calls, persisted, events, run: (form) => fn({ ok: false, message: '' }, form) };
+  return { config, calls, persisted, events, run: async (form) => {
+    const result = await fn({ ok: false, message: '' }, form);
+    for (const job of deferred.splice(0)) await job();
+    return result;
+  } };
 }
 
 function validForm(action) {
