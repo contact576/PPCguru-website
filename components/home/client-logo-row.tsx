@@ -12,9 +12,7 @@ const CREAM = "#f1efe3";
 /* eslint-disable @next/next/no-img-element -- client logos are tiny static assets */
 
 /**
- * Homepage client proof: every client logo we have, in ONE continuous moving
- * row, with the brands spelled out underneath so the wall reads as proof
- * rather than decoration.
+ * Homepage client proof: every client logo we have, in one continuous moving row.
  *
  * `.mq` (app/globals.css) animates translateX(-50%), so the track must hold the
  * list exactly twice — the second copy is aria-hidden. globals.css also carries
@@ -30,6 +28,7 @@ export function ClientLogoRow() {
     <section
       id="clients"
       aria-labelledby="clients-title"
+      className="pb-12 md:pb-16"
       style={{ background: CREAM, color: INK, borderBottom: "1px solid #e3e0d0", overflow: "hidden" }}
     >
       <div className="mx-auto max-w-[1480px] px-5 pt-12 md:px-8 md:pt-16">
@@ -82,22 +81,6 @@ export function ClientLogoRow() {
           })}
         </div>
       </LoadImagesNearView>
-
-      {/* Every moving logo named, in one flat list — no industry grouping. */}
-      <div className="mx-auto max-w-[1480px] px-5 pb-14 pt-10 md:px-8 md:pb-20 md:pt-12">
-        <ul
-          data-reveal
-          className="flex flex-wrap justify-center gap-x-3 gap-y-3"
-          style={{ borderTop: "1px solid #dddbc9", paddingTop: 26 }}
-        >
-          {[...all].sort((a, b) => a.name.localeCompare(b.name)).map((item) => (
-            <li key={item.file} className="logo-pill">
-              {item.name}
-            </li>
-          ))}
-        </ul>
-      </div>
-
     </section>
   );
 }

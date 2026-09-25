@@ -137,7 +137,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── CLIENTS: one moving row of every client logo + who they are ────── */}
+      {/* ── CLIENTS: one moving row of every client logo ────── */}
       <ClientLogoRow />
 
       {/* ── LIME TICKER ────────────────────────────────────────────────────── */}
