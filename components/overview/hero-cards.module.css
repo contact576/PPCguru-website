@@ -1,0 +1,139 @@
+.heroArt {
+  position: relative;
+  height: 500px;
+  isolation: isolate;
+}
+
+.orbit {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  border: 1px solid #ceff3a2b;
+  top: 20px;
+  left: -10px;
+  transform: rotate(-25deg);
+  pointer-events: none;
+}
+
+.orbit::before,
+.orbit::after {
+  content: "";
+  position: absolute;
+  inset: 50px -40px;
+  border: 1px solid #ceff3a20;
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+.orbit::after { inset: 100px -70px; transform: rotate(85deg); }
+
+.artHeader {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  gap: 14px;
+  z-index: 2;
+}
+
+.artLabel {
+  margin-left: auto;
+  color: #929a83;
+  font: 9px var(--font-mono, monospace);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.motionToggle {
+  display: none;
+  place-items: center;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid #657348;
+  border-radius: 50%;
+  background: #14170e;
+  color: #e8ebdc;
+  cursor: pointer;
+}
+
+.heroArt[data-enhanced="true"] .motionToggle { display: grid; }
+.motionToggle:hover { color: #ceff3a; border-color: #ceff3a; }
+.motionToggle:focus-visible { outline: 2px solid #ceff3a; outline-offset: 4px; }
+
+.artCard {
+  position: absolute;
+  width: 84%;
+  min-height: 166px;
+  padding: 25px 28px;
+  border: 1px solid #657348;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  color: var(--ink, #14170e);
+  box-shadow: 0 14px 30px #0003;
+  transform: rotate(var(--card-angle));
+}
+
+.cardIndex { font: 9px var(--font-mono, monospace); letter-spacing: .12em; align-self: center; }
+.artCard strong { grid-column: 1 / -1; font-size: clamp(28px, 3vw, 42px); font-weight: 850; letter-spacing: -.04em; line-height: 1.1; margin: 13px 0 9px; }
+.artCard > span:last-child { grid-column: 1 / -1; font-size: 11px; }
+.cardOne { --card-angle: -7deg; --float-time: 6.8s; --float-delay: 0s; top: 44px; left: 0; background: #293221; color: #e8ebdc; }
+.cardTwo { --card-angle: 4deg; --float-time: 7.6s; --float-delay: -2.1s; top: 184px; left: 11%; background: #f1efe3; }
+.cardThree { --card-angle: -3deg; --float-time: 8.4s; --float-delay: -4.2s; top: 317px; left: 5%; background: var(--lime, #ceff3a); }
+.cardThree strong { margin-top: 3px; }
+.artFooter { position: absolute; display: flex; justify-content: space-between; gap: 18px; bottom: -23px; left: 3%; right: 0; color: #a9b196; font: 9px var(--font-mono, monospace); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .heroArt[data-enhanced="true"] .artCard {
+    animation: card-float var(--float-time) var(--float-delay) ease-in-out infinite;
+    animation-play-state: paused;
+  }
+  .heroArt[data-enhanced="true"] .orbit {
+    animation: orbit-sway 22s ease-in-out infinite;
+    animation-play-state: paused;
+  }
+  .heroArt[data-enhanced="true"][data-active="true"][data-paused="false"] .artCard,
+  .heroArt[data-enhanced="true"][data-active="true"][data-paused="false"] .orbit {
+    animation-play-state: running;
+  }
+}
+
+@keyframes card-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--card-angle)); }
+  50% { transform: translate3d(3px, -9px, 0) rotate(calc(var(--card-angle) + .8deg)); }
+}
+
+@keyframes orbit-sway {
+  0%, 100% { transform: rotate(-25deg); }
+  50% { transform: rotate(-10deg); }
+}
+
+@media (max-width: 1100px) {
+  .heroArt { scale: .94; transform-origin: center right; }
+  .artCard { width: 90%; padding-inline: 21px; }
+  .cardTwo { left: 7%; }
+  .artLabel { font-size: 8px; }
+  .orbit { width: 360px; height: 400px; }
+}
+
+@media (max-width: 760px) {
+  .heroArt { width: min(390px, 100%); height: 420px; margin: 22px auto 20px; scale: 1; }
+  .artCard { min-height: 140px; padding: 20px 23px; width: 88%; }
+  .artCard strong { font-size: 32px; margin: 9px 0; }
+  .artCard > span:last-child { font-size: 10px; }
+  .cardOne { top: 34px; left: 2%; }
+  .cardTwo { top: 149px; left: 9%; }
+  .cardThree { top: 264px; left: 4%; }
+  .orbit { width: 90%; height: 340px; left: 4%; top: 35px; }
+  .artFooter { bottom: -5px; font-size: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroArt[data-enhanced="true"] .motionToggle { display: none; }
+}

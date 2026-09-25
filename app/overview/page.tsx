@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowDown, ArrowUpRight, Search, Megaphone, Globe2, MousePointer2, PenTool, Workflow, Check } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Search, Megaphone, Globe2, MousePointer2, PenTool, Workflow, Check, PanelsTopLeft, ChartNoAxesCombined, Bot, type LucideIcon } from "lucide-react";
 import { OverviewClientLogos } from "@/components/overview/client-logos";
+import { OverviewHeroCards } from "@/components/overview/hero-cards";
+import { BrandIcon } from "@/components/shared/brand-logos";
 import { RevealInit } from "@/components/home/reveal-init";
 import { JsonLd } from "@/components/seo/json-ld";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
@@ -37,6 +39,39 @@ const shortLabels: Record<string, string> = {
   seo: "SEO & local search", "web-design": "Web design", "cro-landing-pages": "Landing pages & CRO",
   creative: "Creative production", crm: "CRM & reporting", "ai-automation": "AI automation",
 };
+
+const platformMarks: Record<string, string> = {
+  "google-ads": "/platforms/google-ads.svg",
+  "meta-ads": "/platforms/meta.svg",
+  "tiktok-ads": "/platforms/tiktok.svg",
+  "youtube-ads": "/platforms/youtube.svg",
+};
+
+const brandMarks: Record<string, string> = {
+  "microsoft-ads": "Microsoft Ads",
+  "linkedin-ads": "LinkedIn Ads",
+  "pinterest-ads": "Pinterest Ads",
+};
+
+const serviceIcons: Record<string, LucideIcon> = {
+  seo: Search,
+  "web-design": PanelsTopLeft,
+  "cro-landing-pages": ChartNoAxesCombined,
+  creative: PenTool,
+  crm: Workflow,
+  "ai-automation": Bot,
+};
+
+function ServiceMark({ slug }: { slug: string }) {
+  if (platformMarks[slug]) {
+    // The adjacent label names the platform; the logo is decorative.
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={platformMarks[slug]} width="24" height="24" alt="" loading="lazy" />;
+  }
+  if (brandMarks[slug]) return <BrandIcon name={brandMarks[slug]} size={24} radius={4} />;
+  const Icon = serviceIcons[slug];
+  return Icon ? <Icon size={23} strokeWidth={1.7} aria-hidden /> : null;
+}
 
 const steps = [
   { title: "Audit.", text: "Find the gaps in your ads, tracking and website." },
@@ -85,26 +120,7 @@ export default function OverviewPage() {
               </div>
             </div>
 
-            <div className={styles.heroArt} aria-label="Our connected approach: be found, be chosen, keep growing">
-              <div className={styles.orbit} aria-hidden />
-              <div className={styles.artLabel}>One team. The whole journey.</div>
-              <div className={`${styles.artCard} ${styles.cardOne}`}>
-                <span className={styles.cardIndex}>01 / ATTRACT</span>
-                <Search size={30} strokeWidth={1.5} aria-hidden />
-                <strong>Be found.</strong><span>Search + social + SEO</span>
-              </div>
-              <div className={`${styles.artCard} ${styles.cardTwo}`}>
-                <span className={styles.cardIndex}>02 / CONVERT</span>
-                <MousePointer2 size={30} strokeWidth={1.5} aria-hidden />
-                <strong>Be chosen.</strong><span>Creative + websites + CRO</span>
-              </div>
-              <div className={`${styles.artCard} ${styles.cardThree}`}>
-                <span className={styles.cardIndex}>03 / GROW</span>
-                <ArrowUpRight size={42} strokeWidth={1.5} aria-hidden />
-                <strong>Keep growing.</strong><span>CRM + automation + insight</span>
-              </div>
-              <div className={styles.artFooter}><span>Human strategy.</span><span>AI-powered execution.</span></div>
-            </div>
+            <OverviewHeroCards />
           </div>
 
           <div className={styles.heroBottom}>
@@ -141,7 +157,13 @@ export default function OverviewPage() {
                 <div className={styles.serviceLinks}>
                   {slugs.map((slug) => {
                     const service = services.find((item) => item.slug === slug)!;
-                    return <Link href={`/services/${slug}`} key={slug} aria-label={`Explore ${service.name}`}>{shortLabels[slug]} <ArrowUpRight size={12} aria-hidden /></Link>;
+                    return (
+                      <Link href={`/services/${slug}`} key={slug} aria-label={`Explore ${service.name}`}>
+                        <span className={styles.serviceMark} aria-hidden><ServiceMark slug={slug} /></span>
+                        <span>{shortLabels[slug]}</span>
+                        <ArrowUpRight className={styles.serviceArrow} size={12} aria-hidden />
+                      </Link>
+                    );
                   })}
                 </div>
               </article>
