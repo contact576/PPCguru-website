@@ -10,5 +10,7 @@ export function ChromeGate({ children }: { children: React.ReactNode }) {
   if (pathname === "/100-leads" || pathname.startsWith("/100-leads/")) return null;
   if (pathname === "/seo-visibility" || pathname.startsWith("/seo-visibility/")) return null;
   if (pathname === "/gta-marketing-agency" || pathname.startsWith("/gta-marketing-agency/")) return null;
+  // The agency overview has its own compact navigation and contact footer.
+  if (pathname === "/overview") return null;
   return <>{children}</>;
 }

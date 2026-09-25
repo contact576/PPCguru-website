@@ -23,6 +23,7 @@ export type PageGroup = { group: string; pages: PageRef[] };
 
 const core: PageRef[] = [
   { path: "/", label: "Home" },
+  { path: "/overview", label: "PPC Guru overview" },
   { path: "/services", label: "Services (hub)" },
   { path: "/industries", label: "Industries (hub)" },
   { path: "/locations", label: "Locations (hub)" },

@@ -19,11 +19,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date("2026-06-30T00:00:00Z");
 
   const staticRoutes = [
-    "", "/services", "/industries", "/locations", "/results", "/about",
+    "", "/overview", "/services", "/industries", "/locations", "/results", "/about",
     "/blog", "/contact", "/free-audit", "/tools", "/pricing", "/benchmarks", "/compare", "/glossary", "/privacy", "/terms",
   ].map((path) => ({
     url: `${base}${path}`,
-    lastModified: now,
+    lastModified: path === "/overview" ? new Date("2026-09-25T00:00:00Z") : now,
     changeFrequency: "weekly" as const,
     priority: path === "" ? 1 : 0.8,
   }));
