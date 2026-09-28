@@ -52,6 +52,8 @@ Start with the page that best completes the buyer's task. For “SEO agency Toro
 
 Then review internal links. Do existing pages point the commercial phrase to the commercial page? Do related guides explain the next step without repeating the service pitch? Google says descriptive internal links help people and search systems understand destination pages ([link guidance](https://developers.google.com/search/docs/crawling-indexing/links-crawlable)).
 
+Before creating another page from a competitor keyword export, use our [SEO competitor-analysis guide for Toronto service businesses](/blog/seo-competitor-analysis-toronto-service-businesses) to separate a genuine customer-task gap from a phrase your existing page may already own.
+
 ## A caution before deleting anything
 
 Do not delete a page just because a tool shows two URLs for one phrase. The less-visited page may rank for valuable long-tail questions, assist enquiries, or be the only useful explanation for a segment. Check query-level evidence, referral links and actual user need. If you merge, test the destination and redirect rather than sending every old URL to the home page.
@@ -59,3 +61,4 @@ Do not delete a page just because a tool shows two URLs for one phrase. The less
 If the five-column sheet reveals that your service pages cannot be assigned distinct jobs, [ask PPC Guru for an SEO page review](https://ppcguru.ca/services/seo). Bring the URLs and the services you want to sell. A useful outcome is a page-owner decision and worklist—not simply a declaration that the site has “cannibalization.”
 
 *Source check: 14 September 2026. The five-column test is an original editorial framework. It does not claim that Google applies a particular “cannibalization penalty.”*
+
