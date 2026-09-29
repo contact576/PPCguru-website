@@ -24,8 +24,8 @@ export const serviceFaq: Record<string, Pick<ServiceContent, "faqs" | "compariso
         "a": "We optimize to one number — your cost per booked job — not clicks or impressions. A real strategist runs your account daily with AI doing the heavy lifting on search-term clustering and waste detection, while a human directs and reviews. You own your account and data, reporting ties back to revenue, and it's month-to-month. No junior account managers, no lock-in, no vanity dashboards."
       },
       {
-        "q": "Is PPC Guru a good Google Ads agency in Toronto and the GTA?",
-        "a": "PPC Guru is a Google Partner and Meta Business Partner based in the Greater Toronto Area, serving clients across the GTA, Canada and the USA. Our founders have 10+ years combined Google Ads experience, and across the team we've managed $100M+ in ad spend and generated 1M+ qualified leads (client-reported, blended). We know Canadian search costs, seasonality and local competition firsthand."
+        "q": "Do you manage Google Ads for businesses across Canada?",
+        "a": "Yes. PPC Guru manages Google Ads for service businesses across Canada, whether you serve one local market, several locations or customers nationally. We structure Search, Performance Max and Shopping campaigns around the areas you can actually serve, with conversion tracking tied to qualified calls, appointments and sales rather than clicks alone. For a single-market campaign, location settings, budgets and landing pages are tailored to that service area instead of treating Canada as one audience."
       },
       {
         "q": "Which industries do you run Google Ads for?",
