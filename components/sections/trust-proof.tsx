@@ -38,8 +38,10 @@ export function ReviewRating({ align = "center", className = "" }: { align?: "ce
       <div className={`flex max-w-2xl flex-col gap-2 ${wrap} ${className}`}>
         <div className={`flex flex-wrap items-center gap-3 ${align === "center" ? "justify-center" : ""}`}>
           <Stars rating={ratingValue} />
-          <span className="head text-2xl leading-none text-[var(--color-ink)]">{ratingValue.toFixed(1)}</span>
-          <span className="text-sm text-[var(--color-ink-dim)]" aria-label={`${ratingValue} out of 5 from ${reviewCount} reviews`}>
+          <span className="head text-2xl leading-none text-[var(--color-ink)]">
+            {ratingValue.toFixed(1)}<span className="sr-only"> out of 5 stars</span>
+          </span>
+          <span className="text-sm text-[var(--color-ink-dim)]">
             from <strong className="text-[var(--color-ink)]">{reviewCount.toLocaleString()}</strong> reviews
           </span>
         </div>

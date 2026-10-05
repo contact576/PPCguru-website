@@ -8,7 +8,7 @@ const ink = "#14170e";
 
 function Stars({ rating }: { rating: number }) {
   return (
-    <span aria-label={`${rating} out of 5`} style={{ display: "inline-flex", gap: 2 }}>
+    <span aria-hidden="true" style={{ display: "inline-flex", gap: 2 }}>
       {[0, 1, 2, 3, 4].map((i) => (
         <svg key={i} width="18" height="18" viewBox="0 0 24 24" aria-hidden>
           <path
@@ -85,7 +85,9 @@ export function GoogleReviews({ fallback }: { fallback: ReactNode }) {
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <Stars rating={googleProfile.rating} />
-          <span className="head" style={{ fontSize: 17, color: ink }}>{googleProfile.rating.toFixed(1)}</span>
+          <span className="head" style={{ fontSize: 17, color: ink }}>
+            {googleProfile.rating.toFixed(1)}<span className="sr-only"> out of 5 stars</span>
+          </span>
           {googleProfile.count ? (
             <span style={{ fontSize: 13, color: "#8a8c72" }}>· {googleProfile.count} reviews</span>
           ) : null}
