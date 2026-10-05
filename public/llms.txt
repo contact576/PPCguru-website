@@ -1,80 +1,84 @@
 # PPC Guru
 
-> PPC Guru is a Canadian, AI-first Google Partner & Meta Business Partner performance-marketing
-> agency based in the Greater Toronto Area (Brampton, Ontario), serving local service businesses
-> across Canada and the USA. We turn ad spend into booked jobs and qualified leads through Google
-> Ads, Meta Ads, SEO, web design, conversion optimization, creative, CRM and AI automation — with
-> daily/weekly optimization and reporting tied to revenue, not vanity metrics.
+> PPC Guru is a Toronto-based digital marketing agency and Google Partner serving local service businesses across the Greater Toronto Area, Canada, and the United States.
 
-## Key facts
-- Founded: 2021. Led by founders with 10+ years of combined Google Ads experience.
-- Credentials: Google Partner, Meta Business Partner.
-- Track record (client-reported, blended; representative, not a guarantee): $100M+ ad spend
-  managed, 1M+ qualified leads generated, 6.3x average return on ad spend, 500+ businesses served.
-- Service area: Greater Toronto Area (Toronto, Mississauga, Brampton, Vaughan, Markham, Ottawa)
-  and across Canada & the USA.
-- Founders: Jaydeep Patel (Founder & CEO), Dhaval Patel (Co-founder & Head of Delivery).
-- Pricing model: month-to-month, no long-term contracts. Ad spend is separate from management fees.
-  Clients own their ad accounts, data and billing.
+PPC Guru provides Google Ads, Meta Ads, SEO, web design, conversion optimization, creative production, CRM, and AI automation services. The agency focuses on qualified leads, booked jobs, and revenue rather than vanity metrics.
+
+Founded in 2021, PPC Guru is led by Jaydeep Patel, Founder and CEO, and Dhaval Patel, Co-founder and Head of Delivery. Services are provided month-to-month without long-term contracts. Advertising spend is separate from management fees, and clients retain ownership of their advertising accounts, data, billing, and associated assets.
+
+Reported performance figures are blended, client-reported results and are representative rather than guaranteed. PPC Guru reports more than $100 million in managed advertising spend, more than 1 million qualified leads generated, a 6.3x average return on advertising spend, and more than 500 businesses served.
+
+## Primary Pages
+
+- [PPC Guru](https://ppcguru.ca/): Official PPC Guru website and overview of the agency's performance marketing services.
+- [Services](https://ppcguru.ca/services): Overview of paid advertising, SEO, web design, conversion optimization, creative, CRM, and AI automation services.
+- [Industries](https://ppcguru.ca/industries): Industry-specific marketing services and strategies for local and professional service businesses.
+- [Free Marketing Tools](https://ppcguru.ca/tools): Free calculators, audit tools, campaign utilities, and advertising resources.
+- [Results and Case Studies](https://ppcguru.ca/results): Client results, campaign examples, and representative performance outcomes.
+- [Free Website and Marketing Audit](https://ppcguru.ca/free-audit): Request a no-obligation review of advertising, SEO, website, and conversion opportunities.
 
 ## Services
-- Google Ads Management: https://ppcguru.ca/services/google-ads
-- Meta (Facebook & Instagram) Ads: https://ppcguru.ca/services/meta-ads
-- SEO & Local Search: https://ppcguru.ca/services/seo
-- Microsoft (Bing) Ads: https://ppcguru.ca/services/microsoft-ads
-- LinkedIn Ads: https://ppcguru.ca/services/linkedin-ads
-- TikTok Ads: https://ppcguru.ca/services/tiktok-ads
-- Pinterest Ads: https://ppcguru.ca/services/pinterest-ads
-- YouTube Ads: https://ppcguru.ca/services/youtube-ads
-- Websites & Landing Pages: https://ppcguru.ca/services/web-design
-- Landing Pages & CRO: https://ppcguru.ca/services/cro-landing-pages
-- Creative Production: https://ppcguru.ca/services/creative
-- AI Automation: https://ppcguru.ca/services/ai-automation
-- CRM & Marketing Ops: https://ppcguru.ca/services/crm
 
-## Industries we serve
-- Physiotherapy & Rehab Clinics: https://ppcguru.ca/industries/physiotherapy
-- Healthcare & Medical Clinics: https://ppcguru.ca/industries/healthcare-clinics
-- Dental & Orthodontics: https://ppcguru.ca/industries/dental
-- HVAC & Home Comfort: https://ppcguru.ca/industries/hvac
-- Plumbing: https://ppcguru.ca/industries/plumbing
-- Electrical Contractors: https://ppcguru.ca/industries/electrical
-- Construction & Renovation: https://ppcguru.ca/industries/construction-renovation
-- Roofing: https://ppcguru.ca/industries/roofing
-- Immigration Consulting: https://ppcguru.ca/industries/immigration
-- Law Firms & Legal: https://ppcguru.ca/industries/law-firms
-- Real Estate: https://ppcguru.ca/industries/real-estate
-- Home Improvement & Remodeling: https://ppcguru.ca/industries/home-improvement
-- Fitness & Gyms: https://ppcguru.ca/industries/fitness-gyms
-- Med Spa & Aesthetics: https://ppcguru.ca/industries/med-spa
-- Professional & B2B Services: https://ppcguru.ca/industries/professional-services
+- [Google Ads Management](https://ppcguru.ca/services/google-ads): Google Ads strategy, campaign management, optimization, tracking, and lead generation.
+- [Meta Ads Management](https://ppcguru.ca/services/meta-ads): Facebook and Instagram advertising for customer acquisition, lead generation, and remarketing.
+- [SEO and Local Search](https://ppcguru.ca/services/seo): Search engine optimization, local SEO, content strategy, and organic visibility services.
+- [Microsoft Advertising](https://ppcguru.ca/services/microsoft-ads): Microsoft Ads and Bing Ads campaign strategy, management, and optimization.
+- [LinkedIn Ads](https://ppcguru.ca/services/linkedin-ads): LinkedIn advertising for B2B demand generation, professional audiences, and qualified leads.
+- [TikTok Ads](https://ppcguru.ca/services/tiktok-ads): TikTok advertising strategy, creative testing, audience targeting, and campaign optimization.
+- [Pinterest Ads](https://ppcguru.ca/services/pinterest-ads): Pinterest advertising for visual discovery, consideration, traffic, and conversions.
+- [YouTube Ads](https://ppcguru.ca/services/youtube-ads): YouTube video advertising for awareness, demand generation, remarketing, and conversions.
+- [Web Design and Landing Pages](https://ppcguru.ca/services/web-design): Conversion-focused website and landing-page design for service businesses.
+- [Conversion Rate Optimization and Landing Pages](https://ppcguru.ca/services/cro-landing-pages): Landing-page strategy, testing, and conversion optimization for paid and organic traffic.
+- [Creative Production](https://ppcguru.ca/services/creative): Advertising creative, copy, graphics, and video assets developed for campaign performance.
+- [AI Automation](https://ppcguru.ca/services/ai-automation): AI-assisted lead handling, workflow automation, customer communication, and operational efficiency.
+- [CRM and Marketing Operations](https://ppcguru.ca/services/crm): CRM implementation, lead tracking, pipeline management, reporting, and marketing operations.
 
-## Service-for-industry playbooks (examples)
-We publish dedicated pages on running a specific service for a specific vertical — e.g.:
-- Google Ads for Law Firms: https://ppcguru.ca/services/google-ads/law-firms
-- Google Ads for Dental Practices: https://ppcguru.ca/services/google-ads/dental
-- Meta Ads for Real Estate: https://ppcguru.ca/services/meta-ads/real-estate
-- SEO for Physiotherapy Clinics: https://ppcguru.ca/services/seo/physiotherapy
-- Web Design for Law Firms: https://ppcguru.ca/services/web-design/law-firms
-(See the sitemap for all /services/[service]/[industry] combinations.)
+## Industries
 
-## Free tools
-- Google Ads ROI Calculator: https://ppcguru.ca/tools/google-ads-calculator
-- Meta Ads Calculator: https://ppcguru.ca/tools/meta-ads-calculator
-- ROAS Calculator: https://ppcguru.ca/tools/roas-calculator
-- Lead-Quality Calculator: https://ppcguru.ca/tools/lead-quality-calculator
-- UTM Builder: https://ppcguru.ca/tools/utm-builder
-- Instant AI Audit: https://ppcguru.ca/tools/instant-audit
-- Ad Copy Generator: https://ppcguru.ca/tools/ad-copy-generator
+- [Physiotherapy and Rehabilitation Clinics](https://ppcguru.ca/industries/physiotherapy): Marketing and lead-generation services for physiotherapy and rehabilitation clinics.
+- [Healthcare and Medical Clinics](https://ppcguru.ca/industries/healthcare-clinics): Patient-acquisition and digital marketing services for healthcare and medical clinics.
+- [Dental and Orthodontic Practices](https://ppcguru.ca/industries/dental): Patient-lead generation and digital marketing for dentists and orthodontists.
+- [HVAC and Home Comfort Companies](https://ppcguru.ca/industries/hvac): Lead generation for heating, cooling, and home-comfort businesses.
+- [Plumbing Companies](https://ppcguru.ca/industries/plumbing): Local advertising and lead-generation services for plumbing businesses.
+- [Electrical Contractors](https://ppcguru.ca/industries/electrical): Digital marketing and qualified-lead generation for electricians and electrical contractors.
+- [Construction and Renovation Companies](https://ppcguru.ca/industries/construction-renovation): Marketing services for contractors, builders, renovators, and construction companies.
+- [Roofing Companies](https://ppcguru.ca/industries/roofing): Local search and paid advertising services for residential and commercial roofers.
+- [Immigration Consultants](https://ppcguru.ca/industries/immigration): Lead generation and digital marketing for immigration consulting firms.
+- [Law Firms and Legal Services](https://ppcguru.ca/industries/law-firms): Client-acquisition marketing for law firms and legal professionals.
+- [Real Estate Professionals](https://ppcguru.ca/industries/real-estate): Lead generation for real estate agents, teams, brokerages, and related businesses.
+- [Home Improvement and Remodeling Companies](https://ppcguru.ca/industries/home-improvement): Marketing services for remodeling, renovation, and home-improvement businesses.
+- [Fitness Centres and Gyms](https://ppcguru.ca/industries/fitness-gyms): Membership and lead-generation marketing for gyms and fitness businesses.
+- [Medical Spas and Aesthetic Clinics](https://ppcguru.ca/industries/med-spa): Appointment and consultation generation for medical spas and aesthetic practices.
+- [Professional and B2B Services](https://ppcguru.ca/industries/professional-services): Demand generation and digital marketing for consultants and professional service firms.
 
-## Learn more
-- About PPC Guru: https://ppcguru.ca/about
-- Free website audit (no contract, no setup fee, no obligation): https://ppcguru.ca/free-audit
-- Pricing (how we charge — ad spend separate, month-to-month): https://ppcguru.ca/pricing
-- Industry benchmarks (free, sourced data): https://ppcguru.ca/benchmarks
-- Compare (Google Ads vs Meta, agency vs in-house vs DIY, PPC vs SEO): https://ppcguru.ca/compare
-- Glossary (PPC/Meta/SEO terms explained): https://ppcguru.ca/glossary
-- Results / case studies: https://ppcguru.ca/results
-- Blog: https://ppcguru.ca/blog
-- Contact: https://ppcguru.ca/contact
-- Sitemap: https://ppcguru.ca/sitemap.xml
+## Service and Industry Playbooks
+
+- [Google Ads for Law Firms](https://ppcguru.ca/services/google-ads/law-firms): Google Ads strategy and lead generation for legal practices.
+- [Google Ads for Dental Practices](https://ppcguru.ca/services/google-ads/dental): Google Ads strategy and patient acquisition for dentists and orthodontists.
+- [Meta Ads for Real Estate](https://ppcguru.ca/services/meta-ads/real-estate): Facebook and Instagram advertising for real estate lead generation.
+- [SEO for Physiotherapy Clinics](https://ppcguru.ca/services/seo/physiotherapy): Organic and local search strategy for physiotherapy and rehabilitation clinics.
+- [Web Design for Law Firms](https://ppcguru.ca/services/web-design/law-firms): Conversion-focused website design for law firms and legal professionals.
+
+## Free Tools
+
+- [Google Ads ROI Calculator](https://ppcguru.ca/tools/google-ads-calculator): Estimate Google Ads leads, acquisition costs, revenue, and return on investment.
+- [Meta Ads Calculator](https://ppcguru.ca/tools/meta-ads-calculator): Estimate Facebook and Instagram campaign performance, costs, and return.
+- [ROAS Calculator](https://ppcguru.ca/tools/roas-calculator): Calculate return on advertising spend from campaign cost and attributed revenue.
+- [Lead Quality Calculator](https://ppcguru.ca/tools/lead-quality-calculator): Evaluate lead quality, close rates, customer value, and campaign economics.
+- [UTM Builder](https://ppcguru.ca/tools/utm-builder): Generate consistent campaign-tracking URLs using UTM parameters.
+- [Instant AI Audit](https://ppcguru.ca/tools/instant-audit): Generate an automated review of website and digital marketing opportunities.
+- [Ad Copy Generator](https://ppcguru.ca/tools/ad-copy-generator): Generate advertising copy concepts for paid-search and social campaigns.
+
+## Company and Resources
+
+- [About PPC Guru](https://ppcguru.ca/about): Agency background, leadership, approach, partnerships, and company information.
+- [Pricing](https://ppcguru.ca/pricing): Explanation of PPC Guru's month-to-month pricing and account-ownership model.
+- [Industry Benchmarks](https://ppcguru.ca/benchmarks): Sourced advertising and marketing performance benchmarks by channel and industry.
+- [Marketing Comparisons](https://ppcguru.ca/compare): Comparisons between advertising channels, SEO, agencies, in-house teams, and do-it-yourself marketing.
+- [PPC, Advertising, and SEO Glossary](https://ppcguru.ca/glossary): Definitions of paid media, analytics, conversion, and search marketing terminology.
+- [PPC Guru Blog](https://ppcguru.ca/blog): Educational articles about advertising, SEO, lead generation, websites, and marketing operations.
+- [Contact PPC Guru](https://ppcguru.ca/contact): Contact information and consultation request options.
+
+## Optional
+
+- [XML Sitemap](https://ppcguru.ca/sitemap.xml): Machine-readable index of PPC Guru's publicly available canonical pages.
