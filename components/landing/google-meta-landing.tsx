@@ -37,7 +37,7 @@ const faqItems = [
   ["How soon can we start, and are results guaranteed?", "After your request, you can book a call on the next page. Launch timing depends on account access, creative, tracking and platform approval. The examples on this page are past client outcomes, not a guarantee of your lead volume, cost or sales."],
 ] as const;
 
-const reviewNames = ["Hunter Harris", "Amy Ramirez", "Natalie Lewis", "Nancy Gonzalez", "Evan Johnson", "Brian Martinez"];
+const reviewNames = ["Amy Ramirez", "Ankesh", "Nancy Gonzalez"];
 const paidMediaReviews = reviewNames.flatMap((name) => googleReviews.filter((review) => review.name === name));
 
 /* eslint-disable @next/next/no-img-element -- supplied local logos and original evidence */
@@ -50,9 +50,9 @@ export function GoogleMetaLanding() {
           <LandingHeader ctaLabel="Get my free plan" />
           <section className="hero-section" aria-labelledby="google-meta-title">
             <div className="hero-copy">
-              <p className="hero-kicker"><span /> Paid advertising · Canada &amp; USA</p>
-              <h1 id="google-meta-title">Google Ads.<br />Meta Ads.<br /><em>More leads.</em></h1>
-              <p className="hero-lede">Reach customers on Google, Facebook and Instagram with ads built to bring enquiries. One team for your strategy, creative and tracking.</p>
+              <p className="hero-kicker"><span /> Google Ads + Meta Ads · Canada &amp; USA</p>
+              <h1 id="google-meta-title">Turn ad spend<br /><em>into more leads.</em></h1>
+              <p className="hero-lede">Reach ready-to-buy customers on Google, Facebook and Instagram. We manage your campaigns, creative and tracking to turn interest into enquiries.</p>
               <div className="hero-checks">
                 <span><Check aria-hidden="true" /> Your accounts stay yours</span>
                 <span><Check aria-hidden="true" /> Month-to-month management</span>
@@ -62,7 +62,7 @@ export function GoogleMetaLanding() {
                 <button type="button" className="primary-button" onClick={() => goTo("qualification")}>Get my free growth plan <ArrowRight aria-hidden="true" /></button>
                 <button type="button" className="gm-text-button" onClick={() => goTo("results")}>See real results <ArrowRight aria-hidden="true" /></button>
               </div>
-              <p className="gm-microcopy">No obligation. No account access needed to get started.</p>
+              <p className="gm-microcopy">Submit the form, then book your free strategy call. We’ll recommend your channels, starting budget and next steps.</p>
               <PartnerPair size="sm" className="gm-partners" />
               <a className="gm-rating" href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer">
                 <span aria-label="5 out of 5 stars">{Array.from({ length: 5 }, (_, i) => <Star key={i} aria-hidden="true" />)}</span>
@@ -79,7 +79,7 @@ export function GoogleMetaLanding() {
         <section className="gm-section gm-container" id="channels" aria-labelledby="gm-channels-title">
           <div className="gm-section-heading">
             <p className="section-kicker">Two platforms. A connected strategy.</p>
-            <h2 id="gm-channels-title">Meet your next customer.<br /><span>Wherever they start.</span></h2>
+            <h2 id="gm-channels-title">Google captures intent.<br /><span>Meta creates interest.</span></h2>
             <p>Show up when they search. Stay relevant while they decide.</p>
           </div>
           <div className="gm-channel-grid">
@@ -103,10 +103,10 @@ export function GoogleMetaLanding() {
 
         <section className="gm-plan-section" id="how-it-works" aria-labelledby="gm-plan-title">
           <div className="gm-container">
-            <div className="gm-plan-heading"><div><p className="section-kicker">Your next move, made clear</p><h2 id="gm-plan-title" tabIndex={-1}>A plan before<br /><span>another dollar spent.</span></h2></div><p>Tell us where you are now. We’ll help you see what to fix, where to advertise and what to measure.</p></div>
+            <div className="gm-plan-heading"><div><p className="section-kicker">How it works</p><h2 id="gm-plan-title" tabIndex={-1}>From your first call<br /><span>to your next campaign.</span></h2></div><p>Get a channel recommendation, a starting budget and clear priorities. Decide whether to work with us after your call.</p></div>
             <ol className="gm-steps">
               <li><span>01</span><ClipboardList aria-hidden="true" /><h3>Tell us about your business.</h3><p>Share your market, goals and ad budget in the short form above.</p></li>
-              <li><span>02</span><Crosshair aria-hidden="true" /><h3>Get a focused growth plan.</h3><p>Review your channel mix, offer and biggest conversion opportunities with our team.</p></li>
+              <li><span>02</span><Crosshair aria-hidden="true" /><h3>Book your free strategy call.</h3><p>Choose a time after submitting. We’ll review your offer and discuss your Google and Meta growth plan.</p></li>
               <li><span>03</span><SlidersHorizontal aria-hidden="true" /><h3>Launch. Learn. Improve.</h3><p>If we’re a fit, agree the scope and build campaigns with tracking and regular reviews.</p></li>
             </ol>
             <div className="gm-plan-cta"><button type="button" className="primary-button" onClick={() => goTo("qualification")}>Get my free growth plan <ArrowRight aria-hidden="true" /></button><span>No obligation. Ad spend and management fees agreed separately.</span></div>
@@ -114,20 +114,20 @@ export function GoogleMetaLanding() {
         </section>
 
         <section className="gm-section gm-container gm-about" aria-labelledby="gm-about-title">
-          <div><p className="section-kicker">A team you can actually talk to</p><h2 id="gm-about-title">Know what’s running.<br /><span>Know why it matters.</span></h2><p>PPC Guru is a Toronto-based team managing paid campaigns for businesses across Canada and the USA. We bring the ads, creative and customer journey into the same conversation.</p><a className="gm-contact-link" href={siteConfig.contact.phoneHref}><Phone aria-hidden="true" /> {siteConfig.contact.phone} <ArrowRight aria-hidden="true" /></a></div>
+          <div><p className="section-kicker">Meet PPC Guru</p><h2 id="gm-about-title">Your campaigns.<br /><span>A team you can reach.</span></h2><p>We’re a Toronto-based team managing Google and Meta campaigns across Canada and the USA. Talk to us about your ads, creative and lead quality in the same conversation.</p><a className="gm-contact-link" href={siteConfig.contact.phoneHref}><Phone aria-hidden="true" /> {siteConfig.contact.phone} <ArrowRight aria-hidden="true" /></a></div>
           <div className="gm-accountability">
-            <article><ShieldCheck aria-hidden="true" /><div><h3>Control stays with you.</h3><p>Your accounts, your data and a clear scope before work begins.</p></div></article>
+            <article><ShieldCheck aria-hidden="true" /><div><h3>A clear scope before launch.</h3><p>Agree the channels, creative, management fees and ad budget before campaigns go live.</p></div></article>
             <article><Crosshair aria-hidden="true" /><div><h3>Lead quality stays in view.</h3><p>Review what happens after the click, including enquiries and your team’s feedback.</p></div></article>
             <article><MessageSquare aria-hidden="true" /><div><h3>Answers in plain English.</h3><p>Understand what changed, what it cost and what we’ll test next.</p></div></article>
           </div>
         </section>
 
         <section className="gm-reviews-section" aria-label="PPC Guru client reviews">
-          <div className="gm-container"><div className="gm-section-heading"><p className="section-kicker">The people behind the reviews</p><h2>Hear it from<br /><span>the businesses we work with.</span></h2><p>Published Google reviews, in our clients’ own words.</p></div><GoogleReviewsBlock reviews={paidMediaReviews} limit={6} /></div>
+          <div className="gm-container"><div className="gm-section-heading"><p className="section-kicker">Client reviews</p><h2>What our<br /><span>clients say.</span></h2><p>Published on Google. Read each review in full.</p></div><GoogleReviewsBlock reviews={paidMediaReviews} limit={3} expandable /></div>
         </section>
 
         <section className="gm-section gm-container gm-areas" id="service-areas" aria-labelledby="gm-areas-title">
-          <div><p className="section-kicker"><MapPin aria-hidden="true" /> Toronto roots. Wider reach.</p><h2 id="gm-areas-title">Local understanding.<br /><span>Room to grow.</span></h2><p>From one service area to campaigns across Canada and the USA, we build your targeting around where your next customers are.</p></div>
+          <div><p className="section-kicker"><MapPin aria-hidden="true" /> Where we work</p><h2 id="gm-areas-title">Toronto &amp; the GTA.<br /><span>Canada &amp; the USA.</span></h2><p>Local service areas or multiple markets: we build campaign targeting around where your customers are.</p></div>
           <div><h3>Across Toronto &amp; the GTA</h3><ul>{GTA_CITIES.map((city) => <li key={city}>{city}</li>)}</ul><p>Also working with businesses across Canada &amp; the USA.</p></div>
         </section>
 

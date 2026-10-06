@@ -22,6 +22,7 @@ import { GTA_LANDING_ID, GTA_LANDING_SERVICE_LABEL, GTA_LANDING_SOURCE, GTA_LAND
 import { GOOGLE_META_LANDING_ID, GOOGLE_META_LANDING_SERVICE_LABEL, GOOGLE_META_LANDING_SOURCE, GOOGLE_META_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-google-meta";
 import { GTA_EXTRA_BUSINESS_TYPE_IDS, GTA_EXTRA_BUDGET_IDS, LANDING_CHANNEL_IDS, isValidLeadPhone, landingChannelLabel, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
 import { setLandingConversionReceipt } from "@/lib/landing-conversion";
+import { readConversionContext } from "@/lib/conversion-context";
 
 /** Pages that share this form, keyed by their hidden `source` value. */
 const PAGES = {
@@ -206,7 +207,13 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     utm,
   });
 
-  await identifyVisitor({ sessionId: data.session_id, leadId, email: data.email, name: data.name });
+  // A stale tab may still post its old session id after the visitor opts out.
+  // Enforce consent at the server before linking browsing history or setting
+  // the identity cookie; the enquiry itself is still saved and delivered.
+  const conversionContext = await readConversionContext();
+  if (!conversionContext.declined) {
+    await identifyVisitor({ sessionId: data.session_id, leadId, email: data.email, name: data.name });
+  }
 
   // CRM + team notification + autoresponder — parallel, deferred past the
   // redirect once the row is stored (lib/lead-delivery.ts). This is what makes

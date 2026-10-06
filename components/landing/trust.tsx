@@ -90,7 +90,7 @@ function reviewDate(iso: string) {
 }
 
 /** Real reviews from the PPC Guru Google Business Profile. */
-export function GoogleReviewsBlock({ limit = 6, reviews = featuredGoogleReviews, heading = true }: { limit?: number; reviews?: GoogleReview[]; heading?: boolean }) {
+export function GoogleReviewsBlock({ limit = 6, reviews = featuredGoogleReviews, heading = true, expandable = false }: { limit?: number; reviews?: GoogleReview[]; heading?: boolean; expandable?: boolean }) {
   const shown = reviews.slice(0, limit);
   return (
     <div className="lp-reviews" id="reviews">
@@ -122,7 +122,16 @@ export function GoogleReviewsBlock({ limit = 6, reviews = featuredGoogleReviews,
               </span>
               <Stars n={r.stars} />
             </header>
-            <p>{r.text}</p>
+            {expandable ? (
+              <details className="lp-review-expand">
+                <summary>
+                  <span className="lp-review-excerpt">{r.text}</span>
+                  <span className="lp-review-more">Read full review</span>
+                  <span className="lp-review-less">Show less</span>
+                </summary>
+                <p>{r.text}</p>
+              </details>
+            ) : <p>{r.text}</p>}
           </li>
         ))}
       </ul>

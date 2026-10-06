@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Check, type LucideIcon } from "lucide-react";
+import { CalendarCheck, Check, type LucideIcon } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { LandingFooter, LandingHeader, type HeaderPlatform } from "@/components/landing/landing-chrome";
 import { ThankYouActions } from "@/components/landing/thank-you-actions";
@@ -46,6 +46,8 @@ export function LandingThankYou({
   footerTagline,
   className = "",
   footer,
+  confirmed = true,
+  backLabel = "Go back to the offer",
 }: {
   name: string;
   kicker: string;
@@ -66,6 +68,9 @@ export function LandingThankYou({
   className?: string;
   /** A funnel-specific footer; omitted on existing landing pages. */
   footer?: ReactNode;
+  /** Direct booking visits must not claim a new form submission was received. */
+  confirmed?: boolean;
+  backLabel?: string;
 }) {
   return (
     <div className={`lp-root ${className}`.trim()}>
@@ -76,7 +81,7 @@ export function LandingThankYou({
             <section className="thanks-hero" aria-labelledby="thanks-title">
               <div className="thanks-card">
                 <div className="success-mark">
-                  <Check aria-hidden="true" />
+                  {confirmed ? <Check aria-hidden="true" /> : <CalendarCheck aria-hidden="true" />}
                 </div>
                 <p className="form-kicker">{kicker}</p>
                 <h1 id="thanks-title">
@@ -121,7 +126,7 @@ export function LandingThankYou({
             ))}
           </ol>
           <p className="thanks-footnote">
-            Missed something? <Link href={backHref}>Go back to the offer</Link> or email <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.
+            Missed something? <Link href={backHref}>{backLabel}</Link> or email <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.
           </p>
         </section>
 

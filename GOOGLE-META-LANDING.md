@@ -10,9 +10,13 @@ visually checked against the files in `public/landing/results` on 2026-10-06.
 Messaging conversations, Meta leads and form leads retain their actual labels.
 Missing reporting years or dates are not inferred.
 
-Google Ads screenshots have not yet been supplied. Its panel currently shows
-clearly labelled, verbatim Google Ads client reviews. Add verified original
-captures to `googleAdsResults` to enable the matching phone carousel. Each record
+The results section is one horizontal, scroll-snap gallery inspired by `/100-leads`:
+a centred active campaign, neighbouring cards, previous/next buttons, position dots,
+keyboard navigation and original-image dialog. Each card identifies its platform.
+The gallery does not autoplay and respects reduced-motion preferences.
+
+Google Ads screenshots have not yet been supplied. Add verified original
+captures to `googleAdsResults` to include them in the same gallery. Each record
 needs the image path and dimensions, client, result, cost, spend and visible period.
 Do not use the ChatGPT captures in `public/landing/proof` as campaign evidence.
 
@@ -24,12 +28,17 @@ Do not use the ChatGPT captures in `public/landing/proof` as campaign evidence.
   CAD ad budget, channel, name, email and phone.
 - Success requires an accepted storage/CRM/email delivery path. Validation,
   spam rejection and unavailable delivery return an error instead of redirecting.
+- Field errors keep stable accessible labels, describe the error separately and
+  focus the relevant step once per failed response. Configured Turnstile must be
+  ready before submission. Hidden anti-spam fields stay outside keyboard/AT navigation.
 - The thank-you URL contains no name, email or company query parameters.
 - This funnel’s acknowledgement email matches the growth-plan offer and links
   directly to `/google-ads-and-meta-ads/thank-you#book`. Other forms retain their
   existing acknowledgement copy and destination.
 - The short-lived, HTTP-only `ppcg_google_meta_receipt` cookie is isolated to
   this thank-you route. The browser must also have its matching pending event ID.
+- Direct visits and acknowledgement-email revisits show neutral booking copy;
+  only a valid receipt shows the successful-submission confirmation.
 - Uses the existing LeadConnector booking calendar `zbrJAxyqqqT6te57YdYU`.
   Keep its visible fallback link; do not load `form_embed.js`, which hides this
   calendar. The narrow-phone CSS lets all seven day columns fit.
@@ -60,12 +69,16 @@ tag. The Ads conversion, GA4 lead, Clarity `google_meta_lead_submitted`, and Met
 Lead run only after the receipt/session check. Google Ads uses the event ID as
 `transaction_id`; Meta uses the same event ID as the server event for deduplication.
 No contact details or made-up revenue values are sent in these browser events.
-Declined analytics consent suppresses them. Refreshing or directly opening the
+Declined analytics consent suppresses them and visitor identity linking. Session
+fields respond to consent changes and clear the identifier on opt-out.
+Refreshing or directly opening the
 thank-you route is not a new lead.
 
 ## Verification and release
 
-Run `npm run check:landing-lead`, `npm run check:team-email` and `npm run build`.
+Run `npm run check:landing-lead`, `npm run check:team-email`,
+`npm run typecheck` and `npm run build`. The current offline suite covers 59 lead/conversion checks,
+11 email checks and 12 routing checks.
 On the Windows workspace junction, Next.js must run from the resolved physical
 project path; this is a local environment issue, not a deployment configuration.
 Production `ppcguru.ca` is hosted on Hostinger and deploys `master`.

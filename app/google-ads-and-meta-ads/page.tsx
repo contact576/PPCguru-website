@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
   alternates: { canonical: GOOGLE_META_LANDING_PATH },
   openGraph: {
-    title: "Google Ads. Meta Ads. More leads. | PPC Guru",
+    title: "Turn ad spend into more leads. | PPC Guru",
     description: "Real campaign evidence. Clear reporting. A free growth plan built around your business.",
     url: GOOGLE_META_LANDING_PATH,
     type: "website",

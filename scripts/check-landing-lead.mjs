@@ -16,7 +16,7 @@ function load(file, imports = {}, globals = {}) {
   const filename = path.join(repo, file);
   const compiled = ts.transpileModule(readFileSync(filename, "utf8"), {
     fileName: filename,
-    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true },
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true, jsx: ts.JsxEmit.ReactJSX },
   });
   const module = { exports: {} };
   vm.runInNewContext(compiled.outputText, {
@@ -56,7 +56,7 @@ function validForm(source = gta.GTA_LANDING_SOURCE) {
 }
 
 function harness(overrides = {}) {
-  const config = { supabase: true, storedId: LEAD_ID, rate: true, turnstile: true, spam: false, ghl: true, ghlResult: true, email: true, emailResult: true, structuredId: "landing-row", ...overrides };
+  const config = { supabase: true, storedId: LEAD_ID, rate: true, turnstile: true, spam: false, ghl: true, ghlResult: true, email: true, emailResult: true, structuredId: "landing-row", declined: false, ...overrides };
   const calls = { store: [], landing: [], identify: [], ghl: [], zoho: [], email: [], autoresponder: [], meta: [], openai: [], receipt: [] };
   const after = [];
   const spy = (name, value) => async (...args) => { calls[name].push(structuredClone(args)); return value; };
@@ -80,7 +80,7 @@ function harness(overrides = {}) {
     "@/lib/zoho": { zohoConfigured: () => false, sendLeadToZoho: spy("zoho", false) },
     "@/lib/meta-capi": { sendMetaLead: spy("meta", true) },
     "@/lib/openai-capi": { sendOpenAiLead: spy("openai", true) },
-    "@/lib/conversion-context": { cleanEventId: conversion.cleanEventId, readConversionContext: async () => ({ declined: false, sourceUrl: "https://example.invalid/gta-marketing-agency" }) },
+    "@/lib/conversion-context": { cleanEventId: conversion.cleanEventId, readConversionContext: async () => ({ declined: config.declined, sourceUrl: "https://example.invalid/gta-marketing-agency" }) },
   };
   deps["@/lib/lead-delivery"] = load("lib/lead-delivery.ts", deps);
   const action = load("app/actions/landing-lead.ts", deps).submitLandingLead;
@@ -133,6 +133,17 @@ await check("100-leads accepts the original question set and keeps its offer rou
   await expectRedirect(h, validForm(hundred.LANDING_SOURCE), `${hundred.LANDING_THANK_YOU_PATH}?n=Test&c=Offline%20Heating`);
   assert.equal(h.calls.store[0][0].service, hundred.LANDING_SERVICE_LABEL);
   assert.equal(h.calls.receipt.length, 0);
+});
+
+await check("declined consent still delivers a Google + Meta enquiry but never stitches its stale session", async () => {
+  const h = harness({ declined: true });
+  await expectRedirect(h, validForm(googleMeta.GOOGLE_META_LANDING_SOURCE), googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  assert.equal(h.calls.store.length, 1);
+  assert.equal(h.calls.identify.length, 0, "no identity cookie or browsing-history linking after opt-out");
+  await h.flush();
+  assert.equal(h.calls.ghl.length, 1);
+  assert.equal(h.calls.email.length, 1);
+  assert.equal(h.calls.meta[0][1].declined, true, "CAPI boundary receives the opt-out");
 });
 
 await check("Google + Meta keeps its own accepted lead, source, receipt and PII-free thank-you route", async () => {
@@ -571,6 +582,173 @@ await check("Google + Meta receipt is isolated from GTA and scoped to its own th
   assert.equal(writes[1].options.maxAge, 300);
   assert.equal(await receipt.readLandingConversionReceipt(), EVENT_ID);
   assert.equal(await receipt.readLandingConversionReceipt(googleMeta.GOOGLE_META_LANDING_SOURCE), "offline-event-0002");
+});
+
+const jsxRuntime = {
+  Fragment: "fragment",
+  jsx: (type, props) => ({ type, props }),
+  jsxs: (type, props) => ({ type, props }),
+};
+function descendants(node) {
+  if (!node || typeof node !== "object") return [];
+  return [node, ...[].concat(node.props?.children ?? []).flatMap(descendants)];
+}
+
+await check("session field responds to consent changes and removes its listeners on unmount", () => {
+  let consent = "accepted";
+  let stateIndex = 0;
+  let first = true;
+  const states = [];
+  const listeners = new Map();
+  let cleanup;
+  const SessionField = load("components/shared/session-field.tsx", {
+    "react/jsx-runtime": jsxRuntime,
+    react: {
+      useState: (initial) => {
+        const index = stateIndex++;
+        if (!(index in states)) states[index] = initial;
+        return [states[index], (value) => { states[index] = value; }];
+      },
+      useEffect: (fn) => { if (first) cleanup = fn(); },
+    },
+    "@/lib/analytics": { consentState: () => consent, sessionId: () => "offline-session", leadEventId: () => EVENT_ID },
+  }, { window: { addEventListener: (name, fn) => listeners.set(name, fn), removeEventListener: (name) => listeners.delete(name) } }).SessionField;
+  const render = () => { stateIndex = 0; const tree = SessionField(); first = false; return descendants(tree).filter((n) => n.type === "input"); };
+  render();
+  assert.equal(render().find((n) => n.props.name === "session_id").props.value, "offline-session");
+  consent = "declined";
+  listeners.get("ppcg:consent")();
+  assert.equal(render().find((n) => n.props.name === "session_id").props.value, "");
+  assert.equal(render().find((n) => n.props.name === "event_id").props.value, EVENT_ID);
+  consent = "accepted";
+  listeners.get("storage")();
+  assert.equal(render().find((n) => n.props.name === "session_id").props.value, "offline-session");
+  cleanup();
+  assert.equal(listeners.size, 0);
+});
+
+for (const receipt of [undefined, EVENT_ID]) {
+  await check(`Google + Meta ${receipt ? "confirmed" : "direct/email"} thank-you retains booking without a false receipt claim`, async () => {
+    const page = load("app/google-ads-and-meta-ads/thank-you/page.tsx", {
+      "react/jsx-runtime": jsxRuntime,
+      "lucide-react": { CalendarCheck: "CalendarCheck", ClipboardList: "ClipboardList", Rocket: "Rocket" },
+      "../../100-leads/landing.css": {}, "../google-meta.css": {},
+      "@/components/landing/landing-thank-you": { LandingThankYou: "LandingThankYou" },
+      "@/components/landing/google-meta-footer": { GoogleMetaFooter: "GoogleMetaFooter" },
+      "@/components/landing/confirmed-conversion": { ConfirmedLandingConversion: "ConfirmedLandingConversion" },
+      "@/lib/landing-conversion": { readLandingConversionReceipt: async (source) => { assert.equal(source, googleMeta.GOOGLE_META_LANDING_SOURCE); return receipt; } },
+      "@/lib/data/landing-google-meta": googleMeta,
+    }).default;
+    const tree = await page();
+    const props = descendants(tree).find((n) => n.type === "LandingThankYou").props;
+    assert.equal(props.confirmed, Boolean(receipt));
+    assert.equal(props.kicker, receipt ? "Request received" : "Book your strategy call");
+    assert.equal(props.whatsappOpener.includes("I just requested"), Boolean(receipt));
+    const shared = load("components/landing/landing-thank-you.tsx", {
+      "react/jsx-runtime": jsxRuntime,
+      "next/link": "Link",
+      "lucide-react": { Check: "Check", CalendarCheck: "CalendarCheck" },
+      "@/lib/site-config": { siteConfig: { contact: { whatsapp: "https://example.invalid/chat", phone: "offline-phone", phoneHref: "tel:000", email: "team@example.invalid" } } },
+      "@/components/landing/landing-chrome": { LandingFooter: "LandingFooter", LandingHeader: "LandingHeader" },
+      "@/components/landing/thank-you-actions": { ThankYouActions: "ThankYouActions" },
+      "@/components/landing/booking-calendar": { BookingCalendar: "BookingCalendar" },
+      "@/components/landing/trust": { PartnerBadges: "PartnerBadges", GoogleReviewsBlock: "GoogleReviewsBlock" },
+    }).LandingThankYou;
+    const rendered = descendants(shared(props));
+    assert.equal(rendered.filter((n) => n.type === "BookingCalendar").length, 1);
+    const statusMark = descendants(rendered.find((n) => n.props?.className === "success-mark"));
+    assert.equal(statusMark.filter((n) => n.type === "Check").length, receipt ? 1 : 0);
+    assert.equal(statusMark.filter((n) => n.type === "CalendarCheck").length, receipt ? 0 : 1);
+  });
+}
+
+await check("server error focus is consumed once and never steals focus after correction or Back", () => {
+  const slots = [];
+  const focus = [];
+  let cursor = 0;
+  let effects = [];
+  let dirty = true;
+  let tree;
+  let response;
+  const react = {
+    useState(initial) {
+      const index = cursor++;
+      if (!(index in slots)) slots[index] = typeof initial === "function" ? initial() : initial;
+      return [slots[index], (next) => {
+        const value = typeof next === "function" ? next(slots[index]) : next;
+        if (!Object.is(value, slots[index])) { slots[index] = value; dirty = true; }
+      }];
+    },
+    useRef(initial) { const index = cursor++; return slots[index] ??= { current: initial }; },
+    useEffect(fn, dependencies) {
+      const index = cursor++;
+      if (!slots[index] || dependencies.some((value, i) => !Object.is(value, slots[index][i]))) {
+        slots[index] = dependencies;
+        effects.push(fn);
+      }
+    },
+    useActionState: (_action, initial) => [response ?? initial, () => {}, false],
+  };
+  const Form = load("components/landing/leads-landing.tsx", {
+    react, "react/jsx-runtime": jsxRuntime, "next/link": "Link", "next/navigation": { unstable_rethrow() {} },
+    "lucide-react": new Proxy({}, { get: (_target, name) => String(name) }),
+    "@/app/actions/landing-lead": { submitLandingLead() { throw new Error("No real submission in UI check"); } },
+    "@/components/shared/turnstile-field": { TurnstileField: "TurnstileField" },
+    "@/components/shared/session-field": { SessionField: "SessionField" },
+    "@/lib/analytics": { track() {} }, "@/lib/data/landing-100-leads": hundred,
+    "@/components/shared/partner-pair": {}, "@/components/landing/landing-chrome": {},
+    "@/components/landing/hero-marks": {}, "@/components/landing/trust": {},
+    "@/lib/landing-lead-fields": fields, "@/lib/data/landing-gta": gta,
+    "@/lib/data/landing-google-meta": googleMeta,
+    "@/lib/site-config": { siteConfig: { contact: { phone: "offline", phoneHref: "tel:000", email: "team@example.invalid" } } },
+  }, { window: { location: { search: "", pathname: googleMeta.GOOGLE_META_LANDING_PATH } }, document: { referrer: "" }, URLSearchParams }).QualificationForm;
+  const textOf = (node) => typeof node === "string" ? node : [].concat(node?.props?.children ?? []).map(textOf).join("");
+  const nodes = () => descendants(tree);
+  function render() {
+    dirty = true;
+    let cycles = 0;
+    while (dirty) {
+      assert.ok(cycles++ < 12, "effects must settle without an update loop");
+      dirty = false; cursor = 0; effects = [];
+      tree = Form({ copy: { source: googleMeta.GOOGLE_META_LANDING_SOURCE, collectChannel: true, topline: "Plan", stepTwoLede: "Plan", submitLabel: "Send" } });
+      for (const node of nodes().filter((item) => item.props?.ref)) {
+        node.props.ref.current = node.type === "form" ? {
+          querySelector(selector) {
+            const name = selector.match(/name="([^"]+)"/)?.[1];
+            const visibleInput = nodes().find((item) => item.type === "input" && item.props.name === name && item.props.type !== "hidden");
+            return visibleInput ? { focus: () => focus.push(name) } : null;
+          },
+        } : { focus: () => focus.push(node.type === "h2" ? `heading:${textOf(node)}` : "summary") };
+      }
+      for (const effect of effects) effect();
+    }
+  }
+  const fill = (name, value) => { nodes().find((n) => n.type === "input" && n.props.name === name).props.onChange({ target: { name, value } }); render(); };
+  const next = () => { nodes().find((n) => n.type === "button" && n.props.className === "primary-button").props.onClick(); render(); };
+  render();
+  fill("company", "Offline Test"); fill("location", "Toronto"); fill("website", "example.invalid"); next();
+  for (const field of ["business_type", "budget", "channel"]) {
+    const group = nodes().find((n) => n.props?.["data-field"] === field);
+    descendants(group).find((n) => n.props?.role === "radio").props.onClick(); render();
+  }
+  next();
+  response = { ok: false, message: "Please fix the highlighted fields.", errors: { website: "Please check this website." } };
+  render();
+  assert.equal(focus.at(-1), "website", "new server error returns to and focuses its visible field");
+  fill("website", "fixed.example.invalid");
+  const afterCorrection = focus.length;
+  next();
+  assert.deepEqual(focus.slice(afterCorrection), ["heading:What best describes Offline Test?"], "old failure cannot override the next panel's heading focus");
+  next();
+  response = { ok: false, message: "Please try again." };
+  render();
+  assert.equal(focus.at(-1), "summary");
+  const afterFailure = focus.length;
+  nodes().find((n) => n.type === "button" && n.props.className === "secondary-button").props.onClick(); render();
+  assert.deepEqual(focus.slice(afterFailure), ["heading:What best describes Offline Test?"], "Back cannot replay a consumed summary focus");
+  response = { ok: false, message: "Please try again." };
+  render();
+  assert.equal(focus.at(-1), "summary", "a new failure with the same text still receives focus");
 });
 
 console.log(`\n${checks} offline landing form, delivery and conversion checks passed. No credentials or real services used.`);

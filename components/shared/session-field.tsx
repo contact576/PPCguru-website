@@ -24,8 +24,14 @@ export function SessionField() {
 
   useEffect(() => {
     setEid(leadEventId());
-    if (consentState() === "declined") return;
-    setSid(sessionId() ?? "");
+    const syncConsent = () => setSid(consentState() === "declined" ? "" : sessionId() ?? "");
+    syncConsent();
+    window.addEventListener("ppcg:consent", syncConsent);
+    window.addEventListener("storage", syncConsent);
+    return () => {
+      window.removeEventListener("ppcg:consent", syncConsent);
+      window.removeEventListener("storage", syncConsent);
+    };
   }, []);
 
   return (
