@@ -63,6 +63,7 @@
 .lp-root.lp-google-meta .gm-plan-section { background: #111c17; color: #f7f9f1; padding-block: 80px; }
 .lp-root.lp-google-meta .gm-plan-heading { display: grid; grid-template-columns: 1.3fr 1fr; gap: 80px; align-items: end; }
 .lp-root.lp-google-meta .gm-plan-heading h2 { margin: 16px 0 0; }
+.lp-root.lp-google-meta .gm-plan-heading h2, .lp-root.lp-google-meta .gm-steps h3 { color: #f7f9f1; }
 .lp-root.lp-google-meta .gm-plan-heading h2 span { color: var(--lime); }
 .lp-root.lp-google-meta .gm-plan-heading .section-kicker { color: #c0d8a6; }
 .lp-root.lp-google-meta .gm-plan-heading > p { color: #bdc7be; line-height: 1.7; font-size: 17px; margin-bottom: 4px; }
