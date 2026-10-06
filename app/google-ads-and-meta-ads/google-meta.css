@@ -161,10 +161,10 @@
 .lp-root.lp-google-meta .gm-platform-logo { width: 123px; height: 31px; object-fit: contain; object-position: left; }
 .lp-root.lp-google-meta .gm-platform-label { font-size: 10px; color: #637254; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .lp-root.lp-google-meta .gm-phone-stage { display: flex; justify-content: center; padding: 6px 8px 25px; background: radial-gradient(ellipse at center, #dce9ca 0, transparent 65%); }
-.lp-root.lp-google-meta .gm-phone-frame { width: min(100%, 238px); border: 7px solid #151d18; border-radius: 29px; background: #151d18; padding: 0; overflow: hidden; cursor: zoom-in; position: relative; box-shadow: 0 17px 30px #24381621; touch-action: pan-y; }
-.lp-root.lp-google-meta .gm-phone-image { width: 100%; height: auto; aspect-ratio: 736 / 1600; object-fit: contain; background: #fff; border-radius: 21px 21px 0 0; pointer-events: none; }
-.lp-root.lp-google-meta .gm-phone-open { display: flex; justify-content: center; align-items: center; gap: 7px; color: #fff; min-height: 31px; font-size: 9px; font-weight: 750; }
-.lp-root.lp-google-meta .gm-phone-open svg { width: 12px; height: 12px; }
+.lp-root.lp-google-meta .gm-phone-frame { width: min(100%, 238px); max-width: 100%; border: 0; border-radius: 18px; background: transparent; padding: 0; cursor: zoom-in; position: relative; touch-action: pan-y; }
+.lp-root.lp-google-meta .gm-phone-image { display: block; width: 100%; height: auto; object-fit: contain; border-radius: 18px; pointer-events: none; }
+.lp-root.lp-google-meta .gm-phone-open { display: flex; justify-content: center; align-items: center; gap: 7px; width: fit-content; min-height: 44px; margin: 10px auto 0; padding: 8px 14px; border: 1px solid #bfd2e4; border-radius: 999px; color: #204e70; background: #e7f2fb; font-size: 12px; font-weight: 800; }
+.lp-root.lp-google-meta .gm-phone-open svg { width: 14px; height: 14px; }
 .lp-root.lp-google-meta .gm-result-caption h3 { font-size: 21px; font-weight: 850; letter-spacing: -.035em; margin: 0 0 16px; }
 .lp-root.lp-google-meta .gm-result-stats { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 13px; margin: 0; padding: 16px 0; border-block: 1px solid #e0e5d9; min-height: 104px; align-content: start; }
 .lp-root.lp-google-meta .gm-result-stats dt { font-size: 11px; color: #526049; margin-bottom: 6px; text-transform: uppercase; font-weight: 800; letter-spacing: .04em; }
@@ -177,6 +177,7 @@
 .lp-root.lp-google-meta .gm-carousel-arrow:hover { background: #ecf8d6; }
 .lp-root.lp-google-meta .gm-carousel-arrow svg, .lp-root.lp-google-meta .gm-dialog-controls button svg { width: 17px; height: 17px; }
 .lp-root.lp-google-meta .gm-carousel-dots { display: flex; justify-content: center; grid-row: 1; grid-column: 2; }
+.lp-root.lp-google-meta .gm-carousel-platform { grid-row: 1; grid-column: 2; text-align: center; color: #285471; font-size: 13px; font-weight: 800; }
 .lp-root.lp-google-meta .gm-carousel-dot { width: 32px; height: 44px; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center; }
 .lp-root.lp-google-meta .gm-carousel-dot::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #c1cbb3; }
 .lp-root.lp-google-meta .gm-carousel-dot.is-active::after { width: 8px; height: 8px; background: #527b20; }
@@ -185,6 +186,11 @@
 .lp-root.lp-google-meta .gm-autoplay-button { min-height: 44px; display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border: 0; border-radius: 999px; background: transparent; color: #285471; font-size: 12px; font-weight: 700; cursor: pointer; }
 .lp-root.lp-google-meta .gm-autoplay-button:hover { background: #d3e3f7; }
 .lp-root.lp-google-meta .gm-autoplay-button svg { width: 14px; height: 14px; }
+.lp-root.lp-google-meta .gm-platform-shortcuts { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 6px auto 16px; }
+.lp-root.lp-google-meta .gm-platform-shortcuts::before { content: "JUMP TO A PLATFORM"; flex-basis: 100%; color: #526049; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-align: center; }
+.lp-root.lp-google-meta .gm-platform-shortcuts button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 9px 14px; border: 1px solid #bfd2e4; border-radius: 999px; color: #204e70; background: #fff; font-size: 13px; font-weight: 800; cursor: pointer; }
+.lp-root.lp-google-meta .gm-platform-shortcuts button:hover { background: #e7f2fb; border-color: #81acd0; }
+.lp-root.lp-google-meta .gm-platform-shortcuts button span { display: inline-grid; place-items: center; min-width: 22px; height: 22px; border-radius: 50%; color: #204e70; background: #e7f2fb; font-size: 11px; }
 .lp-root.lp-google-meta .gm-results-disclosure { margin-top: 23px; max-width: 900px; text-align: center; font-size: 12px; line-height: 1.7; color: #465b6e; }
 .lp-root.lp-google-meta .gm-result-dialog { margin: auto; width: min(94vw, 750px); max-height: 92dvh; padding: 18px; overflow: auto; border: 1px solid #d8e1d2; border-radius: 20px; background: #fffef9; color: var(--ink); }
 .lp-root.lp-google-meta .gm-result-dialog::backdrop { background: #07170ce6; }
@@ -192,7 +198,8 @@
 .lp-root.lp-google-meta .gm-dialog-header h3 { font-size: 16px; font-weight: 800; }
 .lp-root.lp-google-meta .gm-dialog-close { border: 1px solid #d6decd; border-radius: 50%; width: 40px; height: 40px; display: grid; place-items: center; background: white; cursor: pointer; flex-shrink: 0; }
 .lp-root.lp-google-meta .gm-dialog-close svg { width: 19px; height: 19px; }
-.lp-root.lp-google-meta .gm-dialog-image { width: min(100%, 480px); max-width: 100%; height: auto; margin-inline: auto; object-fit: contain; }
+.lp-root.lp-google-meta .gm-dialog-image { display: block; width: min(100%, 865px); max-width: 100%; height: auto; margin-inline: auto; object-fit: contain; }
+.lp-root.lp-google-meta .gm-dialog-original-link { display: block; width: fit-content; min-height: 44px; margin: 12px auto 0; padding: 11px 16px; border-radius: 999px; color: #204e70; background: #e7f2fb; font-size: 13px; font-weight: 800; text-align: center; }
 .lp-root.lp-google-meta .gm-dialog-caption { text-align: center; font-size: 12px; line-height: 1.6; margin-top: 12px; }
 .lp-root.lp-google-meta .gm-dialog-controls { display: flex; align-items: center; justify-content: center; gap: 18px; margin: 0 0 16px; font-size: 12px; }
 .lp-root.lp-google-meta .gm-dialog-controls button { width: auto; min-height: 40px; padding: 8px 14px; gap: 7px; border-radius: 999px; }

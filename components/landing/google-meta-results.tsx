@@ -2,23 +2,19 @@
 
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { ArrowLeft, ArrowRight, Expand, Pause, Play, X } from "lucide-react";
+import Image from "next/image";
 import { googleAdsResults, metaAdsResults, type CampaignScreenshot } from "@/lib/data/landing-google-meta-results";
 
 type CampaignItem = CampaignScreenshot & { platform: "Google Ads" | "Meta Ads" };
 
-const metaOrder = ["mc-constructions.jpeg", "true-life-wellness.jpeg", "projects-pioneer.jpeg", "mdi-reno.jpeg", "apna-tiffin-service.jpeg"];
-const orderedMeta = [...metaAdsResults].sort((a, b) => {
-  const rank = (item: CampaignScreenshot) => {
-    const index = metaOrder.indexOf(item.src.split("/").at(-1) ?? "");
-    return index < 0 ? metaOrder.length : index;
-  };
-  return rank(a) - rank(b);
-});
-const campaigns: CampaignItem[] = [
-  ...googleAdsResults.map((result) => ({ ...result, platform: "Google Ads" as const })),
-  ...orderedMeta.map((result) => ({ ...result, platform: "Meta Ads" as const })),
-];
-const initialIndex = campaigns.length >= 3 ? 1 : 0;
+const reports: CampaignItem[] = Array.from({ length: Math.max(googleAdsResults.length, metaAdsResults.length) }, (_, index) => [
+  googleAdsResults[index] ? { ...googleAdsResults[index], platform: "Google Ads" as const } : null,
+  metaAdsResults[index] ? { ...metaAdsResults[index], platform: "Meta Ads" as const } : null,
+]).flat().filter((result): result is CampaignItem => result !== null);
+const campaigns: CampaignItem[] = reports;
+const initialIndex = 0;
+const firstGoogleIndex = campaigns.findIndex((result) => result.platform === "Google Ads");
+const firstMetaIndex = campaigns.findIndex((result) => result.platform === "Meta Ads");
 
 function ResultCaption({ result }: { result: CampaignScreenshot }) {
   return (
@@ -216,9 +212,9 @@ export function GoogleMetaResults() {
       <div className="gm-results-heading">
         <p className="section-kicker">The work, in the open</p>
         <h2 id="gm-results-title" tabIndex={-1}>Real campaigns.<br /><span>Real results.</span></h2>
-        <p>Swipe through real client campaigns. Open any screenshot for the full picture.</p>
+        <p>Swipe through Google and Meta campaign reports supplied by PPC Guru. Open any image to inspect its figures.</p>
       </div>
-      <div className="gm-results-carousel" role="region" aria-roledescription="carousel" aria-label="Client campaign screenshots" tabIndex={0} onKeyDown={onCarouselKeyDown}
+      <div className="gm-results-carousel" role="region" aria-roledescription="carousel" aria-label="Google and Meta campaign reports" tabIndex={0} onKeyDown={onCarouselKeyDown}
         onFocusCapture={(event) => { if (!rotationControlRef.current?.contains(event.target)) setRotationPaused(true); }}
         onPointerDownCapture={(event) => { if (!rotationControlRef.current?.contains(event.target as Node)) setRotationPaused(true); }}>
         {total > 1 && !reducedMotion ? <div className="gm-carousel-playback">
@@ -227,11 +223,15 @@ export function GoogleMetaResults() {
             {rotationPaused ? "Play slideshow" : "Pause slideshow"}
           </button>
         </div> : null}
+        <div className="gm-platform-shortcuts" role="group" aria-label="Jump to campaign type">
+          {firstGoogleIndex >= 0 && <button type="button" aria-controls={trackId} onClick={() => { setRotationPaused(true); scrollToCard(firstGoogleIndex); }}>Google Ads <span>{googleAdsResults.length}</span></button>}
+          {firstMetaIndex >= 0 && <button type="button" aria-controls={trackId} onClick={() => { setRotationPaused(true); scrollToCard(firstMetaIndex); }}>Meta Ads <span>{metaAdsResults.length}</span></button>}
+        </div>
         <div className="gm-carousel-controls">
           <button className="gm-carousel-arrow" type="button" onClick={() => move(-1)} disabled={total < 2} aria-controls={trackId} aria-label="Previous campaign"><ArrowLeft aria-hidden="true" /></button>
-          <div className="gm-carousel-dots" role="group" aria-label="Choose a campaign">
+          {total > 8 ? <span className="gm-carousel-platform" aria-hidden="true">{active.platform}</span> : <div className="gm-carousel-dots" role="group" aria-label="Choose a campaign">
             {campaigns.map((result, index) => <button key={`${result.platform}-${result.src}`} type="button" className={`gm-carousel-dot${index === activeIndex ? " is-active" : ""}`} aria-controls={trackId} aria-label={`Show ${result.client}, ${result.platform}, ${index + 1} of ${total}`} aria-current={index === activeIndex ? "true" : undefined} onClick={() => { setRotationPaused(true); scrollToCard(index); }} />)}
-          </div>
+          </div>}
           <span className="gm-carousel-counter" aria-hidden="true">{activeIndex + 1} / {total}</span>
           <button className="gm-carousel-arrow" type="button" onClick={() => move(1)} disabled={total < 2} aria-controls={trackId} aria-label="Next campaign"><ArrowRight aria-hidden="true" /></button>
         </div>
@@ -241,18 +241,18 @@ export function GoogleMetaResults() {
             <article ref={(node) => { cardRefs.current[index] = node; }} key={`${result.platform}-${result.src}`} className={`gm-campaign-card${index === activeIndex ? " is-active" : ""}`} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${total}: ${result.client}, ${result.platform}`}>
               <div className="gm-campaign-heading">
                 <img className="gm-platform-logo" src={result.platform === "Google Ads" ? "/badges/google-ads-logo.svg" : "/badges/meta-logo.svg"} width={result.platform === "Google Ads" ? 910 : 948} height={result.platform === "Google Ads" ? 230 : 191} alt={result.platform} loading="lazy" />
-                <span className="gm-platform-label">Original screenshot</span>
+                <span className="gm-platform-label">Provided campaign report</span>
               </div>
               <ResultCaption result={result} />
               <div className="gm-phone-stage">
-                <button ref={(node) => { buttonRefs.current[index] = node; }} type="button" className="gm-phone-frame" tabIndex={index === activeIndex ? 0 : -1} aria-haspopup="dialog" aria-label={`Open ${result.client} ${result.platform} screenshot full size`} style={{ touchAction: "auto" }}
+                <button ref={(node) => { buttonRefs.current[index] = node; }} type="button" className="gm-phone-frame" tabIndex={index === activeIndex ? 0 : -1} aria-haspopup="dialog" aria-label={`Open ${result.client} ${result.platform} report full size`} style={{ touchAction: "auto" }}
                   onPointerDown={(event) => { if (event.isPrimary && event.button === 0) { pointerStart.current = { x: event.clientX, y: event.clientY, id: event.pointerId }; dragged.current = false; } }}
                   onPointerMove={(event) => { const start = pointerStart.current; if (start && start.id === event.pointerId && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 12) dragged.current = true; }}
                   onPointerUp={(event) => { if (pointerStart.current?.id === event.pointerId) pointerStart.current = null; }}
                   onPointerCancel={(event) => { if (pointerStart.current?.id === event.pointerId) { pointerStart.current = null; dragged.current = true; } }}
                   onClick={(event) => openResult(index, event.currentTarget, event.detail === 0)}>
-                  <img className="gm-phone-image" src={result.src} width={result.width} height={result.height} alt={`${result.client} ${result.platform} campaign dashboard`} loading="lazy" decoding="async" draggable={false} />
-                  <span className="gm-phone-open"><Expand aria-hidden="true" /> Open original</span>
+                  <Image className="gm-phone-image" src={result.src} width={result.width} height={result.height} sizes="(max-width: 600px) 234px, 238px" quality={85} alt={`${result.client} ${result.platform} campaign report`} loading="lazy" draggable={false} />
+                  <span className="gm-phone-open"><Expand aria-hidden="true" /> View full image</span>
                 </button>
               </div>
             </article>
@@ -260,8 +260,8 @@ export function GoogleMetaResults() {
         </div>
         <span className="sr-only" role="status" aria-live={rotating ? "off" : "polite"}>Campaign {activeIndex + 1} of {total}: {active.client}, {active.platform}, {active.result}, {active.cost}.</span>
       </div>
-      <p className="gm-results-disclosure">Past campaign results. Performance varies by offer, market, budget and follow-up. Figures reflect the lead or conversation type and period shown in each original screenshot.</p>
-      <dialog ref={dialogRef} className="gm-result-dialog" aria-label={`${expanded.client} ${expanded.platform} original campaign screenshot`} onClose={() => setDialogOpen(false)} onKeyDown={(event) => {
+      <p className="gm-results-disclosure">Past campaign figures supplied by PPC Guru; independently unverified. Reports show the metric and period on each image, and a conversion does not necessarily mean a lead or sale. Performance varies by offer, market, budget and follow-up.</p>
+      <dialog ref={dialogRef} className="gm-result-dialog" aria-label={`${expanded.client} ${expanded.platform} campaign image`} onClose={() => setDialogOpen(false)} onKeyDown={(event) => {
         const target = keyboardTarget(event, dialogIndex);
         if (target !== null) { event.preventDefault(); event.stopPropagation(); setDialogIndex(target); }
       }} onClick={(event) => {
@@ -269,14 +269,15 @@ export function GoogleMetaResults() {
         const bounds = event.currentTarget.getBoundingClientRect();
         if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialogRef.current?.close();
       }}>
-        <div className="gm-dialog-header"><span>{expanded.platform} · Original campaign screenshot</span><button ref={closeRef} className="gm-dialog-close" type="button" onClick={() => dialogRef.current?.close()} aria-label="Close full-size screenshot"><X aria-hidden="true" /></button></div>
+        <div className="gm-dialog-header"><span>{expanded.platform} · Provided campaign report</span><button ref={closeRef} className="gm-dialog-close" type="button" onClick={() => dialogRef.current?.close()} aria-label="Close full-size report"><X aria-hidden="true" /></button></div>
         <div className="gm-dialog-controls">
-          <button type="button" onClick={() => setDialogIndex((current) => (current - 1 + total) % total)} disabled={total < 2} aria-label="Previous campaign screenshot"><ArrowLeft aria-hidden="true" /> Previous</button>
+          <button type="button" onClick={() => setDialogIndex((current) => (current - 1 + total) % total)} disabled={total < 2} aria-label="Previous campaign report"><ArrowLeft aria-hidden="true" /> Previous</button>
           <span>{dialogIndex + 1} / {total}</span>
-          <button type="button" onClick={() => setDialogIndex((current) => (current + 1) % total)} disabled={total < 2} aria-label="Next campaign screenshot">Next <ArrowRight aria-hidden="true" /></button>
+          <button type="button" onClick={() => setDialogIndex((current) => (current + 1) % total)} disabled={total < 2} aria-label="Next campaign report">Next <ArrowRight aria-hidden="true" /></button>
         </div>
-        <span className="sr-only" role="status">Screenshot {dialogIndex + 1} of {total}: {expanded.client}, {expanded.platform}, {expanded.result}, {expanded.cost}.</span>
+        <span className="sr-only" role="status">Report {dialogIndex + 1} of {total}: {expanded.client}, {expanded.platform}, {expanded.result}, {expanded.cost}.</span>
         <img key={expanded.src} className="gm-dialog-image" src={expanded.src} width={expanded.width} height={expanded.height} alt={`${expanded.client}: ${expanded.result}, ${expanded.cost}, ${expanded.spend} spent. ${expanded.period}.`} />
+        <a className="gm-dialog-original-link" href={expanded.src} target="_blank" rel="noopener noreferrer">Open full-resolution report</a>
         <div className="gm-dialog-caption"><ResultCaption result={expanded} /></div>
       </dialog>
     </section>

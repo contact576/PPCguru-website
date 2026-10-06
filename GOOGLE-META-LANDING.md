@@ -5,22 +5,30 @@ Both are paid-traffic destinations with noindex metadata and their own header/fo
 
 ## Campaign evidence
 
-`lib/data/landing-google-meta-results.ts` contains five original Meta screenshots,
-visually checked against the files in `public/landing/results` on 2026-10-06.
-Messaging conversations, Meta leads and form leads retain their actual labels.
-Missing reporting years or dates are not inferred.
+`lib/data/landing-google-meta-results.ts` contains all 23 reports supplied in the
+PPC Guru Drive folder on 2026-10-07: 13 Google Ads and 10 Meta Ads. They are
+styled, partly redacted reports, not native dashboard captures. The visible
+figures were transcribed from each image. Google reports label their result
+**conversions**, while Meta reports label theirs **leads**. All show CAD spend
+and 8 Jul–5 Oct 2026. The figures have not been independently verified against
+the ad accounts. Public filenames and captions use only unredacted industry
+descriptions; the private source mapping is kept outside the repository.
+
+The five older original Meta captures remain in `public/landing/results` for
+`/100-leads`; this gallery uses the complete, consistently dated Drive set.
 
 The results section is one horizontal, scroll-snap gallery inspired by `/100-leads`:
-a centred active campaign, neighbouring cards, previous/next buttons, position dots,
-keyboard navigation and original-image dialog. Each card identifies its platform.
+a centred active campaign, neighbouring cards, previous/next buttons, compact
+position controls, keyboard navigation and full-image dialog. Reports from the
+two platforms alternate, with jump buttons for Google and Meta. Each card
+identifies its platform.
 The gallery advances one card every 4.5 seconds while visible, reversing at each
 end. Hover pauses temporarily; manual interaction or keyboard focus pauses until
 the visitor chooses Play slideshow. It also pauses in background tabs or while
-a screenshot is open, and disables autoplay for reduced-motion preferences.
+a report is open, and disables autoplay for reduced-motion preferences.
+Carousel previews use Next image optimization and lazy loading; the dialog and
+its full-resolution link use the original report files.
 
-Google Ads screenshots have not yet been supplied. Add verified original
-captures to `googleAdsResults` to include them in the same gallery. Each record
-needs the image path and dimensions, client, result, cost, spend and visible period.
 Do not use the ChatGPT captures in `public/landing/proof` as campaign evidence.
 
 ## Form and booking
