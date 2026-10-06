@@ -5,9 +5,10 @@ import { Search, Download, Inbox, AlertTriangle, ExternalLink } from "lucide-rea
 import { LANDING_LEAD_STATUSES, type LandingLeadRow, type LandingLeadStatus } from "@/lib/landing-leads";
 import { budgetLabel, businessTypeLabel, LANDING_PATH } from "@/lib/data/landing-100-leads";
 import { SEO_LANDING_PATH, SEO_LANDING_ID, seoGoalLabel, seoInvestmentLabel } from "@/lib/data/landing-seo";
-import { GTA_LANDING_ID } from "@/lib/data/landing-gta";
+import { GTA_LANDING_ID, GTA_LANDING_PATH } from "@/lib/data/landing-gta";
+import { GOOGLE_META_LANDING_ID, GOOGLE_META_LANDING_PATH } from "@/lib/data/landing-google-meta";
 
-/** Per-landing rendering of the qualification answers (100-leads vs SEO). */
+/** Per-landing rendering of qualification answers. */
 function marketCell(r: LandingLeadRow) {
   if (r.landing === SEO_LANDING_ID) {
     const a = r.answers ?? {};
@@ -34,9 +35,10 @@ function budgetCell(r: LandingLeadRow) {
 function landingChip(landing: string) {
   const seo = landing === SEO_LANDING_ID;
   const gta = landing === GTA_LANDING_ID;
+  const googleMeta = landing === GOOGLE_META_LANDING_ID;
   return (
     <span className={`mono mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[.05em] ${seo ? "bg-[#e6f0ff] text-[#1f4b99]" : gta ? "bg-[#fdeede] text-[#8a4b12]" : "bg-[#eef2dd] text-[#4f5f14]"}`}>
-      {seo ? "SEO visibility" : gta ? "GTA agency" : "100 leads"}
+      {seo ? "SEO visibility" : gta ? "GTA agency" : googleMeta ? "Google + Meta" : "100 leads"}
     </span>
   );
 }
@@ -103,7 +105,7 @@ function toCsv(rows: LandingLeadRow[]) {
 }
 
 /**
- * /admin/landing-leads — the /100-leads funnel queue. Search, CSV export, and
+ * /admin/landing-leads — the landing funnel queue. Search, CSV export, and
  * a per-row status select that PATCHes /api/admin/landing-leads. When the
  * dedicated table is missing the page still lists the leads (from `leads`)
  * but says so and disables status editing.
@@ -173,13 +175,14 @@ export function LandingLeadsView({ rows: initialRows, fallback }: { rows: Landin
           <h1 className="text-2xl font-bold text-[var(--color-ink)]">Landing page leads</h1>
           <p className="mt-1 text-sm text-[var(--color-ink-dim)]">
             Every application from{" "}
-            <a href={LANDING_PATH} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 underline decoration-dotted">
-              {LANDING_PATH} <ExternalLink size={12} />
-            </a>{" "}
-            and{" "}
-            <a href={SEO_LANDING_PATH} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 underline decoration-dotted">
-              {SEO_LANDING_PATH} <ExternalLink size={12} />
-            </a>{" "}
+            {[LANDING_PATH, SEO_LANDING_PATH, GTA_LANDING_PATH, GOOGLE_META_LANDING_PATH].map((path, index) => (
+              <span key={path}>
+                {index > 0 ? ", " : ""}
+                <a href={path} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 underline decoration-dotted">
+                  {path} <ExternalLink size={12} />
+                </a>
+              </span>
+            ))}{" "}
             — newest first. <strong>{rows.length}</strong> total · <strong>{today}</strong> today · <strong>{week}</strong> this week.
           </p>
         </div>

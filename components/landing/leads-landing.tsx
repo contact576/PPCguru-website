@@ -35,6 +35,7 @@ import { HundredMark, ZeroFeeMark } from "@/components/landing/hero-marks";
 import { ClientLogoWall, TrustSection } from "@/components/landing/trust";
 import { GTA_EXTRA_BUSINESS_TYPES, GTA_EXTRA_BUDGETS, LANDING_CHANNELS, isValidLeadPhone, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
 import { GTA_LANDING_SOURCE } from "@/lib/data/landing-gta";
+import { GOOGLE_META_LANDING_SOURCE } from "@/lib/data/landing-google-meta";
 import { siteConfig } from "@/lib/site-config";
 
 // Header/footer moved to landing-chrome.tsx (shared with /seo-visibility);
@@ -136,9 +137,9 @@ const DEFAULT_COPY: QualificationCopy = {
 };
 
 export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: QualificationCopy } = {}) {
-  const isGta = copy.source === GTA_LANDING_SOURCE;
-  const businessTypes = isGta ? [...BUSINESS_TYPES, ...GTA_EXTRA_BUSINESS_TYPES] : BUSINESS_TYPES;
-  const budgets = isGta ? [...LANDING_BUDGETS, ...GTA_EXTRA_BUDGETS] : LANDING_BUDGETS;
+  const isGrowthPlan = copy.source === GTA_LANDING_SOURCE || copy.source === GOOGLE_META_LANDING_SOURCE;
+  const businessTypes = isGrowthPlan ? [...BUSINESS_TYPES, ...GTA_EXTRA_BUSINESS_TYPES] : BUSINESS_TYPES;
+  const budgets = isGrowthPlan ? [...LANDING_BUDGETS, ...GTA_EXTRA_BUDGETS] : LANDING_BUDGETS;
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ company: "", location: "", website: "", businessType: "", budget: "", channel: "", name: "", email: "", phone: "" });
   const [state, action, pending] = useActionState(async (previous: LandingLeadState, data: FormData) => {
@@ -151,7 +152,13 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
     }
   }, initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errorFocus, setErrorFocus] = useState<{ fields: string[]; step?: number } | null>(null);
   const [renderedAt, setRenderedAt] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const requiresTurnstile = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
+  const verificationPending = requiresTurnstile && !turnstileToken;
+  const formRef = useRef<HTMLFormElement>(null);
+  const feedbackRef = useRef<HTMLParagraphElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const previousStep = useRef(1);
   const utm = useAttribution();
@@ -160,6 +167,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
   useEffect(() => {
     if (previousStep.current !== step) headingRef.current?.focus();
     previousStep.current = step;
+    if (step !== 3) setTurnstileToken("");
   }, [step]);
 
   // Turnstile tokens are single-use: after a rejected submit, issue a fresh
@@ -175,9 +183,22 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
   useEffect(() => {
     const e = state.errors ?? {};
     setErrors(e);
-    if (e.company || e.location || e.website) setStep(1);
-    else if (e.business_type || e.budget || e.channel) setStep(2);
-  }, [state.errors]);
+    if (!state.message || state.ok) return;
+    const errorStep = e.company || e.location || e.website ? 1 : e.business_type || e.budget || e.channel ? 2 : undefined;
+    if (errorStep) setStep(errorStep);
+    // Queue a single focus move after the corrected panel/errors have rendered.
+    // Later navigation must not replay this server failure's focus request.
+    setErrorFocus({ fields: Object.keys(e), step: errorStep });
+  }, [state]);
+
+  useEffect(() => {
+    if (!errorFocus || pending || (errorFocus.step && step !== errorFocus.step)) return;
+    const invalidField = errorFocus.fields.map((name) => formRef.current?.querySelector<HTMLElement>(
+      `[name="${name}"]:not([type="hidden"]), [data-field="${name}"] [role="radio"]`,
+    )).find(Boolean);
+    (invalidField ?? feedbackRef.current)?.focus();
+    setErrorFocus(null);
+  }, [errorFocus, pending, step]);
 
   const updateField = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -198,6 +219,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
       if (!stepOneReady) return;
       if (normaliseWebOrSocial(form.website) === null) {
         setErrors((current) => ({ ...current, website: "Enter a website such as yourbusiness.ca or an Instagram @handle." }));
+        formRef.current?.querySelector<HTMLInputElement>('[name="website"]')?.focus();
         return;
       }
     }
@@ -234,10 +256,14 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
       </div>
       <Stepper step={step} />
 
-      <form action={action} noValidate={step !== 3} aria-busy={pending} onSubmit={(event) => {
+      <form ref={formRef} action={action} noValidate={step !== 3} aria-busy={pending} onSubmit={(event) => {
         if (step !== 3 || pending) {
           event.preventDefault();
           if (!pending) goTo(step + 1);
+          return;
+        }
+        if (verificationPending) {
+          event.preventDefault();
           return;
         }
         const contactErrors: Record<string, string> = {};
@@ -250,7 +276,9 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
         }
       }}>
         {/* Honeypot + attribution + first-party session id. */}
-        <input type="text" name="company_website" tabIndex={-1} autoComplete="off" className="lp-hidden" aria-hidden />
+        <div hidden aria-hidden="true">
+          <input type="text" name="company_website" tabIndex={-1} autoComplete="off" />
+        </div>
         <input type="hidden" name="source" value={copy.source} />
         <input type="hidden" name="utm" value={utm} readOnly />
         <SessionField />
@@ -266,7 +294,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
         <input type="hidden" name="budget" value={form.budget} readOnly />
         {copy.collectChannel ? <input type="hidden" name="channel" value={form.channel} readOnly /> : null}
         {state.message && !state.ok ? (
-          <p className="form-error" role="alert">
+          <p className="form-error" role="alert" ref={feedbackRef} tabIndex={-1}>
             {state.message}
             {!state.errors ? <> You can also <a className="underline" href={siteConfig.contact.phoneHref}>call {siteConfig.contact.phone}</a> or <a className="underline" href={`mailto:${siteConfig.contact.email}`}>email {siteConfig.contact.email}</a>.</> : null}
           </p>
@@ -276,34 +304,35 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
           <div className="form-panel">
             <div className="form-heading">
               <p className="form-kicker">Let’s start with your market</p>
-              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGta ? "Tell us about your business" : "Where should we send the leads?"}</h2>
-              <p>{isGta ? "Share your business and service area so we can shape your Google and Meta growth plan." : "Tell us which business and service area we would be advertising."}</p>
+              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGrowthPlan ? "Tell us about your business" : "Where should we send the leads?"}</h2>
+              <p>{isGrowthPlan ? "Share your business and service area so we can shape your Google and Meta growth plan." : "Tell us which business and service area we would be advertising."}</p>
             </div>
             <div className="input-stack">
               <label>
-                <span>Business name</span>
+                <span id="qualification-company-label">Business name</span>
                 <div className="input-shell">
                   <Building2 aria-hidden="true" />
-                  <input name="company" value={form.company} onChange={updateField} onKeyDown={advanceOnEnter} placeholder="e.g. Northstar Heating" autoComplete="organization" minLength={2} maxLength={120} aria-invalid={Boolean(errors.company)} aria-describedby={errors.company ? "company-error" : undefined} required />
+                  <input name="company" aria-labelledby="qualification-company-label" value={form.company} onChange={updateField} onKeyDown={advanceOnEnter} placeholder="e.g. Northstar Heating" autoComplete="organization" minLength={2} maxLength={120} aria-invalid={Boolean(errors.company)} aria-describedby={errors.company ? "company-error" : undefined} required />
                 </div>
                 {errors.company ? <em className="field-error" id="company-error">{errors.company}</em> : null}
               </label>
               <label>
-                <span>Primary city or service area</span>
+                <span id="qualification-location-label">Primary city or service area</span>
                 <div className="input-shell">
                   <MapPin aria-hidden="true" />
-                  <input name="location" value={form.location} onChange={updateField} onKeyDown={advanceOnEnter} placeholder="e.g. Toronto & GTA" autoComplete="address-level2" minLength={2} maxLength={120} aria-invalid={Boolean(errors.location)} aria-describedby={errors.location ? "location-error" : undefined} required />
+                  <input name="location" aria-labelledby="qualification-location-label" value={form.location} onChange={updateField} onKeyDown={advanceOnEnter} placeholder="e.g. Toronto & GTA" autoComplete="address-level2" minLength={2} maxLength={120} aria-invalid={Boolean(errors.location)} aria-describedby={errors.location ? "location-error" : undefined} required />
                 </div>
                 {errors.location ? <em className="field-error" id="location-error">{errors.location}</em> : null}
               </label>
               <label>
-                <span>
+                <span id="qualification-website-label">
                   Website or Instagram <i className="field-optional">optional</i>
                 </span>
                 <div className="input-shell">
                   <Globe aria-hidden="true" />
                   <input
                     name="website"
+                    aria-labelledby="qualification-website-label"
                     value={form.website}
                     onChange={updateField}
                     onKeyDown={advanceOnEnter}
@@ -319,7 +348,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
               </label>
             </div>
             <button className="primary-button" type="button" disabled={!stepOneReady} onClick={() => goTo(2)}>
-              {isGta ? "Continue" : "Map my lead market"} <ArrowRight aria-hidden="true" />
+              {isGrowthPlan ? "Continue" : "Map my lead market"} <ArrowRight aria-hidden="true" />
             </button>
             <p className="form-reassurance">
               <Lock aria-hidden="true" /> No credit card, contract or account access needed.
@@ -336,7 +365,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
             </div>
             <fieldset className="choice-fieldset">
               <legend>Business type</legend>
-              <div className="choice-grid" role="radiogroup" aria-label="Business type">
+              <div className="choice-grid" role="radiogroup" data-field="business_type" aria-label="Business type" aria-invalid={Boolean(errors.business_type)} aria-describedby={errors.business_type ? "business-type-error" : undefined}>
                 {businessTypes.map(({ id, label }, index) => {
                   const Icon = TYPE_ICONS[id] ?? Briefcase;
                   const selected = form.businessType === id;
@@ -349,30 +378,30 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
                   );
                 })}
               </div>
-              {errors.business_type ? <em className="field-error">{errors.business_type}</em> : null}
+              {errors.business_type ? <em className="field-error" id="business-type-error">{errors.business_type}</em> : null}
             </fieldset>
             <fieldset className="choice-fieldset budget-fieldset">
               <legend>{copy.collectChannel ? "Monthly ad budget (CAD)" : "Monthly ad budget"}</legend>
-              <div className="budget-grid" role="radiogroup" aria-label="Monthly ad budget">
+              <div className="budget-grid" role="radiogroup" data-field="budget" aria-label="Monthly ad budget" aria-invalid={Boolean(errors.budget)} aria-describedby={errors.budget ? "budget-error" : undefined}>
                 {budgets.map(({ id, label }, index) => (
                   <button key={id} type="button" className={form.budget === id ? "budget-choice is-selected" : "budget-choice"} style={id === "recommend" ? { gridColumn: "1 / -1" } : undefined} role="radio" aria-checked={form.budget === id} tabIndex={form.budget === id || (!form.budget && index === 0) ? 0 : -1} onKeyDown={(event) => chooseWithArrow(event, "budget", budgets)} onClick={() => choose("budget", id)}>
                     {label}
                   </button>
                 ))}
               </div>
-              {errors.budget ? <em className="field-error">{errors.budget}</em> : null}
+              {errors.budget ? <em className="field-error" id="budget-error">{errors.budget}</em> : null}
             </fieldset>
             {copy.collectChannel ? (
               <fieldset className="choice-fieldset budget-fieldset">
                 <legend>Which channels are you interested in?</legend>
-                <div className="budget-grid" role="radiogroup" aria-label="Advertising channels">
+                <div className="budget-grid" role="radiogroup" data-field="channel" aria-label="Advertising channels" aria-invalid={Boolean(errors.channel)} aria-describedby={errors.channel ? "channel-error" : undefined}>
                   {LANDING_CHANNELS.map(({ id, label }, index) => (
                     <button key={id} type="button" className={form.channel === id ? "budget-choice is-selected" : "budget-choice"} role="radio" aria-checked={form.channel === id} tabIndex={form.channel === id || (!form.channel && index === 0) ? 0 : -1} onKeyDown={(event) => chooseWithArrow(event, "channel", LANDING_CHANNELS)} onClick={() => choose("channel", id)}>
                       {label}
                     </button>
                   ))}
                 </div>
-                {errors.channel ? <em className="field-error">{errors.channel}</em> : null}
+                {errors.channel ? <em className="field-error" id="channel-error">{errors.channel}</em> : null}
               </fieldset>
             ) : null}
             <div className="form-actions">
@@ -390,32 +419,33 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
           <div className="form-panel">
             <div className="form-heading">
               <p className="form-kicker">Last step</p>
-              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGta ? "Where can we reach you?" : "Where should we send your lead plan?"}</h2>
-              <p>{isGta ? "We’ll use these details to arrange a short call about your growth plan." : "We’ll use this to arrange a short qualification call—not to spam you."}</p>
+              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGrowthPlan ? "Where can we reach you?" : "Where should we send your lead plan?"}</h2>
+              <p>{isGrowthPlan ? "We’ll use these details to arrange a short call about your growth plan." : "We’ll use this to arrange a short qualification call—not to spam you."}</p>
             </div>
             <div className="input-stack compact-fields">
               <label>
-                <span>Your name</span>
-                <input name="name" value={form.name} onChange={updateField} autoComplete="name" minLength={2} maxLength={100} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? "name-error" : undefined} disabled={pending} required />
+                <span id="qualification-name-label">Your name</span>
+                <input name="name" aria-labelledby="qualification-name-label" value={form.name} onChange={updateField} autoComplete="name" minLength={2} maxLength={100} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? "name-error" : undefined} disabled={pending} required />
                 {errors.name ? <em className="field-error" id="name-error">{errors.name}</em> : null}
               </label>
               <label>
-                <span>Work email</span>
-                <input name="email" type="email" value={form.email} onChange={updateField} autoComplete="email" maxLength={254} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? "email-error" : undefined} disabled={pending} required />
+                <span id="qualification-email-label">Work email</span>
+                <input name="email" aria-labelledby="qualification-email-label" type="email" value={form.email} onChange={updateField} autoComplete="email" maxLength={254} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? "email-error" : undefined} disabled={pending} required />
                 {errors.email ? <em className="field-error" id="email-error">{errors.email}</em> : null}
               </label>
               <label>
-                <span>Phone number</span>
-                <input name="phone" type="tel" value={form.phone} onChange={updateField} autoComplete="tel" minLength={7} maxLength={40} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? "phone-error" : undefined} disabled={pending} required />
+                <span id="qualification-phone-label">Phone number</span>
+                <input name="phone" aria-labelledby="qualification-phone-label" type="tel" value={form.phone} onChange={updateField} autoComplete="tel" minLength={7} maxLength={40} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? "phone-error" : undefined} disabled={pending} required />
                 {errors.phone ? <em className="field-error" id="phone-error">{errors.phone}</em> : null}
               </label>
             </div>
-            <TurnstileField resetKey={attempt} renderedAt={renderedAt} />
+            <TurnstileField resetKey={attempt} renderedAt={renderedAt} onToken={setTurnstileToken} />
+            {verificationPending ? <p className="form-reassurance" id="verification-wait">Complete the verification above before sending your request. If it does not load, <a href={`mailto:${siteConfig.contact.email}`}>email our team</a>.</p> : null}
             <div className="form-actions">
               <button className="secondary-button" type="button" onClick={() => goTo(2)} disabled={pending}>
                 <ArrowLeft aria-hidden="true" /> Back
               </button>
-              <button className="primary-button" type="submit" disabled={pending}>
+              <button className="primary-button" type="submit" disabled={pending || verificationPending} aria-describedby={verificationPending ? "verification-wait" : undefined}>
                 {pending ? "Sending your request…" : copy.submitLabel} <ArrowRight aria-hidden="true" />
               </button>
             </div>

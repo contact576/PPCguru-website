@@ -114,4 +114,60 @@ await check("a rescue can complete delivery only when owner is the sole remainin
   assert.equal(await h.mail.sendMail({ to: [...team, "marketing@ppcguru.ca"], subject: "Offline", rescue: true }), true);
 });
 
+await check("Google + Meta acknowledgement matches the growth plan and links directly to booking", async () => {
+  const h = harness();
+  assert.equal(await h.mail.sendLeadAutoresponder(
+    { name: "Offline Person", email: "offline.person@example.invalid" },
+    { source: "landing:google-meta-ads" },
+  ), true);
+  const message = h.calls.smtp[0];
+  const bookingUrl = "https://ppcguru.ca/google-ads-and-meta-ads/thank-you#book";
+  assert.ok(message.html.includes(`href="${bookingUrl}"`));
+  assert.ok(message.text.includes(`Book your strategy call: ${bookingUrl}`));
+  for (const body of [message.html, message.text]) {
+    assert.ok(body.includes("Google Ads + Meta Ads growth-plan request"));
+    assert.ok(body.includes("Book your strategy call"));
+    assert.ok(body.includes("Google Ads and Meta Ads growth plan"));
+    assert.ok(body.includes("We review your goals, offer and current setup"));
+    assert.ok(!body.includes("where budget is leaking"));
+    assert.ok(!body.includes("/free-audit"));
+    assert.doesNotMatch(body, /100[ -](qualified[ -])?leads|guarantee/i);
+  }
+  const url = new URL(bookingUrl);
+  assert.equal(url.search, "", "booking link must not carry contact details or tracking identifiers");
+  assert.equal(url.hash, "#book");
+});
+
+await check("existing and unknown sources retain the original acknowledgement and audit CTA", async () => {
+  const lead = { name: "Offline Person", email: "offline.person@example.invalid" };
+  const baseline = harness();
+  await baseline.mail.sendLeadAutoresponder(lead);
+  const original = baseline.calls.smtp[0];
+  assert.ok(original.html.includes('href="https://ppcguru.ca/free-audit"'));
+  assert.ok(original.text.includes("Book your free audit call: https://ppcguru.ca/free-audit"));
+  assert.ok(original.text.includes("Thanks, Offline — we've got your request."));
+  assert.ok(original.text.includes("You get a clear plan to turn spend into booked jobs"));
+  assert.ok(original.html.includes("We review your ads / site &amp; find where budget is leaking"));
+  assert.ok(original.text.includes("We review your ads / site and find where budget is leaking"));
+  for (const source of ["contact", "landing:100-leads", "landing:gta-marketing-agency", "landing:seo-visibility", "https://untrusted.invalid/booking"]) {
+    const h = harness();
+    await h.mail.sendLeadAutoresponder(lead, { source, bookingUrl: "https://untrusted.invalid/booking" });
+    assert.equal(h.calls.smtp[0].html, original.html, source);
+    assert.equal(h.calls.smtp[0].text, original.text, source);
+    assert.equal(h.calls.smtp[0].subject, original.subject, source);
+  }
+});
+
+await check("names are HTML-escaped while the text acknowledgement remains plain", async () => {
+  for (const source of [undefined, "landing:google-meta-ads"]) {
+    const h = harness();
+    const firstName = `<b>Sam&'"</b>`;
+    await h.mail.sendLeadAutoresponder({ name: `${firstName} Person`, email: "offline.person@example.invalid" }, { source });
+    const message = h.calls.smtp[0];
+    assert.ok(message.html.includes("&lt;b&gt;Sam&amp;&#39;&quot;&lt;/b&gt;"));
+    assert.ok(!message.html.includes(firstName));
+    assert.ok(message.text.includes(firstName));
+  }
+});
+
 console.log(`${checks} offline team email checks passed. No real emails sent.`);

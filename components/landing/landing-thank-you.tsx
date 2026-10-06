@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Check, type LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import { CalendarCheck, Check, type LucideIcon } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { LandingFooter, LandingHeader, type HeaderPlatform } from "@/components/landing/landing-chrome";
 import { ThankYouActions } from "@/components/landing/thank-you-actions";
@@ -44,6 +45,9 @@ export function LandingThankYou({
   headerPlatforms,
   footerTagline,
   className = "",
+  footer,
+  confirmed = true,
+  backLabel = "Go back to the offer",
 }: {
   name: string;
   kicker: string;
@@ -62,6 +66,11 @@ export function LandingThankYou({
   headerPlatforms?: HeaderPlatform[];
   footerTagline: string;
   className?: string;
+  /** A funnel-specific footer; omitted on existing landing pages. */
+  footer?: ReactNode;
+  /** Direct booking visits must not claim a new form submission was received. */
+  confirmed?: boolean;
+  backLabel?: string;
 }) {
   return (
     <div className={`lp-root ${className}`.trim()}>
@@ -72,7 +81,7 @@ export function LandingThankYou({
             <section className="thanks-hero" aria-labelledby="thanks-title">
               <div className="thanks-card">
                 <div className="success-mark">
-                  <Check aria-hidden="true" />
+                  {confirmed ? <Check aria-hidden="true" /> : <CalendarCheck aria-hidden="true" />}
                 </div>
                 <p className="form-kicker">{kicker}</p>
                 <h1 id="thanks-title">
@@ -117,14 +126,14 @@ export function LandingThankYou({
             ))}
           </ol>
           <p className="thanks-footnote">
-            Missed something? <Link href={backHref}>Go back to the offer</Link> or email <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.
+            Missed something? <Link href={backHref}>{backLabel}</Link> or email <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a>.
           </p>
         </section>
 
         <section className="lp-trust lp-trust-thanks" aria-label="Recent Google reviews">
           <GoogleReviewsBlock limit={3} />
         </section>
-        <LandingFooter tagline={footerTagline} />
+        {footer ?? <LandingFooter tagline={footerTagline} />}
       </div>
     </div>
   );

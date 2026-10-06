@@ -79,7 +79,7 @@ export async function fanOut(input: DeliveryInput, ctx?: ConversionContext): Pro
     ),
     // Strict forms without a saved row wait for a team/CRM acknowledgement
     // before telling the visitor that their request has been received.
-    !input.requireDelivery || leadId !== null ? safe("autoresponder", sendLeadAutoresponder(lead), false) : false,
+    !input.requireDelivery || leadId !== null ? safe("autoresponder", sendLeadAutoresponder(lead, { source: record.source }), false) : false,
     ctx ? sendConversions(input, ctx) : undefined,
   ]);
   if (!emailed) {
@@ -120,7 +120,7 @@ export async function deliverLead(input: DeliveryInput): Promise<DeliveryOutcome
   if (input.requireDelivery && anyDelivered) {
     after(async () => {
       await Promise.all([
-        safe("autoresponder", sendLeadAutoresponder(input.lead), false),
+        safe("autoresponder", sendLeadAutoresponder(input.lead, { source: input.record.source }), false),
         sendConversions(input, ctx),
       ]);
     });
