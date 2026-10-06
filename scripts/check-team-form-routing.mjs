@@ -166,6 +166,7 @@ for (const route of routes) {
     assert.equal(h.calls.crm[0][0].submissionId, stored ? LEAD_ID : undefined);
     assert.equal(h.calls.autoresponder.length, 1);
     assert.deepEqual(h.calls.autoresponder[0][0], { name: "Offline Test Person", email: EMAIL });
+    assert.deepEqual(h.calls.autoresponder[0][1], { source: route.source }, "both stored and fallback delivery must retain the source for the correct acknowledgement");
     for (const api of ["meta", "openai"]) {
       assert.equal(h.calls[api].length, 1);
       assert.equal(h.calls[api][0][0].source, route.source);

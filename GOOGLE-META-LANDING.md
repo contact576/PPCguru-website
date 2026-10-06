@@ -25,6 +25,9 @@ Do not use the ChatGPT captures in `public/landing/proof` as campaign evidence.
 - Success requires an accepted storage/CRM/email delivery path. Validation,
   spam rejection and unavailable delivery return an error instead of redirecting.
 - The thank-you URL contains no name, email or company query parameters.
+- This funnel’s acknowledgement email matches the growth-plan offer and links
+  directly to `/google-ads-and-meta-ads/thank-you#book`. Other forms retain their
+  existing acknowledgement copy and destination.
 - The short-lived, HTTP-only `ppcg_google_meta_receipt` cookie is isolated to
   this thank-you route. The browser must also have its matching pending event ID.
 - Uses the existing LeadConnector booking calendar `zbrJAxyqqqT6te57YdYU`.

@@ -30,7 +30,7 @@ export default async function GoogleMetaThankYouPage() {
         lede="Choose a time below for your Google Ads and Meta Ads strategy call. We’ll discuss your business, the channels that fit and a practical starting budget. Prefer to speak directly? Call or WhatsApp our team."
         steps={[
           { Icon: ClipboardList, title: "We review your business", copy: "We review your service area, website and channel preferences before the conversation." },
-          { Icon: CalendarCheck, title: "Book your strategy call", copy: "Pick a convenient time below to discuss your goals, current campaigns and lead quality." },
+          { Icon: CalendarCheck, title: "Book your strategy call", copy: "Use the calendar to pick a convenient time to discuss your goals, current campaigns and lead quality." },
           { Icon: Rocket, title: "Agree the next steps", copy: "We recommend a channel mix and outline the tracking, creative and landing-page work needed before launch." },
         ]}
         whatsappOpener="Hi PPC Guru — I just requested a Google Ads and Meta Ads growth plan. Can we talk?"

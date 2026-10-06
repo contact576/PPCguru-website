@@ -323,9 +323,40 @@ const BUSINESS = {
 // Colours mirror the site (ink / lime / cream) so the email feels on-brand.
 const C = { ink: "#14170e", lime: "#ceff3a", cream: "#f1efe3", olive: "#5f6f17", dim: "#54564a", faint: "#8a8c72" };
 
-function autoresponderHtml(name: string): string {
-  const first = (name || "there").trim().split(/\s+/)[0];
+/** Sources select fixed, first-party destinations; form input cannot supply a URL. */
+function autoresponderCopy(source?: string) {
+  if (source === "landing:google-meta-ads") {
+    return {
+      request: "Google Ads + Meta Ads growth-plan request",
+      htmlIntro: "We’ll review your goals, market and budget before your strategy call. Here’s what happens next:",
+      textIntro: "We’ll review your goals, market and budget before your strategy call. Here’s what happens next:",
+      reviewHtml: "We review your goals, offer and current setup",
+      reviewText: "We review your goals, offer and current setup",
+      plan: "We’ll discuss your Google Ads and Meta Ads growth plan",
+      bookingUrl: `${BUSINESS.site}/google-ads-and-meta-ads/thank-you#book`,
+      ctaLabel: "Book your strategy call",
+    };
+  }
+  return {
+    request: "request",
+    htmlIntro: "A real strategist (not a bot) is already reviewing what you sent. Here's what happens next:",
+    textIntro: "A real strategist is already reviewing what you sent. What happens next:",
+    reviewHtml: "We review your ads / site &amp; find where budget is leaking",
+    reviewText: "We review your ads / site and find where budget is leaking",
+    plan: "You get a clear plan to turn spend into booked jobs",
+    bookingUrl: `${BUSINESS.site}/free-audit`,
+    ctaLabel: "Book your free audit call",
+  };
+}
+
+function escapeHtmlText(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function autoresponderHtml(name: string, source?: string): string {
+  const first = escapeHtmlText((name || "there").trim().split(/\s+/)[0]);
   const unsub = `mailto:${BUSINESS.email}?subject=Unsubscribe`;
+  const copy = autoresponderCopy(source);
   return `<!doctype html><html><body style="margin:0;background:${C.cream};font-family:Arial,Helvetica,sans-serif;color:${C.ink};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.cream};padding:28px 12px;">
     <tr><td align="center">
@@ -335,16 +366,16 @@ function autoresponderHtml(name: string): string {
           <span style="color:#a9aa97;font-size:12px;"> &nbsp;·&nbsp; Google &amp; Meta Ads, done right</span>
         </td></tr>
         <tr><td style="padding:32px 28px 8px;">
-          <h1 style="margin:0 0 14px;font-size:23px;line-height:1.25;">Thanks, ${first} — we've got your request. ✅</h1>
+          <h1 style="margin:0 0 14px;font-size:23px;line-height:1.25;">Thanks, ${first} — we've got your ${copy.request}. ✅</h1>
           <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${C.dim};">
-            A real strategist (not a bot) is already reviewing what you sent. Here's what happens next:
+            ${copy.htmlIntro}
           </p>
           <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
-            <tr><td style="padding:6px 0;font-size:15px;color:${C.ink};">✅ &nbsp;We review your ads / site &amp; find where budget is leaking</td></tr>
+            <tr><td style="padding:6px 0;font-size:15px;color:${C.ink};">✅ &nbsp;${copy.reviewHtml}</td></tr>
             <tr><td style="padding:6px 0;font-size:15px;color:${C.ink};">📞 &nbsp;We reach out within <strong>1 business day</strong> with next steps</td></tr>
-            <tr><td style="padding:6px 0;font-size:15px;color:${C.ink};">🚀 &nbsp;You get a clear plan to turn spend into booked jobs</td></tr>
+            <tr><td style="padding:6px 0;font-size:15px;color:${C.ink};">🚀 &nbsp;${copy.plan}</td></tr>
           </table>
-          <a href="${BUSINESS.site}/free-audit" style="display:inline-block;background:${C.lime};color:${C.ink};font-weight:700;font-size:14px;text-decoration:none;padding:14px 24px;border-radius:12px;">Book your free audit call →</a>
+          <a href="${copy.bookingUrl}" style="display:inline-block;background:${C.lime};color:${C.ink};font-weight:700;font-size:14px;text-decoration:none;padding:14px 24px;border-radius:12px;">${copy.ctaLabel} →</a>
           <p style="margin:22px 0 0;font-size:14px;line-height:1.6;color:${C.dim};">
             In the meantime, our <a href="${BUSINESS.site}/tools" style="color:${C.olive};font-weight:700;">free calculators</a> and
             <a href="${BUSINESS.site}/blog" style="color:${C.olive};font-weight:700;">latest guides</a> are worth a look.
@@ -365,17 +396,18 @@ function autoresponderHtml(name: string): string {
   </table></body></html>`;
 }
 
-function autoresponderText(name: string): string {
+function autoresponderText(name: string, source?: string): string {
   const first = (name || "there").trim().split(/\s+/)[0];
+  const copy = autoresponderCopy(source);
   return [
-    `Thanks, ${first} — we've got your request.`,
+    `Thanks, ${first} — we've got your ${copy.request}.`,
     ``,
-    `A real strategist is already reviewing what you sent. What happens next:`,
-    `  - We review your ads / site and find where budget is leaking`,
+    copy.textIntro,
+    `  - ${copy.reviewText}`,
     `  - We reach out within 1 business day with next steps`,
-    `  - You get a clear plan to turn spend into booked jobs`,
+    `  - ${copy.plan}`,
     ``,
-    `Book your free audit call: ${BUSINESS.site}/free-audit`,
+    `${copy.ctaLabel}: ${copy.bookingUrl}`,
     `Free tools: ${BUSINESS.site}/tools  ·  Guides: ${BUSINESS.site}/blog`,
     ``,
     `— The PPC Guru team`,
@@ -392,14 +424,14 @@ function autoresponderText(name: string): string {
  * false (never throws) when Resend isn't configured or delivery fails, so it
  * can't affect the form-submission result.
  */
-export async function sendLeadAutoresponder(lead: { name?: string; email?: string }): Promise<boolean> {
+export async function sendLeadAutoresponder(lead: { name?: string; email?: string }, context: { source?: string } = {}): Promise<boolean> {
   if (!lead.email || !emailConfigured()) return false;
   const name = lead.name || "";
   return sendMail({
     to: lead.email,
     subject: "Thanks — here's what happens next 🚀",
-    html: autoresponderHtml(name),
-    text: autoresponderText(name),
+    html: autoresponderHtml(name, context.source),
+    text: autoresponderText(name, context.source),
     headers: {
       // Improves deliverability + gives inbox providers a one-click unsubscribe.
       "List-Unsubscribe": `<mailto:${BUSINESS.email}?subject=Unsubscribe>`,
