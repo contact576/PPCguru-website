@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
-import { ArrowLeft, ArrowRight, Expand, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Expand, Pause, Play, X } from "lucide-react";
 import { googleAdsResults, metaAdsResults, type CampaignScreenshot } from "@/lib/data/landing-google-meta-results";
 
 type CampaignItem = CampaignScreenshot & { platform: "Google Ads" | "Meta Ads" };
@@ -50,9 +50,17 @@ export function GoogleMetaResults() {
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const pointerStart = useRef<{ x: number; y: number; id: number } | null>(null);
   const dragged = useRef(false);
+  const rotationControlRef = useRef<HTMLButtonElement>(null);
+  const rotationDirection = useRef(1);
+  const [rotationPaused, setRotationPaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(true);
+  const [inView, setInView] = useState(false);
+  const [foreground, setForeground] = useState(true);
+  const [hovered, setHovered] = useState(false);
   const total = campaigns.length;
   const active = campaigns[activeIndex];
   const expanded = campaigns[dialogIndex];
+  const rotating = total > 1 && !rotationPaused && !reducedMotion && inView && foreground && !hovered && !dialogOpen;
 
   const scrollToCard = useCallback((index: number, behavior: ScrollBehavior = "smooth") => {
     const track = trackRef.current;
@@ -114,6 +122,41 @@ export function GoogleMetaResults() {
   }, [scrollToCard, total]);
 
   useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncMotion = () => {
+      setReducedMotion(motion.matches);
+      if (motion.matches) setRotationPaused(true);
+    };
+    const syncVisibility = () => setForeground(!document.hidden);
+    syncMotion();
+    syncVisibility();
+    motion.addEventListener("change", syncMotion);
+    document.addEventListener("visibilitychange", syncVisibility);
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio >= .15), { threshold: [0, .15] });
+    observer.observe(track);
+    return () => {
+      motion.removeEventListener("change", syncMotion);
+      document.removeEventListener("visibilitychange", syncVisibility);
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!rotating) return;
+    const timer = window.setInterval(() => {
+      if (navigationTarget.current !== null) return;
+      const current = activeIndexRef.current;
+      // Reverse at either end so every automatic move travels just one card.
+      if (current === total - 1) rotationDirection.current = -1;
+      else if (current === 0) rotationDirection.current = 1;
+      scrollToCard(current + rotationDirection.current);
+    }, 4500);
+    return () => window.clearInterval(timer);
+  }, [rotating, scrollToCard, total]);
+
+  useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialogOpen || !dialog) return;
     const previousOverflow = document.body.style.overflow;
@@ -133,6 +176,7 @@ export function GoogleMetaResults() {
   }, [dialogIndex]);
 
   function move(direction: number) {
+    setRotationPaused(true);
     if (total > 1) scrollToCard((activeIndexRef.current + direction + total) % total);
   }
 
@@ -151,6 +195,7 @@ export function GoogleMetaResults() {
     if (target === null) return;
     event.preventDefault();
     event.stopPropagation();
+    setRotationPaused(true);
     const fromScreenshot = buttonRefs.current.some((button) => button === document.activeElement);
     scrollToCard(target, "auto");
     if (fromScreenshot) buttonRefs.current[target]?.focus({ preventScroll: true });
@@ -173,16 +218,25 @@ export function GoogleMetaResults() {
         <h2 id="gm-results-title" tabIndex={-1}>Real campaigns.<br /><span>Real results.</span></h2>
         <p>Swipe through real client campaigns. Open any screenshot for the full picture.</p>
       </div>
-      <div className="gm-results-carousel" role="region" aria-roledescription="carousel" aria-label="Client campaign screenshots" tabIndex={0} onKeyDown={onCarouselKeyDown}>
+      <div className="gm-results-carousel" role="region" aria-roledescription="carousel" aria-label="Client campaign screenshots" tabIndex={0} onKeyDown={onCarouselKeyDown}
+        onFocusCapture={(event) => { if (!rotationControlRef.current?.contains(event.target)) setRotationPaused(true); }}
+        onPointerDownCapture={(event) => { if (!rotationControlRef.current?.contains(event.target as Node)) setRotationPaused(true); }}>
+        {total > 1 && !reducedMotion ? <div className="gm-carousel-playback">
+          <button ref={rotationControlRef} type="button" className="gm-autoplay-button" aria-controls={trackId} onClick={() => setRotationPaused((paused) => !paused)}>
+            {rotationPaused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
+            {rotationPaused ? "Play slideshow" : "Pause slideshow"}
+          </button>
+        </div> : null}
         <div className="gm-carousel-controls">
           <button className="gm-carousel-arrow" type="button" onClick={() => move(-1)} disabled={total < 2} aria-controls={trackId} aria-label="Previous campaign"><ArrowLeft aria-hidden="true" /></button>
           <div className="gm-carousel-dots" role="group" aria-label="Choose a campaign">
-            {campaigns.map((result, index) => <button key={`${result.platform}-${result.src}`} type="button" className={`gm-carousel-dot${index === activeIndex ? " is-active" : ""}`} aria-controls={trackId} aria-label={`Show ${result.client}, ${result.platform}, ${index + 1} of ${total}`} aria-current={index === activeIndex ? "true" : undefined} onClick={() => scrollToCard(index)} />)}
+            {campaigns.map((result, index) => <button key={`${result.platform}-${result.src}`} type="button" className={`gm-carousel-dot${index === activeIndex ? " is-active" : ""}`} aria-controls={trackId} aria-label={`Show ${result.client}, ${result.platform}, ${index + 1} of ${total}`} aria-current={index === activeIndex ? "true" : undefined} onClick={() => { setRotationPaused(true); scrollToCard(index); }} />)}
           </div>
           <span className="gm-carousel-counter" aria-hidden="true">{activeIndex + 1} / {total}</span>
           <button className="gm-carousel-arrow" type="button" onClick={() => move(1)} disabled={total < 2} aria-controls={trackId} aria-label="Next campaign"><ArrowRight aria-hidden="true" /></button>
         </div>
-        <div ref={trackRef} id={trackId} className="gm-results-track" onPointerDownCapture={() => { navigationTarget.current = null; }} onWheel={() => { navigationTarget.current = null; }}>
+        <div ref={trackRef} id={trackId} className="gm-results-track" onPointerDownCapture={() => { navigationTarget.current = null; }} onWheel={() => { navigationTarget.current = null; setRotationPaused(true); }}
+          onPointerEnter={(event) => { if (event.pointerType !== "touch") setHovered(true); }} onPointerLeave={() => setHovered(false)}>
           {campaigns.map((result, index) => (
             <article ref={(node) => { cardRefs.current[index] = node; }} key={`${result.platform}-${result.src}`} className={`gm-campaign-card${index === activeIndex ? " is-active" : ""}`} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${total}: ${result.client}, ${result.platform}`}>
               <div className="gm-campaign-heading">
@@ -204,7 +258,7 @@ export function GoogleMetaResults() {
             </article>
           ))}
         </div>
-        <span className="sr-only" role="status">Campaign {activeIndex + 1} of {total}: {active.client}, {active.platform}, {active.result}, {active.cost}.</span>
+        <span className="sr-only" role="status" aria-live={rotating ? "off" : "polite"}>Campaign {activeIndex + 1} of {total}: {active.client}, {active.platform}, {active.result}, {active.cost}.</span>
       </div>
       <p className="gm-results-disclosure">Past campaign results. Performance varies by offer, market, budget and follow-up. Figures reflect the lead or conversation type and period shown in each original screenshot.</p>
       <dialog ref={dialogRef} className="gm-result-dialog" aria-label={`${expanded.client} ${expanded.platform} original campaign screenshot`} onClose={() => setDialogOpen(false)} onKeyDown={(event) => {

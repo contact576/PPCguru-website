@@ -13,7 +13,10 @@ Missing reporting years or dates are not inferred.
 The results section is one horizontal, scroll-snap gallery inspired by `/100-leads`:
 a centred active campaign, neighbouring cards, previous/next buttons, position dots,
 keyboard navigation and original-image dialog. Each card identifies its platform.
-The gallery does not autoplay and respects reduced-motion preferences.
+The gallery advances one card every 4.5 seconds while visible, reversing at each
+end. Hover pauses temporarily; manual interaction or keyboard focus pauses until
+the visitor chooses Play slideshow. It also pauses in background tabs or while
+a screenshot is open, and disables autoplay for reduced-motion preferences.
 
 Google Ads screenshots have not yet been supplied. Add verified original
 captures to `googleAdsResults` to include them in the same gallery. Each record
