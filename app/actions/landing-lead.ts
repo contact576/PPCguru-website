@@ -19,6 +19,7 @@ import {
   businessTypeLabel,
 } from "@/lib/data/landing-100-leads";
 import { GTA_LANDING_ID, GTA_LANDING_SERVICE_LABEL, GTA_LANDING_SOURCE, GTA_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-gta";
+import { GOOGLE_META_LANDING_ID, GOOGLE_META_LANDING_SERVICE_LABEL, GOOGLE_META_LANDING_SOURCE, GOOGLE_META_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-google-meta";
 import { GTA_EXTRA_BUSINESS_TYPE_IDS, GTA_EXTRA_BUDGET_IDS, LANDING_CHANNEL_IDS, isValidLeadPhone, landingChannelLabel, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
 import { setLandingConversionReceipt } from "@/lib/landing-conversion";
 
@@ -26,6 +27,7 @@ import { setLandingConversionReceipt } from "@/lib/landing-conversion";
 const PAGES = {
   [LANDING_SOURCE]: { landing: "100-leads", thankYou: LANDING_THANK_YOU_PATH, service: LANDING_SERVICE_LABEL, subject: "100-leads landing lead" },
   [GTA_LANDING_SOURCE]: { landing: GTA_LANDING_ID, thankYou: GTA_LANDING_THANK_YOU_PATH, service: GTA_LANDING_SERVICE_LABEL, subject: "GTA agency landing lead" },
+  [GOOGLE_META_LANDING_SOURCE]: { landing: GOOGLE_META_LANDING_ID, thankYou: GOOGLE_META_LANDING_THANK_YOU_PATH, service: GOOGLE_META_LANDING_SERVICE_LABEL, subject: "Google + Meta growth-plan lead" },
 } as const;
 
 /**
@@ -56,7 +58,7 @@ const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name.").max(100, "Please keep your name under 100 characters."),
   email: z.string().trim().email("Please enter a valid email.").max(254),
   phone: z.string().trim().max(40).refine(isValidLeadPhone, "Please enter a valid phone number, including the area code."),
-  source: z.enum([LANDING_SOURCE, GTA_LANDING_SOURCE], { message: "Please refresh this page and try again." }).optional().or(z.literal("")),
+  source: z.enum([LANDING_SOURCE, GTA_LANDING_SOURCE, GOOGLE_META_LANDING_SOURCE], { message: "Please refresh this page and try again." }).optional().or(z.literal("")),
   /** JSON string built client-side from the landing URL (see LeadsLanding). */
   utm: z.string().optional(),
   session_id: z.string().max(64).optional().or(z.literal("")),
@@ -66,10 +68,11 @@ const schema = z.object({
   turnstileToken: z.string().max(4000).optional().or(z.literal("")),
   renderedAt: z.string().max(20).optional().or(z.literal("")),
 }).superRefine((data, ctx) => {
-  if (data.source === GTA_LANDING_SOURCE && !data.channel) {
+  const growthPlan = data.source === GTA_LANDING_SOURCE || data.source === GOOGLE_META_LANDING_SOURCE;
+  if (growthPlan && !data.channel) {
     ctx.addIssue({ code: "custom", path: ["channel"], message: "Please choose a channel, or let us recommend one." });
   }
-  if (data.source !== GTA_LANDING_SOURCE) {
+  if (!growthPlan) {
     if (!BUSINESS_TYPE_IDS.some((id) => id === data.business_type)) {
       ctx.addIssue({ code: "custom", path: ["business_type"], message: "Please choose a business type for this offer." });
     }
@@ -117,8 +120,8 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   const source = data.source || LANDING_SOURCE;
   const page = PAGES[source as keyof typeof PAGES] ?? PAGES[LANDING_SOURCE];
   const website = normaliseWebOrSocial(data.website) ?? "";
-  // Keep GTA form details out of browser history, referrers and analytics URLs.
-  const thankYou = source === GTA_LANDING_SOURCE ? page.thankYou : `${page.thankYou}?n=${encodeURIComponent(firstName(data.name))}&c=${encodeURIComponent(data.company)}`;
+  // Growth-plan funnels keep contact details out of history and analytics URLs.
+  const thankYou = source === LANDING_SOURCE ? `${page.thankYou}?n=${encodeURIComponent(firstName(data.name))}&c=${encodeURIComponent(data.company)}` : page.thankYou;
 
   // Rejected requests never visit the conversion URL or claim to be received.
   if (data.company_website) return { ok: false, message: "We couldn't verify this request. Please try again or contact us directly." };
@@ -240,9 +243,9 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     return { ok: false, message: "We couldn't submit that right now. Please call or email us directly." };
   }
 
-  if (source === GTA_LANDING_SOURCE) {
+  if (source === GTA_LANDING_SOURCE || source === GOOGLE_META_LANDING_SOURCE) {
     try {
-      await setLandingConversionReceipt(formData.get("event_id"));
+      await setLandingConversionReceipt(formData.get("event_id"), source);
     } catch {
       // A missing analytics receipt must never undo an already accepted lead.
       console.warn("[landing-lead] Unable to set the confirmed conversion receipt.");

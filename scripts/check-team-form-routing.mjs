@@ -40,6 +40,7 @@ const options = load("lib/data/form-options.ts");
 const fields = load("lib/landing-lead-fields.ts");
 const hundred = load("lib/data/landing-100-leads.ts", { "@/lib/landing-lead-fields": fields });
 const gta = load("lib/data/landing-gta.ts");
+const googleMeta = load("lib/data/landing-google-meta.ts");
 const seo = load("lib/data/landing-seo.ts");
 const conversion = load("lib/conversion-context.ts");
 class Redirect extends Error {
@@ -51,6 +52,7 @@ const routes = [
   { label: "submitContact", file: "app/contact/actions.ts", action: "submitContact", source: "contact", kind: "contact" },
   { label: "submitLandingLead:100-leads", file: "app/actions/landing-lead.ts", action: "submitLandingLead", source: hundred.LANDING_SOURCE, kind: "landing", thankYou: hundred.LANDING_THANK_YOU_PATH },
   { label: "submitLandingLead:GTA", file: "app/actions/landing-lead.ts", action: "submitLandingLead", source: gta.GTA_LANDING_SOURCE, kind: "landing", thankYou: gta.GTA_LANDING_THANK_YOU_PATH },
+  { label: "submitLandingLead:Google+Meta", file: "app/actions/landing-lead.ts", action: "submitLandingLead", source: googleMeta.GOOGLE_META_LANDING_SOURCE, kind: "landing", thankYou: googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH },
   { label: "submitSeoLead", file: "app/actions/seo-lead.ts", action: "submitSeoLead", source: seo.SEO_LANDING_SOURCE, kind: "seo", thankYou: seo.SEO_LANDING_THANK_YOU_PATH },
 ];
 
@@ -72,7 +74,7 @@ function formFor(route) {
       website: "example.invalid", location: "Toronto", business_type: "home-services", budget: "2500-5000",
       utm: JSON.stringify({ utm_source: "google", utm_campaign: "offline-campaign" }),
     });
-    if (route.source === gta.GTA_LANDING_SOURCE) values.channel = "both";
+    if (route.source === gta.GTA_LANDING_SOURCE || route.source === googleMeta.GOOGLE_META_LANDING_SOURCE) values.channel = "both";
   } else {
     Object.assign(values, {
       website: "example.invalid", search: "heating services Toronto", goal: "all", investment: "1500-3000",
@@ -106,6 +108,7 @@ function harness(route, stored) {
     "@/lib/landing-lead-fields": fields,
     "@/lib/data/landing-100-leads": hundred,
     "@/lib/data/landing-gta": gta,
+    "@/lib/data/landing-google-meta": googleMeta,
     "@/lib/data/landing-seo": seo,
     "@/lib/landing-conversion": { setLandingConversionReceipt: spy("receipt", undefined) },
     "@/lib/supabase": { hasSupabase: () => stored, saveLeadReturning: spy("store", stored ? LEAD_ID : null) },
@@ -176,7 +179,7 @@ for (const route of routes) {
       assert.ok(notification.text.includes("utm_campaign=offline-campaign"));
       assert.equal(h.calls.landing[0][0].utm.utm_campaign, "offline-campaign");
     }
-    if (route.source === gta.GTA_LANDING_SOURCE) assert.ok(notification.text.includes("Preferred channel: Google + Meta"));
+    if (route.source === gta.GTA_LANDING_SOURCE || route.source === googleMeta.GOOGLE_META_LANDING_SOURCE) assert.ok(notification.text.includes("Preferred channel: Google + Meta"));
     if (route.kind === "seo") assert.ok(notification.text.includes("Target search: heating services Toronto"));
     checks++;
     console.log(`PASS ${route.label}: ${stored ? "deferred stored" : "immediate email-only"} delivery preserves recipients, Reply-To and source data`);

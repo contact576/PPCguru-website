@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Check, type LucideIcon } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { LandingFooter, LandingHeader, type HeaderPlatform } from "@/components/landing/landing-chrome";
@@ -44,6 +45,7 @@ export function LandingThankYou({
   headerPlatforms,
   footerTagline,
   className = "",
+  footer,
 }: {
   name: string;
   kicker: string;
@@ -62,6 +64,8 @@ export function LandingThankYou({
   headerPlatforms?: HeaderPlatform[];
   footerTagline: string;
   className?: string;
+  /** A funnel-specific footer; omitted on existing landing pages. */
+  footer?: ReactNode;
 }) {
   return (
     <div className={`lp-root ${className}`.trim()}>
@@ -124,7 +128,7 @@ export function LandingThankYou({
         <section className="lp-trust lp-trust-thanks" aria-label="Recent Google reviews">
           <GoogleReviewsBlock limit={3} />
         </section>
-        <LandingFooter tagline={footerTagline} />
+        {footer ?? <LandingFooter tagline={footerTagline} />}
       </div>
     </div>
   );

@@ -35,6 +35,7 @@ import { HundredMark, ZeroFeeMark } from "@/components/landing/hero-marks";
 import { ClientLogoWall, TrustSection } from "@/components/landing/trust";
 import { GTA_EXTRA_BUSINESS_TYPES, GTA_EXTRA_BUDGETS, LANDING_CHANNELS, isValidLeadPhone, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
 import { GTA_LANDING_SOURCE } from "@/lib/data/landing-gta";
+import { GOOGLE_META_LANDING_SOURCE } from "@/lib/data/landing-google-meta";
 import { siteConfig } from "@/lib/site-config";
 
 // Header/footer moved to landing-chrome.tsx (shared with /seo-visibility);
@@ -136,9 +137,9 @@ const DEFAULT_COPY: QualificationCopy = {
 };
 
 export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: QualificationCopy } = {}) {
-  const isGta = copy.source === GTA_LANDING_SOURCE;
-  const businessTypes = isGta ? [...BUSINESS_TYPES, ...GTA_EXTRA_BUSINESS_TYPES] : BUSINESS_TYPES;
-  const budgets = isGta ? [...LANDING_BUDGETS, ...GTA_EXTRA_BUDGETS] : LANDING_BUDGETS;
+  const isGrowthPlan = copy.source === GTA_LANDING_SOURCE || copy.source === GOOGLE_META_LANDING_SOURCE;
+  const businessTypes = isGrowthPlan ? [...BUSINESS_TYPES, ...GTA_EXTRA_BUSINESS_TYPES] : BUSINESS_TYPES;
+  const budgets = isGrowthPlan ? [...LANDING_BUDGETS, ...GTA_EXTRA_BUDGETS] : LANDING_BUDGETS;
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ company: "", location: "", website: "", businessType: "", budget: "", channel: "", name: "", email: "", phone: "" });
   const [state, action, pending] = useActionState(async (previous: LandingLeadState, data: FormData) => {
@@ -276,8 +277,8 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
           <div className="form-panel">
             <div className="form-heading">
               <p className="form-kicker">Let’s start with your market</p>
-              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGta ? "Tell us about your business" : "Where should we send the leads?"}</h2>
-              <p>{isGta ? "Share your business and service area so we can shape your Google and Meta growth plan." : "Tell us which business and service area we would be advertising."}</p>
+              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGrowthPlan ? "Tell us about your business" : "Where should we send the leads?"}</h2>
+              <p>{isGrowthPlan ? "Share your business and service area so we can shape your Google and Meta growth plan." : "Tell us which business and service area we would be advertising."}</p>
             </div>
             <div className="input-stack">
               <label>
@@ -319,7 +320,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
               </label>
             </div>
             <button className="primary-button" type="button" disabled={!stepOneReady} onClick={() => goTo(2)}>
-              {isGta ? "Continue" : "Map my lead market"} <ArrowRight aria-hidden="true" />
+              {isGrowthPlan ? "Continue" : "Map my lead market"} <ArrowRight aria-hidden="true" />
             </button>
             <p className="form-reassurance">
               <Lock aria-hidden="true" /> No credit card, contract or account access needed.
@@ -390,8 +391,8 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
           <div className="form-panel">
             <div className="form-heading">
               <p className="form-kicker">Last step</p>
-              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGta ? "Where can we reach you?" : "Where should we send your lead plan?"}</h2>
-              <p>{isGta ? "We’ll use these details to arrange a short call about your growth plan." : "We’ll use this to arrange a short qualification call—not to spam you."}</p>
+              <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGrowthPlan ? "Where can we reach you?" : "Where should we send your lead plan?"}</h2>
+              <p>{isGrowthPlan ? "We’ll use these details to arrange a short call about your growth plan." : "We’ll use this to arrange a short qualification call—not to spam you."}</p>
             </div>
             <div className="input-stack compact-fields">
               <label>
