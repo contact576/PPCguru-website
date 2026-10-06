@@ -23,6 +23,7 @@ import { GOOGLE_META_LANDING_ID, GOOGLE_META_LANDING_SERVICE_LABEL, GOOGLE_META_
 import { GTA_EXTRA_BUSINESS_TYPE_IDS, GTA_EXTRA_BUDGET_IDS, LANDING_CHANNEL_IDS, isValidLeadPhone, landingChannelLabel, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
 import { setLandingConversionReceipt } from "@/lib/landing-conversion";
 import { readConversionContext } from "@/lib/conversion-context";
+import { withGoogleMetaAttempt, type GoogleMetaAttempt } from "@/lib/google-meta-submission";
 
 /** Pages that share this form, keyed by their hidden `source` value. */
 const PAGES = {
@@ -186,69 +187,84 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
       .filter(Boolean)
       .join("\n"),
   };
-  const leadId = await saveLeadReturning(record);
-  if (hasSupabase() && !leadId) {
-    return { ok: false, message: "We couldn't save your request right now. Please try again shortly." };
-  }
+  const persistAndDeliver = async (attempt?: GoogleMetaAttempt): Promise<LandingLeadState> => {
+    const leadId = attempt?.leadId ?? await saveLeadReturning(record);
+    if (hasSupabase() && !leadId) {
+      return { ok: false, message: "We couldn't save your request right now. Please try again shortly." };
+    }
+    if (attempt && leadId) attempt.leadId = leadId;
 
-  // The structured landing row (best-effort — the lead is already safe above).
-  await saveLandingLead({
-    leadId,
-    landing: page.landing,
-    name: data.name,
-    email: data.email,
-    phone: data.phone,
-    company: data.company,
-    location: data.location,
-    website,
-    businessType: data.business_type,
-    budget: data.budget,
-    answers: data.channel ? { channel: data.channel } : undefined,
-    utm,
-  });
+    // The structured landing row (best-effort — the lead is already safe above).
+    if (!attempt?.landingSaved) {
+      const landingId = await saveLandingLead({
+        leadId,
+        landing: page.landing,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        company: data.company,
+        location: data.location,
+        website,
+        businessType: data.business_type,
+        budget: data.budget,
+        answers: data.channel ? { channel: data.channel } : undefined,
+        utm,
+      });
+      if (attempt && landingId) attempt.landingSaved = true;
+    }
 
-  // A stale tab may still post its old session id after the visitor opts out.
-  // Enforce consent at the server before linking browsing history or setting
-  // the identity cookie; the enquiry itself is still saved and delivered.
-  const conversionContext = await readConversionContext();
-  if (!conversionContext.declined) {
-    await identifyVisitor({ sessionId: data.session_id, leadId, email: data.email, name: data.name });
-  }
+    // A stale tab may still post its old session id after the visitor opts out.
+    // Enforce consent at the server before linking browsing history or setting
+    // the identity cookie; the enquiry itself is still saved and delivered.
+    const conversionContext = await readConversionContext();
+    if (!conversionContext.declined && !attempt?.identified) {
+      await identifyVisitor({ sessionId: data.session_id, leadId, email: data.email, name: data.name });
+      if (attempt) attempt.identified = true;
+    }
 
-  // CRM + team notification + autoresponder — parallel, deferred past the
-  // redirect once the row is stored (lib/lead-delivery.ts). This is what makes
-  // the thank-you page appear immediately instead of after 10+ s of SMTP.
-  const delivery = await deliverLead({
-    eventId: formData.get("event_id"),
-    requireDelivery: true,
-    record,
-    leadId,
-    lead: { name: data.name, email: data.email },
-    notification: {
-      replyTo: data.email,
-      subject: `🔥 ${page.subject} — ${data.name} (${data.company}, ${data.location})`,
-      text: [
-        `Source: ${source}`,
-        `Name: ${data.name}`,
-        `Business: ${data.company}`,
-        `Service area: ${data.location}`,
-        website ? `Website / Instagram: ${website}` : "",
-        `Business type: ${typeLabel}`,
-        channelText ? `Preferred channel: ${channelText}` : "",
-        `Monthly ad budget: ${budgetText}`,
-        `Email: ${data.email}`,
-        `Phone: ${data.phone}`,
-        attribution ? `Attribution: ${attribution}` : "",
-        "",
-        "Next step: qualification call — agree lead criteria, geography, budget and written terms.",
-      ]
-        .filter((l) => l !== "")
-        .join("\n"),
-    },
-  });
-  if (!delivery.ok) {
-    return { ok: false, message: "We couldn't submit that right now. Please call or email us directly." };
-  }
+    // Google + Meta waits for all team recipients and GHL, even when stored.
+    // Existing funnels retain their deferred post-save delivery behavior.
+    const delivery = await deliverLead({
+      eventId: formData.get("event_id"),
+      requireDelivery: true,
+      record,
+      leadId,
+      attempt,
+      lead: { name: data.name, email: data.email },
+      notification: {
+        replyTo: data.email,
+        subject: `🔥 ${page.subject} — ${data.name} (${data.company}, ${data.location})`,
+        text: [
+          `Source: ${source}`,
+          `Name: ${data.name}`,
+          `Business: ${data.company}`,
+          `Service area: ${data.location}`,
+          website ? `Website / Instagram: ${website}` : "",
+          `Business type: ${typeLabel}`,
+          channelText ? `Preferred channel: ${channelText}` : "",
+          `Monthly ad budget: ${budgetText}`,
+          `Email: ${data.email}`,
+          `Phone: ${data.phone}`,
+          attribution ? `Attribution: ${attribution}` : "",
+          "",
+          "Next step: qualification call — agree lead criteria, geography, budget and written terms.",
+        ]
+          .filter((l) => l !== "")
+          .join("\n"),
+      },
+    });
+    if (!delivery.ok) {
+      return { ok: false, message: source === GOOGLE_META_LANDING_SOURCE
+        ? "We couldn't complete delivery of your request. Please try again shortly, or call or email us directly."
+        : "We couldn't submit that right now. Please call or email us directly." };
+    }
+    return { ok: true, message: "" };
+  };
+
+  const result = source === GOOGLE_META_LANDING_SOURCE
+    ? await withGoogleMetaAttempt(record, formData.get("event_id"), persistAndDeliver)
+    : await persistAndDeliver();
+  if (!result.ok) return result;
 
   if (source === GTA_LANDING_SOURCE || source === GOOGLE_META_LANDING_SOURCE) {
     try {

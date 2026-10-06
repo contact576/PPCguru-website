@@ -94,7 +94,11 @@ function harness(route, stored) {
   const calls = { store: [], landing: [], identify: [], mail: [], autoresponder: [], crm: [], meta: [], openai: [], receipt: [] };
   const jobs = [];
   const spy = (name, result) => async (...args) => {
-    calls[name].push(structuredClone(args));
+    calls[name].push(structuredClone(args.map((arg) => {
+      if (!arg?.onAccepted) return arg;
+      const { onAccepted, ...recorded } = arg;
+      return recorded;
+    })));
     return result;
   };
   // Load the real helper against a deliberately incomplete old configuration.
@@ -123,7 +127,7 @@ function harness(route, stored) {
       sendMail: spy("mail", true),
       sendLeadAutoresponder: spy("autoresponder", true),
     },
-    "@/lib/gohighlevel": { ghlConfigured: () => true, sendLeadToGhl: spy("crm", false) },
+    "@/lib/gohighlevel": { ghlConfigured: () => true, sendLeadToGhl: spy("crm", route.source === googleMeta.GOOGLE_META_LANDING_SOURCE) },
     "@/lib/zoho": { zohoConfigured: () => false, sendLeadToZoho() { throw new Error("Unexpected Zoho delivery"); } },
     "@/lib/meta-capi": { sendMetaLead: spy("meta", true) },
     "@/lib/openai-capi": { sendOpenAiLead: spy("openai", true) },
@@ -132,6 +136,7 @@ function harness(route, stored) {
       readConversionContext: async () => ({ declined: false, sourceUrl: "https://example.invalid/form" }),
     },
   };
+  imports["@/lib/google-meta-submission"] = load("lib/google-meta-submission.ts", { ...imports, "node:crypto": require("node:crypto") });
   imports["@/lib/lead-delivery"] = load("lib/lead-delivery.ts", imports);
   const action = load(route.file, imports)[route.action];
   return {
@@ -149,7 +154,8 @@ for (const route of routes) {
     } else {
       assert.equal((await h.run()).ok, true);
     }
-    assert.equal(h.calls.mail.length, stored ? 0 : 1, "only stored leads may defer team delivery");
+    const strict = route.source === googleMeta.GOOGLE_META_LANDING_SOURCE;
+    assert.equal(h.calls.mail.length, stored && !strict ? 0 : 1, "Google + Meta must await required delivery even when stored");
     await h.flush();
     assert.equal(h.calls.mail.length, 1, "one internal notification per form submission");
     const notification = h.calls.mail[0][0];
@@ -163,7 +169,8 @@ for (const route of routes) {
     assert.equal(h.calls.store[0][0].source, route.source);
     assert.equal(h.calls.crm.length, 1);
     assert.equal(h.calls.crm[0][0].source, route.source);
-    assert.equal(h.calls.crm[0][0].submissionId, stored ? LEAD_ID : undefined);
+    if (strict && !stored) assert.match(h.calls.crm[0][0].submissionId, /^google-meta-[a-f0-9]{64}$/);
+    else assert.equal(h.calls.crm[0][0].submissionId, stored ? LEAD_ID : undefined);
     assert.equal(h.calls.autoresponder.length, 1);
     assert.deepEqual(h.calls.autoresponder[0][0], { name: "Offline Test Person", email: EMAIL });
     assert.deepEqual(h.calls.autoresponder[0][1], { source: route.source }, "both stored and fallback delivery must retain the source for the correct acknowledgement");
@@ -183,7 +190,7 @@ for (const route of routes) {
     if (route.source === gta.GTA_LANDING_SOURCE || route.source === googleMeta.GOOGLE_META_LANDING_SOURCE) assert.ok(notification.text.includes("Preferred channel: Google + Meta"));
     if (route.kind === "seo") assert.ok(notification.text.includes("Target search: heating services Toronto"));
     checks++;
-    console.log(`PASS ${route.label}: ${stored ? "deferred stored" : "immediate email-only"} delivery preserves recipients, Reply-To and source data`);
+    console.log(`PASS ${route.label}: ${strict ? "required email + GHL" : stored ? "deferred stored" : "immediate email-only"} delivery preserves recipients, Reply-To and source data`);
   }
 }
 

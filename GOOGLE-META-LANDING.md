@@ -37,8 +37,14 @@ Do not use the ChatGPT captures in `public/landing/proof` as campaign evidence.
 - Source: `landing:google-meta-ads`; stored landing ID: `google-meta-ads`.
 - Collects business, location, optional website/profile, business type, monthly
   CAD ad budget, channel, name, email and phone.
-- Success requires an accepted storage/CRM/email delivery path. Validation,
-  spam rejection and unavailable delivery return an error instead of redirecting.
+- Success requires email-provider acknowledgment for marketing, sales and
+  contact at ppcguru.ca, plus successful GHL contact, note and tag delivery.
+  A Supabase recovery row alone cannot confirm this funnel, and it never falls
+  back to Zoho. Failure shows an error without a receipt or conversion event.
+- Identical retries reuse saved rows and successful channels in a bounded
+  30-minute process cache, including per-recipient email acknowledgments.
+  Duplicate protection is best effort across workers/restarts; it is not a
+  durable outbox or a guarantee of exactly-once delivery.
 - Field errors keep stable accessible labels, describe the error separately and
   focus the relevant step once per failed response. Configured Turnstile must be
   ready before submission. Hidden anti-spam fields stay outside keyboard/AT navigation.
@@ -88,8 +94,9 @@ thank-you route is not a new lead.
 ## Verification and release
 
 Run `npm run check:landing-lead`, `npm run check:team-email`,
-`npm run typecheck` and `npm run build`. The current offline suite covers 59 lead/conversion checks,
-11 email checks and 12 routing checks.
+`npm run check:ghl`, `npm run typecheck` and `npm run build`. The offline suite
+covers 72 lead/conversion checks, 15 email checks, 12 routing checks and 16 GHL
+contract checks.
 On the Windows workspace junction, Next.js must run from the resolved physical
 project path; this is a local environment issue, not a deployment configuration.
 Production `ppcguru.ca` is hosted on Hostinger and deploys `master`.
@@ -97,3 +104,8 @@ Production `ppcguru.ca` is hosted on Hostinger and deploys `master`.
 Offline tests use mocked delivery providers. They do not prove receipt in a real
 inbox or an ads dashboard; those require an intentional live submission after
 deployment. No live test lead or calendar booking was created during development.
+Live delivery needs the deployed `GHL_API_TOKEN` and `GHL_LOCATION_ID`, plus a
+working email channel (`SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, or `RESEND_API_KEY`
+with a verified sender). `CONTACT_FROM_EMAIL`, `EMAIL_PROVIDER`, and optional
+SMTP port/TLS settings must match that channel. Provider acceptance still needs
+to be checked against actual receipt in all three inboxes and the GHL contact.

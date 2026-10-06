@@ -15,13 +15,17 @@ const DEFAULT_RECIPIENTS = [
 ];
 const REQUIRED_RECIPIENTS = ["sales@ppcguru.ca", "contact@ppcguru.ca"];
 
-/** Every lead form uses the mandatory pair plus configured extras. */
-export function leadRecipients(): string[] {
+/** Every lead form keeps its existing recipients; Google + Meta also requires marketing. */
+export function leadRecipients(source?: string): string[] {
   const parsed = (process.env.CONTACT_TO_EMAIL ?? "")
     .split(",")
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
-  return [...new Set([...REQUIRED_RECIPIENTS, ...(parsed.length ? parsed : DEFAULT_RECIPIENTS)])];
+  return [...new Set([
+    ...REQUIRED_RECIPIENTS,
+    ...(source === "landing:google-meta-ads" ? ["marketing@ppcguru.ca"] : []),
+    ...(parsed.length ? parsed : DEFAULT_RECIPIENTS),
+  ])];
 }
 
 /** The "from" address used on all outbound mail. For SMTP this must match the
@@ -50,6 +54,8 @@ export type MailInput = {
    *  message. Only for INTERNAL mail (lead notifications) — never for anything
    *  addressed to the customer, which must not be re-routed to the team. */
   rescue?: boolean;
+  /** Server-only retry bookkeeping for recipients a provider acknowledged. */
+  onAccepted?: (recipients: string[]) => void;
 };
 
 /* ── Last-resort rescue channel ──────────────────────────────────────────────
@@ -151,6 +157,7 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
       if (info.rejected?.length) console.warn("[email] SMTP rejected recipients:", info.rejected);
       const accepted = new Set((info.accepted ?? []).map((recipient: string | { address: string }) =>
         (typeof recipient === "string" ? recipient : recipient.address).toLowerCase()));
+      msg.onAccepted?.(pending.filter((address) => accepted.has(address)));
       pending = pending.filter((address) => !accepted.has(address));
       if (!pending.length) return true;
     } catch (err) {
@@ -187,10 +194,15 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
           const rescued = await rescueSend(resend, msg);
           // An owner-only rescue alert is useful, but cannot stand in for
           // acceptance by the required sales + contact destinations.
-          if (rescued && pending.every((address) => address === RESCUE_TO().trim().toLowerCase())) return true;
+          if (rescued) {
+            const accepted = pending.filter((address) => address === RESCUE_TO().trim().toLowerCase());
+            msg.onAccepted?.(accepted);
+            if (accepted.length === pending.length) return true;
+          }
         }
         return false;
       }
+      msg.onAccepted?.(pending);
       return true;
     } catch (err) {
       console.error("[email] Resend send failed:", err instanceof Error ? err.message : err);

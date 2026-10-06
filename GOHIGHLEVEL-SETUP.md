@@ -3,7 +3,11 @@
 The website saves submissions in Supabase and sends the selected CRM a copy.
 When both `GHL_API_TOKEN` and `GHL_LOCATION_ID` are configured, GoHighLevel replaces
 Zoho for new website submissions. Without them, the existing Zoho configuration
-remains the fallback. Team notification emails continue separately.
+remains the fallback for other forms. The Google + Meta growth-plan form is
+stricter: it requires configured GHL and email-provider acknowledgment for
+`marketing@ppcguru.ca`, `sales@ppcguru.ca` and `contact@ppcguru.ca` before showing
+success. It never substitutes Zoho for GHL. A saved Supabase row remains a recovery
+copy when a required delivery fails; the visitor sees an error and can retry.
 
 Each GoHighLevel delivery upserts a contact, records the full submission as a
 contact note, then adds the website tags. Existing contact tags are preserved.
@@ -17,7 +21,8 @@ Name it `PPC Guru Website` and select:
 - `contacts.write`: upsert contacts, add tags, and create notes.
 - `contacts.readonly`: check existing submission notes before creating or retrying them.
 - `locations.readonly`: optional location read check in the verification script.
-- `locations/customFields.readonly`: only needed to verify configured custom-field mappings.
+- `locations/customFields.readonly`: discover and verify contact custom fields.
+- `locations/customFields.write`: needed only to create missing custom fields automatically.
 
 There is no separate `notes.write` scope. Copy the token when it is shown and keep
 it in server-side environment variables. Obtain the sub-account **Location ID**
@@ -39,7 +44,7 @@ running server. The Vercel copy has a separate environment.
 Keep the existing Supabase URL/service-role key and email configuration in that
 same production environment. Never put the GHL token in a `NEXT_PUBLIC_` variable
 or commit a real environment file. Do not remove the old Zoho configuration until
-production delivery has been verified; missing GHL configuration still uses it.
+production delivery has been verified; other forms still use it when GHL is missing.
 
 ## 3. Verify the connection and each production form
 
@@ -69,6 +74,12 @@ Submit again using the same email to verify the sub-account's matching settings.
 Repeat submissions should have separate notes when they have different Supabase
 row IDs. Replaying one saved row should reuse its existing note.
 
+For `/google-ads-and-meta-ads`, check all three team inboxes and the GHL contact,
+full submission note and `form-landing-google-meta-ads` tag. Provider API/SMTP
+acknowledgment proves acceptance, not inbox arrival: check actual mail receipt,
+including spam or quarantine. Only successful required delivery should lead to
+the thank-you page, customer acknowledgement and confirmed conversion receipt.
+
 ## 4. Optional mapping
 
 | Variable | Default | Purpose |
@@ -78,20 +89,23 @@ row IDs. Replaying one saved row should reuse its existing note.
 | `GHL_ASSIGNED_USER_ID` | unset | Assign submitted contacts to this HighLevel user. |
 | `GHL_CUSTOM_FIELD_BUDGET` | unset | Budget custom-field reference. |
 | `GHL_CUSTOM_FIELD_SERVICES` | unset | Services custom-field reference. |
-| `GHL_CUSTOM_FIELD_SOURCE` | unset | Form-source custom-field reference. |
+| `GHL_CUSTOM_FIELD_MESSAGE` | unset | Message custom-field ID, including qualification answers. |
+| `GHL_AUTO_CREATE_FIELDS` | `true` | Set `false` to prevent automatic creation of missing fields. |
 
-Prefer a custom-field ID. `id:<id>` also works. For a key, use `contact.example`
-or the explicit `key:<field-key>` syntax. Payloads use `fieldValue`, with the
-reference sent as `id` or `key` as appropriate. Without mappings, the note still
-contains all supplied form details, source, submission ID and timestamp.
+Pin actual custom-field IDs. Otherwise the integration finds matching fields by
+name and creates missing ones when permitted. Contact updates first use
+`field_value`, with a `fieldValue` compatibility retry only on schema rejection.
+The complete note remains required and contains all supplied details even if
+custom-field discovery, creation or updates fail.
 
 The integration pins the supported `Version: 2021-07-28` contract. Do not change
 `GHL_API_VERSION` without rechecking the contact, note and tag API contracts.
 
 ## 5. Workflow tags
 
-Live submissions add `website-lead` and a source tag such as `form-contact` or
-`form-popup-audit`. Additive tags preserve any existing customer or pipeline tags.
+Live submissions add `website-lead` and a source tag such as `form-contact`,
+`form-popup-audit` or `form-landing-google-meta-ads`. Additive tags preserve any
+existing customer or pipeline tags.
 The **Contact Tag / Tag Added** trigger can react when these tags are first added;
 adding an already-present tag is not a reliable event for every repeat submission.
 These API writes are not native HighLevel form submissions.
@@ -138,6 +152,17 @@ remains available for manual `ghl:backfill` recovery. There is no scheduled retr
 worker or outbox schema yet. Check Hostinger's application runtime logs for the
 sanitized `[ghl]` operation/status warning. Upstream response bodies and submitted
 personal data are not logged by the GHL integration or backfill.
+
+The Google + Meta form waits for email and GHL in parallel. A required failure
+does not schedule its customer acknowledgement or conversion events. Identical
+retries in the same process reuse the saved row, skip an acknowledged GHL
+delivery and send only to team recipients not yet acknowledged. Retry progress
+is held for 30 minutes in a bounded cache; changed answers start a new attempt.
+This is best-effort duplicate protection, not a durable queue: another worker or
+process restart can repeat an email or create another saved row/note. An uncertain
+SMTP/provider response also cannot guarantee whether a message arrived. Stored
+leads use their canonical row ID as the note marker so manual backfill stays
+compatible. No new environment variable or database migration is required.
 
 ## Official API references
 

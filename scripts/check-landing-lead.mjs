@@ -59,7 +59,14 @@ function harness(overrides = {}) {
   const config = { supabase: true, storedId: LEAD_ID, rate: true, turnstile: true, spam: false, ghl: true, ghlResult: true, email: true, emailResult: true, structuredId: "landing-row", declined: false, ...overrides };
   const calls = { store: [], landing: [], identify: [], ghl: [], zoho: [], email: [], autoresponder: [], meta: [], openai: [], receipt: [] };
   const after = [];
-  const spy = (name, value) => async (...args) => { calls[name].push(structuredClone(args)); return value; };
+  const spy = (name, value) => async (...args) => {
+    calls[name].push(structuredClone(args.map((arg) => {
+      if (!arg?.onAccepted) return arg;
+      const { onAccepted, ...recorded } = arg;
+      return recorded;
+    })));
+    return typeof value === "function" ? value(...args) : value;
+  };
   const deps = {
     "zod": zod,
     "next/navigation": { redirect: (url) => { throw new Redirect(url); } },
@@ -75,13 +82,21 @@ function harness(overrides = {}) {
     "@/lib/turnstile": { verifyTurnstile: async () => ({ ok: config.turnstile }), turnstileConfigured: () => true },
     "@/lib/spam-filter": { scoreSubmission: () => ({ spam: config.spam, score: config.spam ? 8 : 0, reasons: [] }), logBlocked() {} },
     "@/lib/rate-limit": { clientIpFromHeaders: async () => "192.0.2.1", rateLimit: () => ({ ok: config.rate }) },
-    "@/lib/email": { emailConfigured: () => config.email, leadRecipients: () => ["team@example.invalid"], sendMail: spy("email", config.emailResult), sendLeadAutoresponder: spy("autoresponder", true) },
-    "@/lib/gohighlevel": { ghlConfigured: () => config.ghl, sendLeadToGhl: spy("ghl", config.ghlResult) },
+    "@/lib/email": { emailConfigured: () => config.email, leadRecipients: () => ["sales@ppcguru.ca", "contact@ppcguru.ca", "marketing@ppcguru.ca"], sendMail: spy("email", (msg) => {
+      if (config.acceptedRecipients) msg.onAccepted?.(config.acceptedRecipients);
+      if (config.emailThrows) throw new Error("Mock email rejection");
+      return config.emailResult;
+    }), sendLeadAutoresponder: spy("autoresponder", true) },
+    "@/lib/gohighlevel": { ghlConfigured: () => config.ghl, sendLeadToGhl: spy("ghl", () => {
+      if (config.ghlThrows) throw new Error("Mock GHL rejection");
+      return config.ghlResult;
+    }) },
     "@/lib/zoho": { zohoConfigured: () => false, sendLeadToZoho: spy("zoho", false) },
     "@/lib/meta-capi": { sendMetaLead: spy("meta", true) },
     "@/lib/openai-capi": { sendOpenAiLead: spy("openai", true) },
     "@/lib/conversion-context": { cleanEventId: conversion.cleanEventId, readConversionContext: async () => ({ declined: config.declined, sourceUrl: "https://example.invalid/gta-marketing-agency" }) },
   };
+  deps["@/lib/google-meta-submission"] = load("lib/google-meta-submission.ts", { ...deps, "node:crypto": require("node:crypto") });
   deps["@/lib/lead-delivery"] = load("lib/lead-delivery.ts", deps);
   const action = load("app/actions/landing-lead.ts", deps).submitLandingLead;
   return { config, calls, after, run: (form = validForm()) => action({ ok: false, message: "" }, form), flush: async () => { for (const job of after) await job(); } };
@@ -206,6 +221,111 @@ await check("Google + Meta cannot report success when neither storage nor delive
   assert.equal(h.calls.meta.length, 0);
   assert.equal(h.calls.autoresponder.length, 0);
   assert.equal(h.after.length, 0);
+});
+
+for (const [label, overrides] of [
+  ["email rejects", { emailResult: false }],
+  ["GHL rejects", { ghlResult: false }],
+  ["email throws", { emailThrows: true }],
+  ["GHL throws", { ghlThrows: true }],
+  ["email is unconfigured", { email: false }],
+  ["GHL is unconfigured", { ghl: false }],
+]) {
+  await check(`stored Google + Meta lead stays recoverable without a success receipt when ${label}`, async () => {
+    const h = harness(overrides);
+    const result = await h.run(validForm(googleMeta.GOOGLE_META_LANDING_SOURCE));
+    assert.equal(result.ok, false);
+    assert.match(result.message, /couldn't complete delivery/);
+    assert.equal(h.calls.store.length, 1, "keep the recovery copy");
+    assert.equal(h.calls.zoho.length, 0, "Zoho must not silently stand in for GHL");
+    for (const key of ["receipt", "meta", "openai", "autoresponder"]) assert.equal(h.calls[key].length, 0, key);
+    assert.equal(h.after.length, 0, "no deferred false acknowledgment or conversion");
+  });
+}
+
+await check("Google + Meta starts email and GHL together and waits for both acknowledgments", async () => {
+  let resolveMail;
+  let resolveGhl;
+  const h = harness({ emailResult: new Promise((resolve) => { resolveMail = resolve; }), ghlResult: new Promise((resolve) => { resolveGhl = resolve; }) });
+  const submission = h.run(validForm(googleMeta.GOOGLE_META_LANDING_SOURCE));
+  const redirected = assert.rejects(submission, (error) => error instanceof Redirect);
+  for (let i = 0; i < 30; i++) await Promise.resolve();
+  assert.equal(h.calls.email.length, 1);
+  assert.equal(h.calls.ghl.length, 1);
+  assert.equal(h.calls.receipt.length, 0);
+  resolveMail(true);
+  for (let i = 0; i < 10; i++) await Promise.resolve();
+  assert.equal(h.calls.receipt.length, 0, "email alone must not confirm");
+  resolveGhl(true);
+  await redirected;
+  assert.equal(h.calls.receipt.length, 1);
+});
+
+await check("retry after GHL failure reuses the saved row and accepted email", async () => {
+  const h = harness({ ghlResult: false });
+  const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
+  assert.equal((await h.run(form)).ok, false);
+  h.config.ghlResult = true;
+  await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  assert.equal(h.calls.store.length, 1);
+  assert.equal(h.calls.landing.length, 1);
+  assert.equal(h.calls.email.length, 1);
+  assert.equal(h.calls.ghl.length, 2);
+  assert.equal(h.calls.ghl[0][0].submissionId, h.calls.ghl[1][0].submissionId);
+  assert.equal(h.calls.ghl[0][0].submissionId, LEAD_ID, "retain the canonical marker for manual backfill");
+  await h.flush();
+  assert.equal(h.calls.autoresponder.length, 1);
+  assert.equal(h.calls.meta.length, 1);
+});
+
+await check("retry after partial email failure sends only unacknowledged inboxes and skips accepted GHL", async () => {
+  const h = harness({ emailResult: false, acceptedRecipients: ["sales@ppcguru.ca"] });
+  const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
+  assert.equal((await h.run(form)).ok, false);
+  h.config.emailResult = true;
+  h.config.acceptedRecipients = ["contact@ppcguru.ca", "marketing@ppcguru.ca"];
+  await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  assert.equal(h.calls.store.length, 1);
+  assert.equal(h.calls.ghl.length, 1);
+  assert.deepEqual(h.calls.email[1][0].to, ["contact@ppcguru.ca", "marketing@ppcguru.ca"]);
+});
+
+await check("a repeated accepted Google + Meta submission never resends notifications or conversions", async () => {
+  const h = harness();
+  const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
+  await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  await h.flush();
+  for (const key of ["store", "landing", "ghl", "email", "autoresponder", "meta", "openai"]) assert.equal(h.calls[key].length, 1, key);
+});
+
+await check("concurrent Google + Meta retries share one save and delivery attempt", async () => {
+  const h = harness();
+  await Promise.all([1, 2].map(() => expectRedirect(h, validForm(googleMeta.GOOGLE_META_LANDING_SOURCE), googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH)));
+  await h.flush();
+  for (const key of ["store", "landing", "ghl", "email", "autoresponder", "meta"]) assert.equal(h.calls[key].length, 1, key);
+});
+
+await check("edited Google + Meta answers are delivered afresh even with the same browser event id", async () => {
+  const h = harness({ ghlResult: false });
+  const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
+  assert.equal((await h.run(form)).ok, false);
+  form.set("channel", "google");
+  h.config.ghlResult = true;
+  await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  assert.equal(h.calls.store.length, 2);
+  assert.equal(h.calls.email.length, 2);
+  assert.match(h.calls.ghl[1][0].message, /Preferred channel: Google Ads/);
+});
+
+await check("without a database the fallback GHL submission marker survives a process restart", async () => {
+  const first = harness({ supabase: false, storedId: null });
+  const second = harness({ supabase: false, storedId: null });
+  const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
+  await expectRedirect(first, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  await expectRedirect(second, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  assert.equal(first.calls.ghl[0][0].submissionId, second.calls.ghl[0][0].submissionId);
+  assert.match(first.calls.ghl[0][0].submissionId, /^google-meta-[a-f0-9]{64}$/);
 });
 
 await check("100-leads choices remain its original four businesses and four budget tiers", () => {

@@ -1,5 +1,5 @@
 /** Read-only by default. --test-lead explicitly creates an isolated .invalid test contact. */
-import { ghlConfigured, ghlCustomFieldReference, syncLeadToGhl } from "../lib/gohighlevel.ts";
+import { ghlConfigured, syncLeadToGhl } from "../lib/gohighlevel.ts";
 
 const API_BASE = (process.env.GHL_API_BASE || "https://services.leadconnectorhq.com").replace(/\/+$/, "");
 const API_VERSION = process.env.GHL_API_VERSION || "2021-07-28";
@@ -50,7 +50,7 @@ async function main(): Promise<void> {
   const wantedFields = [
     ["GHL_CUSTOM_FIELD_BUDGET", process.env.GHL_CUSTOM_FIELD_BUDGET],
     ["GHL_CUSTOM_FIELD_SERVICES", process.env.GHL_CUSTOM_FIELD_SERVICES],
-    ["GHL_CUSTOM_FIELD_SOURCE", process.env.GHL_CUSTOM_FIELD_SOURCE],
+    ["GHL_CUSTOM_FIELD_MESSAGE", process.env.GHL_CUSTOM_FIELD_MESSAGE],
   ].filter(([, value]) => value?.trim()) as Array<[string, string]>;
   if (wantedFields.length) {
     const fieldsResult = await read("/locations/" + encodeURIComponent(LOCATION_ID!) + "/customFields");
@@ -59,8 +59,8 @@ async function main(): Promise<void> {
       bad("configured custom fields could not be verified; add locations/customFields.readonly and retry.");
     } else {
       for (const [envName, value] of wantedFields) {
-        const ref = ghlCustomFieldReference(value);
-        const found = fields.some((field) => "id" in ref ? field.id === ref.id : field.fieldKey === ref.key);
+        // resolveFieldMap pins the literal field ID, so verify that same value.
+        const found = fields.some((field) => field.id === value.trim());
         if (found) pass(envName + " refers to an existing field");
         else bad(envName + " does not match a field in this location");
       }

@@ -251,7 +251,7 @@ export function GoogleMetaResults() {
                   onPointerUp={(event) => { if (pointerStart.current?.id === event.pointerId) pointerStart.current = null; }}
                   onPointerCancel={(event) => { if (pointerStart.current?.id === event.pointerId) { pointerStart.current = null; dragged.current = true; } }}
                   onClick={(event) => openResult(index, event.currentTarget, event.detail === 0)}>
-                  <Image className="gm-phone-image" src={result.src} width={result.width} height={result.height} sizes="(max-width: 600px) 234px, 238px" quality={85} alt={`${result.client} ${result.platform} campaign report`} loading="lazy" draggable={false} />
+                  <Image className="gm-phone-image" src={result.src} width={result.width} height={result.height} sizes="(max-width: 600px) 234px, 238px" quality={75} alt={`${result.client} ${result.platform} campaign report`} loading="lazy" draggable={false} />
                   <span className="gm-phone-open"><Expand aria-hidden="true" /> View full image</span>
                 </button>
               </div>

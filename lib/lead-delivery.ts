@@ -6,6 +6,8 @@ import { sendLeadToGhl, ghlConfigured } from "@/lib/gohighlevel";
 import { sendMetaLead } from "@/lib/meta-capi";
 import { sendOpenAiLead } from "@/lib/openai-capi";
 import { readConversionContext, cleanEventId, type ConversionContext } from "@/lib/conversion-context";
+import { GOOGLE_META_LANDING_SOURCE } from "@/lib/data/landing-google-meta";
+import type { GoogleMetaAttempt } from "@/lib/google-meta-submission";
 
 /**
  * Post-save fan-out shared by every lead form (contact, pop-up/tools, the paid
@@ -20,7 +22,8 @@ import { readConversionContext, cleanEventId, type ConversionContext } from "@/l
  *   2. When the submission is already safe in Supabase, the whole fan-out is
  *      handed to Next's `after()` and runs once the response has been sent —
  *      the visitor sees the thank-you page as soon as the row is written.
- *   3. Only when there is NO durable store (Supabase unconfigured) do we wait
+ *   3. The Google + Meta funnel always waits for email and GHL acknowledgment.
+ *      Other forms only wait when there is NO durable store (unconfigured),
  *      for the fan-out, because then an email/CRM hit is the only proof the
  *      lead exists and the action must be able to report a failure.
  */
@@ -42,6 +45,8 @@ export type DeliveryInput = {
   eventId?: FormDataEntryValue | null;
   /** Paid landing pages may only confirm a lead accepted by a durable channel. */
   requireDelivery?: boolean;
+  /** Server-owned retry progress, only used by the Google + Meta funnel. */
+  attempt?: GoogleMetaAttempt;
 };
 
 export type DeliveryResult = { crmed: boolean; emailed: boolean; autoresponded: boolean };
@@ -74,7 +79,7 @@ export async function fanOut(input: DeliveryInput, ctx?: ConversionContext): Pro
     safe("crm", crm, false),
     safe(
       "team email",
-      sendMail({ to: leadRecipients(), replyTo: notification.replyTo, subject: notification.subject, text: notification.text, rescue: true }),
+      sendMail({ to: leadRecipients(record.source), replyTo: notification.replyTo, subject: notification.subject, text: notification.text, rescue: true }),
       false,
     ),
     // Strict forms without a saved row wait for a team/CRM acknowledgement
@@ -92,18 +97,59 @@ export async function fanOut(input: DeliveryInput, ctx?: ConversionContext): Pro
 
 export type DeliveryOutcome =
   | { ok: true }
-  /** Nothing durable accepted the lead — the caller should show an error. */
+  /** Required delivery did not complete — the caller should show an error. */
   | { ok: false; reason: "undelivered" };
 
 /**
  * Decide how to run the fan-out for this submission.
- *  - stored in Supabase  → schedule it after the response, return ok immediately.
+ *  - Google + Meta       → await all team recipients and GHL, even when stored.
+ *  - other stored leads  → schedule it after the response, return ok immediately.
  *  - not stored          → run it now; ok only if some channel accepted the lead.
  */
 export async function deliverLead(input: DeliveryInput): Promise<DeliveryOutcome> {
   const stored = input.leadId !== null;
   // Headers/cookies are request-scoped: read them now, before `after()`.
   const ctx = await readConversionContext();
+  // This funnel promises all three team inboxes AND GHL. A stored row is a
+  // recovery copy, not confirmation of those deliveries; Zoho cannot replace GHL.
+  if (input.record.source === GOOGLE_META_LANDING_SOURCE) {
+    const { record, notification, attempt } = input;
+    if (attempt?.accepted) return { ok: true };
+    const remainingRecipients = leadRecipients(record.source).filter((recipient) => !attempt?.acceptedRecipients.includes(recipient));
+    const [emailed, crmed] = await Promise.all([
+      attempt?.emailed || !remainingRecipients.length || (emailConfigured() && safe("Google + Meta team email", sendMail({
+        to: remainingRecipients, replyTo: notification.replyTo,
+        subject: notification.subject, text: notification.text, rescue: true,
+        onAccepted: attempt ? (recipients) => {
+          attempt.acceptedRecipients = [...new Set([...attempt.acceptedRecipients, ...recipients])];
+        } : undefined,
+      }), false)),
+      attempt?.crmed || (ghlConfigured() && safe("Google + Meta GHL", sendLeadToGhl({
+        ...record, submissionId: input.leadId ?? attempt?.submissionId ?? cleanEventId(input.eventId),
+        createdAt: new Date().toISOString(),
+      }), false)),
+    ]);
+    if (attempt) {
+      attempt.emailed = emailed;
+      attempt.crmed = crmed;
+    }
+    if (!emailed || !crmed) {
+      console.error("[lead-delivery] Google + Meta required delivery incomplete", {
+        leadId: input.leadId, emailAccepted: emailed, ghlAccepted: crmed,
+      });
+      return { ok: false, reason: "undelivered" };
+    }
+    if (attempt) attempt.accepted = true;
+    // Only acknowledge and count a conversion after both required destinations
+    // accepted the request. The saved recovery copy alone is not a conversion.
+    after(async () => {
+      await Promise.all([
+        safe("autoresponder", sendLeadAutoresponder(input.lead, { source: record.source }), false),
+        sendConversions(input, ctx),
+      ]);
+    });
+    return { ok: true };
+  }
   if (stored) {
     after(async () => {
       await fanOut(input, ctx);
