@@ -51,7 +51,7 @@ export function LoadImagesNearView({
   }, [margin]);
 
   return (
-    <div ref={ref} className={className} style={style} aria-label={ariaLabel}>
+    <div ref={ref} className={className} style={style} role={ariaLabel ? "group" : undefined} aria-label={ariaLabel}>
       {children}
     </div>
   );

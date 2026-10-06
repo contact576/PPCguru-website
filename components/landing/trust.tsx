@@ -65,7 +65,7 @@ export function RegistriesStrip({ heading = true }: { heading?: boolean }) {
 
 function Stars({ n }: { n: number }) {
   return (
-    <span className="lp-stars" aria-label={`${n} out of 5 stars`}>
+    <span className="lp-stars" role="img" aria-label={`${n} out of 5 stars`}>
       {[0, 1, 2, 3, 4].map((i) => (
         <svg key={i} width="16" height="16" viewBox="0 0 24 24" aria-hidden>
           <path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 18.9 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z" fill={i < n ? "#FBBC05" : "#e3e0d0"} />
@@ -171,7 +171,7 @@ export function ClientLogoWall() {
         {rows.map((row, ri) => {
           const items = [...row, ...row];
           return (
-            <div className="logo-viewport" key={ri} aria-label={ri === 0 ? "Client logos" : undefined}>
+            <div className="logo-viewport" key={ri} role={ri === 0 ? "group" : undefined} aria-label={ri === 0 ? "Client logos" : undefined}>
               <div
                 className={ri % 2 ? "logo-track is-reverse" : "logo-track"}
                 style={{ animationDuration: `${Math.max(46, items.length * 3.4)}s` }}

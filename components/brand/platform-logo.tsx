@@ -13,7 +13,7 @@ export function PlatformLogo({ brand }: { brand: string }) {
   switch (brand) {
     case "google":
       return (
-        <span className={wm} aria-label="Google" style={{ fontWeight: 700 }}>
+        <span className={wm} role="img" aria-label="Google" style={{ fontWeight: 700 }}>
           <span style={{ color: "#4285F4" }}>G</span>
           <span style={{ color: "#EA4335" }}>o</span>
           <span style={{ color: "#FBBC05" }}>o</span>
@@ -24,7 +24,7 @@ export function PlatformLogo({ brand }: { brand: string }) {
       );
     case "meta":
       return (
-        <span className={`${wm} inline-flex items-center gap-1.5`} aria-label="Meta">
+        <span className={`${wm} inline-flex items-center gap-1.5`} role="img" aria-label="Meta">
           <svg width="19" height="12.5" viewBox="0 0 24 24" aria-hidden>
             <path
               fill="#0866FF"
@@ -36,27 +36,27 @@ export function PlatformLogo({ brand }: { brand: string }) {
       );
     case "clutch":
       return (
-        <span className={wm} aria-label="Clutch" style={{ color: "#17313B" }}>
+        <span className={wm} role="img" aria-label="Clutch" style={{ color: "#17313B" }}>
           Clutch<span style={{ color: "#FF3D2E" }}>.</span>
         </span>
       );
     case "goodfirms":
       return (
-        <span className={wm} aria-label="GoodFirms">
+        <span className={wm} role="img" aria-label="GoodFirms">
           <span style={{ color: "#16192C" }}>Good</span>
           <span style={{ color: "#F2703A" }}>Firms</span>
         </span>
       );
     case "designrush":
       return (
-        <span className={wm} aria-label="DesignRush">
+        <span className={wm} role="img" aria-label="DesignRush">
           <span style={{ color: "#141414" }}>Design</span>
           <span style={{ color: "#E4002B" }}>Rush</span>
         </span>
       );
     case "upcity":
       return (
-        <span className={`${wm} inline-flex items-center`} aria-label="UpCity" style={{ color: "#1F5E77" }}>
+        <span className={`${wm} inline-flex items-center`} role="img" aria-label="UpCity" style={{ color: "#1F5E77" }}>
           UpCity
           <span style={{ color: "#F5821F", marginLeft: 1 }} aria-hidden>
             ▴
@@ -65,7 +65,7 @@ export function PlatformLogo({ brand }: { brand: string }) {
       );
     case "trustpilot":
       return (
-        <span className={`${wm} inline-flex items-center gap-1.5`} aria-label="Trustpilot">
+        <span className={`${wm} inline-flex items-center gap-1.5`} role="img" aria-label="Trustpilot">
           <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden>
             <path fill="#00B67A" d="M12 1.5l3.09 6.94 7.41.72-5.6 4.99 1.64 7.35L12 17.77 5.46 21.5l1.64-7.35-5.6-4.99 7.41-.72L12 1.5z" />
           </svg>
@@ -74,7 +74,7 @@ export function PlatformLogo({ brand }: { brand: string }) {
       );
     case "g2":
       return (
-        <span className={`${wm} inline-flex items-center gap-1.5`} aria-label="G2">
+        <span className={`${wm} inline-flex items-center gap-1.5`} role="img" aria-label="G2">
           <span
             style={{ background: "#FF492C", color: "#fff", borderRadius: "50%", width: 20, height: 20, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800 }}
             aria-hidden
@@ -86,35 +86,35 @@ export function PlatformLogo({ brand }: { brand: string }) {
       );
     case "themanifest":
       return (
-        <span className={wm} aria-label="The Manifest">
+        <span className={wm} role="img" aria-label="The Manifest">
           <span style={{ color: "#1D1D1B" }}>the</span>
           <span style={{ color: "#F04E37" }}>manifest</span>
         </span>
       );
     case "sortlist":
       return (
-        <span className={wm} aria-label="Sortlist">
+        <span className={wm} role="img" aria-label="Sortlist">
           <span style={{ color: "#12344D" }}>Sort</span>
           <span style={{ color: "#00B2A9" }}>list</span>
         </span>
       );
     case "provenexpert":
       return (
-        <span className={wm} aria-label="ProvenExpert">
+        <span className={wm} role="img" aria-label="ProvenExpert">
           <span style={{ color: "#005EA8" }}>Proven</span>
           <span style={{ color: "#F7941D" }}>Expert</span>
         </span>
       );
     case "techbehemoths":
       return (
-        <span className={wm} aria-label="TechBehemoths">
+        <span className={wm} role="img" aria-label="TechBehemoths">
           <span style={{ color: "#F26522" }}>Tech</span>
           <span style={{ color: "#1B1B1B" }}>Behemoths</span>
         </span>
       );
     case "itprofiles":
       return (
-        <span className={wm} aria-label="ITProfiles">
+        <span className={wm} role="img" aria-label="ITProfiles">
           <span style={{ color: "#0B63CE" }}>IT</span>
           <span style={{ color: "#1B1B1B" }}>Profiles</span>
         </span>

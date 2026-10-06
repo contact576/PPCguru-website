@@ -347,11 +347,11 @@ export function ProofGallery({ onCta = scrollToForm, ctaLabel = "Check my search
         ))}
       </div>
 
-      <div className="proof-mobile-controls" aria-label="ChatGPT screenshot controls">
+      <div className="proof-mobile-controls" role="group" aria-label="ChatGPT screenshot controls">
         <button type="button" onClick={() => show(active - 1)} disabled={active === 0} aria-label="Show previous screenshot">
           <ArrowLeft />
         </button>
-        <div className="proof-dots" aria-label={`Screenshot ${active + 1} of ${aiProofs.length}`}>
+        <div className="proof-dots" role="group" aria-label={`Screenshot ${active + 1} of ${aiProofs.length}`}>
           {aiProofs.map((proof, index) => (
             <button key={proof.file} type="button" className={index === active ? "is-active" : ""} onClick={() => show(index)} aria-label={`Show ${proof.platform} screenshot`} />
           ))}

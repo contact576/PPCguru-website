@@ -595,7 +595,7 @@ function ResultsCarousel() {
           <button type="button" onClick={() => move(-1)} aria-label="Previous campaign result">
             <ArrowLeft />
           </button>
-          <div className="result-dots" aria-label="Choose campaign result">
+          <div className="result-dots" role="group" aria-label="Choose campaign result">
             {campaignResults.map((result, resultIndex) => (
               <button
                 key={result.file}
