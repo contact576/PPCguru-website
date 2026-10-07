@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog", "/contact", "/free-audit", "/tools", "/pricing", "/benchmarks", "/compare", "/glossary", "/privacy", "/terms",
   ].map((path) => ({
     url: `${base}${path}`,
-    lastModified: path === "/overview" ? new Date("2026-09-25T00:00:00Z") : now,
+    lastModified: path === "/overview" ? new Date("2026-09-25T00:00:00Z") : path === "" ? new Date("2026-10-07T00:00:00Z") : now,
     changeFrequency: "weekly" as const,
     priority: path === "" ? 1 : 0.8,
   }));

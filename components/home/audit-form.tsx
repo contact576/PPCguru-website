@@ -21,7 +21,7 @@ const input: React.CSSProperties = { width: "100%", background: "#fbfaf2", borde
 
 function Opt({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} style={{ textAlign: "left", cursor: "pointer", fontSize: 14, fontWeight: 600, padding: "14px 16px", borderRadius: 12, fontFamily: "inherit", background: active ? "#ceff3a" : "#fff", color: active ? "#14170e" : "#3a3c30", border: `1.5px solid ${active ? "#14170e" : "#e3e0d0"}`, transition: "transform .12s" }}>{label}</button>
+    <button type="button" aria-pressed={active} onClick={onClick} style={{ textAlign: "left", cursor: "pointer", fontSize: 14, fontWeight: 600, padding: "14px 16px", borderRadius: 12, fontFamily: "inherit", background: active ? "#ceff3a" : "#fff", color: active ? "#14170e" : "#3a3c30", border: `1.5px solid ${active ? "#14170e" : "#e3e0d0"}`, transition: "transform .12s" }}>{label}</button>
   );
 }
 
@@ -94,21 +94,27 @@ export function AuditForm() {
     fd.set("turnstileToken", token);
     fd.set("renderedAt", renderedAt);
     fd.set("event_id", leadEventId());
-    const res = await captureLead({ ok: false, message: "" }, fd);
-    setSubmitting(false);
-    if (res.ok) {
-      track("audit_form_submit", { needs: needs.join(", "), spend, issue });
-      trackLead();
-      setDone(true);
-    } else {
-      // Spent token → force a fresh challenge before they retry.
+    try {
+      const res = await captureLead({ ok: false, message: "" }, fd);
+      if (res.ok) {
+        track("audit_form_submit", { needs: needs.join(", "), spend, issue });
+        trackLead();
+        setDone(true);
+      } else {
+        // Spent token → force a fresh challenge before they retry.
+        setAttempt((n) => n + 1);
+        setError(res.message || "We couldn't submit that right now. Please try again.");
+      }
+    } catch {
       setAttempt((n) => n + 1);
-      setError(res.message || "We couldn't submit that right now. Please try again.");
+      setError("We couldn't submit that right now. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <div data-reveal style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 24, padding: 30, boxShadow: "0 22px 54px rgba(20,23,14,.08)" }}>
+    <form data-reveal noValidate onSubmit={(event) => { event.preventDefault(); void submit(); }} style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 24, padding: 30, boxShadow: "0 22px 54px rgba(20,23,14,.08)" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
         <span className="mono" style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "#83856f" }}>Step {Math.min(step, 4)} of 4</span>
         <span className="mono" style={{ fontSize: 11, color: "#6f7d22", fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase" }}>Free · ~30 sec</span>
@@ -121,7 +127,7 @@ export function AuditForm() {
         <div style={{ textAlign: "center", padding: "24px 0" }}>
           <div style={{ width: 62, height: 62, borderRadius: "50%", background: "#ceff3a", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, margin: "0 auto 18px" }}>✓</div>
           <h3 className="head" style={{ fontSize: 24, marginBottom: 10 }}>Request received</h3>
-          <p style={{ fontSize: 15, color: "#54564a", lineHeight: 1.6, maxWidth: 360, margin: "0 auto" }}>Thanks {name || "—"} — we&rsquo;ll review your accounts and reply within one business day with clear next steps.</p>
+          <p style={{ fontSize: 15, color: "#54564a", lineHeight: 1.6, maxWidth: 360, margin: "0 auto" }}>Thanks {name || "—"} — we&rsquo;ll review your request and reply with clear next steps. We can review your campaigns if you choose to share account access.</p>
         </div>
       ) : step === 1 ? (
         <div>
@@ -130,7 +136,7 @@ export function AuditForm() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             {SERVICE_OPTIONS.map((o) => <Opt key={o} label={o} active={needs.includes(o)} onClick={() => toggleNeed(o)} />)}
           </div>
-          {error && <div style={{ marginTop: 14, fontSize: 13, color: "#c0531f", fontWeight: 600 }}>{error}</div>}
+          {error && <div role="alert" style={{ marginTop: 14, fontSize: 13, color: "#c0531f", fontWeight: 600 }}>{error}</div>}
           <button
             type="button"
             onClick={() => {
@@ -175,19 +181,19 @@ export function AuditForm() {
               <div className="mono" style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "#83856f", marginBottom: 8 }}>Preferred contact</div>
               <div style={{ display: "flex", gap: 8 }}>
                 {CONTACT.map((c) => (
-                  <button key={c} type="button" onClick={() => setContact(c)} style={{ flex: 1, cursor: "pointer", fontSize: 13, fontWeight: 600, padding: 11, borderRadius: 11, fontFamily: "inherit", background: contact === c ? "#14170e" : "#fff", color: contact === c ? "#f1efe3" : "#3a3c30", border: `1.5px solid ${contact === c ? "#14170e" : "#e3e0d0"}` }}>{c}</button>
+                  <button key={c} type="button" aria-pressed={contact === c} onClick={() => setContact(c)} style={{ flex: 1, cursor: "pointer", fontSize: 13, fontWeight: 600, padding: 11, borderRadius: 11, fontFamily: "inherit", background: contact === c ? "#14170e" : "#fff", color: contact === c ? "#f1efe3" : "#3a3c30", border: `1.5px solid ${contact === c ? "#14170e" : "#e3e0d0"}` }}>{c}</button>
                 ))}
               </div>
             </div>
           </div>
           {/* "I'm not a robot" check — renders only once the Turnstile site key is set. */}
           <TurnstileField resetKey={attempt} onToken={setToken} action="home-audit" className="mt-4" />
-          {error && <div style={{ marginTop: 14, fontSize: 13, color: "#c0531f", fontWeight: 600 }}>{error}</div>}
-          <button type="button" onClick={submit} disabled={submitting} className="mono" style={{ marginTop: 18, width: "100%", background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: 16, borderRadius: 13, cursor: submitting ? "wait" : "pointer", border: "none", boxShadow: "0 10px 28px rgba(206,255,58,.35)", opacity: submitting ? 0.7 : 1 }}>{submitting ? "Sending…" : "Send my free PPC audit request"}</button>
+          {error && <div role="alert" style={{ marginTop: 14, fontSize: 13, color: "#c0531f", fontWeight: 600 }}>{error}</div>}
+          <button type="submit" disabled={submitting} className="mono" style={{ marginTop: 18, width: "100%", background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: 16, borderRadius: 13, cursor: submitting ? "wait" : "pointer", border: "none", boxShadow: "0 10px 28px rgba(206,255,58,.35)", opacity: submitting ? 0.7 : 1 }}>{submitting ? "Sending…" : "Send my free PPC audit request"}</button>
           <p style={{ fontSize: 11, color: "#83856f", marginTop: 12, lineHeight: 1.5 }}>By submitting, you agree to be contacted by PPC Guru about your audit request. No spam — unsubscribe anytime.</p>
           <button type="button" onClick={() => setStep(3)} className="mono" style={{ ...back, marginTop: 10 }}>← Back</button>
         </div>
       )}
-    </div>
+    </form>
   );
 }

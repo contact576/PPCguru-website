@@ -1,583 +1,233 @@
-import Link from "next/link";
-import { Zap, Search, Bot, Brain, FileText, ListChecks, KeyRound } from "lucide-react";
-import { anchorForHref, serviceLinks, hubLinks } from "@/lib/data/internal-links";
-import { RevealInit } from "@/components/home/reveal-init";
-import { HeroDashboard } from "@/components/home/hero-dashboard";
-import { WasteCalculator } from "@/components/home/waste-calculator";
-import { FaqList } from "@/components/home/faq-list";
-import { AuditForm } from "@/components/home/audit-form";
-import {
-  tickerLoop, proofItems, proofPoints, sprintWeeks, homeServices, aiTasks, humanTasks,
-  comparisonRows, rptDeliverables, rptKpis, homeCases, homeIndustries,
-  homePricing,
-} from "@/lib/data/home";
-import { GoogleReviews } from "@/components/home/google-reviews";
-import { ToolsOs } from "@/components/home/tools-os";
-import { ReviewRating, AwardsStrip } from "@/components/sections/trust-proof";
-import { TestimonialCarousel } from "@/components/home/testimonial-carousel";
-import { ClientLogoRow } from "@/components/home/client-logo-row";
-import { PartnerPair } from "@/components/shared/partner-pair";
-import { LeadCtaButton } from "@/components/shared/lead-cta";
-import { HeroOffer } from "@/components/shared/hero-offer";
-import { performanceStats } from "@/lib/data/performance-stats";
-import { HeroVectors } from "@/components/shared/hero-vectors";
-import { StatCounter } from "@/components/ui/stat-counter";
-import { ScrollProgress } from "@/components/home/scroll-progress";
-import { ScrollParallax } from "@/components/shared/scroll-parallax";
-import { GsapHeroReveal } from "@/components/home/gsap-hero";
-import { GrowthLoopPinned } from "@/components/home/growth-loop-pinned";
-import { GsapText } from "@/components/shared/gsap-text";
-import { BlogPosts } from "@/components/home/blog-section";
-import { JsonLd } from "@/components/seo/json-ld";
 import type { Metadata } from "next";
-import { buildMetadata, homepageSchema } from "@/lib/seo";
-import { withMetaOverride } from "@/lib/page-meta";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  ChartNoAxesCombined,
+  Check,
+  CircleCheck,
+  MapPin,
+  Megaphone,
+  PanelsTopLeft,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  Workflow,
+} from "lucide-react";
+import { AuditForm } from "@/components/home/audit-form";
+import { BlogPosts } from "@/components/home/blog-section";
+import { PartnerPair } from "@/components/shared/partner-pair";
+import { JsonLd } from "@/components/seo/json-ld";
+import { googleBusinessProfile, googleReviews } from "@/lib/data/google-reviews";
+import { googleAdsResults, metaAdsResults } from "@/lib/data/landing-google-meta-results";
+import { buildMetadata, faqSchema, homepageSchema } from "@/lib/seo";
+import { siteConfig } from "@/lib/site-config";
+import "./home-revamp.css";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return withMetaOverride(buildMetadata({
-  title: "Google & Meta Ads Agency in the GTA & Canada",
-  description:
-    "PPC Guru is an AI-first Google & Meta Partner agency in the Greater Toronto Area. We audit, rebuild and manage your ads so budget turns into qualified leads, booked jobs and revenue — starting with a free website audit: no contract, no setup fee.",
-  path: "/",
-}), "/");
+// The old database override for / says "#1" without evidence. Keep the
+// reviewed homepage metadata authoritative; production stays unchanged until
+// this branch is explicitly released.
+export function generateMetadata(): Metadata {
+  const base = buildMetadata({
+    title: "Toronto PPC Agency for Google Ads, Meta Ads & SEO",
+    description:
+      "PPC Guru is a Toronto PPC agency connecting Google Ads, Meta Ads, SEO, landing pages and tracking. See campaign evidence and get a free website and ads audit.",
+    path: "/",
+    keywords: ["Toronto PPC agency", "Google Ads management Toronto", "Meta Ads agency", "SEO Toronto"],
+  });
+  return {
+    ...base,
+    title: { absolute: "Toronto PPC Agency for Google Ads, Meta Ads & SEO | PPC Guru" },
+    alternates: { canonical: `${siteConfig.url}/` },
+  };
 }
 
-// ISR: refresh the homepage (incl. the dynamic blog teaser) at most once a minute
-// so newly published posts surface without a redeploy.
+// Keep the newest published articles visible without rebuilding the site.
 export const revalidate = 60;
 
-/* ── shared bits ─────────────────────────────────────────────────────────── */
-const WRAP = "mx-auto max-w-[1480px] px-5 py-14 md:px-8 md:py-20";
-const ink = "#14170e", cream = "#f1efe3", lime = "#ceff3a", olive = "#6f7d22", coral = "#f26a2b";
-const SILO_LINK: React.CSSProperties = { color: "#5d6b1a", textDecoration: "underline", textUnderlineOffset: 3, fontWeight: 600 };
+const services = [
+  {
+    number: "01",
+    title: "Google Ads",
+    description: "Show up when people search for what you sell. We connect campaigns, search terms, landing pages and call or form tracking.",
+    href: "/services/google-ads",
+    icon: Search,
+    detail: "Capture demand",
+  },
+  {
+    number: "02",
+    title: "Meta Ads",
+    description: "Make the right offer visible on Facebook and Instagram, then test the creative and audiences that bring useful enquiries.",
+    href: "/services/meta-ads",
+    icon: Megaphone,
+    detail: "Create interest",
+  },
+  {
+    number: "03",
+    title: "SEO & local search",
+    description: "Help customers find clear answers about your services and locations through useful pages, technical SEO and local presence.",
+    href: "/services/seo",
+    icon: MapPin,
+    detail: "Earn visibility",
+  },
+  {
+    number: "04",
+    title: "Websites & landing pages",
+    description: "Make the page match the promise in the ad, answer the next question and make it easy to get in touch.",
+    href: "/services/web-design",
+    icon: PanelsTopLeft,
+    detail: "Convert attention",
+  },
+  {
+    number: "05",
+    title: "Tracking & CRM",
+    description: "Connect forms, calls, analytics and follow-up so you can review enquiry quality alongside clicks and cost.",
+    href: "/services/crm",
+    icon: Workflow,
+    detail: "See what happens next",
+  },
+] as const;
 
-function Eyebrow({ children, color = olive }: { children: React.ReactNode; color?: string }) {
-  return (
-    <div className="eyebrow" style={{ color, marginBottom: 18, display: "inline-flex", alignItems: "center", gap: 10 }}>
-      <svg width="44" height="12" viewBox="0 0 44 12" fill="none" aria-hidden style={{ flexShrink: 0 }}>
-        <line x1="1" y1="7" x2="13" y2="7" stroke={coral} strokeWidth="2" strokeLinecap="round" strokeDasharray="2 3" />
-        <path d="M17 7 H34 l 5 -4.5" stroke={olive} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="15" cy="7" r="2.8" fill={ink} />
-        <circle cx="40" cy="2.5" r="3" fill={lime} stroke={olive} strokeWidth="1" />
-      </svg>
-      {children}
-    </div>
-  );
-}
-function Em({ children, color = "#5d6b1a" }: { children: React.ReactNode; color?: string }) {
-  return <span className="serif" style={{ textTransform: "none", fontWeight: 400, fontStyle: "italic", color }}>{children}</span>;
+const steps = [
+  { number: "01", title: "Find the gaps", text: "We review your website, campaigns and tracking, then identify missed demand and wasted effort." },
+  { number: "02", title: "Agree the plan", text: "We set priorities for services, locations, channels and budget, with a clear way to measure progress." },
+  { number: "03", title: "Build and connect", text: "We launch or improve campaigns and pages while keeping your accounts, forms and call tracking connected." },
+  { number: "04", title: "Learn and improve", text: "We review enquiry quality with your team, test what matters and explain what changed and why." },
+] as const;
+
+const industries = [
+  { name: "Healthcare & physiotherapy", href: "/industries/physiotherapy" },
+  { name: "Home comfort & HVAC", href: "/industries/hvac" },
+  { name: "Construction & renovation", href: "/industries/construction-renovation" },
+  { name: "Immigration services", href: "/industries/immigration" },
+  { name: "Real estate", href: "/industries/real-estate" },
+  { name: "Legal services", href: "/industries/law-firms" },
+] as const;
+
+const locations = [
+  { name: "Toronto", href: "/toronto/google-ads" },
+  { name: "Mississauga", href: "/mississauga/google-ads" },
+  { name: "Brampton", href: "/brampton/google-ads" },
+  { name: "Vaughan", href: "/vaughan/google-ads" },
+  { name: "Markham", href: "/markham/google-ads" },
+  { name: "Ottawa", href: "/ottawa/google-ads" },
+] as const;
+
+const selectedLogos = [
+  { name: "Millennial Events", src: "/landing/logos/opt/millennial-events.webp" },
+  { name: "True Life Wellness", src: "/landing/logos/opt/true-life-wellness-and-physiotherapy.webp" },
+  { name: "Project Pioneer Construction", src: "/landing/logos/opt/project-pioneer-construction.webp" },
+  { name: "Norths Construction", src: "/landing/logos/opt/norths-construction.webp" },
+  { name: "JK Appliance Repair", src: "/landing/logos/opt/jk-appliance-repair-inc.webp" },
+] as const;
+
+const faqItems = [
+  { q: "Should I start with Google Ads or Meta Ads?", a: "Google Ads can reach people already searching for your service. Meta Ads can introduce your offer and reconnect with interested people. We recommend a starting mix based on your market, goals and budget; you do not need to run both." },
+  { q: "What is included in the free audit?", a: "We review your website, conversion paths and tracking, then identify practical first fixes. If you share access to existing ad accounts, we can review campaign structure and wasted spend too. The audit is free and there is no obligation to hire us." },
+  { q: "Who owns my ad accounts and data?", a: "You do. Your Google and Meta accounts, history, data and platform billing stay under your control. We work with the access needed to manage your campaigns." },
+  { q: "How are ad spend and agency fees handled?", a: "You pay ad spend directly to the platforms. We agree on management, creative and landing-page scope and fees separately before paid work begins." },
+  { q: "How do you measure success?", a: "We track calls, forms and other agreed conversion actions, then review cost and lead quality with your team. Where the data is available, we also look at bookings and work won rather than treating every platform conversion as a sale." },
+  { q: "Where does PPC Guru work?", a: "Our team is based in Toronto. We work with businesses across the Greater Toronto Area, Canada and the United States." },
+] as const;
+
+const reviews = ["Brian Martinez", "Aditi Singh", "Joseph Clary"].flatMap((name) =>
+  googleReviews.filter((review) => review.name === name),
+);
+
+const featuredReports = [
+  { ...googleAdsResults[0], platform: "Google Ads", className: "home-report-google" },
+  { ...metaAdsResults[0], platform: "Meta Ads", className: "home-report-meta" },
+] as const;
+
+function TextLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return <Link className="home-text-link" href={href}>{children}<ArrowUpRight size={17} aria-hidden="true" /></Link>;
 }
 
 export default function HomePage() {
   return (
-    <>
+    <div className="home-revamp">
       <JsonLd data={homepageSchema()} />
-    <div style={{ position: "relative", overflowX: "hidden", background: cream }}>
-      <ScrollProgress />
-      <RevealInit />
+      <JsonLd data={faqSchema(faqItems.map(({ q, a }) => ({ q, a })))} />
 
-      {/* ── HERO ───────────────────────────────────────────────────────────── */}
-      <section id="top" style={{ position: "relative", background: cream, overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <ScrollParallax speed={20} className="pointer-events-none absolute inset-x-0 -inset-y-[14%]">
-          <HeroVectors variant="feature" animate idSeed="home-hero" />
-        </ScrollParallax>
-        <div style={{ position: "absolute", top: -140, right: -100, width: 520, height: 520, background: "radial-gradient(circle,rgba(206,255,58,.1),transparent 65%)" }} />
-        {/* kinetic marquee behind */}
-        <div style={{ position: "absolute", top: 120, left: 0, right: 0, overflow: "hidden", opacity: 0.16, pointerEvents: "none" }} aria-hidden>
-          <div className="mq" style={{ fontSize: "8vw" }}>
-            {["Stop wasting ad spend", "turn clicks into", "booked jobs", "stop wasting ad spend", "turn clicks into booked jobs"].map((t, i) => (
-              i % 2 === 0
-                ? <span key={i} className="head" style={{ WebkitTextStroke: `1.5px ${ink}`, color: "transparent", padding: "0 .25em" }}>{t}</span>
-                : <span key={i} className="serif" style={{ color: olive, padding: "0 .25em", textTransform: "none" }}>{t}</span>
-            ))}
+      <section className="home-hero" id="top" aria-labelledby="home-title">
+        <div className="home-hero-glow" aria-hidden="true" />
+        <div className="home-wrap home-hero-grid">
+          <div className="home-hero-copy">
+            <p className="home-kicker home-kicker-light"><span className="home-kicker-dot" /> Toronto PPC agency <span className="home-kicker-divider">/</span> Canada &amp; the US</p>
+            <h1 id="home-title">More of the <em>right leads.</em><br />A clearer way to grow.</h1>
+            <p className="home-hero-lede">PPC Guru connects Google Ads, Meta Ads, SEO, landing pages and tracking so you can see what brings enquiries and what to improve next.</p>
+            <div className="home-hero-actions">
+              <a className="home-button home-button-lime" href="#audit">Get my free audit <ArrowRight size={18} aria-hidden="true" /></a>
+              <a className="home-button home-button-outline" href="#proof">See campaign evidence <ArrowUpRight size={18} aria-hidden="true" /></a>
+            </div>
+            <p className="home-hero-note"><CircleCheck size={16} aria-hidden="true" /> Your ad accounts stay yours. Scope and fees are agreed before paid work.</p>
           </div>
-        </div>
-
-        <div className="mx-auto grid max-w-[1480px] items-center gap-11 px-5 py-[88px] md:px-8 md:py-[96px] lg:grid-cols-[1.05fr_1fr] lg:gap-14" style={{ position: "relative" }}>
-          <GsapHeroReveal>
-            <div className="eyebrow" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#4f5f14", border: "1px solid rgba(95,111,23,.4)", padding: "8px 14px", borderRadius: 999, marginBottom: 30 }}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: lime, display: "inline-block", boxShadow: `0 0 8px ${lime}` }} />
-              GTA&rsquo;s AI-first Google &amp; Meta Partner agency · Canada &amp; USA
+          <div className="home-hero-visual" aria-label="Preview of PPC Guru-supplied Google Ads and Meta Ads campaign reports">
+            <div className="home-visual-header"><span className="home-live-dot" /> THE WORK BEHIND THE RESULTS <span>01 / 02</span></div>
+            <div className="home-visual-window home-visual-window-back">
+              <Image src={metaAdsResults[0].src} alt="PPC Guru-supplied Meta Ads campaign report visual for an events campaign" width={metaAdsResults[0].width} height={metaAdsResults[0].height} priority sizes="(max-width: 700px) 42vw, 250px" />
             </div>
-            <h1 className="head" style={{ fontSize: "clamp(3rem,7vw,6.4rem)" }}>
-              <span style={{ display: "block" }}>Stop</span>
-              <span style={{ display: "inline-block", position: "relative" }}>
-                <Em color="#5d6b1a">wasting</Em>
-                <svg className="scribble" viewBox="0 0 320 130" preserveAspectRatio="none" style={{ position: "absolute", left: "-6%", top: "-14%", width: "112%", height: "128%", overflow: "visible", pointerEvents: "none" }} aria-hidden>
-                  <path d="M40 96 C 4 60, 70 14, 168 16 C 268 18, 312 52, 296 82 C 280 112, 170 122, 78 112 C 18 105, -6 74, 52 50" fill="none" stroke={lime} strokeWidth="4" strokeLinecap="round" style={{ ["--len" as string]: "920" }} />
-                </svg>
-              </span>
-              <span style={{ display: "block" }}>ad spend.</span>
-            </h1>
-            <p style={{ fontSize: 18, lineHeight: 1.6, color: "#54564a", marginTop: 28, maxWidth: 500 }}>
-              We audit, rebuild and manage Google Ads, Meta &amp; SEO so your budget turns into <strong style={{ color: ink, fontWeight: 700 }}>qualified leads, booked jobs and revenue.</strong> Find the leaks before you scale.
-            </p>
-            <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 34 }}>
-              <Link href="#audit" className="mono btn-shine transition-transform hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: lime, color: ink, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 28px", borderRadius: 14, boxShadow: "0 12px 34px rgba(206,255,58,.3)" }}>Get Free PPC Audit →</Link>
-              <Link href="#calculator" className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "17px 26px", borderRadius: 14 }}>Try ROI Calculator</Link>
+            <div className="home-visual-window home-visual-window-front">
+              <Image src={googleAdsResults[0].src} alt="PPC Guru-supplied Google Ads campaign report visual for wellness and physiotherapy" width={googleAdsResults[0].width} height={googleAdsResults[0].height} priority sizes="(max-width: 700px) 52vw, 305px" />
             </div>
-            <HeroOffer className="mt-7 max-w-lg" badge="Free website audit" line="Get a free website and ad-account audit — no contract, no setup fee, no obligation." credit />
-            <div style={{ marginTop: 40 }}>
-              {/* Both partner badges in one frame each, so they read as a matched pair. */}
-              <PartnerPair size="sm" style={{ maxWidth: 520 }} />
-              <div className="mono" style={{ marginTop: 13, fontSize: 11, letterSpacing: ".14em", textTransform: "uppercase", color: "#6b6d5c", lineHeight: 1.6 }}>Performance marketing · GTA</div>
-            </div>
-          </GsapHeroReveal>
-          <HeroDashboard />
-        </div>
-      </section>
-
-      {/* ── TRUST: verified reviews + credentials ──────────────────────────── */}
-      <section style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
-        <div className="mx-auto max-w-[1480px] px-5 py-8 md:px-8 md:py-9">
-          <div data-reveal className="flex flex-col items-center gap-6">
-            <ReviewRating />
-            <AwardsStrip />
+            <div className="home-visual-caption"><span>GOOGLE ADS + META ADS</span><strong>Campaign reports<br />you can inspect.</strong></div>
           </div>
         </div>
       </section>
 
-      {/* ── CLIENTS: one moving row of every client logo ────── */}
-      <ClientLogoRow />
-
-      {/* ── LIME TICKER ────────────────────────────────────────────────────── */}
-      <div style={{ background: lime, color: ink, overflow: "hidden", padding: "16px 0", borderBottom: "1px solid #b6e62a" }}>
-        <div className="mq mq-rev" style={{ fontSize: 20, alignItems: "center" }}>
-          {[...tickerLoop, ...tickerLoop].map((t, i) => (
-            <span key={i} className="head" style={{ fontSize: 20, padding: "0 22px", display: "inline-flex", alignItems: "center", gap: 22 }}>{t}<span className="serif" style={{ fontWeight: 400, textTransform: "none", fontSize: 22 }}>✺</span></span>
-          ))}
-        </div>
-      </div>
-
-      {/* ── PROOF ──────────────────────────────────────────────────────────── */}
-      <section id="proof" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
-        <div className={WRAP}>
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px" }}>
-            <Eyebrow>What you can count on</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Proof we can show <Em>before</Em> you book a call</h2>
+      <section className="home-trust" aria-labelledby="home-trust-title">
+        <div className="home-wrap">
+          <div className="home-trust-top">
+            <div><p className="home-kicker">Independent platform credentials</p><h2 id="home-trust-title">A partner you can look up.</h2></div>
+            <PartnerPair size="sm" className="home-partners" />
           </div>
-          <div className="grid gap-[18px] sm:grid-cols-2">
-            {proofItems.map((it) => (
-              <div key={it.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 22, padding: 28 }}>
-                <div style={{ width: 52, height: 52, borderRadius: 14, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}><it.icon size={24} strokeWidth={2} aria-hidden /></div>
-                <div className="head" style={{ fontSize: 20, marginBottom: 8 }}>{it.title}</div>
-                <div style={{ fontSize: 14.5, color: "#54564a", lineHeight: 1.55 }}>{it.desc}</div>
-              </div>
-            ))}
-          </div>
-          <div data-reveal style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, marginTop: 24 }}>
-            {proofPoints.map((p) => (
-              <span key={p} className="mono" style={{ fontSize: 11, fontWeight: 600, color: "#4f5f14", background: "#eef2dd", border: "1px solid #cfe39a", padding: "8px 13px", borderRadius: 999, letterSpacing: ".03em" }}>{p}</span>
-            ))}
-          </div>
-
-          {/* Real, client-confirmed aggregate results — three headline numbers, not a wall of stats. */}
-          <div data-reveal style={{ marginTop: 48, paddingTop: 40, borderTop: "1px solid #dddbc9" }}>
-            <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-x-8">
-              {performanceStats.filter((s) => s.proofType === "agency_aggregate").map((s) => (
-                <div key={s.label} style={{ textAlign: "center" }}>
-                  <div className="head" style={{ fontSize: "clamp(2.6rem,5vw,3.6rem)", color: ink, lineHeight: 1 }}><StatCounter value={s.value} /></div>
-                  <div style={{ fontSize: 13.5, color: "#54564a", lineHeight: 1.4, marginTop: 10 }}>{s.label}</div>
+          <div className="home-logo-line">
+            <span>Selected client work</span>
+            <div className="home-logo-grid">
+              {selectedLogos.map((logo) => (
+                <div className="home-logo" key={logo.name}>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- already optimized static WebP logos with different aspect ratios */}
+                  <img src={logo.src} alt={logo.name} loading="lazy" decoding="async" />
                 </div>
               ))}
             </div>
-            <p style={{ textAlign: "center", fontSize: 11.5, color: "#8a8c72", marginTop: 26, letterSpacing: ".02em" }}>PPC Guru client aggregate — not a guarantee of individual results.</p>
           </div>
         </div>
       </section>
 
-      {/* ── FREE WEBSITE AUDIT ─────────────────────────────────────────────── */}
-      <section id="sprint" style={{ background: "#f7f5ea", color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <div className="ambient-glow" style={{ position: "absolute", top: -120, left: -80, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.08),transparent 65%)" }} />
-        <div className={WRAP} style={{ position: "relative" }}>
-          <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.2fr]">
-            <div data-reveal>
-              <Eyebrow><Zap size={13} aria-hidden style={{ display: "inline", verticalAlign: "-2px", marginRight: 6 }} />Free website audit</Eyebrow>
-              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>See what your site is <Em>losing</Em> before you commit</h2>
-              <p style={{ fontSize: 17, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 460 }}>We audit your website and ad accounts free — the conversion gaps, tracking problems and wasted spend, with the fixes we&rsquo;d make first. Judge us on the plan, not promises. No contract, no setup fee, no obligation.</p>
-              <div style={{ display: "flex", gap: 13, flexWrap: "wrap", marginTop: 30 }}>
-                <Link href="/free-audit" className="mono" style={{ background: lime, color: ink, fontWeight: 700, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 26px", borderRadius: 13 }}>Get my free website audit</Link>
-                <Link href="#calculator" className="mono" style={{ background: "#fff", border: "1px solid #c4c2b0", color: ink, fontWeight: 600, fontSize: 12.5, letterSpacing: ".06em", textTransform: "uppercase", padding: "16px 24px", borderRadius: 13 }}>Run the numbers first</Link>
-              </div>
-              <p style={{ fontSize: 12.5, color: "#6b6d5c", lineHeight: 1.55, marginTop: 22, maxWidth: 440 }}>The audit is free and yours to keep. Final scope of any engagement depends on account size, campaign history, tracking setup, and monthly budget. Results vary by industry, budget, tracking quality and offer strength.</p>
-            </div>
-            <div data-reveal>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {sprintWeeks.map((w) => (
-                  <div key={w.num} style={{ position: "relative", zIndex: 1, background: "#fff", border: "1px solid #e3e0d0", borderRadius: 20, padding: 22 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                      <span className="head" style={{ fontSize: 22, color: olive }}>{w.num}</span>
-                      <span className="mono" style={{ fontSize: 10, fontWeight: 600, color: "#83856f", letterSpacing: ".1em", textTransform: "uppercase" }}>{w.week}</span>
-                    </div>
-                    <div className="head" style={{ fontSize: 16, lineHeight: 1.05, marginBottom: 9 }}>{w.title}</div>
-                    <div style={{ fontSize: 13, color: "#54564a", lineHeight: 1.5 }}>{w.desc}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      <section className="home-section home-services" id="services" aria-labelledby="home-services-title">
+        <div className="home-wrap">
+          <div className="home-section-head"><div><p className="home-kicker">What we do</p><h2 id="home-services-title">One team, from first search <em>to follow-up.</em></h2></div><p>People discover you in different places. The experience should feel connected from the first impression to the first conversation.</p></div>
+          <div className="home-services-grid">{services.map((service) => { const Icon = service.icon; return <Link href={service.href} className="home-service-card" key={service.title}><div className="home-service-top"><span>{service.number} / {service.detail}</span><ArrowUpRight size={21} aria-hidden="true" /></div><span className="home-service-icon"><Icon size={28} strokeWidth={1.7} aria-hidden="true" /></span><h3>{service.title}</h3><p>{service.description}</p><span className="home-card-link">Explore service <ArrowRight size={16} aria-hidden="true" /></span></Link>; })}</div>
+          <div className="home-section-bottom"><TextLink href="/services">View all PPC Guru services</TextLink><TextLink href="/toronto/google-ads">Google Ads management in Toronto</TextLink></div>
         </div>
       </section>
 
-      {/* ── WASTE CALCULATOR ───────────────────────────────────────────────── */}
-      <section id="calculator" style={{ background: cream, color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(20,23,14,.05) 1px,transparent 1px)", backgroundSize: "32px 32px", maskImage: "radial-gradient(ellipse 70% 80% at 70% 40%,#000,transparent)", WebkitMaskImage: "radial-gradient(ellipse 70% 80% at 70% 40%,#000,transparent)", opacity: 0.5 }} />
-        <div className={WRAP} style={{ position: "relative" }}>
-          <div className="grid items-center gap-12 lg:grid-cols-[0.78fr_1.22fr]">
-            <div data-reveal>
-              <Eyebrow color={coral}><Search size={13} aria-hidden style={{ display: "inline", verticalAlign: "-2px", marginRight: 6 }} />Free PPC waste audit</Eyebrow>
-              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.5vw,3.6rem)" }}>Find the <Em color={coral}>leaks</Em> in your budget</h2>
-              <p style={{ fontSize: 16.5, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 420 }}>Enter a few numbers to see a directional estimate of where spend may be leaking — and what a realistic improvement could look like.</p>
-              <ul style={{ listStyle: "none", padding: 0, margin: "26px 0 0", display: "flex", flexDirection: "column", gap: 13 }}>
-                {["Built like a mini audit report, not a basic form", "Risk scoring for tracking & landing pages", "A recommended first fix in seconds"].map((t) => (
-                  <li key={t} style={{ display: "flex", gap: 11, alignItems: "flex-start", fontSize: 14.5, color: "#3a3c30" }}><span style={{ color: olive }}>●</span> {t}</li>
-                ))}
-              </ul>
-              <p style={{ fontSize: 12, color: "#6b6d5c", marginTop: 24, maxWidth: 380, lineHeight: 1.5 }}>Directional estimate, not a guarantee. Real findings depend on your actual account, tracking and market.</p>
-            </div>
-            <WasteCalculator />
-          </div>
+      <section className="home-section home-proof" id="proof" aria-labelledby="home-proof-title">
+        <div className="home-wrap">
+          <div className="home-section-head home-proof-head"><div><p className="home-kicker">Campaign evidence</p><h2 id="home-proof-title">See the work behind <em>the numbers.</em></h2></div><p>Explore PPC Guru-supplied, styled campaign report visuals. The labels below follow the platforms: Google reports conversions; Meta reports leads.</p></div>
+          <div className="home-report-grid">{featuredReports.map((report) => <Link href="/google-ads-and-meta-ads#results" className={`home-report-card ${report.className}`} key={report.src} aria-label={`Explore ${report.platform} campaign reports, including ${report.client}`}><div className="home-report-top"><span className="home-report-platform">{report.platform}</span><span>{report.period}</span></div><div className="home-report-image"><Image src={report.src} alt={`${report.platform} report visual for ${report.client}: ${report.result}, ${report.cost}, spend ${report.spend}, ${report.period}`} width={report.width} height={report.height} sizes="(max-width: 700px) 86vw, 45vw" loading="lazy" /></div><div className="home-report-copy"><div><p>{report.client}</p><h3>{report.result}</h3><span>{report.cost} · {report.spend} spend</span></div><ArrowUpRight size={22} aria-hidden="true" /></div></Link>)}</div>
+          <div className="home-proof-foot"><p>These styled, redacted visuals were supplied by PPC Guru. Their figures have not been independently verified in the ad accounts. A conversion or lead is not necessarily a sale, and past results do not predict future performance.</p><Link className="home-button home-button-dark" href="/google-ads-and-meta-ads#results">Explore all campaign reports <ArrowUpRight size={18} aria-hidden="true" /></Link></div>
         </div>
       </section>
 
-      {/* ── SERVICES ───────────────────────────────────────────────────────── */}
-      <section id="services" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
-        <div className={WRAP}>
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px" }}>
-            <Eyebrow>What we do</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Full-funnel growth,<br />one <Em>accountable</Em> team</h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 640 }}>Paid ads, SEO, creative and the systems that turn leads into booked jobs — all measured against revenue. From <Link href={serviceLinks["google-ads"].href} style={SILO_LINK}>{serviceLinks["google-ads"].anchor}</Link> and <Link href={serviceLinks["seo"].href} style={SILO_LINK}>{serviceLinks["seo"].anchor}</Link> to <Link href={serviceLinks["meta-ads"].href} style={SILO_LINK}>{serviceLinks["meta-ads"].anchor}</Link> and <Link href={serviceLinks["web-design"].href} style={SILO_LINK}>{serviceLinks["web-design"].anchor}</Link>, explore our <Link href={hubLinks.services.href} style={SILO_LINK}>{hubLinks.services.anchor}</Link>.</p>
-          </div>
-          <div className="grid gap-[14px] sm:grid-cols-2 lg:grid-cols-4">
-            {homeServices.map((s) => (
-              <div key={s.title} data-reveal className="hcard" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 18, padding: 20, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-                  <span style={{ height: 44, padding: "0 10px", gap: 8, borderRadius: 13, background: "#fff", border: "1px solid #dddbc9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    {s.logos.map((l) => (
-                      // eslint-disable-next-line @next/next/no-img-element -- tiny static SVGs, no optimisation needed
-                      <img key={l} src={`/platforms/${l}.svg`} alt="" width={l === "zoho" ? 48 : 24} height={24} loading="lazy" decoding="async" style={{ height: 24, width: "auto", display: "block" }} />
-                    ))}
-                  </span>
-                  <span className="mono" style={{ fontSize: 8.5, color: "#8a8c72", letterSpacing: ".07em", textTransform: "uppercase", border: "1px solid #d3d1bf", padding: "4px 7px", borderRadius: 6 }}>{s.bestFor}</span>
-                </div>
-                <div className="head" style={{ fontSize: 16.5, marginBottom: 7, lineHeight: 1.2 }}>{s.title}</div>
-                <div style={{ fontSize: 12.5, color: "#54564a", lineHeight: 1.5, marginBottom: 13 }}>{s.outcome}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 14 }}>
-                  {s.deliverables.map((d) => (
-                    <span key={d} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#2c2e22" }}><span style={{ color: olive, fontSize: 11 }}>✓</span>{d}</span>
-                  ))}
-                </div>
-                <Link href={s.href} className="mono" style={{ marginTop: "auto", fontSize: 10.5, fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", color: ink, display: "inline-flex", alignItems: "center", gap: 6, borderTop: "1px solid #e3e1d2", paddingTop: 13 }}>{anchorForHref(s.href)} →</Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <section className="home-section home-principle" aria-labelledby="home-principle-title"><div className="home-wrap home-principle-grid"><div><p className="home-kicker">The difference is in the connection</p><h2 id="home-principle-title">A click is only <em>the beginning.</em></h2><p>Good marketing connects the search, the offer, the page and the follow-up. We look beyond platform dashboards to understand which enquiries your team can actually use.</p><TextLink href="/about">Meet the PPC Guru team</TextLink></div><div className="home-principle-list"><div><Search size={23} aria-hidden="true" /><span><strong>Relevant demand</strong><small>Reach people in the right market, at the right moment.</small></span></div><div><PanelsTopLeft size={23} aria-hidden="true" /><span><strong>A clearer destination</strong><small>Make the next step easy on a page that answers real questions.</small></span></div><div><ChartNoAxesCombined size={23} aria-hidden="true" /><span><strong>Decisions you can explain</strong><small>Connect costs to enquiries, then review quality and follow-up.</small></span></div></div></div></section>
 
-      {/* ── GROWTH LOOP (pinned, scroll-scrubbed) ──────────────────────────── */}
-      <GrowthLoopPinned />
+      <section className="home-section home-process" id="process" aria-labelledby="home-process-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">How we work</p><h2 id="home-process-title">A clear plan. <em>Steady improvement.</em></h2></div><p>You should know what happens next, what is being measured and why a campaign changes.</p></div><ol className="home-steps">{steps.map((step) => <li key={step.number}><span className="home-step-number">{step.number}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol><div className="home-process-promise"><ShieldCheck size={24} aria-hidden="true" /><p><strong>Account ownership stays with you.</strong> We agree on access, scope, budget and reporting before launch.</p><a href="#audit">Start with a free audit <ArrowRight size={17} aria-hidden="true" /></a></div></div></section>
 
-      {/* ── AI EXECUTION ───────────────────────────────────────────────────── */}
-      <section id="ai" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
-        <div className={WRAP}>
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px" }}>
-            <Eyebrow>AI-augmented, human-directed</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>AI-augmented execution.<br /><Em>Human-led</Em> strategy.</h2>
-            <GsapText mode="scrub" style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 560 }}>A command center where AI does the heavy lifting and strategists own every decision that touches your budget.</GsapText>
-          </div>
-          <div className="grid gap-[18px] lg:grid-cols-2">
-            <div data-reveal style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 24, padding: 28 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22 }}>
-                <span style={{ width: 46, height: 46, borderRadius: 13, background: ink, color: lime, display: "flex", alignItems: "center", justifyContent: "center", }}><Bot size={22} aria-hidden /></span>
-                <div><div className="head" style={{ fontSize: 19 }}>AI handles the volume</div><div className="mono" style={{ fontSize: 10, color: "#8a8c72", letterSpacing: ".08em", textTransform: "uppercase" }}>Always-on · every account</div></div>
-              </div>
-              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                {aiTasks.map((t) => (
-                  <div key={t} style={{ background: "#fff", border: "1px solid #e3e1d2", borderRadius: 12, padding: "12px 13px", fontSize: 13, color: "#2c2e22", display: "flex", alignItems: "center", gap: 9 }}><span style={{ color: olive }}>▸</span>{t}</div>
-                ))}
-              </div>
-            </div>
-            <div data-reveal style={{ background: ink, border: `1px solid ${ink}`, borderRadius: 24, padding: 28 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22 }}>
-                <span style={{ width: 46, height: 46, borderRadius: 13, background: "rgba(206,255,58,.16)", color: lime, display: "flex", alignItems: "center", justifyContent: "center", }}><Brain size={22} aria-hidden /></span>
-                <div><div className="head" style={{ fontSize: 19, color: cream }}>Humans own the judgment</div><div className="mono" style={{ fontSize: 10, color: "#9a9b88", letterSpacing: ".08em", textTransform: "uppercase" }}>Strategy · money · client</div></div>
-              </div>
-              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                {humanTasks.map((t) => (
-                  <div key={t} style={{ background: "rgba(241,239,227,.05)", border: "1px solid rgba(241,239,227,.1)", borderRadius: 12, padding: "12px 13px", fontSize: 13, color: "#c9c8b6", display: "flex", alignItems: "center", gap: 9 }}><span style={{ color: olive }}>●</span>{t}</div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="home-section home-organic" aria-labelledby="home-organic-title"><div className="home-wrap home-organic-grid"><div className="home-organic-symbol" aria-hidden="true"><Sparkles size={34} /><span>SEARCH<br />MAPS<br />ANSWERS</span><div className="home-organic-orbit" /></div><div><p className="home-kicker">Organic &amp; AI-assisted discovery</p><h2 id="home-organic-title">Be useful wherever <em>customers search.</em></h2><p>Paid campaigns bring demand now. Clear service and location pages help people understand your business when they search in Google, Maps or AI-assisted products. We work on technical SEO, local signals and genuinely useful answers that make your expertise easier to find and evaluate.</p><p className="home-organic-note">No one can promise a ranking or an AI citation. We focus on accurate information, strong pages and evidence that stands up to a closer look.</p><TextLink href="/services/seo">Explore SEO &amp; local search</TextLink></div></div></section>
 
-      {/* ── AI OPERATING SYSTEM ────────────────────────────────────────────── */}
-      <ToolsOs />
+      <section className="home-section home-markets" id="industries" aria-labelledby="home-markets-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Who we help</p><h2 id="home-markets-title">Built for businesses where <em>an enquiry matters.</em></h2></div><p>From a Toronto clinic to a multi-location service team, the right plan starts with your market and the work you want more of.</p></div><div className="home-markets-grid"><div><h3>Industries</h3><div className="home-link-list">{industries.map((industry) => <Link href={industry.href} key={industry.name}>{industry.name}<ArrowUpRight size={16} aria-hidden="true" /></Link>)}</div><TextLink href="/industries">Explore all industries</TextLink></div><div><h3>Toronto &amp; beyond</h3><p>Based at {siteConfig.contact.streetAddress}, Toronto. We work throughout the GTA and with teams across Canada and the US.</p><div className="home-location-links">{locations.map((location) => <Link href={location.href} key={location.name}>{location.name}</Link>)}</div><TextLink href="/locations">Explore service areas</TextLink></div></div></div></section>
 
-      {/* ── COMPARISON ─────────────────────────────────────────────────────── */}
-      <section style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
-        <div className="mx-auto max-w-[1340px] px-5 py-20 md:px-8 md:py-24">
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px", textAlign: "center" }}>
-            <Eyebrow>Why PPC Guru</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Typical agency vs <Em>the Guru way</Em></h2>
-            <GsapText mode="scrub" style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>The difference isn&rsquo;t just better bidding — it&rsquo;s transparency, ownership, and optimizing for revenue.</GsapText>
-          </div>
-          <div data-reveal style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", minWidth: 560, borderCollapse: "separate", borderSpacing: 0, textAlign: "left", borderRadius: 16, overflow: "hidden", border: "1px solid #dddbc9" }}>
-              <caption style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>PPC Guru vs a typical agency, compared</caption>
-              <thead>
-                <tr style={{ background: ink }}>
-                  <th scope="col" className="mono" style={{ padding: "14px 18px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#b8bda6", fontWeight: 700 }}>What matters</th>
-                  <th scope="col" className="mono" style={{ padding: "14px 18px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: lime, fontWeight: 800 }}>The PPC Guru way</th>
-                  <th scope="col" className="mono" style={{ padding: "14px 18px", fontSize: 11, textTransform: "uppercase", letterSpacing: ".06em", color: "#9a9b88", fontWeight: 600 }}>Typical agency</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonRows.map((r, i) => (
-                  <tr key={r.dimension} style={{ verticalAlign: "top", background: i % 2 ? "#faf9f0" : "#fff" }}>
-                    <th scope="row" className="head" style={{ padding: "15px 18px", fontSize: 15, color: ink, textAlign: "left", fontWeight: 700, borderTop: "1px solid #ececdd" }}>{r.dimension}</th>
-                    <td style={{ padding: "15px 18px", fontSize: 14, color: ink, fontWeight: 600, background: "rgba(206,255,58,.10)", borderTop: "1px solid #ececdd" }}><span style={{ display: "inline-flex", width: 18, height: 18, marginRight: 8, borderRadius: 999, background: lime, color: ink, alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, verticalAlign: "middle" }}>✓</span>{r.guru}</td>
-                    <td style={{ padding: "15px 18px", fontSize: 13.5, color: "#83856f", borderTop: "1px solid #ececdd" }}><span style={{ color: coral, fontWeight: 700, marginRight: 8 }}>✕</span>{r.typical}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 22 }}>
-              {([[FileText, "Weekly report"], [ListChecks, "Tracking checklist"], [KeyRound, "Account ownership"]] as const).map(([Icon, c]) => <span key={c} className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, fontWeight: 600, color: "#4f5f14", border: "1px solid #cfe39a", padding: "6px 10px", borderRadius: 8, letterSpacing: ".05em", textTransform: "uppercase" }}><Icon size={12} aria-hidden />{c}</span>)}
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="home-section home-reviews" id="reviews" aria-labelledby="home-reviews-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Client voices</p><h2 id="home-reviews-title">What clients say <em>about the work.</em></h2></div><p>Named comments from PPC Guru&apos;s public Google Business Profile. Read them in context on Google.</p></div><div className="home-review-grid">{reviews.map((review) => <blockquote className="home-review-card" key={review.name}><div className="home-review-stars" aria-label={`${review.stars} out of 5 stars`}>{Array.from({ length: review.stars }, (_, index) => <Star key={index} size={16} fill="currentColor" aria-hidden="true" />)}</div><p>“{review.text}”</p><footer><strong>{review.name}</strong><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer">Google review <ArrowUpRight size={15} aria-hidden="true" /></a></footer></blockquote>)}</div><div className="home-reviews-foot"><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer" className="home-text-link">Read reviews on Google <ArrowUpRight size={17} aria-hidden="true" /></a></div></div></section>
 
-      {/* ── REPORTING ──────────────────────────────────────────────────────── */}
-      <section style={{ background: "#f7f5ea", color: ink, position: "relative", overflow: "hidden", borderBottom: "1px solid #e3e0d0" }}>
-        <div className="ambient-glow" style={{ position: "absolute", bottom: -160, left: "8%", width: 480, height: 480, background: "radial-gradient(circle,rgba(206,255,58,.1),transparent 65%)" }} />
-        <div className={WRAP} style={{ position: "relative" }}>
-          <div className="grid items-center gap-12 lg:grid-cols-[0.84fr_1.16fr]">
-            <div data-reveal>
-              <Eyebrow>Transparent reporting</Eyebrow>
-              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>No agency <Em>black box</Em></h2>
-              <p style={{ fontSize: 16.5, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 440 }}>You should never have to guess what your agency did this month. Here&rsquo;s exactly what lands in your inbox, on a clear cadence.</p>
-              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2" style={{ marginTop: 26 }}>
-                {rptDeliverables.map((d) => <div key={d} style={{ display: "flex", gap: 9, alignItems: "center", fontSize: 13.5, color: "#3a3c30", background: "#eef0e2", border: "1px solid #dddbc9", padding: "12px 13px", borderRadius: 12 }}><span style={{ color: olive }}>✓</span>{d}</div>)}
-              </div>
-            </div>
-            <div data-reveal style={{ background: "#1b1f12", border: "1px solid rgba(241,239,227,.12)", borderRadius: 24, padding: 24, boxShadow: "0 40px 90px rgba(0,0,0,.4)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-                <div className="head" style={{ fontSize: 16, color: cream }}>Monthly Performance Report</div>
-                <span className="mono" style={{ fontSize: 9.5, color: "#8a8b78", border: "1px solid rgba(241,239,227,.12)", padding: "5px 10px", borderRadius: 7, letterSpacing: ".06em", textTransform: "uppercase" }}>Sample</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4" style={{ marginBottom: 14 }}>
-                {rptKpis.map((k) => (
-                  <div key={k.label} style={{ background: "rgba(241,239,227,.04)", border: "1px solid rgba(241,239,227,.08)", borderRadius: 13, padding: 13 }}>
-                    <div className="mono" style={{ fontSize: 8.5, color: "#8a8b78", fontWeight: 600, letterSpacing: ".05em", textTransform: "uppercase" }}>{k.label}</div>
-                    <div className="head" style={{ fontSize: 19, marginTop: 4, color: k.c }}><StatCounter value={k.val} /></div>
-                    <div className="mono" style={{ fontSize: 9.5, color: "#9bd227", fontWeight: 600, marginTop: 1 }}>{k.delta}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ background: "rgba(241,239,227,.04)", border: "1px solid rgba(241,239,227,.08)", borderRadius: 16, padding: 16, marginBottom: 12 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}><span className="mono" style={{ fontSize: 10, color: "#8a8b78", fontWeight: 600, letterSpacing: ".06em", textTransform: "uppercase" }}>Revenue vs wasted spend</span><span className="mono" style={{ fontSize: 10, color: lime, fontWeight: 600 }}>▲ trending up</span></div>
-                <svg viewBox="0 0 360 90" style={{ width: "100%", height: 88, display: "block" }} preserveAspectRatio="none">
-                  <defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor={lime} stopOpacity=".3" /><stop offset="1" stopColor={lime} stopOpacity="0" /></linearGradient></defs>
-                  <path d="M0,74 L60,68 L120,70 L180,52 L240,44 L300,28 L360,12 L360,90 L0,90 Z" fill="url(#rg)" />
-                  <path d="M0,74 L60,68 L120,70 L180,52 L240,44 L300,28 L360,12" fill="none" stroke={lime} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ strokeDasharray: 480, strokeDashoffset: 480, animation: "ppcDash 1.8s ease forwards .3s" }} />
-                  <path d="M0,80 L60,79 L120,80 L180,78 L240,79 L300,80 L360,80" fill="none" stroke={coral} strokeWidth="1.5" strokeDasharray="4 4" opacity=".6" />
-                </svg>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12.5, background: "rgba(206,255,58,.08)", border: "1px solid rgba(206,255,58,.22)", padding: "11px 14px", borderRadius: 12 }}><span style={{ color: "#c9c8b6" }}>Top campaign · Emergency HVAC</span><span className="mono" style={{ color: lime, fontWeight: 700 }}>5.3x ROAS</span></div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12.5, background: "rgba(242,106,43,.08)", border: "1px solid rgba(242,106,43,.22)", padding: "11px 14px", borderRadius: 12 }}><span style={{ color: "#c9c8b6" }}>42 search terms added as negatives</span><span className="mono" style={{ color: "#fdba74", fontWeight: 700 }}>−18% waste</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="home-section home-faq" id="faq" aria-labelledby="home-faq-title"><div className="home-wrap home-faq-grid"><div><p className="home-kicker">Before you get started</p><h2 id="home-faq-title">Straight answers, <em>no black box.</em></h2><p>Still have a question about your market, budget or current campaigns? We can look at it together.</p><TextLink href="/contact">Talk to our team</TextLink></div><div className="home-faq-list">{faqItems.map((item) => <details key={item.q}><summary>{item.q}<span aria-hidden="true">+</span></summary><p>{item.a}</p></details>)}</div></div></section>
 
-      {/* ── CASE STUDIES ───────────────────────────────────────────────────── */}
-      <section id="cases" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
-        <div className={WRAP}>
-          <div data-reveal style={{ maxWidth: 780, margin: "0 auto 14px" }}>
-            <Eyebrow>Proof</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Results that show up<br />in the <Em>bank account</Em></h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6, maxWidth: 600 }}>Representative engagements showing how we turn spend into booked jobs. Anonymized — individual results vary.</p>
-          </div>
-          <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin]" style={{ marginTop: 36 }}>
-            {homeCases.map((c) => (
-              <div key={c.industry} className="w-[236px] shrink-0 snap-start" style={{ background: "#fbfaf2", border: "1px solid #dddbc9", borderRadius: 18, padding: 18, display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                  <span className="mono" style={{ fontSize: 9.5, fontWeight: 600, color: ink, background: lime, padding: "4px 9px", borderRadius: 6, letterSpacing: ".04em", textTransform: "uppercase" }}>{c.industry}</span>
-                  <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72" }}>{c.location}</span>
-                </div>
-                <div className="head" style={{ fontSize: 40, color: ink, lineHeight: 1 }}><StatCounter value={c.metric} /></div>
-                <div className="mono" style={{ fontSize: 10.5, color: "#54564a", textTransform: "uppercase", letterSpacing: ".03em", marginTop: 4, marginBottom: 12 }}>{c.metricLabel}</div>
-                <svg viewBox="0 0 200 44" style={{ width: "100%", height: 38, display: "block" }}>
-                  <line x1="10" y1="42.5" x2="190" y2="42.5" stroke="#dddbc9" strokeWidth="1" />
-                  <rect x="24" y={c.barA} width="60" height={c.barAh} rx="4" fill="#cfcdba" />
-                  <rect x="116" y={c.barB} width="60" height={c.barBh} rx="4" fill="#9bd227" />
-                </svg>
-                <div style={{ display: "flex", marginTop: 6 }}>
-                  <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 8.5, letterSpacing: ".08em", textTransform: "uppercase", color: "#83856f" }}>Before</span>
-                  <span className="mono" style={{ flex: 1, textAlign: "center", fontSize: 8.5, letterSpacing: ".08em", textTransform: "uppercase", color: "#5f6f17", fontWeight: 700 }}>After</span>
-                </div>
-                <div style={{ marginTop: "auto", paddingTop: 12, borderTop: "1px solid #e3e1d2", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span className="mono" style={{ fontSize: 9.5, color: "#8a8c72" }}>{c.channel}</span>
-                  <Link href={`/results/${c.slug}`} className="mono" style={{ fontSize: 10, fontWeight: 700, color: ink, letterSpacing: ".05em", textTransform: "uppercase" }}>View →</Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <section className="home-section home-insights" id="blog" aria-labelledby="home-insights-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Practical ideas</p><h2 id="home-insights-title">Useful reads for <em>the next decision.</em></h2></div><p>Guides on paid media, local search, landing pages and measurement from the PPC Guru team.</p></div><BlogPosts limit={3} /></div></section>
 
-      {/* ── INDUSTRIES ─────────────────────────────────────────────────────── */}
-      <section id="industries" style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
-        <div className={WRAP}>
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px", textAlign: "center" }}>
-            <Eyebrow>Who we help</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Deep in local <Em>service</Em> verticals</h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>Repeatable playbooks for the industries we know best — niche depth beats generalist agencies for local lead-gen.</p>
-          </div>
-          <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4">
-            {homeIndustries.map((i) => (
-              <Link key={i.name} href={`/industries/${i.slug}`} data-reveal className="group transition-all hover:-translate-y-1 hover:shadow-tile" style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 18, padding: 22, display: "block" }}>
-                <div style={{ width: 46, height: 46, borderRadius: 13, background: "#eef2dd", color: "#5f6f17", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}><i.icon size={22} strokeWidth={2} aria-hidden /></div>
-                <div className="head" style={{ fontSize: 16, marginBottom: 8, lineHeight: 1.05 }}>{i.name}</div>
-                <div style={{ fontSize: 12.5, color: "#54564a", lineHeight: 1.5 }}>{i.angle}</div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRICING ────────────────────────────────────────────────────────── */}
-      <section id="pricing" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
-        <div className="mx-auto max-w-[1340px] px-5 py-20 md:px-8 md:py-24">
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 52px", textAlign: "center" }}>
-            <Eyebrow>Pricing</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Built around your <Em>budget</Em></h2>
-            <p style={{ fontSize: 17, color: "#54564a", marginTop: 18, lineHeight: 1.6 }}>Management fees depend on account complexity, channels, tracking and goals. Here&rsquo;s the structure — your exact scope is confirmed after a review.</p>
-          </div>
-          <div className="grid items-stretch gap-[18px] lg:grid-cols-3">
-            {homePricing.map((p) => (
-              <div key={p.name} data-reveal className="hoverlift" style={{ background: p.dark ? ink : "#fbfaf2", color: p.dark ? cream : ink, border: `1px solid ${p.dark ? ink : "#dddbc9"}`, borderRadius: 24, padding: 32, display: "flex", flexDirection: "column", position: "relative", boxShadow: p.dark ? "0 24px 60px rgba(20,23,14,.25)" : "none" }}>
-                {p.dark && <span className="mono" style={{ position: "absolute", top: -12, left: "50%", transform: "translateX(-50%)", background: lime, color: ink, fontSize: 10, fontWeight: 700, padding: "7px 14px", borderRadius: 999, whiteSpace: "nowrap", letterSpacing: ".08em", textTransform: "uppercase" }}>Most popular</span>}
-                <div className="head" style={{ fontSize: 20 }}>{p.name}</div>
-                <div style={{ fontSize: 13, color: p.dark ? "#9a9b88" : "#54564a", marginTop: 7, lineHeight: 1.4 }}>{p.bestFor}</div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 6, margin: "22px 0" }}><span className="head" style={{ fontSize: 42, color: p.dark ? lime : ink }}>{p.price}</span>{p.priceNote && <span className="mono" style={{ fontSize: 12, color: p.dark ? "#9a9b88" : "#8a8c72", textTransform: "uppercase", letterSpacing: ".05em" }}>{p.priceNote}</span>}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 26 }}>
-                  {p.items.map((it) => <span key={it} style={{ display: "flex", alignItems: "flex-start", gap: 9, fontSize: 13.5, lineHeight: 1.4, color: p.dark ? "#e7e6d6" : "#2c2e22" }}><span style={{ color: p.dark ? lime : olive, flexShrink: 0 }}>✓</span>{it}</span>)}
-                </div>
-                <LeadCtaButton label={p.cta} source={`pricing:${p.name}`} title={`${p.name} — get started`} className="mono" style={{ marginTop: "auto", width: "100%", cursor: "pointer", border: "none", textAlign: "center", background: p.dark ? lime : ink, color: p.dark ? ink : cream, fontWeight: 700, fontSize: 12, letterSpacing: ".06em", textTransform: "uppercase", padding: 15, borderRadius: 13 }} />
-              </div>
-            ))}
-          </div>
-          <p style={{ textAlign: "center", fontSize: 12.5, color: "#8a8c72", marginTop: 26, maxWidth: 640, marginLeft: "auto", marginRight: "auto", lineHeight: 1.5 }}>Ad spend is separate from management fees and paid directly to the ad platforms. Pricing depends on account complexity, channels, tracking setup, landing-page needs and growth goals.</p>
-        </div>
-      </section>
-
-      {/* ── REVIEWS (real Google reviews via widget; testimonials fallback) ── */}
-      <section style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0" }}>
-        <div className={WRAP}>
-          <div data-reveal style={{ maxWidth: 760, margin: "0 auto 28px", textAlign: "center" }}>
-            <Eyebrow>In their words</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>What our clients <Em>actually say</Em></h2>
-          </div>
-          <GoogleReviews fallback={<TestimonialCarousel />} />
-        </div>
-      </section>
-
-      {/* ── FROM THE BLOG (dynamic — latest published posts) ───────────────── */}
-      <section id="blog" style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0" }}>
-        <div className={WRAP}>
-          <div data-reveal style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: 18, marginBottom: 40 }}>
-            <div style={{ maxWidth: 640 }}>
-              <Eyebrow>From the blog</Eyebrow>
-              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>Playbooks that <Em>compound</Em></h2>
-              <p style={{ fontSize: 15, color: "#54564a", lineHeight: 1.6, marginTop: 14 }}>Practical guides on paid ads, SEO and lead generation — written by the team running the campaigns.</p>
-            </div>
-            <Link href="/blog" className="mono" style={{ color: olive, fontWeight: 700, fontSize: 12, letterSpacing: ".06em", textTransform: "uppercase", whiteSpace: "nowrap" }}>View all →</Link>
-          </div>
-          <BlogPosts />
-        </div>
-      </section>
-
-      {/* ── FAQ ────────────────────────────────────────────────────────────── */}
-      <section id="faq" style={{ background: cream, color: ink, borderBottom: `1px solid ${ink}` }}>
-        <div className="mx-auto max-w-[1080px] px-5 py-20 md:px-8 md:py-24">
-          <div data-reveal style={{ textAlign: "center", marginBottom: 48 }}>
-            <Eyebrow>FAQ</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}>Questions, <Em>answered</Em></h2>
-          </div>
-          <FaqList />
-        </div>
-      </section>
-
-      {/* ── FREE RESOURCES ─────────────────────────────────────────────────── */}
-      <section style={{ background: "#f7f5ea", color: ink, borderBottom: "1px solid #e3e0d0" }}>
-        <div className="mx-auto max-w-[1080px] px-5 py-16 md:px-8 md:py-20">
-          <div data-reveal style={{ textAlign: "center", marginBottom: 36 }}>
-            <Eyebrow>Free resources</Eyebrow>
-            <h2 className="head" style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)" }}>Useful even if we never <Em>work together</Em></h2>
-          </div>
-          <div data-reveal className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { href: "/tools/google-ads-calculator", t: "ROI calculators", d: "Model leads, cost-per-lead and ROAS by industry and budget." },
-              { href: "/benchmarks", t: "Industry benchmarks", d: "Typical CPC, conversion rate and cost-per-lead for ~35 industries." },
-              { href: "/compare", t: "Compare guides", d: "Google Ads vs Meta, agency vs in-house vs DIY, PPC vs SEO." },
-              { href: "/glossary", t: "Marketing glossary", d: "Every PPC, Meta and SEO term in plain English." },
-              { href: "/pricing", t: "How pricing works", d: "Transparent fee models — your ad spend stays 100% yours." },
-              { href: "/tools/instant-audit", t: "Instant AI audit", d: "On-page and tracking signals for any site in seconds." },
-            ].map((r) => (
-              <Link key={r.href} href={r.href} style={{ display: "block", background: "#fff", border: "1px solid #dddbc9", borderRadius: 18, padding: 22 }} className="transition-colors hover:border-[#14170e]">
-                <div className="head" style={{ fontSize: 16, color: ink }}>{r.t} <span style={{ color: olive }}>→</span></div>
-                <p style={{ fontSize: 13.5, color: "#54564a", marginTop: 6, lineHeight: 1.5 }}>{r.d}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── AUDIT FORM ─────────────────────────────────────────────────────── */}
-      <section id="audit" style={{ background: cream, color: ink, borderBottom: "1px solid #e3e0d0", position: "relative", overflow: "hidden" }}>
-        <div className="ambient-glow" style={{ position: "absolute", top: -120, right: -90, width: 420, height: 420, background: "radial-gradient(circle,rgba(206,255,58,.2),transparent 65%)" }} />
-        <div className="mx-auto max-w-[1360px] px-5 py-20 md:px-8 md:py-24" style={{ position: "relative" }}>
-          <div className="grid items-start gap-12 lg:grid-cols-[0.82fr_1.18fr]">
-            <div data-reveal>
-              <Eyebrow>Free PPC audit</Eyebrow>
-              <h2 className="head" style={{ fontSize: "clamp(2.2rem,4.6vw,3.6rem)" }}>See where your budget is <Em>really going</Em></h2>
-              <p style={{ fontSize: 16.5, color: "#54564a", lineHeight: 1.6, marginTop: 18, maxWidth: 440 }}>Most accounts waste spend on poor tracking, weak keywords, bad landing pages or slow follow-up. We&rsquo;ll show you exactly where — before you commit to anything.</p>
-              <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 11 }}>
-                {["Campaign structure & search-term waste", "Negative-keyword opportunities", "Conversion tracking — GA4 / GTM", "Landing-page & CRO review", "Budget allocation & competitor visibility", "A clear 30-day action plan"].map((t) => (
-                  <div key={t} style={{ display: "flex", gap: 10, alignItems: "center", fontSize: 14, color: "#2c2e22" }}><span style={{ color: olive }}>✓</span>{t}</div>
-                ))}
-              </div>
-              <p style={{ fontSize: 12, color: "#6b6d5c", marginTop: 22, maxWidth: 400, lineHeight: 1.5 }}>No obligation. No long-term lock-in. You own your accounts and data. We reply within one business day.</p>
-            </div>
-            <AuditForm />
-          </div>
-        </div>
-      </section>
-
-      {/* ── FINAL CTA ──────────────────────────────────────────────────────── */}
-      <section id="get-started" style={{ background: lime, color: ink, position: "relative", overflow: "hidden" }}>
-        <svg viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.5 }} aria-hidden>
-          <g fill="none" stroke={ink} strokeWidth="1" strokeOpacity=".06"><ellipse cx="600" cy="250" rx="320" ry="180" /><ellipse cx="600" cy="250" rx="460" ry="260" /><ellipse cx="600" cy="250" rx="600" ry="340" /></g>
-        </svg>
-        <div style={{ position: "absolute", bottom: -160, left: "50%", transform: "translateX(-50%)", width: 680, height: 420, background: "radial-gradient(circle,rgba(255,255,255,.45),transparent 65%)" }} />
-        <div data-reveal className="mx-auto max-w-[940px] px-5 py-24 text-center md:px-8" style={{ position: "relative" }}>
-          <GsapText as="h2" mode="chars" className="head" style={{ fontSize: "clamp(2.6rem,6vw,5rem)" }}>Turn ad spend into<br /><Em>booked jobs</Em></GsapText>
-          <p style={{ fontSize: 18, color: "#54564a", lineHeight: 1.6, margin: "22px auto 0", maxWidth: 600 }}>Start with a free website audit. You&rsquo;ll get clear next steps before committing to anything — no contract, no setup fee.</p>
-          <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 40 }}>
-            <Link href="#audit" className="mono" style={{ background: ink, color: cream, fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 30px", borderRadius: 14, boxShadow: "0 14px 40px rgba(20,23,14,.28)" }}>Get my free website audit</Link>
-            <Link href="/free-audit" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 28px", borderRadius: 14 }}>What&rsquo;s in the audit?</Link>
-            <Link href="/contact" className="mono" style={{ background: "transparent", border: "1px solid rgba(20,23,14,.32)", color: ink, fontWeight: 600, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: "18px 26px", borderRadius: 14, display: "inline-flex", alignItems: "center", gap: 9 }}><span style={{ width: 9, height: 9, borderRadius: "50%", background: ink }} />Message us</Link>
-          </div>
-          <p className="mono" style={{ fontSize: 11, color: "#3a4a10", marginTop: 28, letterSpacing: ".1em", textTransform: "uppercase" }}>No long-term contracts · You keep ownership of your accounts</p>
-        </div>
-      </section>
+      <section className="home-section home-audit" id="audit" aria-labelledby="home-audit-title"><div className="home-wrap home-audit-grid"><div><p className="home-kicker home-kicker-light">Start with clarity</p><h2 id="home-audit-title">Find out what your marketing <em>could do better.</em></h2><p>Get a free review of your website, tracking and first growth opportunities. Share an ad account if you want us to assess existing campaigns too.</p><ul><li><Check size={17} aria-hidden="true" /> Practical first fixes, in plain English</li><li><Check size={17} aria-hidden="true" /> Your accounts and data remain yours</li><li><Check size={17} aria-hidden="true" /> No obligation to work with us</li></ul><div className="home-audit-contact"><span>Prefer a conversation?</span><a href={siteConfig.contact.phoneHref}>{siteConfig.contact.phone}</a><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></div></div><AuditForm /></div></section>
     </div>
-    </>
   );
 }
