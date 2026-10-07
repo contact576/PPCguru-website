@@ -102,10 +102,10 @@ export function SiteHeader() {
       }}
     >
       <div style={{ maxWidth: 1480, margin: "0 auto", padding: "0 20px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
-        <Logo href="/" variant="dark" size={42} />
+        <div style={{ flexShrink: 0 }}><Logo href="/" variant="dark" size={42} /></div>
 
         {/* Desktop nav */}
-        <nav className="mono hidden lg:flex" aria-label="Primary" style={{ alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase" }}>
+        <nav className="mono hidden min-[1440px]:flex" aria-label="Primary" style={{ alignItems: "center", gap: 4, fontSize: 12, fontWeight: 600, letterSpacing: ".07em", textTransform: "uppercase" }}>
           {nav.map((item) => {
             const active = isActive(pathname, item);
             const color = active ? "#6f7d22" : "#3a3a36";
@@ -175,7 +175,7 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="hidden lg:flex" style={{ alignItems: "center", gap: 10 }}>
+        <div className="hidden min-[1440px]:flex" style={{ alignItems: "center", gap: 10 }}>
           {siteConfig.contact.phone ? (
             <a href={siteConfig.contact.phoneHref} className="mono transition-colors hover:border-[#14170e]" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11, fontWeight: 700, letterSpacing: ".05em", color: "#3a3a36", padding: "10px 13px", border: "1px solid #d8d6c6", borderRadius: 12, whiteSpace: "nowrap" }}>
               <Phone size={13} /> {siteConfig.contact.phone}
@@ -186,7 +186,7 @@ export function SiteHeader() {
           <Link href="/contact" className="mono btn-shine transition-transform hover:-translate-y-0.5" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 11.5, letterSpacing: ".05em", textTransform: "uppercase", padding: "12px 18px", borderRadius: 12, whiteSpace: "nowrap", boxShadow: "0 6px 20px rgba(206,255,58,.28)" }}>Book a Growth Audit</Link>
         </div>
 
-        <button onClick={() => setOpen((v) => !v)} aria-label="Open menu" aria-expanded={open} className="lg:hidden" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 46, height: 46, border: "1px solid #c4c2b0", background: "transparent", cursor: "pointer", color: "#14170e", borderRadius: 13 }}>
+        <button onClick={() => setOpen((v) => !v)} aria-label="Open menu" aria-expanded={open} className="flex min-[1440px]:hidden" style={{ alignItems: "center", justifyContent: "center", width: 46, height: 46, border: "1px solid #c4c2b0", background: "transparent", cursor: "pointer", color: "#14170e", borderRadius: 13 }}>
           <span style={{ display: "block", width: 18, height: 2, background: "#14170e", boxShadow: "0 6px 0 #14170e,0 -6px 0 #14170e" }} />
         </button>
       </div>

@@ -7,24 +7,25 @@ import {
   ChartNoAxesCombined,
   Check,
   CircleCheck,
-  MapPin,
-  Megaphone,
   PanelsTopLeft,
   Search,
   ShieldCheck,
   Sparkles,
   Star,
-  Workflow,
 } from "lucide-react";
 import { AuditForm } from "@/components/home/audit-form";
 import { BlogPosts } from "@/components/home/blog-section";
-import { PartnerPair } from "@/components/shared/partner-pair";
+import { CampaignDeck } from "@/components/home/campaign-deck";
+import { HomePartners, HomeClientMarquee } from "@/components/home/home-trust";
+import { HomeCredentials } from "@/components/home/home-credentials";
+import { ServiceVisual } from "@/components/home/service-visual";
 import { JsonLd } from "@/components/seo/json-ld";
 import { googleBusinessProfile, googleReviews } from "@/lib/data/google-reviews";
 import { googleAdsResults, metaAdsResults } from "@/lib/data/landing-google-meta-results";
 import { buildMetadata, faqSchema, homepageSchema } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 import "./home-revamp.css";
+import "./home-visuals.css";
 
 // The old database override for / says "#1" without evidence. Keep the
 // reviewed homepage metadata authoritative; production stays unchanged until
@@ -53,7 +54,7 @@ const services = [
     title: "Google Ads",
     description: "Show up when people search for what you sell. We connect campaigns, search terms, landing pages and call or form tracking.",
     href: "/services/google-ads",
-    icon: Search,
+    visual: "google",
     detail: "Capture demand",
   },
   {
@@ -61,7 +62,7 @@ const services = [
     title: "Meta Ads",
     description: "Make the right offer visible on Facebook and Instagram, then test the creative and audiences that bring useful enquiries.",
     href: "/services/meta-ads",
-    icon: Megaphone,
+    visual: "meta",
     detail: "Create interest",
   },
   {
@@ -69,7 +70,7 @@ const services = [
     title: "SEO & local search",
     description: "Help customers find clear answers about your services and locations through useful pages, technical SEO and local presence.",
     href: "/services/seo",
-    icon: MapPin,
+    visual: "seo",
     detail: "Earn visibility",
   },
   {
@@ -77,7 +78,7 @@ const services = [
     title: "Websites & landing pages",
     description: "Make the page match the promise in the ad, answer the next question and make it easy to get in touch.",
     href: "/services/web-design",
-    icon: PanelsTopLeft,
+    visual: "website",
     detail: "Convert attention",
   },
   {
@@ -85,7 +86,7 @@ const services = [
     title: "Tracking & CRM",
     description: "Connect forms, calls, analytics and follow-up so you can review enquiry quality alongside clicks and cost.",
     href: "/services/crm",
-    icon: Workflow,
+    visual: "tracking",
     detail: "See what happens next",
   },
 ] as const;
@@ -115,14 +116,6 @@ const locations = [
   { name: "Ottawa", href: "/ottawa/google-ads" },
 ] as const;
 
-const selectedLogos = [
-  { name: "Millennial Events", src: "/landing/logos/opt/millennial-events.webp" },
-  { name: "True Life Wellness", src: "/landing/logos/opt/true-life-wellness-and-physiotherapy.webp" },
-  { name: "Project Pioneer Construction", src: "/landing/logos/opt/project-pioneer-construction.webp" },
-  { name: "Norths Construction", src: "/landing/logos/opt/norths-construction.webp" },
-  { name: "JK Appliance Repair", src: "/landing/logos/opt/jk-appliance-repair-inc.webp" },
-] as const;
-
 const faqItems = [
   { q: "Should I start with Google Ads or Meta Ads?", a: "Google Ads can reach people already searching for your service. Meta Ads can introduce your offer and reconnect with interested people. We recommend a starting mix based on your market, goals and budget; you do not need to run both." },
   { q: "What is included in the free audit?", a: "We review your website, conversion paths and tracking, then identify practical first fixes. If you share access to existing ad accounts, we can review campaign structure and wasted spend too. The audit is free and there is no obligation to hire us." },
@@ -137,8 +130,8 @@ const reviews = ["Brian Martinez", "Aditi Singh", "Joseph Clary"].flatMap((name)
 );
 
 const featuredReports = [
-  { ...googleAdsResults[0], platform: "Google Ads", className: "home-report-google" },
-  { ...metaAdsResults[0], platform: "Meta Ads", className: "home-report-meta" },
+  { ...googleAdsResults[0], platform: "Google Ads", logo: "/platforms/google-ads.svg", className: "home-report-google" },
+  { ...metaAdsResults[0], platform: "Meta Ads", logo: "/platforms/meta.svg", className: "home-report-meta" },
 ] as const;
 
 function TextLink({ href, children }: { href: string; children: React.ReactNode }) {
@@ -164,43 +157,25 @@ export default function HomePage() {
             </div>
             <p className="home-hero-note"><CircleCheck size={16} aria-hidden="true" /> Your ad accounts stay yours. Scope and fees are agreed before paid work.</p>
           </div>
-          <div className="home-hero-visual" aria-label="Preview of PPC Guru-supplied Google Ads and Meta Ads campaign reports">
-            <div className="home-visual-header"><span className="home-live-dot" /> THE WORK BEHIND THE RESULTS <span>01 / 02</span></div>
-            <div className="home-visual-window home-visual-window-back">
-              <Image src={metaAdsResults[0].src} alt="PPC Guru-supplied Meta Ads campaign report visual for an events campaign" width={metaAdsResults[0].width} height={metaAdsResults[0].height} priority sizes="(max-width: 700px) 42vw, 250px" />
-            </div>
-            <div className="home-visual-window home-visual-window-front">
-              <Image src={googleAdsResults[0].src} alt="PPC Guru-supplied Google Ads campaign report visual for wellness and physiotherapy" width={googleAdsResults[0].width} height={googleAdsResults[0].height} priority sizes="(max-width: 700px) 52vw, 305px" />
-            </div>
-            <div className="home-visual-caption"><span>GOOGLE ADS + META ADS</span><strong>Campaign reports<br />you can inspect.</strong></div>
-          </div>
+          <CampaignDeck />
         </div>
       </section>
 
       <section className="home-trust" aria-labelledby="home-trust-title">
         <div className="home-wrap">
           <div className="home-trust-top">
-            <div><p className="home-kicker">Independent platform credentials</p><h2 id="home-trust-title">A partner you can look up.</h2></div>
-            <PartnerPair size="sm" className="home-partners" />
-          </div>
-          <div className="home-logo-line">
-            <span>Selected client work</span>
-            <div className="home-logo-grid">
-              {selectedLogos.map((logo) => (
-                <div className="home-logo" key={logo.name}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- already optimized static WebP logos with different aspect ratios */}
-                  <img src={logo.src} alt={logo.name} loading="lazy" decoding="async" />
-                </div>
-              ))}
-            </div>
+            <div><p className="home-kicker">Platform partnerships</p><h2 id="home-trust-title">A partner you can look up.</h2></div>
+            <HomePartners />
           </div>
         </div>
       </section>
 
+      <HomeClientMarquee />
+
       <section className="home-section home-services" id="services" aria-labelledby="home-services-title">
         <div className="home-wrap">
           <div className="home-section-head"><div><p className="home-kicker">What we do</p><h2 id="home-services-title">One team, from first search <em>to follow-up.</em></h2></div><p>People discover you in different places. The experience should feel connected from the first impression to the first conversation.</p></div>
-          <div className="home-services-grid">{services.map((service) => { const Icon = service.icon; return <Link href={service.href} className="home-service-card" key={service.title}><div className="home-service-top"><span>{service.number} / {service.detail}</span><ArrowUpRight size={21} aria-hidden="true" /></div><span className="home-service-icon"><Icon size={28} strokeWidth={1.7} aria-hidden="true" /></span><h3>{service.title}</h3><p>{service.description}</p><span className="home-card-link">Explore service <ArrowRight size={16} aria-hidden="true" /></span></Link>; })}</div>
+          <div className="home-services-grid">{services.map((service) => <Link href={service.href} className="home-service-card" key={service.title}><div className="home-service-top"><span>{service.number} / {service.detail}</span><ArrowUpRight size={21} aria-hidden="true" /></div><ServiceVisual kind={service.visual} /><h3>{service.title}</h3><p>{service.description}</p><span className="home-card-link">Explore service <ArrowRight size={16} aria-hidden="true" /></span></Link>)}</div>
           <div className="home-section-bottom"><TextLink href="/services">View all PPC Guru services</TextLink><TextLink href="/toronto/google-ads">Google Ads management in Toronto</TextLink></div>
         </div>
       </section>
@@ -208,7 +183,7 @@ export default function HomePage() {
       <section className="home-section home-proof" id="proof" aria-labelledby="home-proof-title">
         <div className="home-wrap">
           <div className="home-section-head home-proof-head"><div><p className="home-kicker">Campaign evidence</p><h2 id="home-proof-title">See the work behind <em>the numbers.</em></h2></div><p>Explore PPC Guru-supplied, styled campaign report visuals. The labels below follow the platforms: Google reports conversions; Meta reports leads.</p></div>
-          <div className="home-report-grid">{featuredReports.map((report) => <Link href="/google-ads-and-meta-ads#results" className={`home-report-card ${report.className}`} key={report.src} aria-label={`Explore ${report.platform} campaign reports, including ${report.client}`}><div className="home-report-top"><span className="home-report-platform">{report.platform}</span><span>{report.period}</span></div><div className="home-report-image"><Image src={report.src} alt={`${report.platform} report visual for ${report.client}: ${report.result}, ${report.cost}, spend ${report.spend}, ${report.period}`} width={report.width} height={report.height} sizes="(max-width: 700px) 86vw, 45vw" loading="lazy" /></div><div className="home-report-copy"><div><p>{report.client}</p><h3>{report.result}</h3><span>{report.cost} · {report.spend} spend</span></div><ArrowUpRight size={22} aria-hidden="true" /></div></Link>)}</div>
+          <div className="home-report-grid">{featuredReports.map((report) => <Link href="/google-ads-and-meta-ads#results" className={`home-report-card ${report.className}`} key={report.src} aria-label={`Explore ${report.platform} campaign reports, including ${report.client}`}><div className="home-report-top"><span className="home-report-platform"><Image src={report.logo} alt="" width={26} height={26} />{report.platform}</span><span>{report.period}</span></div><div className="home-report-image"><Image src={report.src} alt={`${report.platform} report visual for ${report.client}: ${report.result}, ${report.cost}, spend ${report.spend}, ${report.period}`} width={report.width} height={report.height} sizes="(max-width: 700px) 86vw, 45vw" loading="lazy" /></div><div className="home-report-copy"><div><p>{report.client}</p><h3>{report.result}</h3><span>{report.cost} · {report.spend} spend</span></div><ArrowUpRight size={22} aria-hidden="true" /></div></Link>)}</div>
           <div className="home-proof-foot"><p>These styled, redacted visuals were supplied by PPC Guru. Their figures have not been independently verified in the ad accounts. A conversion or lead is not necessarily a sale, and past results do not predict future performance.</p><Link className="home-button home-button-dark" href="/google-ads-and-meta-ads#results">Explore all campaign reports <ArrowUpRight size={18} aria-hidden="true" /></Link></div>
         </div>
       </section>
@@ -221,7 +196,9 @@ export default function HomePage() {
 
       <section className="home-section home-markets" id="industries" aria-labelledby="home-markets-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Who we help</p><h2 id="home-markets-title">Built for businesses where <em>an enquiry matters.</em></h2></div><p>From a Toronto clinic to a multi-location service team, the right plan starts with your market and the work you want more of.</p></div><div className="home-markets-grid"><div><h3>Industries</h3><div className="home-link-list">{industries.map((industry) => <Link href={industry.href} key={industry.name}>{industry.name}<ArrowUpRight size={16} aria-hidden="true" /></Link>)}</div><TextLink href="/industries">Explore all industries</TextLink></div><div><h3>Toronto &amp; beyond</h3><p>Based at {siteConfig.contact.streetAddress}, Toronto. We work throughout the GTA and with teams across Canada and the US.</p><div className="home-location-links">{locations.map((location) => <Link href={location.href} key={location.name}>{location.name}</Link>)}</div><TextLink href="/locations">Explore service areas</TextLink></div></div></div></section>
 
-      <section className="home-section home-reviews" id="reviews" aria-labelledby="home-reviews-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Client voices</p><h2 id="home-reviews-title">What clients say <em>about the work.</em></h2></div><p>Named comments from PPC Guru&apos;s public Google Business Profile. Read them in context on Google.</p></div><div className="home-review-grid">{reviews.map((review) => <blockquote className="home-review-card" key={review.name}><div className="home-review-stars" aria-label={`${review.stars} out of 5 stars`}>{Array.from({ length: review.stars }, (_, index) => <Star key={index} size={16} fill="currentColor" aria-hidden="true" />)}</div><p>“{review.text}”</p><footer><strong>{review.name}</strong><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer">Google review <ArrowUpRight size={15} aria-hidden="true" /></a></footer></blockquote>)}</div><div className="home-reviews-foot"><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer" className="home-text-link">Read reviews on Google <ArrowUpRight size={17} aria-hidden="true" /></a></div></div></section>
+      <section className="home-section home-reviews" id="reviews" aria-labelledby="home-reviews-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Client voices</p><h2 id="home-reviews-title">What clients say <em>about the work.</em></h2></div><p>Named comments from PPC Guru&apos;s public Google Business Profile. Read them in context on Google.</p></div><div className="home-review-grid">{reviews.map((review) => <blockquote className="home-review-card" key={review.name}><div className="home-review-source"><Image src="/platforms/google.svg" alt="Google" width={26} height={26} /><div className="home-review-stars" aria-label={`${review.stars} out of 5 stars`}>{Array.from({ length: review.stars }, (_, index) => <Star key={index} size={16} fill="currentColor" aria-hidden="true" />)}</div></div><p>“{review.text}”</p><footer><strong>{review.name}</strong><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer">Google review <ArrowUpRight size={15} aria-hidden="true" /></a></footer></blockquote>)}</div><div className="home-reviews-foot"><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer" className="home-text-link">Read reviews on Google <ArrowUpRight size={17} aria-hidden="true" /></a></div></div></section>
+
+      <HomeCredentials />
 
       <section className="home-section home-faq" id="faq" aria-labelledby="home-faq-title"><div className="home-wrap home-faq-grid"><div><p className="home-kicker">Before you get started</p><h2 id="home-faq-title">Straight answers, <em>no black box.</em></h2><p>Still have a question about your market, budget or current campaigns? We can look at it together.</p><TextLink href="/contact">Talk to our team</TextLink></div><div className="home-faq-list">{faqItems.map((item) => <details key={item.q}><summary>{item.q}<span aria-hidden="true">+</span></summary><p>{item.a}</p></details>)}</div></div></section>
 

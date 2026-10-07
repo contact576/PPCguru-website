@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { BrandMarquee } from "@/components/shared/logo-wall";
 import { Logo } from "@/components/shared/logo";
-import { PartnerPair } from "@/components/shared/partner-pair";
+import Image from "next/image";
+import { GOOGLE_PARTNER_PROFILE_URL, META_PARTNER_URL } from "@/lib/data/certifications";
 import { siteConfig, addressLines } from "@/lib/site-config";
 
 /**
@@ -43,9 +44,16 @@ export function SiteFooter() {
             <p style={{ fontSize: 13.5, color: "#75766a", lineHeight: 1.6, maxWidth: 320 }}>
               A Google Partner &amp; Meta Business Partner agency turning ad spend into booked jobs and qualified leads for service businesses across the GTA, Canada and the USA.
             </p>
-            {/* [VERIFY] partner status + badge-usage rights before launch.
-                One shared pair — each badge links to the proof it comes from. */}
-            <PartnerPair size="sm" style={{ marginTop: 18, maxWidth: 430 }} />
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 22, marginTop: 24 }} aria-label="Platform partner profiles">
+              <a href={GOOGLE_PARTNER_PROFILE_URL} target="_blank" rel="noopener noreferrer" aria-label="Google Partner — view PPC Guru's partner profile" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#c4cebb", fontSize: 11 }}>
+                <Image src="/platforms/google.svg" alt="Google" width={33} height={33} />
+                <span>Google Partner<br />View profile ↗</span>
+              </a>
+              <a href={META_PARTNER_URL} target="_blank" rel="noopener noreferrer" aria-label="Meta — view business partner documentation" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#c4cebb", fontSize: 11 }}>
+                <Image src="/platforms/meta.svg" alt="Meta" width={40} height={32} />
+                <span>Meta business partner<br />Documentation ↗</span>
+              </a>
+            </div>
           </div>
 
           <FCol title="Services" links={[

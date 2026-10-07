@@ -38,7 +38,9 @@ Primary references: [Google AI optimization](https://developers.google.com/searc
 
 **Organic visibility heading:** Be useful wherever customers search. Explain local SEO, clear service/location content, and accurate business facts without claiming guaranteed placement in AI answers.
 
-**Trust:** Real partner-profile links, a small selection of client logos already present in the site's supplied assets, and named verbatim reviews from the documented Google review dataset, each linked to the public Business Profile. Omit stale review counts and unverifiable aggregate client/result claims.
+**Trust:** Real partner-profile links, all 57 supplied client logos from the 100 Leads page in one uniform moving strip, and named verbatim reviews from the documented Google review dataset, each linked to the public Business Profile. Omit stale review counts and unverifiable aggregate client/result claims. Restore all existing owner-confirmed directory profile links, using original platform artwork where available and plain text elsewhere.
+
+**Visual update:** The hero rotates through all 23 supplied report visuals with manual navigation, pause, off-screen suspension and reduced-motion handling. Services use the bundled Google Ads, Meta, Maps, Analytics and Tag Manager logo assets. The website-design visual is a screenshot of PPC Guru's own `/100-leads` page captured locally on 2026-10-07, framed with lightweight CSS perspective motion. It is labeled as a PPC Guru landing page, not client website work. Partner links use unboxed original Google/Meta marks with separate descriptive labels, not recreated certification badges. Two transparent client logos with white lettering receive a dark backdrop for contrast. Review-platform asset provenance is recorded in `public/badges/reviews/SOURCES.md`.
 
 **Location/industry:** One compact set of existing industry links and Toronto/GTA service links. Preserve the hubs as well.
 
