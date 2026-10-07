@@ -117,7 +117,7 @@ export function AuditForm() {
     <form data-reveal noValidate onSubmit={(event) => { event.preventDefault(); void submit(); }} style={{ background: "#fff", border: "1px solid #e3e0d0", borderRadius: 24, padding: 30, boxShadow: "0 22px 54px rgba(20,23,14,.08)" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
         <span className="mono" style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: "#83856f" }}>Step {Math.min(step, 4)} of 4</span>
-        <span className="mono" style={{ fontSize: 11, color: "#6f7d22", fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase" }}>Free · ~30 sec</span>
+        <span className="mono" style={{ fontSize: 11, color: "#6f7d22", fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase" }}>Free · No obligation</span>
       </div>
       <div style={{ height: 6, background: "#ececdf", borderRadius: 999, overflow: "hidden", marginBottom: 26 }}>
         <div style={{ height: "100%", background: "#ceff3a", borderRadius: 999, width: `${(step / 4) * 100}%`, transition: "width .35s cubic-bezier(.22,1,.36,1)" }} />
@@ -189,7 +189,7 @@ export function AuditForm() {
           {/* "I'm not a robot" check — renders only once the Turnstile site key is set. */}
           <TurnstileField resetKey={attempt} onToken={setToken} action="home-audit" className="mt-4" />
           {error && <div role="alert" style={{ marginTop: 14, fontSize: 13, color: "#c0531f", fontWeight: 600 }}>{error}</div>}
-          <button type="submit" disabled={submitting} className="mono" style={{ marginTop: 18, width: "100%", background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: 16, borderRadius: 13, cursor: submitting ? "wait" : "pointer", border: "none", boxShadow: "0 10px 28px rgba(206,255,58,.35)", opacity: submitting ? 0.7 : 1 }}>{submitting ? "Sending…" : "Send my free PPC audit request"}</button>
+          <button type="submit" disabled={submitting} className="mono" style={{ marginTop: 18, width: "100%", background: "#ceff3a", color: "#14170e", fontWeight: 700, fontSize: 13, letterSpacing: ".06em", textTransform: "uppercase", padding: 16, borderRadius: 13, cursor: submitting ? "wait" : "pointer", border: "none", boxShadow: "0 10px 28px rgba(206,255,58,.35)", opacity: submitting ? 0.7 : 1 }}>{submitting ? "Sending…" : "Request my free audit"}</button>
           <p style={{ fontSize: 11, color: "#83856f", marginTop: 12, lineHeight: 1.5 }}>By submitting, you agree to be contacted by PPC Guru about your audit request. No spam — unsubscribe anytime.</p>
           <button type="button" onClick={() => setStep(3)} className="mono" style={{ ...back, marginTop: 10 }}>← Back</button>
         </div>

@@ -34,7 +34,9 @@ export function OfferPopup() {
   const forced = useRef(false);
 
   const offer = offerForPath(pathname);
-  const suppressed = SUPPRESS_ON.some((p) => pathname === p || pathname.startsWith(p + "/"));
+  // Homepage visitors already have a dedicated audit funnel. Match it exactly
+  // so adding "/" never suppresses offers on every other route.
+  const suppressed = pathname === "/" || SUPPRESS_ON.some((p) => pathname === p || pathname.startsWith(p + "/"));
   const isService = pathname.startsWith("/services/");
   // Centre modal for service pages + any explicit open; gentle corner card elsewhere.
   const [centered, setCentered] = useState(isService);
@@ -44,6 +46,16 @@ export function OfferPopup() {
     window.addEventListener("ppcg:open-offer", openNow);
     return () => window.removeEventListener("ppcg:open-offer", openNow);
   }, []);
+
+  useEffect(() => {
+    // Do not carry an already-open offer into the homepage on client navigation.
+    // A later explicit open event still works normally.
+    if (pathname === "/") {
+      setOpen(false);
+      setSubmitted(false);
+      forced.current = false;
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (typeof window === "undefined" || suppressed || seen(K_DONE)) return;

@@ -65,7 +65,7 @@ export function HomeClientMarquee() {
         </label>
       </div>
       <div className="home-client-marquee-viewport" tabIndex={0} role="region" aria-label="Selected client logos. Focus to pause animation.">
-        <div className="home-client-marquee-track" style={{ "--client-marquee-duration": `${clientLogos.length * 3.4}s` } as CSSProperties}>
+        <div className="home-client-marquee-track" style={{ "--client-marquee-duration": `${clientLogos.length * 4.1}s` } as CSSProperties}>
           {[false, true].map((duplicate) => (
             <ul className="home-client-marquee-group" key={String(duplicate)} aria-hidden={duplicate || undefined}>
               {clientLogos.map((file) => (
@@ -73,8 +73,8 @@ export function HomeClientMarquee() {
                   <img
                     src={logoSource(file)}
                     alt={duplicate ? "" : logoName(file)}
-                    width="140"
-                    height="65"
+                    width="180"
+                    height="85"
                     decoding="async"
                     loading="eager"
                     fetchPriority="low"

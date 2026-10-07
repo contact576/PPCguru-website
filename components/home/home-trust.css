@@ -49,9 +49,9 @@
 .home-client-marquee-viewport:focus-visible { outline: 3px solid #ec7b44; outline-offset: -3px; }
 .home-client-marquee-track { display: flex; width: max-content; animation: home-client-marquee-scroll var(--client-marquee-duration, 194s) linear infinite; }
 .home-client-marquee-group { display: flex; flex: 0 0 auto; align-items: center; gap: 32px; list-style: none; margin: 0; padding: 0 32px 0 0; }
-.home-client-marquee-logo { display: flex; align-items: center; justify-content: center; flex: 0 0 168px; width: 168px; height: 95px; }
-.home-client-marquee-logo img { display: block; width: 140px; height: 65px; object-fit: contain; mix-blend-mode: multiply; }
-.home-client-marquee-logo.home-client-logo-dark { height: 81px; margin-block: 7px; border-radius: 7px; background: #233221; }
+.home-client-marquee-logo { display: flex; align-items: center; justify-content: center; flex: 0 0 210px; width: 210px; height: 116px; }
+.home-client-marquee-logo img { display: block; width: 180px; height: 85px; object-fit: contain; mix-blend-mode: multiply; }
+.home-client-marquee-logo.home-client-logo-dark { height: 102px; margin-block: 7px; border-radius: 7px; background: #233221; }
 .home-client-logo-dark img { mix-blend-mode: normal; }
 .home-client-marquee-viewport:hover .home-client-marquee-track,
 .home-client-marquee-viewport:focus-within .home-client-marquee-track,

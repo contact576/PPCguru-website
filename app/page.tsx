@@ -4,11 +4,8 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUpRight,
-  ChartNoAxesCombined,
   Check,
   CircleCheck,
-  PanelsTopLeft,
-  Search,
   ShieldCheck,
   Sparkles,
   Star,
@@ -16,16 +13,18 @@ import {
 import { AuditForm } from "@/components/home/audit-form";
 import { BlogPosts } from "@/components/home/blog-section";
 import { CampaignDeck } from "@/components/home/campaign-deck";
+import { GrowthJourney } from "@/components/home/growth-journey";
+import { GrowthGoals } from "@/components/home/growth-goals";
 import { HomePartners, HomeClientMarquee } from "@/components/home/home-trust";
 import { HomeCredentials } from "@/components/home/home-credentials";
 import { ServiceVisual } from "@/components/home/service-visual";
 import { JsonLd } from "@/components/seo/json-ld";
 import { googleBusinessProfile, googleReviews } from "@/lib/data/google-reviews";
-import { googleAdsResults, metaAdsResults } from "@/lib/data/landing-google-meta-results";
 import { buildMetadata, faqSchema, homepageSchema } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 import "./home-revamp.css";
 import "./home-visuals.css";
+import "./home-growth.css";
 
 // The old database override for / says "#1" without evidence. Keep the
 // reviewed homepage metadata authoritative; production stays unchanged until
@@ -125,14 +124,11 @@ const faqItems = [
   { q: "Where does PPC Guru work?", a: "Our team is based in Toronto. We work with businesses across the Greater Toronto Area, Canada and the United States." },
 ] as const;
 
-const reviews = ["Brian Martinez", "Aditi Singh", "Joseph Clary"].flatMap((name) =>
+const reviews = ["Neel Donda", "Aditi Singh", "Joseph Clary"].flatMap((name) =>
   googleReviews.filter((review) => review.name === name),
 );
 
-const featuredReports = [
-  { ...googleAdsResults[0], platform: "Google Ads", logo: "/platforms/google-ads.svg", className: "home-report-google" },
-  { ...metaAdsResults[0], platform: "Meta Ads", logo: "/platforms/meta.svg", className: "home-report-meta" },
-] as const;
+const heroReview = googleReviews.find((review) => review.name === "Brian Martinez")!;
 
 function TextLink({ href, children }: { href: string; children: React.ReactNode }) {
   return <Link className="home-text-link" href={href}>{children}<ArrowUpRight size={17} aria-hidden="true" /></Link>;
@@ -149,16 +145,18 @@ export default function HomePage() {
         <div className="home-wrap home-hero-grid">
           <div className="home-hero-copy">
             <p className="home-kicker home-kicker-light"><span className="home-kicker-dot" /> Toronto PPC agency <span className="home-kicker-divider">/</span> Canada &amp; the US</p>
-            <h1 id="home-title">More of the <em>right leads.</em><br />A clearer way to grow.</h1>
-            <p className="home-hero-lede">PPC Guru connects Google Ads, Meta Ads, SEO, landing pages and tracking so you can see what brings enquiries and what to improve next.</p>
+            <h1 id="home-title">Turn clicks into <em>real conversations.</em></h1>
+            <p className="home-hero-lede">Reach the right people. Give them a reason to choose you. We connect Google Ads, Meta Ads, SEO and your website to turn interest into enquiries worth following up.</p>
             <div className="home-hero-actions">
               <a className="home-button home-button-lime" href="#audit">Get my free audit <ArrowRight size={18} aria-hidden="true" /></a>
-              <a className="home-button home-button-outline" href="#proof">See campaign evidence <ArrowUpRight size={18} aria-hidden="true" /></a>
+              <a className="home-button home-button-outline" href="#proof">See the work <ArrowUpRight size={18} aria-hidden="true" /></a>
             </div>
-            <p className="home-hero-note"><CircleCheck size={16} aria-hidden="true" /> Your ad accounts stay yours. Scope and fees are agreed before paid work.</p>
+            <p className="home-hero-note"><CircleCheck size={16} aria-hidden="true" /> Free audit. No obligation. Your accounts stay yours.</p>
+            <blockquote className="home-hero-review"><Image src="/platforms/google.svg" alt="Google" width={32} height={32} /><div><p>“{heroReview.text}”</p><footer>{heroReview.name} · <a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer">Read on Google</a></footer></div></blockquote>
           </div>
-          <CampaignDeck />
+          <GrowthJourney />
         </div>
+        <div className="home-wrap home-hero-waypoints"><span><Check size={15} aria-hidden="true" /> Ads that reach</span><span><Check size={15} aria-hidden="true" /> Pages that persuade</span><span><Check size={15} aria-hidden="true" /> Follow-up that connects</span><a href="#growth-plan">Find your starting point <ArrowRight size={16} aria-hidden="true" /></a></div>
       </section>
 
       <section className="home-trust" aria-labelledby="home-trust-title">
@@ -172,25 +170,34 @@ export default function HomePage() {
 
       <HomeClientMarquee />
 
+      <GrowthGoals />
+
+      <section className="home-section home-proof" id="proof" aria-labelledby="home-proof-title">
+        <div className="home-wrap home-evidence-layout">
+          <div className="home-evidence-copy">
+            <p className="home-kicker">The work behind the results</p>
+            <h2 id="home-proof-title">Less guesswork.<br /><em>More to go on.</em></h2>
+            <p>See the campaigns, the costs and the outcomes. Browse Google and Meta report visuals with the context you need to understand each result.</p>
+            <ul className="home-evidence-points">
+              <li><Image src="/platforms/google-ads.svg" alt="" width={29} height={29} /><div><strong>Google Ads campaign reports</strong><span>Conversions, cost per conversion and campaign spend.</span></div></li>
+              <li><Image src="/platforms/meta.svg" alt="" width={29} height={29} /><div><strong>Meta Ads campaign reports</strong><span>Leads, cost per lead and campaign spend.</span></div></li>
+            </ul>
+            <Link className="home-button home-button-dark" href="/google-ads-and-meta-ads#results">Explore all campaign reports <ArrowUpRight size={18} aria-hidden="true" /></Link>
+            <p className="home-proof-disclosure" id="report-context">Styled, redacted report visuals supplied by PPC Guru; figures have not been independently verified in the ad accounts. A lead or conversion is not necessarily a sale. Past results do not predict future performance.</p>
+          </div>
+          <CampaignDeck />
+        </div>
+      </section>
+
       <section className="home-section home-services" id="services" aria-labelledby="home-services-title">
         <div className="home-wrap">
-          <div className="home-section-head"><div><p className="home-kicker">What we do</p><h2 id="home-services-title">One team, from first search <em>to follow-up.</em></h2></div><p>People discover you in different places. The experience should feel connected from the first impression to the first conversation.</p></div>
+          <div className="home-section-head"><div><p className="home-kicker">What we do</p><h2 id="home-services-title">Everything your next customer <em>needs to say yes.</em></h2></div><p>From the ad they notice to the page they trust, choose the support your business needs. Each service works on its own or as part of one plan.</p></div>
           <div className="home-services-grid">{services.map((service) => <Link href={service.href} className="home-service-card" key={service.title}><div className="home-service-top"><span>{service.number} / {service.detail}</span><ArrowUpRight size={21} aria-hidden="true" /></div><ServiceVisual kind={service.visual} /><h3>{service.title}</h3><p>{service.description}</p><span className="home-card-link">Explore service <ArrowRight size={16} aria-hidden="true" /></span></Link>)}</div>
           <div className="home-section-bottom"><TextLink href="/services">View all PPC Guru services</TextLink><TextLink href="/toronto/google-ads">Google Ads management in Toronto</TextLink></div>
         </div>
       </section>
 
-      <section className="home-section home-proof" id="proof" aria-labelledby="home-proof-title">
-        <div className="home-wrap">
-          <div className="home-section-head home-proof-head"><div><p className="home-kicker">Campaign evidence</p><h2 id="home-proof-title">See the work behind <em>the numbers.</em></h2></div><p>Explore PPC Guru-supplied, styled campaign report visuals. The labels below follow the platforms: Google reports conversions; Meta reports leads.</p></div>
-          <div className="home-report-grid">{featuredReports.map((report) => <Link href="/google-ads-and-meta-ads#results" className={`home-report-card ${report.className}`} key={report.src} aria-label={`Explore ${report.platform} campaign reports, including ${report.client}`}><div className="home-report-top"><span className="home-report-platform"><Image src={report.logo} alt="" width={26} height={26} />{report.platform}</span><span>{report.period}</span></div><div className="home-report-image"><Image src={report.src} alt={`${report.platform} report visual for ${report.client}: ${report.result}, ${report.cost}, spend ${report.spend}, ${report.period}`} width={report.width} height={report.height} sizes="(max-width: 700px) 86vw, 45vw" loading="lazy" /></div><div className="home-report-copy"><div><p>{report.client}</p><h3>{report.result}</h3><span>{report.cost} · {report.spend} spend</span></div><ArrowUpRight size={22} aria-hidden="true" /></div></Link>)}</div>
-          <div className="home-proof-foot"><p>These styled, redacted visuals were supplied by PPC Guru. Their figures have not been independently verified in the ad accounts. A conversion or lead is not necessarily a sale, and past results do not predict future performance.</p><Link className="home-button home-button-dark" href="/google-ads-and-meta-ads#results">Explore all campaign reports <ArrowUpRight size={18} aria-hidden="true" /></Link></div>
-        </div>
-      </section>
-
-      <section className="home-section home-principle" aria-labelledby="home-principle-title"><div className="home-wrap home-principle-grid"><div><p className="home-kicker">The difference is in the connection</p><h2 id="home-principle-title">A click is only <em>the beginning.</em></h2><p>Good marketing connects the search, the offer, the page and the follow-up. We look beyond platform dashboards to understand which enquiries your team can actually use.</p><TextLink href="/about">Meet the PPC Guru team</TextLink></div><div className="home-principle-list"><div><Search size={23} aria-hidden="true" /><span><strong>Relevant demand</strong><small>Reach people in the right market, at the right moment.</small></span></div><div><PanelsTopLeft size={23} aria-hidden="true" /><span><strong>A clearer destination</strong><small>Make the next step easy on a page that answers real questions.</small></span></div><div><ChartNoAxesCombined size={23} aria-hidden="true" /><span><strong>Decisions you can explain</strong><small>Connect costs to enquiries, then review quality and follow-up.</small></span></div></div></div></section>
-
-      <section className="home-section home-process" id="process" aria-labelledby="home-process-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">How we work</p><h2 id="home-process-title">A clear plan. <em>Steady improvement.</em></h2></div><p>You should know what happens next, what is being measured and why a campaign changes.</p></div><ol className="home-steps">{steps.map((step) => <li key={step.number}><span className="home-step-number">{step.number}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol><div className="home-process-promise"><ShieldCheck size={24} aria-hidden="true" /><p><strong>Account ownership stays with you.</strong> We agree on access, scope, budget and reporting before launch.</p><a href="#audit">Start with a free audit <ArrowRight size={17} aria-hidden="true" /></a></div></div></section>
+      <section className="home-section home-process" id="process" aria-labelledby="home-process-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">How we work</p><h2 id="home-process-title">A clear plan. <em>Steady improvement.</em></h2></div><p>Meet the people behind the plan. You should know who is doing the work, what happens next and why a campaign changes. <Link href="/about" className="home-text-link">Meet PPC Guru <ArrowUpRight size={16} aria-hidden="true" /></Link></p></div><ol className="home-steps">{steps.map((step) => <li key={step.number}><span className="home-step-number">{step.number}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol><div className="home-process-promise"><ShieldCheck size={24} aria-hidden="true" /><p><strong>Account ownership stays with you.</strong> We agree on access, scope, budget and reporting before launch.</p><a href="#audit">Start with a free audit <ArrowRight size={17} aria-hidden="true" /></a></div></div></section>
 
       <section className="home-section home-organic" aria-labelledby="home-organic-title"><div className="home-wrap home-organic-grid"><div className="home-organic-symbol" aria-hidden="true"><Sparkles size={34} /><span>SEARCH<br />MAPS<br />ANSWERS</span><div className="home-organic-orbit" /></div><div><p className="home-kicker">Organic &amp; AI-assisted discovery</p><h2 id="home-organic-title">Be useful wherever <em>customers search.</em></h2><p>Paid campaigns bring demand now. Clear service and location pages help people understand your business when they search in Google, Maps or AI-assisted products. We work on technical SEO, local signals and genuinely useful answers that make your expertise easier to find and evaluate.</p><p className="home-organic-note">No one can promise a ranking or an AI citation. We focus on accurate information, strong pages and evidence that stands up to a closer look.</p><TextLink href="/services/seo">Explore SEO &amp; local search</TextLink></div></div></section>
 
@@ -204,7 +211,7 @@ export default function HomePage() {
 
       <section className="home-section home-insights" id="blog" aria-labelledby="home-insights-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Practical ideas</p><h2 id="home-insights-title">Useful reads for <em>the next decision.</em></h2></div><p>Guides on paid media, local search, landing pages and measurement from the PPC Guru team.</p></div><BlogPosts limit={3} /></div></section>
 
-      <section className="home-section home-audit" id="audit" aria-labelledby="home-audit-title"><div className="home-wrap home-audit-grid"><div><p className="home-kicker home-kicker-light">Start with clarity</p><h2 id="home-audit-title">Find out what your marketing <em>could do better.</em></h2><p>Get a free review of your website, tracking and first growth opportunities. Share an ad account if you want us to assess existing campaigns too.</p><ul><li><Check size={17} aria-hidden="true" /> Practical first fixes, in plain English</li><li><Check size={17} aria-hidden="true" /> Your accounts and data remain yours</li><li><Check size={17} aria-hidden="true" /> No obligation to work with us</li></ul><div className="home-audit-contact"><span>Prefer a conversation?</span><a href={siteConfig.contact.phoneHref}>{siteConfig.contact.phone}</a><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></div></div><AuditForm /></div></section>
+      <section className="home-section home-audit" id="audit" aria-labelledby="home-audit-title"><div className="home-wrap home-audit-grid"><div><p className="home-kicker home-kicker-light">Start with clarity</p><h2 id="home-audit-title">Know what to fix.<br /><em>Know what’s next.</em></h2><p className="home-audit-intro">Get a practical review of the journey from first click to enquiry. We’ll identify the gaps and recommend where to focus first.</p><ul className="home-audit-deliverables"><li><Check size={17} aria-hidden="true" /> Website and enquiry-path review</li><li><Check size={17} aria-hidden="true" /> Tracking gaps to investigate</li><li><Check size={17} aria-hidden="true" /> Priorities for your goals and budget</li><li><Check size={17} aria-hidden="true" /> Campaign review when you share account access</li></ul><p className="home-audit-reassurance">Free, with no obligation to hire us. Your accounts stay yours.</p><div className="home-audit-contact"><span>Prefer a conversation?</span><a href={siteConfig.contact.phoneHref}>{siteConfig.contact.phone}</a><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a></div></div><AuditForm /></div></section>
     </div>
   );
 }

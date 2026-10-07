@@ -24,15 +24,17 @@ Primary references: [Google AI optimization](https://developers.google.com/searc
 
 **Hero eyebrow:** Toronto PPC agency · Canada & the US
 
-**H1:** More of the right leads. A clearer way to grow.
+**H1:** Turn clicks into real conversations.
 
-**Hero paragraph:** PPC Guru connects Google Ads, Meta Ads, SEO, landing pages and tracking so you can see what brings enquiries and what to improve next.
+**Hero paragraph:** Reach the right people. Give them a reason to choose you. We connect Google Ads, Meta Ads, SEO and your website to turn interest into enquiries worth following up.
 
-**Primary action:** Get my free audit (scroll to the homepage audit form). **Secondary action:** See campaign evidence (scroll to the proof section).
+**Primary action:** Get my free audit (scroll to the homepage audit form). **Secondary action:** See the work (scroll to the proof section). The homepage floating CTA leads to this same form and stays hidden while the hero or audit is visible; the automatic offer popup is suppressed on the homepage.
 
-**Services heading:** One team, from first search to follow-up. Describe Google Ads, Meta Ads, SEO/local search, landing pages/CRO, and tracking/CRM in plain English. Link each to its canonical service page.
+**Services heading:** Everything your next customer needs to say yes. Describe Google Ads, Meta Ads, SEO/local search, landing pages/CRO, and tracking/CRM in plain English. Link each to its canonical service page.
 
-**Evidence heading:** See the work behind the numbers. Show PPC Guru-supplied, styled and redacted Google and Meta campaign report visuals with their platform labels and dates. Call Google outcomes “conversions” and Meta outcomes “leads,” as the visuals do. Say explicitly that figures were transcribed from these materials, not independently verified in the ad accounts; they are not a forecast of sales.
+**Evidence heading:** Less guesswork. More to go on. Rotate all 23 PPC Guru-supplied, styled and redacted Google and Meta campaign report visuals with manual controls, pause, off-screen suspension and reduced-motion handling. Call Google outcomes “conversions” and Meta outcomes “leads,” as the visuals do. Say explicitly that figures were transcribed from these materials, not independently verified in the ad accounts; they are not a forecast of sales.
+
+**Growth choices:** After the partner section and enlarged 57-logo client strip, visitors choose more enquiries, better-fit leads or more from their website. Each choice shows a distinct starting plan, linked service priorities and an audit CTA. This is an explainer, not an automated audit or a promise of results. Selections are not submitted as lead data.
 
 **Process heading:** A clear plan, then steady improvement. Audit the current site and tracking; agree priorities and measurement; build with account ownership and tracking intact; review enquiry quality and explain what changes.
 
@@ -40,13 +42,13 @@ Primary references: [Google AI optimization](https://developers.google.com/searc
 
 **Trust:** Real partner-profile links, all 57 supplied client logos from the 100 Leads page in one uniform moving strip, and named verbatim reviews from the documented Google review dataset, each linked to the public Business Profile. Omit stale review counts and unverifiable aggregate client/result claims. Restore all existing owner-confirmed directory profile links, using original platform artwork where available and plain text elsewhere.
 
-**Visual update:** The hero rotates through all 23 supplied report visuals with manual navigation, pause, off-screen suspension and reduced-motion handling. Services use the bundled Google Ads, Meta, Maps, Analytics and Tag Manager logo assets. The website-design visual is a screenshot of PPC Guru's own `/100-leads` page captured locally on 2026-10-07, framed with lightweight CSS perspective motion. It is labeled as a PPC Guru landing page, not client website work. Partner links use unboxed original Google/Meta marks with separate descriptive labels, not recreated certification badges. Two transparent client logos with white lettering receive a dark backdrop for contrast. Review-platform asset provenance is recorded in `public/badges/reviews/SOURCES.md`.
+**Visual update:** The hero shows an illustrated discovery → landing page → enquiry → follow-up journey with animated connectors, a floating page preview and a pause control. It uses the bundled Google Ads, Meta and Google logo assets and the actual PPC Guru `/100-leads` screenshot captured locally on 2026-10-07. It is explicitly labeled as an illustration and a PPC Guru landing page, not a live dashboard or client website work. The previous generic principle section is removed to avoid repeating this story. Services use the bundled platform artwork. Partner links retain the unboxed original Google/Meta marks and separate descriptive labels. Two transparent client logos with white lettering receive a dark backdrop for contrast. Review-platform asset provenance is recorded in `public/badges/reviews/SOURCES.md`.
 
 **Location/industry:** One compact set of existing industry links and Toronto/GTA service links. Preserve the hubs as well.
 
 **Questions:** Which channel first? What is in the free audit? Who owns the ad accounts? How are fees handled? How is success measured? Where do you work? Answer each directly in server-rendered text; any FAQ schema must match visible answers.
 
-**Final action:** Get a free review of the website, tracking and advertising opportunity. The ad-account portion depends on access. The user keeps their accounts; scope and fees are agreed before paid work.
+**Final action:** Know what to fix. Know what's next. The offer lists a website/enquiry-path review, tracking gaps, priorities for goals and budget, and a campaign review when account access is shared. The user keeps their accounts; scope and fees are agreed before paid work. Form copy says “Free · No obligation” and “Request my free audit” without an untested completion-time claim.
 
 ## Editorial constraints
 

@@ -73,7 +73,7 @@ export function CampaignDeck() {
         <div className="home-deck-float">
           <div className="home-deck-back" aria-hidden="true"><Image src={next.src} alt="" width={next.width} height={next.height} sizes="(max-width: 600px) 65vw, 320px" loading="eager" /></div>
           <Link key={current.src} className="home-deck-front" href="/google-ads-and-meta-ads#results" aria-label={`Inspect ${current.platform} campaign reports: ${current.client}`}>
-            <Image src={current.src} alt={`${current.platform} supplied report visual: ${current.client}, ${current.result}, ${current.cost}`} width={current.width} height={current.height} sizes="(max-width: 600px) 65vw, 320px" priority={index === 0} />
+            <Image src={current.src} alt={`${current.platform} supplied report visual: ${current.client}, ${current.result}, ${current.cost}`} width={current.width} height={current.height} sizes="(max-width: 600px) 65vw, 320px" loading="lazy" />
             <span className="home-deck-inspect">Inspect the reports <ArrowUpRight size={15} aria-hidden="true" /></span>
           </Link>
         </div>
@@ -84,7 +84,7 @@ export function CampaignDeck() {
         <Link href="/google-ads-and-meta-ads#results" aria-label="View all Google Ads and Meta Ads reports"><ArrowUpRight size={25} aria-hidden="true" /></Link>
       </div>
       <div className="home-deck-footer">
-        <span>Supplied report visuals <a href="#proof">About these results</a></span>
+        <span>Supplied report visuals <a href="#report-context">About these results</a></span>
         <div className="home-deck-controls">
           <button type="button" onClick={() => move(-1)} aria-label="Previous report"><ArrowLeft size={17} aria-hidden="true" /></button>
           <button type="button" data-rotation-control onClick={() => setPaused((value) => !value)} disabled={reducedMotion} aria-label={reducedMotion ? "Automatic rotation disabled for reduced motion" : paused ? "Play report rotation" : "Pause report rotation"}>{paused || reducedMotion ? <Play size={15} aria-hidden="true" /> : <Pause size={15} aria-hidden="true" />}</button>
