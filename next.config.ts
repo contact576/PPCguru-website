@@ -57,7 +57,16 @@ const nextConfig: NextConfig = {
     "/*": ["./content/blog/**/*"],
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      {
+        // Keep the public revamp preview out of search results without changing
+        // the production site's indexing rules or canonical URLs.
+        source: "/:path*",
+        has: [{ type: "host", value: "revamp\\.ppcguru\\.ca" }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+    ];
   },
   // Short memorable alias for the paid landing page. Temporary (307) so the
   // alias can be repointed at a different landing later without browsers
