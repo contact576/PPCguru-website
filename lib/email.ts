@@ -2,29 +2,27 @@
  * Server-only email helpers. `leadRecipients()` is the single source of truth
  * for where contact / lead notifications are delivered.
  *
- * Sales + contact always receive team notifications. CONTACT_TO_EMAIL adds
- * configured recipients; when empty, marketing is also included by default.
+ * Sales, contact, and marketing always receive team notifications.
+ * CONTACT_TO_EMAIL may add more recipients.
  * Example comma-separated list:
  *   CONTACT_TO_EMAIL="contact@ppcguru.ca,sales@ppcguru.ca"
  */
 
-const DEFAULT_RECIPIENTS = [
-  "contact@ppcguru.ca",
+const REQUIRED_RECIPIENTS = [
   "sales@ppcguru.ca",
+  "contact@ppcguru.ca",
   "marketing@ppcguru.ca",
 ];
-const REQUIRED_RECIPIENTS = ["sales@ppcguru.ca", "contact@ppcguru.ca"];
 
-/** Every lead form keeps its existing recipients; Google + Meta also requires marketing. */
-export function leadRecipients(source?: string): string[] {
+/** Every lead form includes the three team inboxes, regardless of environment settings. */
+export function leadRecipients(_source?: string): string[] {
   const parsed = (process.env.CONTACT_TO_EMAIL ?? "")
     .split(",")
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
   return [...new Set([
     ...REQUIRED_RECIPIENTS,
-    ...(source === "landing:google-meta-ads" ? ["marketing@ppcguru.ca"] : []),
-    ...(parsed.length ? parsed : DEFAULT_RECIPIENTS),
+    ...parsed,
   ])];
 }
 
@@ -38,9 +36,14 @@ function smtpConfigured(): boolean {
   return Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS);
 }
 
+function smtpSelected(): boolean {
+  // Production lead mail must never authenticate to the suspended mailbox.
+  return process.env.NODE_ENV !== "production" && process.env.EMAIL_PROVIDER !== "resend" && smtpConfigured();
+}
+
 /** True when at least one real delivery channel (SMTP or Resend) is configured. */
 export function emailConfigured(): boolean {
-  return (process.env.EMAIL_PROVIDER !== "resend" && smtpConfigured()) || Boolean(process.env.RESEND_API_KEY);
+  return smtpSelected() || Boolean(process.env.RESEND_API_KEY);
 }
 
 export type MailInput = {
@@ -131,7 +134,7 @@ async function smtpTransporter(): Promise<Transporter> {
 /**
  * Single outbound-mail entry point. Prefers Hostinger SMTP (nodemailer) when
  * configured, falls back to Resend, otherwise logs. Best-effort: never throws,
- * EMAIL_PROVIDER=resend skips SMTP entirely. Returns true only when providers
+ * Production and EMAIL_PROVIDER=resend skip SMTP entirely. Returns true only when providers
  * accepted every intended recipient; acceptance is not proof of inbox delivery.
  */
 export async function sendMail(msg: MailInput): Promise<boolean> {
@@ -142,7 +145,7 @@ export async function sendMail(msg: MailInput): Promise<boolean> {
   if (!pending.length) return false;
 
   // 1) SMTP (Hostinger) — preferred, unless the breaker is open.
-  if (process.env.EMAIL_PROVIDER !== "resend" && smtpConfigured() && Date.now() >= smtpDownUntil) {
+  if (smtpSelected() && Date.now() >= smtpDownUntil) {
     try {
       const transporter = await smtpTransporter();
       const info = await transporter.sendMail({
@@ -266,8 +269,8 @@ export type EmailChannelHealth = {
 export async function probeEmailHealth(): Promise<EmailChannelHealth[]> {
   const out: EmailChannelHealth[] = [];
   const t0 = Date.now();
-  if (process.env.EMAIL_PROVIDER === "resend") {
-    out.push({ channel: "smtp", configured: smtpConfigured(), ok: false, detail: "SMTP is bypassed because EMAIL_PROVIDER=resend selects direct Resend delivery.", ms: 0 });
+  if (process.env.NODE_ENV === "production" || process.env.EMAIL_PROVIDER === "resend") {
+    out.push({ channel: "smtp", configured: smtpConfigured(), ok: false, detail: "SMTP is bypassed; production and EMAIL_PROVIDER=resend use direct Resend delivery.", ms: 0 });
   } else if (!smtpConfigured()) {
     out.push({ channel: "smtp", configured: false, ok: false, detail: "SMTP_HOST / SMTP_USER / SMTP_PASS not set.", ms: 0 });
   } else {
