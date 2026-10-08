@@ -6,8 +6,8 @@ import { track } from "@/lib/analytics";
 
 /**
  * The conversion buttons on the landing thank-you pages. Client-only so the
- * taps can be tracked (`booking_click` / `phone_click` / `whatsapp_click` are
- * first-party events — GTM can pick them up as ad-platform conversions).
+ * booking and WhatsApp taps can be tracked. The site-wide VisitorTracker owns
+ * phone_click, including its GTM event, so a call-button tap is counted once.
  * The WhatsApp button carries the real WhatsApp mark, not a generic chat icon.
  *
  * "Book a meeting" leads because a booked slot beats a callback; it scrolls to
@@ -36,7 +36,7 @@ export function ThankYouActions({
           <small>Pick a time that works — takes 30 seconds</small>
         </span>
       </a>
-      <a className="thanks-button thanks-call" href={phoneHref} onClick={() => track("phone_click", { source })}>
+      <a className="thanks-button thanks-call" href={phoneHref} data-phone-link="business" data-track-source={source}>
         <Phone aria-hidden="true" />
         <span>
           <strong>Call us now</strong>

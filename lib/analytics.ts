@@ -1,11 +1,13 @@
 "use client";
 
+import { siteConfig } from "@/lib/site-config";
+
 /**
  * First-party, consent-aware event beacon.
  *
  * Sends lightweight interaction events (pageviews, clicks, form/tool events) to
- * our own /api/track endpoint, which writes them to Supabase. Nothing is sent to
- * third parties here.
+ * our own /api/track endpoint, which writes them to Supabase. Business phone
+ * clicks also expose a consent-aware GTM data-layer event below.
  *
  * PRIVACY MODEL (PIPEDA/CASL-aligned, disclosed in /privacy):
  *  - If the visitor explicitly DECLINED the cookie notice → we send nothing.
@@ -80,6 +82,45 @@ export function sendEvent(event: string, extra: { target?: string; path?: string
   } catch {
     /* analytics must never break the page */
   }
+}
+
+/**
+ * One event for a public business-phone link, including links rendered after
+ * client navigation. This measures a tap to dial, not a completed phone call.
+ * Returns true for a recognized link so the delegated tracker avoids also
+ * recording the same interaction as a generic first-party click.
+ */
+export function trackBusinessPhoneClick({ href, linkText, source, isBusinessLink = false }: {
+  href: string;
+  linkText: string;
+  source: string;
+  isBusinessLink?: boolean;
+}): boolean {
+  if (typeof window === "undefined" || /^\/admin(?:\/|$)/.test(location.pathname)) return false;
+  if (!/^tel:[+\d().\s-]+$/i.test(href)) return false;
+  const nationalNumber = (value: string) => value.replace(/\D/g, "").replace(/^1(?=\d{10}$)/, "");
+  const phoneNumber = nationalNumber(siteConfig.contact.phoneHref);
+  // Marked links remain identifiable when Google replaces the dial string with
+  // a forwarding number. Always report the actual URL that opens the dialer.
+  if (!isBusinessLink && nationalNumber(href) !== phoneNumber) return false;
+  if (consentState() === "declined") return true;
+
+  sendEvent("phone_click", { target: href });
+  try {
+    const win = window as Window & { dataLayer?: Array<Record<string, unknown> | IArguments> };
+    (win.dataLayer ??= []).push({
+      event: "phone_click",
+      click_url: href,
+      link_url: href,
+      phone_number: phoneNumber,
+      page_path: location.pathname,
+      link_text: linkText.slice(0, 120),
+      source: source.slice(0, 120),
+    });
+  } catch {
+    /* Tracking must never prevent the browser from opening its dialer. */
+  }
+  return true;
 }
 
 export type AnalyticsEvent =

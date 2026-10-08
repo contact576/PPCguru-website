@@ -228,7 +228,7 @@ export default function OverviewPage() {
             <h2 id="contact-title">Let’s get<br /><em>growing.</em><ArrowUpRight aria-hidden /></h2>
             <div><p>Tell us where you want to go. We’ll start with a free website and ad-account audit, and a clear plan for what comes next.</p><Link href="/free-audit" className={`${styles.button} ${styles.darkButton}`}>Get your free audit <ArrowUpRight size={20} aria-hidden /></Link><span className={styles.noPressure}>No contract. No setup fee. No obligation.</span></div>
           </div>
-          <div className={styles.contactDetails}><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email} <ArrowUpRight size={16} aria-hidden /></a><a href={siteConfig.contact.phoneHref}>{siteConfig.contact.phone} <ArrowUpRight size={16} aria-hidden /></a><a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer">Chat on WhatsApp <ArrowUpRight size={16} aria-hidden /></a></div>
+          <div className={styles.contactDetails}><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email} <ArrowUpRight size={16} aria-hidden /></a><a href={siteConfig.contact.phoneHref} data-phone-link="business">{siteConfig.contact.phone} <ArrowUpRight size={16} aria-hidden /></a><a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer">Chat on WhatsApp <ArrowUpRight size={16} aria-hidden /></a></div>
         </div>
       </section>
 

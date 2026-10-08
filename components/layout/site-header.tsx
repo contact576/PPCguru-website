@@ -177,7 +177,7 @@ export function SiteHeader() {
 
         <div className="hidden lg:flex" style={{ alignItems: "center", gap: 10 }}>
           {siteConfig.contact.phone ? (
-            <a href={siteConfig.contact.phoneHref} className="mono transition-colors hover:border-[#14170e]" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11, fontWeight: 700, letterSpacing: ".05em", color: "#3a3a36", padding: "10px 13px", border: "1px solid #d8d6c6", borderRadius: 12, whiteSpace: "nowrap" }}>
+            <a href={siteConfig.contact.phoneHref} data-phone-link="business" className="mono transition-colors hover:border-[#14170e]" style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: 11, fontWeight: 700, letterSpacing: ".05em", color: "#3a3a36", padding: "10px 13px", border: "1px solid #d8d6c6", borderRadius: 12, whiteSpace: "nowrap" }}>
               <Phone size={13} /> {siteConfig.contact.phone}
             </a>
           ) : (
@@ -230,7 +230,7 @@ export function SiteHeader() {
             ))}
 
             {siteConfig.contact.phone ? (
-              <a href={siteConfig.contact.phoneHref} onClick={() => setOpen(false)} className="mono" style={{ marginTop: 16, display: "flex", alignItems: "center", justifyContent: "center", gap: 9, border: "1px solid #14170e", color: "#14170e", fontWeight: 700, letterSpacing: ".04em", padding: 15, borderRadius: 13 }}>
+              <a href={siteConfig.contact.phoneHref} data-phone-link="business" onClick={() => setOpen(false)} className="mono" style={{ marginTop: 16, display: "flex", alignItems: "center", justifyContent: "center", gap: 9, border: "1px solid #14170e", color: "#14170e", fontWeight: 700, letterSpacing: ".04em", padding: 15, borderRadius: 13 }}>
                 <Phone size={16} /> {siteConfig.contact.phone}
               </a>
             ) : null}

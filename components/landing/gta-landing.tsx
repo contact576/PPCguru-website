@@ -69,7 +69,7 @@ export function GtaLanding() {
                 </div>
                 <div className="gta-hero-actions">
                   <button type="button" className="primary-button" onClick={scrollToForm}>Get my free growth plan <ArrowRight aria-hidden="true" /></button>
-                  <a href={siteConfig.contact.phoneHref}><Phone aria-hidden="true" /> {siteConfig.contact.phone}</a>
+                  <a href={siteConfig.contact.phoneHref} data-phone-link="business"><Phone aria-hidden="true" /> {siteConfig.contact.phone}</a>
                 </div>
                 <p className="gta-microcopy">A clear starting plan. No obligation or account access needed.</p>
                 <a className="gta-rating" href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer"><Star aria-hidden="true" /><strong>{googleBusinessProfile.rating.toFixed(1)} on Google</strong><span>{googleBusinessProfile.reviewCount} reviews</span><ExternalLink aria-hidden="true" /></a>
@@ -141,7 +141,7 @@ export function GtaLanding() {
         </section>
         <section className="gta-section gta-faq" aria-labelledby="faq-title"><div className="gta-section-heading"><p className="section-kicker">Before you get started</p><h2 id="faq-title">A few things <span>worth knowing.</span></h2></div><div>{faqs.map(([question, answer]) => <details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div></section>
         <section className="final-cta" aria-labelledby="final-title"><div><p className="section-kicker">Google Ads + Meta Ads · Toronto &amp; GTA</p><h2 id="final-title">Let’s find your next growth opportunity.</h2><p>Get a free plan before committing to a campaign.</p></div><button className="primary-button" type="button" onClick={scrollToForm}>Get my free growth plan <ArrowRight aria-hidden="true" /></button></section>
-        <div className="gta-contact-line"><a href={siteConfig.contact.phoneHref}>{siteConfig.contact.phone}</a><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a><span>{siteConfig.contact.hours}</span></div>
+        <div className="gta-contact-line"><a href={siteConfig.contact.phoneHref} data-phone-link="business">{siteConfig.contact.phone}</a><a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a><span>{siteConfig.contact.hours}</span></div>
         <LandingFooter tagline="Google Ads and Meta Ads management for businesses across Toronto and the GTA." />
       </div>
     </div>
