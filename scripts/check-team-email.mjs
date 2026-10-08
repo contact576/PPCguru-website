@@ -11,7 +11,7 @@ const compiled = ts.transpileModule(readFileSync("lib/email.ts", "utf8"), {
   compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true },
 });
 let checks = 0;
-const team = ["sales@ppcguru.ca", "contact@ppcguru.ca"];
+const team = ["sales@ppcguru.ca", "contact@ppcguru.ca", "marketing@ppcguru.ca"];
 
 function harness(overrides = {}) {
   const env = { SMTP_HOST: "smtp.example.invalid", SMTP_USER: "hello@ppcguru.ca", SMTP_PASS: "offline", ...overrides.env };
@@ -49,13 +49,13 @@ async function check(name, run) {
   await run(); checks++; console.log(`PASS ${name}`);
 }
 
-await check("sales and contact cannot be omitted by CONTACT_TO_EMAIL", async () => {
+await check("all team inboxes cannot be omitted by CONTACT_TO_EMAIL", async () => {
   for (const configured of [undefined, "", "marketing@ppcguru.ca", " Marketing@ppcguru.ca, SALES@ppcguru.ca, sales@ppcguru.ca ", "owner@ppcguru.ca"]) {
     const h = harness({ env: { CONTACT_TO_EMAIL: configured } });
     const recipients = Array.from(h.mail.leadRecipients());
     assert.ok(team.every((recipient) => recipients.includes(recipient)));
     assert.equal(recipients.length, new Set(recipients).size);
-    assert.ok(recipients.includes(configured === "owner@ppcguru.ca" ? "owner@ppcguru.ca" : "marketing@ppcguru.ca"));
+    if (configured === "owner@ppcguru.ca") assert.ok(recipients.includes("owner@ppcguru.ca"));
   }
 });
 
@@ -69,11 +69,11 @@ await check("explicit Resend selection sends complete team list without SMTP", a
   assert.equal(h.calls.resend[0].replyTo, "lead@ppcguru.ca");
 });
 
-await check("Google + Meta always includes all three requested inboxes without changing other forms", () => {
+await check("every lead source includes all three team inboxes", () => {
   for (const configured of ["", "sales@ppcguru.ca,Contact@ppcguru.ca", "owner@ppcguru.ca", "MARKETING@ppcguru.ca,contact@ppcguru.ca"]) {
     const h = harness({ env: { CONTACT_TO_EMAIL: configured } });
     const recipients = Array.from(h.mail.leadRecipients("landing:google-meta-ads"));
-    assert.ok([...team, "marketing@ppcguru.ca"].every((address) => recipients.includes(address)));
+    assert.ok(team.every((address) => recipients.includes(address)));
     assert.equal(recipients.length, new Set(recipients).size);
     if (configured === "sales@ppcguru.ca,Contact@ppcguru.ca") {
       for (const source of [undefined, "contact", "landing:100-leads", "landing:gta-marketing-agency", "landing:seo-visibility"]) {
@@ -86,21 +86,21 @@ await check("Google + Meta always includes all three requested inboxes without c
 await check("recipient progress records only SMTP acknowledgments on partial failure", async () => {
   const h = harness({ accepted: ["sales@ppcguru.ca"] });
   const accepted = [];
-  assert.equal(await h.mail.sendMail({ to: [...team, "marketing@ppcguru.ca"], subject: "Offline", onAccepted: (addresses) => accepted.push(...addresses) }), false);
+  assert.equal(await h.mail.sendMail({ to: team, subject: "Offline", onAccepted: (addresses) => accepted.push(...addresses) }), false);
   assert.deepEqual(accepted, ["sales@ppcguru.ca"]);
 });
 
 await check("recipient progress combines SMTP and fallback acknowledgment without duplicates", async () => {
   const h = harness({ accepted: ["sales@ppcguru.ca"], env: { RESEND_API_KEY: "offline" } });
   const accepted = [];
-  assert.equal(await h.mail.sendMail({ to: [...team, "marketing@ppcguru.ca"], subject: "Offline", onAccepted: (addresses) => accepted.push(...addresses) }), true);
-  assert.deepEqual(accepted, [...team, "marketing@ppcguru.ca"]);
+  assert.equal(await h.mail.sendMail({ to: team, subject: "Offline", onAccepted: (addresses) => accepted.push(...addresses) }), true);
+  assert.deepEqual(accepted, team);
 });
 
 await check("rescue acknowledges marketing only and cannot imply other inboxes succeeded", async () => {
   const h = harness({ env: { EMAIL_PROVIDER: "resend", RESEND_API_KEY: "offline" }, resendErrors: [{ message: "domain is not verified" }, null] });
   const accepted = [];
-  assert.equal(await h.mail.sendMail({ to: [...team, "marketing@ppcguru.ca"], subject: "Offline", rescue: true, onAccepted: (addresses) => accepted.push(...addresses) }), false);
+  assert.equal(await h.mail.sendMail({ to: team, subject: "Offline", rescue: true, onAccepted: (addresses) => accepted.push(...addresses) }), false);
   assert.deepEqual(accepted, ["marketing@ppcguru.ca"]);
 });
 
@@ -109,6 +109,14 @@ await check("explicit Resend selection without key never falls back to suspended
   assert.equal(h.mail.emailConfigured(), false);
   assert.equal(await h.mail.sendMail({ to: team, subject: "Offline" }), false);
   assert.equal(h.calls.smtp.length, 0);
+});
+
+await check("production never authenticates to SMTP even with legacy credentials", async () => {
+  const h = harness({ env: { NODE_ENV: "production", RESEND_API_KEY: "offline" } });
+  assert.equal(await h.mail.sendMail({ to: team, subject: "Offline" }), true);
+  await h.mail.probeEmailHealth();
+  assert.equal(h.calls.smtp.length + h.calls.verify, 0);
+  assert.deepEqual(Array.from(h.calls.resend[0].to), team);
 });
 
 await check("default SMTP transport still succeeds when every recipient is accepted", async () => {
@@ -125,7 +133,7 @@ await check("partial SMTP acceptance cannot claim full delivery", async () => {
 await check("Resend fallback retries only the SMTP-rejected recipients", async () => {
   const h = harness({ accepted: [{ address: "SALES@ppcguru.ca" }], env: { RESEND_API_KEY: "offline" } });
   assert.equal(await h.mail.sendMail({ to: team, subject: "Offline" }), true);
-  assert.deepEqual(Array.from(h.calls.resend[0].to), ["contact@ppcguru.ca"]);
+  assert.deepEqual(Array.from(h.calls.resend[0].to), ["contact@ppcguru.ca", "marketing@ppcguru.ca"]);
 });
 
 await check("owner-only rescue cannot claim sales and contact received notification", async () => {
@@ -142,11 +150,11 @@ await check("owner-only rescue cannot claim sales and contact received notificat
 
 await check("a rescue can complete delivery only when owner is the sole remaining recipient", async () => {
   const h = harness({
-    accepted: team,
+    accepted: team.slice(0, 2),
     env: { RESEND_API_KEY: "offline" },
     resendErrors: [{ message: "domain is not verified" }, null],
   });
-  assert.equal(await h.mail.sendMail({ to: [...team, "marketing@ppcguru.ca"], subject: "Offline", rescue: true }), true);
+  assert.equal(await h.mail.sendMail({ to: team, subject: "Offline", rescue: true }), true);
 });
 
 await check("Google + Meta acknowledgement matches the growth plan and links directly to booking", async () => {
