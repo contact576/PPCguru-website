@@ -157,7 +157,7 @@ await check("a rescue can complete delivery only when owner is the sole remainin
   assert.equal(await h.mail.sendMail({ to: team, subject: "Offline", rescue: true }), true);
 });
 
-await check("Google + Meta acknowledgement matches the growth plan and links directly to booking", async () => {
+await check("Google + Meta acknowledgement matches the eligibility offer and links directly to booking", async () => {
   const h = harness();
   assert.equal(await h.mail.sendLeadAutoresponder(
     { name: "Offline Person", email: "offline.person@example.invalid" },
@@ -166,12 +166,14 @@ await check("Google + Meta acknowledgement matches the growth plan and links dir
   const message = h.calls.smtp[0];
   const bookingUrl = "https://ppcguru.ca/google-ads-and-meta-ads/thank-you#book";
   assert.ok(message.html.includes(`href="${bookingUrl}"`));
-  assert.ok(message.text.includes(`Book your strategy call: ${bookingUrl}`));
+  assert.ok(message.text.includes(`Book your eligibility review: ${bookingUrl}`));
   for (const body of [message.html, message.text]) {
-    assert.ok(body.includes("Google Ads + Meta Ads growth-plan request"));
-    assert.ok(body.includes("Book your strategy call"));
-    assert.ok(body.includes("Google Ads and Meta Ads growth plan"));
-    assert.ok(body.includes("We review your goals, offer and current setup"));
+    assert.ok(body.includes("Google Ads eligibility-review request"));
+    assert.ok(body.includes("Book your eligibility review"));
+    assert.ok(body.includes("previous 30-day Google Ads performance"));
+    assert.ok(body.includes("eligible existing advertisers"));
+    assert.ok(body.includes("your request does not confirm eligibility"));
+    assert.ok(body.includes("Ad spend is separate and non-refundable"));
     assert.ok(!body.includes("where budget is leaking"));
     assert.ok(!body.includes("/free-audit"));
     assert.doesNotMatch(body, /100[ -](qualified[ -])?leads|guarantee/i);

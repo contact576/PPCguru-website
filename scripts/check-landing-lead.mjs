@@ -478,7 +478,9 @@ function browserHarness(consent = "accepted", googleTagReady = false) {
   if (googleTagReady) window.gtag = (...args) => events.push(["gtag", ...args]);
   const sessionStorage = { getItem: (key) => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value), removeItem: (key) => storage.delete(key) };
   const globals = { window, sessionStorage, localStorage: { getItem: () => consent } };
-  const analytics = load("lib/analytics.ts", {}, globals);
+  const analytics = load("lib/analytics.ts", {
+    "@/lib/site-config": { siteConfig: { contact: { phoneHref: "tel:5199929567" } } },
+  }, globals);
   const react = { useEffect: (fn) => { const cleanup = fn(); if (cleanup) cleanups.push(cleanup); } };
   const googleMetaAnalytics = load("components/landing/google-meta-analytics.tsx", {
     react, "@/lib/analytics": analytics,
@@ -762,7 +764,7 @@ for (const receipt of [undefined, EVENT_ID]) {
     const tree = await page();
     const props = descendants(tree).find((n) => n.type === "LandingThankYou").props;
     assert.equal(props.confirmed, Boolean(receipt));
-    assert.equal(props.kicker, receipt ? "Request received" : "Book your strategy call");
+    assert.equal(props.kicker, receipt ? "Eligibility review requested" : "Book your eligibility review");
     assert.equal(props.whatsappOpener.includes("I just requested"), Boolean(receipt));
     const shared = load("components/landing/landing-thank-you.tsx", {
       "react/jsx-runtime": jsxRuntime,

@@ -3,31 +3,44 @@
 Routes: `/google-ads-and-meta-ads` and `/google-ads-and-meta-ads/thank-you`.
 Both are paid-traffic destinations with noindex metadata and their own header/footer.
 
+## Offer
+
+Headline: **Beat your last 30 days of qualified leads—or pay $0 in management fees.**
+
+PPC Guru verifies the advertiser’s previous 30-day Google Ads performance before
+launch. If the agreed comparison period does not generate more qualified leads,
+the management fee for that period is $0. The CTA is **See if my account qualifies**.
+
+The offer is available to eligible existing advertisers. Lead criteria, baseline,
+attribution, campaign period and a comparable advertising budget are confirmed
+before launch. Ad spend is separate and non-refundable. Submitting the form
+requests an eligibility review; it does not confirm qualification or enrolment.
+Meta-only and new advertisers can discuss a campaign plan, but the Google Ads
+management-fee offer does not automatically apply to them.
+
 ## Campaign evidence
 
-`lib/data/landing-google-meta-results.ts` contains all 23 reports supplied in the
-PPC Guru Drive folder on 2026-10-07: 13 Google Ads and 10 Meta Ads. They are
-styled, partly redacted reports, not native dashboard captures. The visible
-figures were transcribed from each image. Google reports label their result
-**conversions**, while Meta reports label theirs **leads**. All show CAD spend
-and 8 Jul–5 Oct 2026. The figures have not been independently verified against
-the ad accounts. Public filenames and captions use only unredacted industry
-descriptions; the private source mapping is kept outside the repository.
+`lib/data/landing-paid-ads-reports.ts` contains all 43 reports supplied in the
+latest PPC Guru Drive folder, imported on 2026-10-08: 28 Google Ads and 15 Meta Ads.
+Their optimized WebP assets live in `public/landing/results/2026-10`. Full source
+screenshot framing and redactions are preserved without cropping. Each image
+retains its own reporting period and metrics; no common period or performance
+figures are inferred. The data file uses industry descriptions and image alt text,
+not transcribed result claims. Past performance does not guarantee future results.
 
-The five older original Meta captures remain in `public/landing/results` for
-`/100-leads`; this gallery uses the complete, consistently dated Drive set.
+The results section has two separate horizontal rails: Google Ads on top moving
+left to right, and Meta Ads below moving right to left. Compact images have a
+narrow white border and a subtle floating motion. Both rails loop continuously
+while visible. Hover and ordinary vertical page scrolling do not pause them.
+Manual browsing pauses motion briefly, then resumes automatically. Visitors can
+use the shared Pause/Resume control. Motion also pauses in background tabs,
+offscreen or while a report is open, and is disabled for reduced-motion preferences.
 
-The results section is one horizontal, scroll-snap gallery inspired by `/100-leads`:
-a centred active campaign, neighbouring cards, previous/next buttons, compact
-position controls, keyboard navigation and full-image dialog. Reports from the
-two platforms alternate, with jump buttons for Google and Meta. Each card
-identifies its platform.
-The gallery advances one card every 4.5 seconds while visible, reversing at each
-end. Hover pauses temporarily; manual interaction or keyboard focus pauses until
-the visitor chooses Play slideshow. It also pauses in background tabs or while
-a report is open, and disables autoplay for reduced-motion preferences.
-Carousel previews use Next image optimization and lazy loading; the dialog and
-its full-resolution link use the original report files.
+Each rail has previous/next buttons, swipe and keyboard navigation. Opening an
+image shows its uncropped report in an accessible dialog, with navigation limited
+to the same platform. Previews use Next image optimization and lazy loading; the
+dialog uses the corresponding full-size WebP. Existing report data and assets
+used by other pages remain separate and unchanged.
 
 Do not use the ChatGPT captures in `public/landing/proof` as campaign evidence.
 
@@ -49,7 +62,8 @@ Do not use the ChatGPT captures in `public/landing/proof` as campaign evidence.
   focus the relevant step once per failed response. Configured Turnstile must be
   ready before submission. Hidden anti-spam fields stay outside keyboard/AT navigation.
 - The thank-you URL contains no name, email or company query parameters.
-- This funnel’s acknowledgement email matches the growth-plan offer and links
+- This funnel’s acknowledgement email requests a Google Ads eligibility review,
+  explains the conditional management-fee offer and separate ad spend, and links
   directly to `/google-ads-and-meta-ads/thank-you#book`. Other forms retain their
   existing acknowledgement copy and destination.
 - The short-lived, HTTP-only `ppcg_google_meta_receipt` cookie is isolated to
@@ -95,7 +109,7 @@ thank-you route is not a new lead.
 
 Run `npm run check:landing-lead`, `npm run check:team-email`,
 `npm run check:ghl`, `npm run typecheck` and `npm run build`. The offline suite
-covers 72 lead/conversion checks, 15 email checks, 12 routing checks and 16 GHL
+covers 72 lead/conversion checks, 16 email checks, 12 routing checks and 16 GHL
 contract checks.
 On the Windows workspace junction, Next.js must run from the resolved physical
 project path; this is a local environment issue, not a deployment configuration.
@@ -103,9 +117,8 @@ Production `ppcguru.ca` is hosted on Hostinger and deploys `master`.
 
 Offline tests use mocked delivery providers. They do not prove receipt in a real
 inbox or an ads dashboard; those require an intentional live submission after
-deployment. No live test lead or calendar booking was created during development.
+deployment. Production live QA for this release is not yet complete.
 Live delivery needs the deployed `GHL_API_TOKEN` and `GHL_LOCATION_ID`, plus a
-working email channel (`SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, or `RESEND_API_KEY`
-with a verified sender). `CONTACT_FROM_EMAIL`, `EMAIL_PROVIDER`, and optional
-SMTP port/TLS settings must match that channel. Provider acceptance still needs
-to be checked against actual receipt in all three inboxes and the GHL contact.
+working `RESEND_API_KEY` with a verified sender and matching `CONTACT_FROM_EMAIL`.
+Production email delivery does not use SMTP. Provider acceptance still needs to
+be checked against actual receipt in all three inboxes and the GHL contact.

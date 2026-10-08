@@ -1,163 +1,219 @@
 "use client";
 
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
-import { ArrowLeft, ArrowRight, Expand, Pause, Play, X } from "lucide-react";
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { ArrowLeft, ArrowRight, Pause, Play, X } from "lucide-react";
 import Image from "next/image";
-import { googleAdsResults, metaAdsResults, type CampaignScreenshot } from "@/lib/data/landing-google-meta-results";
+import { googleAdsReports, metaAdsReports, type CampaignReport } from "@/lib/data/landing-paid-ads-reports";
 
-type CampaignItem = CampaignScreenshot & { platform: "Google Ads" | "Meta Ads" };
+type Platform = "Google Ads" | "Meta Ads";
+type Selection = { platform: Platform; index: number };
+const reportsByPlatform: Record<Platform, CampaignReport[]> = {
+  "Google Ads": googleAdsReports,
+  "Meta Ads": metaAdsReports,
+};
 
-const reports: CampaignItem[] = Array.from({ length: Math.max(googleAdsResults.length, metaAdsResults.length) }, (_, index) => [
-  googleAdsResults[index] ? { ...googleAdsResults[index], platform: "Google Ads" as const } : null,
-  metaAdsResults[index] ? { ...metaAdsResults[index], platform: "Meta Ads" as const } : null,
-]).flat().filter((result): result is CampaignItem => result !== null);
-const campaigns: CampaignItem[] = reports;
-const initialIndex = 0;
-const firstGoogleIndex = campaigns.findIndex((result) => result.platform === "Google Ads");
-const firstMetaIndex = campaigns.findIndex((result) => result.platform === "Meta Ads");
+type ReportRailProps = {
+  platform: Platform;
+  paused: boolean;
+  playbackVersion: number;
+  reducedMotion: boolean;
+  onOpen: (selection: Selection, opener: HTMLButtonElement) => void;
+};
 
-function ResultCaption({ result }: { result: CampaignScreenshot }) {
+/* eslint-disable @next/next/no-img-element -- platform logos and full-resolution report viewer */
+function ReportRail({ platform, paused, playbackVersion, reducedMotion, onOpen }: ReportRailProps) {
+  const reports = reportsByPlatform[platform];
+  const isGoogle = platform === "Google Ads";
+  const railId = useId();
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const groupRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [manual, setManual] = useState(false);
+  const resumeTimer = useRef<number | null>(null);
+  const [inView, setInView] = useState(false);
+  const [foreground, setForeground] = useState(true);
+  const [selected, setSelected] = useState<number | null>(null);
+  const pointerStart = useRef<{ x: number; y: number; id: number } | null>(null);
+  const dragged = useRef(false);
+  const moving = !paused && !manual && !reducedMotion && inView && foreground;
+
+  const pauseBriefly = useCallback(() => {
+    setManual(true);
+    if (resumeTimer.current !== null) window.clearTimeout(resumeTimer.current);
+    resumeTimer.current = window.setTimeout(() => {
+      resumeTimer.current = null;
+      setManual(false);
+      setSelected(null);
+    }, 900);
+  }, []);
+
+  useEffect(() => {
+    if (resumeTimer.current !== null) window.clearTimeout(resumeTimer.current);
+    setManual(false);
+    setSelected(null);
+  }, [playbackVersion]);
+
+  useEffect(() => {
+    const releasePointer = (event: PointerEvent) => {
+      if (pointerStart.current?.id !== event.pointerId) return;
+      pointerStart.current = null;
+      if (event.type === "pointercancel") dragged.current = true;
+      pauseBriefly();
+    };
+    window.addEventListener("pointerup", releasePointer);
+    window.addEventListener("pointercancel", releasePointer);
+    return () => {
+      window.removeEventListener("pointerup", releasePointer);
+      window.removeEventListener("pointercancel", releasePointer);
+      if (resumeTimer.current !== null) window.clearTimeout(resumeTimer.current);
+    };
+  }, [pauseBriefly]);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { rootMargin: "60px" });
+    const syncVisibility = () => setForeground(!document.hidden);
+    observer.observe(viewport);
+    syncVisibility();
+    document.addEventListener("visibilitychange", syncVisibility);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", syncVisibility);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const viewport = viewportRef.current;
+    const group = groupRef.current;
+    if (!viewport || !group) return;
+    // Start the rightward Google rail at its identical second copy.
+    viewport.scrollLeft = isGoogle && !reducedMotion ? group.offsetWidth : 0;
+  }, [isGoogle, reducedMotion]);
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    const group = groupRef.current;
+    if (!moving || !viewport || !group) return;
+    let frame = 0;
+    let previousTime: number | null = null;
+    let position = viewport.scrollLeft;
+    const animate = (time: number) => {
+      const distance = group.offsetWidth;
+      if (previousTime !== null && distance > 0) {
+        // A constant speed keeps both rows in sync regardless of report count.
+        position += Math.min(time - previousTime, 50) * .025 * (isGoogle ? -1 : 1);
+        position = ((position % distance) + distance) % distance;
+        viewport.scrollLeft = position;
+      }
+      previousTime = time;
+      frame = window.requestAnimationFrame(animate);
+    };
+    frame = window.requestAnimationFrame(animate);
+    return () => window.cancelAnimationFrame(frame);
+  }, [isGoogle, moving]);
+
+  const showReport = useCallback((index: number, focus = false) => {
+    const viewport = viewportRef.current;
+    const button = buttonRefs.current[index];
+    if (!viewport || !button) return;
+    pauseBriefly();
+    setSelected(index);
+    const left = viewport.scrollLeft + button.getBoundingClientRect().left - viewport.getBoundingClientRect().left - 18;
+    viewport.scrollTo({ left, behavior: reducedMotion || focus ? "auto" : "smooth" });
+    if (focus) button.focus({ preventScroll: true });
+  }, [pauseBriefly, reducedMotion]);
+
+  function nearestReport() {
+    const viewport = viewportRef.current;
+    const group = groupRef.current;
+    if (!viewport || !group || !reports.length) return 0;
+    const step = group.offsetWidth / reports.length;
+    return Math.round((viewport.scrollLeft % group.offsetWidth) / step) % reports.length;
+  }
+
+  function openReport(index: number) {
+    const opener = buttonRefs.current[index];
+    if (opener && !dragged.current) onOpen({ platform, index }, opener);
+  }
+
+  function reportImage(report: CampaignReport, duplicate = false) {
+    return <Image className="gm-report-image" src={report.src} width={report.width} height={report.height} sizes="(max-width: 600px) 152px, 208px" quality={75} alt={duplicate ? "" : report.alt} loading="lazy" draggable={false} />;
+  }
+
   return (
-    <div className="gm-result-caption">
-      <h3>{result.client}</h3>
-      <dl className="gm-result-stats">
-        <div><dt>Result</dt><dd>{result.result}</dd></div>
-        <div><dt>Cost per result</dt><dd>{result.cost}</dd></div>
-        <div><dt>Ad spend</dt><dd>{result.spend}</dd></div>
-      </dl>
-      <p className="gm-result-period">{result.period}</p>
+    <div className={`gm-report-rail${moving ? " is-moving" : ""}`} data-platform={isGoogle ? "google" : "meta"}>
+      <div className="gm-rail-heading">
+        <h3><img src={isGoogle ? "/badges/google-ads-logo.svg" : "/badges/meta-logo.svg"} width={isGoogle ? 910 : 948} height={isGoogle ? 230 : 191} alt={platform} loading="lazy" />{!isGoogle && <span aria-hidden="true">Ads</span>}</h3>
+        <div className="gm-rail-controls" role="group" aria-label={`Browse ${platform} reports`}>
+          <span>{reports.length} campaign reports</span>
+          <button type="button" aria-controls={railId} aria-label={`Previous ${platform} report`} onClick={() => showReport(((selected ?? nearestReport()) - 1 + reports.length) % reports.length)}><ArrowLeft aria-hidden="true" /></button>
+          <button type="button" aria-controls={railId} aria-label={`Next ${platform} report`} onClick={() => showReport(((selected ?? nearestReport()) + 1) % reports.length)}><ArrowRight aria-hidden="true" /></button>
+        </div>
+      </div>
+      <div ref={viewportRef} id={railId} className="gm-report-viewport" role="region" aria-label={`${platform} campaign screenshots; swipe or use the arrow buttons to browse`} tabIndex={0}
+        onWheel={(event) => { if (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.shiftKey) { pauseBriefly(); setSelected(null); } }}
+        onScroll={() => { if (manual && !pointerStart.current) pauseBriefly(); }}
+        onPointerDownCapture={(event) => {
+          if (!event.isPrimary || event.button !== 0) return;
+          if (resumeTimer.current !== null) window.clearTimeout(resumeTimer.current);
+          setManual(true);
+          setSelected(null);
+          pointerStart.current = { x: event.clientX, y: event.clientY, id: event.pointerId };
+          dragged.current = false;
+        }}
+        onPointerMoveCapture={(event) => { const start = pointerStart.current; if (start && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 10) dragged.current = true; }}
+        onKeyDown={(event) => {
+          if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+          const current = selected ?? nearestReport();
+          const target = event.key === "Home" ? 0 : event.key === "End" ? reports.length - 1 : event.key === "ArrowLeft" ? (current - 1 + reports.length) % reports.length : event.key === "ArrowRight" ? (current + 1) % reports.length : null;
+          if (target === null) return;
+          event.preventDefault();
+          showReport(target, true);
+        }}>
+        <div className="gm-report-strip">
+          <div ref={groupRef} className="gm-report-group">
+            {reports.map((report, index) => <button key={report.src} ref={(node) => { buttonRefs.current[index] = node; }} type="button" className="gm-report-card" style={{ "--float-delay": `${(index % 5) * -.8}s` } as CSSProperties} aria-haspopup="dialog" aria-label={`Enlarge ${report.client} ${platform} report, ${index + 1} of ${reports.length}`}
+              onFocus={(event) => { if (!pointerStart.current && event.currentTarget.matches(":focus-visible")) showReport(index, true); }}
+              onClick={(event) => { if (event.detail === 0) dragged.current = false; openReport(index); }}>
+              {reportImage(report)}
+            </button>)}
+          </div>
+          {!reducedMotion && <div className="gm-report-group gm-report-duplicates" aria-hidden="true">
+            {reports.map((report, index) => <div key={report.src} className="gm-report-card" style={{ "--float-delay": `${(index % 5) * -.8}s` } as CSSProperties} onClick={() => openReport(index)}>{reportImage(report, true)}</div>)}
+          </div>}
+        </div>
+      </div>
+      <span className="sr-only" role="status">{selected === null ? "" : `${platform} report ${selected + 1} of ${reports.length}: ${reports[selected].client}`}</span>
     </div>
   );
 }
 
-/* eslint-disable @next/next/no-img-element -- preserve the original supplied dashboard captures */
 export function GoogleMetaResults() {
-  const [activeIndex, setActiveIndex] = useState(initialIndex);
-  const activeIndexRef = useRef(initialIndex);
-  const navigationTarget = useRef<number | null>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLElement | null)[]>([]);
-  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const trackId = useId();
-  const [dialogIndex, setDialogIndex] = useState(initialIndex);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [playbackVersion, setPlaybackVersion] = useState(0);
+  const [reducedMotion, setReducedMotion] = useState(true);
+  const [selection, setSelection] = useState<Selection | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
-  const pointerStart = useRef<{ x: number; y: number; id: number } | null>(null);
-  const dragged = useRef(false);
-  const rotationControlRef = useRef<HTMLButtonElement>(null);
-  const rotationDirection = useRef(1);
-  const [rotationPaused, setRotationPaused] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(true);
-  const [inView, setInView] = useState(false);
-  const [foreground, setForeground] = useState(true);
-  const [hovered, setHovered] = useState(false);
-  const total = campaigns.length;
-  const active = campaigns[activeIndex];
-  const expanded = campaigns[dialogIndex];
-  const rotating = total > 1 && !rotationPaused && !reducedMotion && inView && foreground && !hovered && !dialogOpen;
-
-  const scrollToCard = useCallback((index: number, behavior: ScrollBehavior = "smooth") => {
-    const track = trackRef.current;
-    const card = cardRefs.current[index];
-    if (!track || !card) return;
-    const trackBounds = track.getBoundingClientRect();
-    const cardBounds = card.getBoundingClientRect();
-    // The track's CSS edge padding lets the first and last cards center too.
-    const left = track.scrollLeft + cardBounds.left - trackBounds.left - (track.clientWidth - cardBounds.width) / 2;
-    activeIndexRef.current = index;
-    setActiveIndex(index);
-    navigationTarget.current = Math.abs(track.scrollLeft - left) < 3 ? null : index;
-    track.scrollTo({ left, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : behavior });
-  }, []);
-
-  useLayoutEffect(() => {
-    const track = trackRef.current;
-    if (!track || !total) return;
-    let frame: number | null = null;
-
-    function readPosition() {
-      frame = null;
-      if (!track) return;
-      const bounds = track.getBoundingClientRect();
-      const centre = bounds.left + track.clientWidth / 2;
-      let nearest = 0;
-      let distance = Infinity;
-      cardRefs.current.forEach((card, index) => {
-        if (!card) return;
-        const rect = card.getBoundingClientRect();
-        const delta = Math.abs(rect.left + rect.width / 2 - centre);
-        if (delta < distance) { nearest = index; distance = delta; }
-      });
-      if (navigationTarget.current !== null) {
-        if (nearest !== navigationTarget.current || distance > 3) return;
-        navigationTarget.current = null;
-      }
-      activeIndexRef.current = nearest;
-      setActiveIndex(nearest);
-    }
-
-    function onScroll() {
-      if (frame === null) frame = window.requestAnimationFrame(readPosition);
-    }
-
-    function onResize() {
-      scrollToCard(activeIndexRef.current, "auto");
-    }
-
-    scrollToCard(initialIndex, "auto");
-    track.addEventListener("scroll", onScroll, { passive: true });
-    const observer = new ResizeObserver(onResize);
-    observer.observe(track);
-    return () => {
-      track.removeEventListener("scroll", onScroll);
-      observer.disconnect();
-      if (frame !== null) window.cancelAnimationFrame(frame);
-    };
-  }, [scrollToCard, total]);
+  const isOpen = selection !== null;
+  const reports = selection ? reportsByPlatform[selection.platform] : [];
+  const expanded = selection ? reports[selection.index] : null;
 
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const syncMotion = () => {
-      setReducedMotion(motion.matches);
-      if (motion.matches) setRotationPaused(true);
-    };
-    const syncVisibility = () => setForeground(!document.hidden);
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncMotion = () => setReducedMotion(media.matches);
     syncMotion();
-    syncVisibility();
-    motion.addEventListener("change", syncMotion);
-    document.addEventListener("visibilitychange", syncVisibility);
-    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting && entry.intersectionRatio >= .15), { threshold: [0, .15] });
-    observer.observe(track);
-    return () => {
-      motion.removeEventListener("change", syncMotion);
-      document.removeEventListener("visibilitychange", syncVisibility);
-      observer.disconnect();
-    };
+    media.addEventListener("change", syncMotion);
+    return () => media.removeEventListener("change", syncMotion);
   }, []);
-
-  useEffect(() => {
-    if (!rotating) return;
-    const timer = window.setInterval(() => {
-      if (navigationTarget.current !== null) return;
-      const current = activeIndexRef.current;
-      // Reverse at either end so every automatic move travels just one card.
-      if (current === total - 1) rotationDirection.current = -1;
-      else if (current === 0) rotationDirection.current = 1;
-      scrollToCard(current + rotationDirection.current);
-    }, 4500);
-    return () => window.clearInterval(timer);
-  }, [rotating, scrollToCard, total]);
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialogOpen || !dialog) return;
+    if (!isOpen || !dialog) return;
     const previousOverflow = document.body.style.overflow;
     dialog.showModal();
-    dialog.scrollTop = 0;
     document.body.style.overflow = "hidden";
     closeRef.current?.focus({ preventScroll: true });
     return () => {
@@ -165,120 +221,45 @@ export function GoogleMetaResults() {
       document.body.style.overflow = previousOverflow;
       openerRef.current?.focus({ preventScroll: true });
     };
-  }, [dialogOpen]);
+  }, [isOpen]);
 
-  useEffect(() => {
-    if (dialogRef.current?.open) dialogRef.current.scrollTop = 0;
-  }, [dialogIndex]);
+  useEffect(() => { if (dialogRef.current) dialogRef.current.scrollTop = 0; }, [selection]);
 
-  function move(direction: number) {
-    setRotationPaused(true);
-    if (total > 1) scrollToCard((activeIndexRef.current + direction + total) % total);
-  }
-
-  function keyboardTarget(event: KeyboardEvent<HTMLElement>, current: number) {
-    if (total < 2 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return null;
-    if (event.key === "Home") return 0;
-    if (event.key === "End") return total - 1;
-    if (event.key === "ArrowLeft") return (current - 1 + total) % total;
-    if (event.key === "ArrowRight") return (current + 1) % total;
-    return null;
-  }
-
-  function onCarouselKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (dialogOpen) return;
-    const target = keyboardTarget(event, activeIndexRef.current);
-    if (target === null) return;
-    event.preventDefault();
-    event.stopPropagation();
-    setRotationPaused(true);
-    const fromScreenshot = buttonRefs.current.some((button) => button === document.activeElement);
-    scrollToCard(target, "auto");
-    if (fromScreenshot) buttonRefs.current[target]?.focus({ preventScroll: true });
-  }
-
-  function openResult(index: number, opener: HTMLButtonElement, keyboard: boolean) {
-    if (dragged.current && !keyboard) return;
-    scrollToCard(index, "auto");
+  function openReport(next: Selection, opener: HTMLButtonElement) {
     openerRef.current = opener;
-    setDialogIndex(index);
-    setDialogOpen(true);
+    setSelection(next);
   }
 
-  if (!active || !expanded) return null;
+  function moveReport(direction: number) {
+    setSelection((current) => current ? { ...current, index: (current.index + direction + reportsByPlatform[current.platform].length) % reportsByPlatform[current.platform].length } : null);
+  }
 
   return (
     <section className="gm-results" id="results" aria-labelledby="gm-results-title">
       <div className="gm-results-heading">
         <p className="section-kicker">The work, in the open</p>
         <h2 id="gm-results-title" tabIndex={-1}>Real campaigns.<br /><span>Real results.</span></h2>
-        <p>Swipe through Google and Meta campaign reports supplied by PPC Guru. Open any image to inspect its figures.</p>
+        <div className="gm-results-intro"><p>Google Ads and Meta Ads. Two channels, real campaign reports. Tap a screenshot to take a closer look.</p>
+          {!reducedMotion && <button type="button" className="gm-autoplay-button" onClick={() => { setPaused((value) => !value); setPlaybackVersion((value) => value + 1); }}>{paused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}{paused ? "Resume motion" : "Pause motion"}</button>}
+        </div>
       </div>
-      <div className="gm-results-carousel" role="region" aria-roledescription="carousel" aria-label="Google and Meta campaign reports" tabIndex={0} onKeyDown={onCarouselKeyDown}
-        onFocusCapture={(event) => { if (!rotationControlRef.current?.contains(event.target)) setRotationPaused(true); }}
-        onPointerDownCapture={(event) => { if (!rotationControlRef.current?.contains(event.target as Node)) setRotationPaused(true); }}>
-        {total > 1 && !reducedMotion ? <div className="gm-carousel-playback">
-          <button ref={rotationControlRef} type="button" className="gm-autoplay-button" aria-controls={trackId} onClick={() => setRotationPaused((paused) => !paused)}>
-            {rotationPaused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
-            {rotationPaused ? "Play slideshow" : "Pause slideshow"}
-          </button>
-        </div> : null}
-        <div className="gm-platform-shortcuts" role="group" aria-label="Jump to campaign type">
-          {firstGoogleIndex >= 0 && <button type="button" aria-controls={trackId} onClick={() => { setRotationPaused(true); scrollToCard(firstGoogleIndex); }}>Google Ads <span>{googleAdsResults.length}</span></button>}
-          {firstMetaIndex >= 0 && <button type="button" aria-controls={trackId} onClick={() => { setRotationPaused(true); scrollToCard(firstMetaIndex); }}>Meta Ads <span>{metaAdsResults.length}</span></button>}
-        </div>
-        <div className="gm-carousel-controls">
-          <button className="gm-carousel-arrow" type="button" onClick={() => move(-1)} disabled={total < 2} aria-controls={trackId} aria-label="Previous campaign"><ArrowLeft aria-hidden="true" /></button>
-          {total > 8 ? <span className="gm-carousel-platform" aria-hidden="true">{active.platform}</span> : <div className="gm-carousel-dots" role="group" aria-label="Choose a campaign">
-            {campaigns.map((result, index) => <button key={`${result.platform}-${result.src}`} type="button" className={`gm-carousel-dot${index === activeIndex ? " is-active" : ""}`} aria-controls={trackId} aria-label={`Show ${result.client}, ${result.platform}, ${index + 1} of ${total}`} aria-current={index === activeIndex ? "true" : undefined} onClick={() => { setRotationPaused(true); scrollToCard(index); }} />)}
-          </div>}
-          <span className="gm-carousel-counter" aria-hidden="true">{activeIndex + 1} / {total}</span>
-          <button className="gm-carousel-arrow" type="button" onClick={() => move(1)} disabled={total < 2} aria-controls={trackId} aria-label="Next campaign"><ArrowRight aria-hidden="true" /></button>
-        </div>
-        <div ref={trackRef} id={trackId} className="gm-results-track" onPointerDownCapture={() => { navigationTarget.current = null; }} onWheel={() => { navigationTarget.current = null; setRotationPaused(true); }}
-          onPointerEnter={(event) => { if (event.pointerType !== "touch") setHovered(true); }} onPointerLeave={() => setHovered(false)}>
-          {campaigns.map((result, index) => (
-            <article ref={(node) => { cardRefs.current[index] = node; }} key={`${result.platform}-${result.src}`} className={`gm-campaign-card${index === activeIndex ? " is-active" : ""}`} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${total}: ${result.client}, ${result.platform}`}>
-              <div className="gm-campaign-heading">
-                <img className="gm-platform-logo" src={result.platform === "Google Ads" ? "/badges/google-ads-logo.svg" : "/badges/meta-logo.svg"} width={result.platform === "Google Ads" ? 910 : 948} height={result.platform === "Google Ads" ? 230 : 191} alt={result.platform} loading="lazy" />
-                <span className="gm-platform-label">Provided campaign report</span>
-              </div>
-              <ResultCaption result={result} />
-              <div className="gm-phone-stage">
-                <button ref={(node) => { buttonRefs.current[index] = node; }} type="button" className="gm-phone-frame" tabIndex={index === activeIndex ? 0 : -1} aria-haspopup="dialog" aria-label={`Open ${result.client} ${result.platform} report full size`} style={{ touchAction: "auto" }}
-                  onPointerDown={(event) => { if (event.isPrimary && event.button === 0) { pointerStart.current = { x: event.clientX, y: event.clientY, id: event.pointerId }; dragged.current = false; } }}
-                  onPointerMove={(event) => { const start = pointerStart.current; if (start && start.id === event.pointerId && Math.hypot(event.clientX - start.x, event.clientY - start.y) > 12) dragged.current = true; }}
-                  onPointerUp={(event) => { if (pointerStart.current?.id === event.pointerId) pointerStart.current = null; }}
-                  onPointerCancel={(event) => { if (pointerStart.current?.id === event.pointerId) { pointerStart.current = null; dragged.current = true; } }}
-                  onClick={(event) => openResult(index, event.currentTarget, event.detail === 0)}>
-                  <Image className="gm-phone-image" src={result.src} width={result.width} height={result.height} sizes="(max-width: 600px) 234px, 238px" quality={75} alt={`${result.client} ${result.platform} campaign report`} loading="lazy" draggable={false} />
-                  <span className="gm-phone-open"><Expand aria-hidden="true" /> View full image</span>
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
-        <span className="sr-only" role="status" aria-live={rotating ? "off" : "polite"}>Campaign {activeIndex + 1} of {total}: {active.client}, {active.platform}, {active.result}, {active.cost}.</span>
-      </div>
-      <p className="gm-results-disclosure">Past campaign figures supplied by PPC Guru; independently unverified. Reports show the metric and period on each image, and a conversion does not necessarily mean a lead or sale. Performance varies by offer, market, budget and follow-up.</p>
-      <dialog ref={dialogRef} className="gm-result-dialog" aria-label={`${expanded.client} ${expanded.platform} campaign image`} onClose={() => setDialogOpen(false)} onKeyDown={(event) => {
-        const target = keyboardTarget(event, dialogIndex);
-        if (target !== null) { event.preventDefault(); event.stopPropagation(); setDialogIndex(target); }
+      <ReportRail platform="Google Ads" paused={paused || isOpen} playbackVersion={playbackVersion} reducedMotion={reducedMotion} onOpen={openReport} />
+      <ReportRail platform="Meta Ads" paused={paused || isOpen} playbackVersion={playbackVersion} reducedMotion={reducedMotion} onOpen={openReport} />
+      <p className="gm-results-disclosure">Campaign reports supplied by PPC Guru. Each image shows its own reporting period and metrics. Past performance does not guarantee future results.</p>
+      <dialog ref={dialogRef} className="gm-result-dialog" aria-label={selection && expanded ? `${expanded.client} ${selection.platform} campaign report` : "Campaign report"} onClose={() => setSelection(null)} onKeyDown={(event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+        if (event.key === "ArrowLeft" || event.key === "ArrowRight") { event.preventDefault(); moveReport(event.key === "ArrowLeft" ? -1 : 1); }
       }} onClick={(event) => {
         if (event.target !== event.currentTarget) return;
         const bounds = event.currentTarget.getBoundingClientRect();
         if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialogRef.current?.close();
       }}>
-        <div className="gm-dialog-header"><span>{expanded.platform} · Provided campaign report</span><button ref={closeRef} className="gm-dialog-close" type="button" onClick={() => dialogRef.current?.close()} aria-label="Close full-size report"><X aria-hidden="true" /></button></div>
-        <div className="gm-dialog-controls">
-          <button type="button" onClick={() => setDialogIndex((current) => (current - 1 + total) % total)} disabled={total < 2} aria-label="Previous campaign report"><ArrowLeft aria-hidden="true" /> Previous</button>
-          <span>{dialogIndex + 1} / {total}</span>
-          <button type="button" onClick={() => setDialogIndex((current) => (current + 1) % total)} disabled={total < 2} aria-label="Next campaign report">Next <ArrowRight aria-hidden="true" /></button>
-        </div>
-        <span className="sr-only" role="status">Report {dialogIndex + 1} of {total}: {expanded.client}, {expanded.platform}, {expanded.result}, {expanded.cost}.</span>
-        <img key={expanded.src} className="gm-dialog-image" src={expanded.src} width={expanded.width} height={expanded.height} alt={`${expanded.client}: ${expanded.result}, ${expanded.cost}, ${expanded.spend} spent. ${expanded.period}.`} />
-        <a className="gm-dialog-original-link" href={expanded.src} target="_blank" rel="noopener noreferrer">Open full-resolution report</a>
-        <div className="gm-dialog-caption"><ResultCaption result={expanded} /></div>
+        {selection && expanded && <>
+          <div className="gm-dialog-header"><span>{selection.platform} <span aria-hidden="true">·</span> {expanded.client}</span><button ref={closeRef} className="gm-dialog-close" type="button" onClick={() => dialogRef.current?.close()} aria-label="Close report"><X aria-hidden="true" /></button></div>
+          <div className="gm-dialog-controls"><button type="button" onClick={() => moveReport(-1)} aria-label={`Previous ${selection.platform} report`}><ArrowLeft aria-hidden="true" /> Previous</button><span>{selection.index + 1} / {reports.length}</span><button type="button" onClick={() => moveReport(1)} aria-label={`Next ${selection.platform} report`}>Next <ArrowRight aria-hidden="true" /></button></div>
+          <span className="sr-only" role="status">{selection.platform} report {selection.index + 1} of {reports.length}: {expanded.client}</span>
+          <img key={expanded.src} className="gm-dialog-image" src={expanded.src} width={expanded.width} height={expanded.height} alt={expanded.alt} />
+        </>}
       </dialog>
     </section>
   );

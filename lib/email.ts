@@ -342,14 +342,14 @@ const C = { ink: "#14170e", lime: "#ceff3a", cream: "#f1efe3", olive: "#5f6f17",
 function autoresponderCopy(source?: string) {
   if (source === "landing:google-meta-ads") {
     return {
-      request: "Google Ads + Meta Ads growth-plan request",
-      htmlIntro: "We’ll review your goals, market and budget before your strategy call. Here’s what happens next:",
-      textIntro: "We’ll review your goals, market and budget before your strategy call. Here’s what happens next:",
-      reviewHtml: "We review your goals, offer and current setup",
-      reviewText: "We review your goals, offer and current setup",
-      plan: "We’ll discuss your Google Ads and Meta Ads growth plan",
+      request: "Google Ads eligibility-review request",
+      htmlIntro: "We’ll review your previous 30-day Google Ads performance to see whether your account qualifies. The offer is available to eligible existing advertisers; your request does not confirm eligibility. If we don’t generate more qualified leads during the agreed comparison period, our management fee for that period is $0. Ad spend is separate and non-refundable. Here’s what happens next:",
+      textIntro: "We’ll review your previous 30-day Google Ads performance to see whether your account qualifies. The offer is available to eligible existing advertisers; your request does not confirm eligibility. If we don’t generate more qualified leads during the agreed comparison period, our management fee for that period is $0. Ad spend is separate and non-refundable. Here’s what happens next:",
+      reviewHtml: "We verify your previous 30-day Google Ads baseline before launch",
+      reviewText: "We verify your previous 30-day Google Ads baseline before launch",
+      plan: "Before launch, we confirm eligibility, lead criteria, baseline, attribution, campaign period and a comparable advertising budget",
       bookingUrl: `${BUSINESS.site}/google-ads-and-meta-ads/thank-you#book`,
-      ctaLabel: "Book your strategy call",
+      ctaLabel: "Book your eligibility review",
     };
   }
   return {

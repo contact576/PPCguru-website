@@ -9,8 +9,8 @@ import { readLandingConversionReceipt } from "@/lib/landing-conversion";
 import { GOOGLE_META_LANDING_PATH, GOOGLE_META_LANDING_SOURCE, GOOGLE_META_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-google-meta";
 
 export const metadata: Metadata = {
-  title: "Book your Google Ads and Meta Ads strategy call",
-  description: "Choose a time to discuss your Google Ads and Meta Ads growth plan with PPC Guru.",
+  title: "Book your Google Ads eligibility review | PPC Guru",
+  description: "Choose a time to review your Google Ads baseline and eligibility for PPC Guru’s qualified-lead management-fee offer.",
   robots: { index: false, follow: false },
   alternates: { canonical: GOOGLE_META_LANDING_THANK_YOU_PATH },
 };
@@ -26,22 +26,22 @@ export default async function GoogleMetaThankYouPage() {
         className="lp-google-meta lp-google-meta-thanks"
         name=""
         confirmed={confirmed}
-        kicker={confirmed ? "Request received" : "Book your strategy call"}
+        kicker={confirmed ? "Eligibility review requested" : "Book your eligibility review"}
         title={confirmed ? "Thanks" : "Let’s talk"}
-        titleEm={confirmed ? "Let’s talk about your next campaign." : "Plan your next campaign with us."}
-        lede="Choose a time below for your Google Ads and Meta Ads strategy call. We’ll discuss your business, the channels that fit and a practical starting budget. Prefer to speak directly? Call or WhatsApp our team."
+        titleEm="Let’s see if your account qualifies."
+        lede="Book a time below to review your previous 30-day Google Ads performance. The offer is available to eligible existing advertisers; submitting a request does not confirm eligibility. If we don’t generate more qualified leads during the agreed comparison period, our management fee for that period is $0. Ad spend is separate and non-refundable."
         steps={[
           confirmed
-            ? { Icon: ClipboardList, title: "We review your business", copy: "We review your service area, website and channel preferences before the conversation." }
-            : { Icon: ClipboardList, title: "Prepare for your call", copy: "Bring your website, service area and campaign questions so we can make the conversation useful." },
-          { Icon: CalendarCheck, title: "Book your strategy call", copy: "Use the calendar to pick a convenient time to discuss your goals, current campaigns and lead quality." },
-          { Icon: Rocket, title: "Agree the next steps", copy: "We recommend a channel mix and outline the tracking, creative and landing-page work needed before launch." },
+            ? { Icon: ClipboardList, title: "We review your account", copy: "We review your request and verify your previous 30-day Google Ads performance before launch." }
+            : { Icon: ClipboardList, title: "Prepare for your review", copy: "Have your previous 30-day Google Ads results and your definition of a qualified lead ready to discuss." },
+          { Icon: CalendarCheck, title: "Book your eligibility review", copy: "Choose a time to discuss your existing campaigns, lead quality and whether your account qualifies." },
+          { Icon: Rocket, title: "Confirm the comparison", copy: "Before launch, we agree lead criteria, baseline, attribution, campaign period and a comparable advertising budget. We’ll also discuss where Meta Ads can support your growth." },
         ]}
-        whatsappOpener={confirmed ? "Hi PPC Guru — I just requested a Google Ads and Meta Ads growth plan. Can we talk?" : "Hi PPC Guru — I’d like to discuss Google Ads and Meta Ads for my business. Can we talk?"}
+        whatsappOpener={confirmed ? "Hi PPC Guru — I just requested an eligibility review for your Google Ads qualified-lead offer. Can we talk?" : "Hi PPC Guru — I’d like to check whether my Google Ads account qualifies for your qualified-lead offer. Can we talk?"}
         backHref={`${GOOGLE_META_LANDING_PATH}#qualification`}
         source={`${GOOGLE_META_LANDING_SOURCE}:thank-you`}
-        headerCtaLabel="Back to the plan"
-        backLabel="Review the growth plan"
+        headerCtaLabel="Review the offer"
+        backLabel="Review the offer and eligibility"
         footerTagline="Google Ads and Meta Ads. One team focused on your growth."
         footer={<GoogleMetaFooter fromThankYou />}
       />
