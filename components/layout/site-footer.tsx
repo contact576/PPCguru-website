@@ -91,7 +91,7 @@ export function SiteFooter() {
             <div className="mono" style={head}>Contact</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 13.5 }}>
               {siteConfig.contact.phone ? (
-                <a href={siteConfig.contact.phoneHref} style={{ ...col, fontWeight: 700, color: "#f1efe3" }} className="hover:text-[#ceff3a]">
+                <a href={siteConfig.contact.phoneHref} data-phone-link="business" style={{ ...col, fontWeight: 700, color: "#f1efe3" }} className="hover:text-[#ceff3a]">
                   {siteConfig.contact.phone}
                 </a>
               ) : null}

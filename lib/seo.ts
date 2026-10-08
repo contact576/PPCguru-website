@@ -159,11 +159,11 @@ export function organizationSchema() {
     description: siteConfig.schemaDescription,
     slogan: siteConfig.tagline,
     email: siteConfig.contact.email,
-    ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phone } : {}),
+    ...(siteConfig.contact.phone ? { telephone: siteConfig.contact.phoneE164 } : {}),
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "sales and customer service",
-      telephone: siteConfig.contact.phone,
+      telephone: siteConfig.contact.phoneE164,
       email: siteConfig.contact.email,
       availableLanguage: "English",
     },

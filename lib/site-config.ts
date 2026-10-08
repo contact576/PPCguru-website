@@ -29,11 +29,11 @@ export const siteConfig = {
     // Sales inbox, shown beside `email` on the paid landing pages so an ad
     // visitor can reach the sales desk directly instead of the general line.
     salesEmail: "sales@ppcguru.ca",
-    // Real business line. `phone` is what a human reads, `phoneHref` is the
-    // dial string — keep them in sync, and keep phoneHref digits-only after the
-    // "+" so iOS/Android dial it without stripping formatting characters.
-    phone: "+1 (519) 992-9567",
-    phoneHref: "tel:+15199929567",
+    // Show and dial the national number consistently across public call links.
+    // Keep the international form separately for machine-readable business data.
+    phone: "(519) 992-9567",
+    phoneHref: "tel:5199929567",
+    phoneE164: "+15199929567",
     // Same business line as `phone`, in wa.me form (digits only, country code, no "+").
     // Rendered on /contact and as the WhatsApp button on /100-leads/thank-you.
     whatsapp: "https://wa.me/15199929567", // [VERIFY] confirm this line is WhatsApp-enabled

@@ -26,7 +26,7 @@ export function GoogleMetaFooter({ fromThankYou = false }: { fromThankYou?: bool
         </nav>
         <div className="gm-footer-contact">
           <h2>Let’s talk</h2>
-          <a href={siteConfig.contact.phoneHref}><Phone aria-hidden="true" /> {siteConfig.contact.phone}</a>
+          <a href={siteConfig.contact.phoneHref} data-phone-link="business"><Phone aria-hidden="true" /> {siteConfig.contact.phone}</a>
           <a href={`mailto:${siteConfig.contact.salesEmail}`}><Mail aria-hidden="true" /> {siteConfig.contact.salesEmail}</a>
           <a href={`mailto:${siteConfig.contact.email}`}><Mail aria-hidden="true" /> {siteConfig.contact.email}</a>
           <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer">Chat on WhatsApp <ArrowUpRight aria-hidden="true" /></a>
