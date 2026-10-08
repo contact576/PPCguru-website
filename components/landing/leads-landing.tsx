@@ -128,7 +128,7 @@ function Stepper({ step }: { step: number }) {
 }
 
 /** Copy that differs per landing page; defaults are the /100-leads wording. */
-export type QualificationCopy = { source: string; topline: string; stepTwoLede: string; submitLabel: string; collectChannel?: boolean };
+export type QualificationCopy = { source: string; topline: string; stepTwoLede: string; submitLabel: string; collectChannel?: boolean; stepOneLede?: string; contactLede?: string };
 const DEFAULT_COPY: QualificationCopy = {
   source: LANDING_SOURCE,
   topline: "100-lead fit check",
@@ -305,7 +305,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
             <div className="form-heading">
               <p className="form-kicker">Let’s start with your market</p>
               <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGrowthPlan ? "Tell us about your business" : "Where should we send the leads?"}</h2>
-              <p>{isGrowthPlan ? "Share your business and service area so we can shape your Google and Meta growth plan." : "Tell us which business and service area we would be advertising."}</p>
+              <p>{copy.stepOneLede ?? (isGrowthPlan ? "Share your business and service area so we can shape your Google and Meta growth plan." : "Tell us which business and service area we would be advertising.")}</p>
             </div>
             <div className="input-stack">
               <label>
@@ -420,7 +420,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
             <div className="form-heading">
               <p className="form-kicker">Last step</p>
               <h2 id="qualification-title" ref={headingRef} tabIndex={-1}>{isGrowthPlan ? "Where can we reach you?" : "Where should we send your lead plan?"}</h2>
-              <p>{isGrowthPlan ? "We’ll use these details to arrange a short call about your growth plan." : "We’ll use this to arrange a short qualification call—not to spam you."}</p>
+              <p>{copy.contactLede ?? (isGrowthPlan ? "We’ll use these details to arrange a short call about your growth plan." : "We’ll use this to arrange a short qualification call—not to spam you.")}</p>
             </div>
             <div className="input-stack compact-fields">
               <label>

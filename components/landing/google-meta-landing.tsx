@@ -15,9 +15,11 @@ import { siteConfig } from "@/lib/site-config";
 
 const FORM_COPY = {
   source: GOOGLE_META_LANDING_SOURCE,
-  topline: "Your free Google + Meta growth plan",
-  stepTwoLede: "Choose a channel, or let us recommend the best starting point for your budget.",
-  submitLabel: "Get my free growth plan",
+  topline: "Your Google Ads eligibility check",
+  stepOneLede: "Share your business and service area. We’ll review your existing Google Ads account with you on a free call.",
+  stepTwoLede: "Share your budget and channels. The management-fee offer applies to eligible existing Google Ads advertisers.",
+  contactLede: "We’ll contact you to review your account and confirm eligibility. Submitting does not enrol you or commit you to a fee.",
+  submitLabel: "See if my account qualifies",
   collectChannel: true,
 };
 
@@ -29,12 +31,13 @@ function goTo(id: string) {
 
 const faqItems = [
   ["Google Ads, Meta Ads, or both?", "Google Ads reaches people searching for what you sell. Meta introduces your offer on Facebook and Instagram and helps bring interested visitors back. We recommend the right starting mix for your business, budget and market. You do not have to run both."],
-  ["What do I get in the free growth plan?", "We review your business, service area and website, then outline a channel recommendation, an initial ad budget and the first changes to your offer, tracking or landing page. If you already advertise, we can discuss an account review on the call. There is no obligation to hire us."],
+  ["How does the $0 management-fee offer work?", "We verify your previous 30-day Google Ads performance before launch. If we don’t generate more qualified leads during the agreed comparison period, our management fee for that period is $0. Lead criteria, baseline, attribution, campaign period and a comparable advertising budget are confirmed before launch. Ad spend is separate and non-refundable."],
+  ["Who qualifies for the offer?", "The offer is available to eligible existing Google Ads advertisers. We review your account and agree the comparison terms before launch. Submitting the form requests an eligibility review; it does not confirm qualification. Meta-only and new advertisers can still discuss a campaign plan, but this Google Ads offer does not automatically apply."],
   ["How much should I budget?", "The right ad budget depends on your services, location, competition and growth goals. Tell us your range in the form, including if you are unsure. Ad spend is paid directly to Google or Meta; management fees, creative and landing-page work are scoped separately before launch."],
   ["Will I own my accounts and data?", "Yes. Your ad accounts and data stay yours. We work with the access needed to manage your campaigns. Management is month to month, with scope, fees and cancellation terms agreed in writing before work starts."],
   ["Can you help if my current ads are not working?", "Yes. We look at search terms or audiences, your offer and creative, landing pages, conversion tracking and lead follow-up. The aim is to find where enquiries are being lost before recommending more spend."],
-  ["Do I need a website or existing ad account?", "No. You can request a plan before those are in place. Share your website or Instagram profile if you have one. We will explain any setup, creative or landing-page work required before launching."],
-  ["How soon can we start, and are results guaranteed?", "After your request, you can book a call on the next page. Launch timing depends on account access, creative, tracking and platform approval. The examples on this page are past client outcomes, not a guarantee of your lead volume, cost or sales."],
+  ["What if I’m new to advertising?", "We can still help you plan Google Ads, Meta Ads or both. The management-fee offer requires an eligible existing Google Ads account and a verified previous 30-day baseline. We’ll explain the setup, creative, landing-page work and fees for a new account before you decide."],
+  ["How soon can we start?", "After your request, book a free call on the next page. Launch timing depends on account access, the baseline review, creative, tracking and platform approval. We confirm offer eligibility and comparison terms before launch. The campaign examples show past outcomes, not a promise of the same lead volume, cost or sales."],
 ] as const;
 
 const reviewNames = ["Amy Ramirez", "Ankesh", "Nancy Gonzalez"];
@@ -47,22 +50,22 @@ export function GoogleMetaLanding() {
       <GoogleMetaAnalytics />
       <div className="site-shell" id="top">
         <div className="hero-surface">
-          <LandingHeader ctaLabel="Get my free plan" />
+          <LandingHeader ctaLabel="See if my account qualifies" />
           <section className="hero-section" aria-labelledby="google-meta-title">
             <div className="hero-copy">
               <p className="hero-kicker"><span /> Google Ads + Meta Ads · Canada &amp; USA</p>
-              <h1 id="google-meta-title">Turn ad spend<br /><em>into more leads.</em></h1>
-              <p className="hero-lede">Reach ready-to-buy customers on Google, Facebook and Instagram. We manage your campaigns, creative and tracking to turn interest into enquiries.</p>
+              <h1 id="google-meta-title">Beat your last 30 days of qualified leads<em>—or pay $0 in management fees.</em></h1>
+              <p className="hero-lede">We verify your previous 30-day Google Ads performance before launch. If we don’t generate more qualified leads during the agreed comparison period, our management fee for that period is $0.</p>
               <div className="hero-checks">
                 <span><Check aria-hidden="true" /> Your accounts stay yours</span>
                 <span><Check aria-hidden="true" /> Month-to-month management</span>
                 <span><Check aria-hidden="true" /> Clear lead &amp; cost reporting</span>
               </div>
               <div className="gm-hero-actions">
-                <button type="button" className="primary-button" onClick={() => goTo("qualification")}>Get my free growth plan <ArrowRight aria-hidden="true" /></button>
+                <button type="button" className="primary-button" onClick={() => goTo("qualification")}>See if my account qualifies <ArrowRight aria-hidden="true" /></button>
                 <button type="button" className="gm-text-button" onClick={() => goTo("results")}>See real results <ArrowRight aria-hidden="true" /></button>
               </div>
-              <p className="gm-microcopy">Submit the form, then book your free strategy call. We’ll recommend your channels, starting budget and next steps.</p>
+              <p className="gm-offer-terms">Available to eligible existing advertisers. Lead criteria, baseline, attribution, campaign period and comparable advertising budget are confirmed before launch. Ad spend is separate and non-refundable.</p>
               <PartnerPair size="sm" className="gm-partners" />
               <a className="gm-rating" href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer">
                 <span aria-label="5 out of 5 stars">{Array.from({ length: 5 }, (_, i) => <Star key={i} aria-hidden="true" />)}</span>
@@ -103,13 +106,13 @@ export function GoogleMetaLanding() {
 
         <section className="gm-plan-section" id="how-it-works" aria-labelledby="gm-plan-title">
           <div className="gm-container">
-            <div className="gm-plan-heading"><div><p className="section-kicker">How it works</p><h2 id="gm-plan-title" tabIndex={-1}>From your first call<br /><span>to your next campaign.</span></h2></div><p>Get a channel recommendation, a starting budget and clear priorities. Decide whether to work with us after your call.</p></div>
+            <div className="gm-plan-heading"><div><p className="section-kicker">How it works</p><h2 id="gm-plan-title" tabIndex={-1}>Verify the baseline.<br /><span>Build from there.</span></h2></div><p>A free account review first. Clear comparison terms before launch. A management fee tied to beating your agreed qualified-lead baseline.</p></div>
             <ol className="gm-steps">
               <li><span>01</span><ClipboardList aria-hidden="true" /><h3>Tell us about your business.</h3><p>Share your market, goals and ad budget in the short form above.</p></li>
-              <li><span>02</span><Crosshair aria-hidden="true" /><h3>Book your free strategy call.</h3><p>Choose a time after submitting. We’ll review your offer and discuss your Google and Meta growth plan.</p></li>
-              <li><span>03</span><SlidersHorizontal aria-hidden="true" /><h3>Launch. Learn. Improve.</h3><p>If we’re a fit, agree the scope and build campaigns with tracking and regular reviews.</p></li>
+              <li><span>02</span><Crosshair aria-hidden="true" /><h3>Verify your last 30 days.</h3><p>Book a free call after submitting. We’ll review your Google Ads performance and confirm whether your account qualifies.</p></li>
+              <li><span>03</span><SlidersHorizontal aria-hidden="true" /><h3>Agree. Launch. Compare.</h3><p>Confirm lead criteria, attribution, period and comparable ad budget before launch. If we don’t beat the agreed baseline, management fees for that period are $0.</p></li>
             </ol>
-            <div className="gm-plan-cta"><button type="button" className="primary-button" onClick={() => goTo("qualification")}>Get my free growth plan <ArrowRight aria-hidden="true" /></button><span>No obligation. Ad spend and management fees agreed separately.</span></div>
+            <div className="gm-plan-cta"><button type="button" className="primary-button" onClick={() => goTo("qualification")}>See if my account qualifies <ArrowRight aria-hidden="true" /></button><span>Eligible existing Google Ads advertisers. Ad spend is separate and non-refundable.</span></div>
           </div>
         </section>
 
@@ -133,7 +136,7 @@ export function GoogleMetaLanding() {
 
         <section className="gm-section gm-faq-section" id="faq" aria-labelledby="gm-faq-title"><div className="gm-container gm-faq-grid"><div><p className="section-kicker">Before you take the next step</p><h2 id="gm-faq-title">Good questions.<br /><span>Clear answers.</span></h2><p>Still weighing up your options? We’ll talk through them on your call.</p></div><div className="gm-faq-list">{faqItems.map(([question, answer]) => <details key={question}><summary>{question}<ChevronDown aria-hidden="true" /></summary><p>{answer}</p></details>)}</div></div></section>
 
-        <section className="gm-final-section" aria-labelledby="gm-final-title"><div className="gm-container gm-final-inner"><p className="section-kicker">Let’s make your next move count.</p><h2 id="gm-final-title">Your next customer<br /><span>starts with a better plan.</span></h2><p>Find out where Google Ads and Meta Ads can take your business.</p><button type="button" className="primary-button" onClick={() => goTo("qualification")}>Get my free growth plan <ArrowRight aria-hidden="true" /></button><a href={siteConfig.contact.phoneHref} data-phone-link="business">Prefer a conversation? {siteConfig.contact.phone}</a><small>No obligation · Your accounts stay yours · Month-to-month management</small></div></section>
+        <section className="gm-final-section" aria-labelledby="gm-final-title"><div className="gm-container gm-final-inner"><p className="section-kicker">Start with your last 30 days.</p><h2 id="gm-final-title">More qualified leads.<br /><span>Or $0 in management fees.</span></h2><p>Let’s review your Google Ads account and see if you qualify.</p><button type="button" className="primary-button" onClick={() => goTo("qualification")}>See if my account qualifies <ArrowRight aria-hidden="true" /></button><a href={siteConfig.contact.phoneHref} data-phone-link="business">Prefer a conversation? {siteConfig.contact.phone}</a><small>Available to eligible existing advertisers. Lead criteria, baseline, attribution, campaign period and comparable advertising budget are confirmed before launch. Ad spend is separate and non-refundable.</small></div></section>
         <GoogleMetaFooter />
       </div>
     </div>

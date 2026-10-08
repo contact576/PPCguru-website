@@ -5,13 +5,13 @@ import { GoogleMetaLanding } from "@/components/landing/google-meta-landing";
 import { GOOGLE_META_LANDING_PATH } from "@/lib/data/landing-google-meta";
 
 export const metadata: Metadata = {
-  title: "Google Ads and Meta Ads | Real Campaign Results",
-  description: "Google Ads and Meta Ads, managed by one team. Explore real campaign results and client reviews, then get a free growth plan for your business.",
+  title: "More Qualified Google Ads Leads or $0 Management Fees",
+  description: "Beat your last 30 days of qualified Google Ads leads or pay $0 in management fees for the agreed period. Eligible existing advertisers. Ad spend is separate.",
   robots: { index: false, follow: false },
   alternates: { canonical: GOOGLE_META_LANDING_PATH },
   openGraph: {
-    title: "Turn ad spend into more leads. | PPC Guru",
-    description: "Real campaign evidence. Clear reporting. A free growth plan built around your business.",
+    title: "Beat your last 30 days of qualified leads—or pay $0 in management fees.",
+    description: "For eligible existing Google Ads advertisers. Baseline, lead criteria, attribution, campaign period and comparable ad budget agreed before launch. Ad spend is separate and non-refundable.",
     url: GOOGLE_META_LANDING_PATH,
     type: "website",
   },

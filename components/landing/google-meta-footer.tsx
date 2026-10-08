@@ -22,7 +22,7 @@ export function GoogleMetaFooter({ fromThankYou = false }: { fromThankYou?: bool
           <a href={section("reviews")}>Client reviews</a>
           <a href={section("service-areas")}>Where we work</a>
           <a href={section("faq")}>Your questions</a>
-          <a className="gm-footer-plan" href={section("qualification")}>Get your free plan <ArrowUpRight aria-hidden="true" /></a>
+          <a className="gm-footer-plan" href={section("qualification")}>See if my account qualifies <ArrowUpRight aria-hidden="true" /></a>
         </nav>
         <div className="gm-footer-contact">
           <h2>Let’s talk</h2>
