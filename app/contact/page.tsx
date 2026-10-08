@@ -50,7 +50,7 @@ export default function ContactPage() {
               <div className="mt-4 space-y-3 text-sm">
                 {/* Phone shown only when a real number is configured. [VERIFY] add phone + WhatsApp. */}
                 {siteConfig.contact.phone ? (
-                  <a href={siteConfig.contact.phoneHref} className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Phone size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.phone}</a>
+                  <a href={siteConfig.contact.phoneHref} data-phone-link="business" className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Phone size={16} className="text-[var(--color-cyan-bright)]" /> {siteConfig.contact.phone}</a>
                 ) : null}
                 {siteConfig.contact.whatsapp ? (
                   <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[var(--color-ink-dim)] hover:text-[var(--color-ink)]"><Phone size={16} className="text-[var(--color-cyan-bright)]" /> WhatsApp</a>

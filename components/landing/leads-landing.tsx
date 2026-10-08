@@ -296,7 +296,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
         {state.message && !state.ok ? (
           <p className="form-error" role="alert" ref={feedbackRef} tabIndex={-1}>
             {state.message}
-            {!state.errors ? <> You can also <a className="underline" href={siteConfig.contact.phoneHref}>call {siteConfig.contact.phone}</a> or <a className="underline" href={`mailto:${siteConfig.contact.email}`}>email {siteConfig.contact.email}</a>.</> : null}
+            {!state.errors ? <> You can also <a className="underline" href={siteConfig.contact.phoneHref} data-phone-link="business">call {siteConfig.contact.phone}</a> or <a className="underline" href={`mailto:${siteConfig.contact.email}`}>email {siteConfig.contact.email}</a>.</> : null}
           </p>
         ) : null}
 
