@@ -440,7 +440,7 @@ export function SeoLanding() {
                   <span /> SEO + AI-search visibility · Canada &amp; USA
                 </p>
                 <h1>
-                  Make your business the obvious answer. <em>In Google and AI search.</em>
+                  Get found on Google. <em>Get recommended by AI.</em>
                 </h1>
                 <p className="hero-lede">
                   When customers ask ChatGPT who to hire, your business should be easy to find, verify and recommend. We build the search signals that help local businesses appear across Google and selected AI answers — with a measurable 30-day target agreed upfront.
