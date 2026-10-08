@@ -5,7 +5,7 @@ Both are paid-traffic destinations with noindex metadata and their own header/fo
 
 ## Offer
 
-Headline: **Beat your last 30 days of qualified leads—or pay $0 in management fees.**
+Headline: **Beat your last 30 days of qualified leads or pay $0 in management fees.**
 
 PPC Guru verifies the advertiser’s previous 30-day Google Ads performance before
 launch. If the agreed comparison period does not generate more qualified leads,

@@ -4,3 +4,4 @@ export const GOOGLE_META_LANDING_THANK_YOU_PATH = "/google-ads-and-meta-ads/than
 export const GOOGLE_META_LANDING_SOURCE = "landing:google-meta-ads";
 export const GOOGLE_META_LANDING_ID = "google-meta-ads";
 export const GOOGLE_META_LANDING_SERVICE_LABEL = "Google Ads + Meta Ads growth plan";
+export const GOOGLE_META_WHATSAPP_URL = "https://wa.me/16473725300";
