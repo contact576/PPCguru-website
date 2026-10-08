@@ -49,7 +49,12 @@ Do not use the ChatGPT captures in `public/landing/proof` as campaign evidence.
 - Reuses the three-step qualification form and production delivery action.
 - Source: `landing:google-meta-ads`; stored landing ID: `google-meta-ads`.
 - Collects business, location, optional website/profile, business type, monthly
-  CAD ad budget, channel, name, email and phone.
+  CAD ad budget, channels, name, email and phone. Channels are multi-select:
+  Google Ads, Meta Ads, SEO and Help me choose. At least one is required.
+  Repeated form values are validated and saved as `answers.channels`; all
+  selected labels appear in team email, the GHL note, the admin queue and CSV.
+  Older tabs posting `both` remain valid and map to Google Ads plus Meta Ads.
+  GTA retains its existing single-choice form and `answers.channel` records.
 - Success requires email-provider acknowledgment for marketing, sales and
   contact at ppcguru.ca, plus successful GHL contact, note and tag delivery.
   A Supabase recovery row alone cannot confirm this funnel, and it never falls
@@ -109,7 +114,7 @@ thank-you route is not a new lead.
 
 Run `npm run check:landing-lead`, `npm run check:team-email`,
 `npm run check:ghl`, `npm run typecheck` and `npm run build`. The offline suite
-covers 72 lead/conversion checks, 16 email checks, 12 routing checks and 16 GHL
+covers lead/conversion checks, 16 email checks, 12 routing checks and 16 GHL
 contract checks.
 On the Windows workspace junction, Next.js must run from the resolved physical
 project path; this is a local environment issue, not a deployment configuration.
@@ -117,7 +122,11 @@ Production `ppcguru.ca` is hosted on Hostinger and deploys `master`.
 
 Offline tests use mocked delivery providers. They do not prove receipt in a real
 inbox or an ads dashboard; those require an intentional live submission after
-deployment. Production live QA for this release is not yet complete.
+deployment. The offer release was verified with a live enquiry on 2026-10-09
+(India time): confirmed thank-you, loaded calendar, Supabase row, team emails
+received in Contact and Sales, and the acknowledgement email received.
+GHL and all three team email destinations acknowledged delivery; the Marketing
+inbox and individual Meta CAPI event were not independently verified.
 Live delivery needs the deployed `GHL_API_TOKEN` and `GHL_LOCATION_ID`, plus a
 working `RESEND_API_KEY` with a verified sender and matching `CONTACT_FROM_EMAIL`.
 Production email delivery does not use SMTP. Provider acceptance still needs to

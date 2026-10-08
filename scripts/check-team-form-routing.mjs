@@ -187,7 +187,8 @@ for (const route of routes) {
       assert.ok(notification.text.includes("utm_campaign=offline-campaign"));
       assert.equal(h.calls.landing[0][0].utm.utm_campaign, "offline-campaign");
     }
-    if (route.source === gta.GTA_LANDING_SOURCE || route.source === googleMeta.GOOGLE_META_LANDING_SOURCE) assert.ok(notification.text.includes("Preferred channel: Google + Meta"));
+    if (route.source === gta.GTA_LANDING_SOURCE) assert.ok(notification.text.includes("Preferred channel: Google + Meta"));
+    if (route.source === googleMeta.GOOGLE_META_LANDING_SOURCE) assert.ok(notification.text.includes("Preferred channels: Google Ads, Meta Ads"));
     if (route.kind === "seo") assert.ok(notification.text.includes("Target search: heating services Toronto"));
     checks++;
     console.log(`PASS ${route.label}: ${strict ? "required email + GHL" : stored ? "deferred stored" : "immediate email-only"} delivery preserves recipients, Reply-To and source data`);

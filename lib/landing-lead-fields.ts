@@ -23,8 +23,21 @@ export const LANDING_CHANNELS = [
 type LandingChannel = (typeof LANDING_CHANNELS)[number]["id"];
 export const LANDING_CHANNEL_IDS = LANDING_CHANNELS.map(({ id }) => id) as [LandingChannel, ...LandingChannel[]];
 
+/** Google + Meta funnel services; GTA keeps its original single-choice list. */
+export const MULTISELECT_LANDING_CHANNELS = [
+  { id: "google", label: "Google Ads" },
+  { id: "meta", label: "Meta Ads" },
+  { id: "seo", label: "SEO" },
+  { id: "recommend", label: "Help me choose" },
+] as const;
+
+export type MultiselectLandingChannel = (typeof MULTISELECT_LANDING_CHANNELS)[number]["id"];
+export const MULTISELECT_LANDING_CHANNEL_IDS = MULTISELECT_LANDING_CHANNELS.map(({ id }) => id) as [MultiselectLandingChannel, ...MultiselectLandingChannel[]];
+
 export function landingChannelLabel(id: string | undefined): string {
-  return LANDING_CHANNELS.find((channel) => channel.id === id)?.label ?? "";
+  return MULTISELECT_LANDING_CHANNELS.find((channel) => channel.id === id)?.label
+    ?? LANDING_CHANNELS.find((channel) => channel.id === id)?.label
+    ?? "";
 }
 
 /** Empty is valid; otherwise accept an HTTP(S) site or an Instagram handle. */

@@ -33,7 +33,7 @@ import { PartnerPair } from "@/components/shared/partner-pair";
 import { LandingHeader, LandingFooter } from "@/components/landing/landing-chrome";
 import { HundredMark, ZeroFeeMark } from "@/components/landing/hero-marks";
 import { ClientLogoWall, TrustSection } from "@/components/landing/trust";
-import { GTA_EXTRA_BUSINESS_TYPES, GTA_EXTRA_BUDGETS, LANDING_CHANNELS, isValidLeadPhone, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
+import { GTA_EXTRA_BUSINESS_TYPES, GTA_EXTRA_BUDGETS, LANDING_CHANNELS, MULTISELECT_LANDING_CHANNELS, isValidLeadPhone, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
 import { GTA_LANDING_SOURCE } from "@/lib/data/landing-gta";
 import { GOOGLE_META_LANDING_SOURCE } from "@/lib/data/landing-google-meta";
 import { siteConfig } from "@/lib/site-config";
@@ -137,11 +137,13 @@ const DEFAULT_COPY: QualificationCopy = {
 };
 
 export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: QualificationCopy } = {}) {
+  const multiChannel = copy.source === GOOGLE_META_LANDING_SOURCE;
   const isGrowthPlan = copy.source === GTA_LANDING_SOURCE || copy.source === GOOGLE_META_LANDING_SOURCE;
   const businessTypes = isGrowthPlan ? [...BUSINESS_TYPES, ...GTA_EXTRA_BUSINESS_TYPES] : BUSINESS_TYPES;
   const budgets = isGrowthPlan ? [...LANDING_BUDGETS, ...GTA_EXTRA_BUDGETS] : LANDING_BUDGETS;
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ company: "", location: "", website: "", businessType: "", budget: "", channel: "", name: "", email: "", phone: "" });
+  const [channels, setChannels] = useState<string[]>([]);
   const [state, action, pending] = useActionState(async (previous: LandingLeadState, data: FormData) => {
     try {
       return await submitLandingLead(previous, data);
@@ -194,7 +196,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
   useEffect(() => {
     if (!errorFocus || pending || (errorFocus.step && step !== errorFocus.step)) return;
     const invalidField = errorFocus.fields.map((name) => formRef.current?.querySelector<HTMLElement>(
-      `[name="${name}"]:not([type="hidden"]), [data-field="${name}"] [role="radio"]`,
+      `[name="${name}"]:not([type="hidden"]), [data-field="${name}"] [role="radio"], [data-field="${name}"] [role="checkbox"]`,
     )).find(Boolean);
     (invalidField ?? feedbackRef.current)?.focus();
     setErrorFocus(null);
@@ -209,9 +211,13 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
     setForm((current) => ({ ...current, [name]: value }));
     setErrors((current) => ({ ...current, [name === "businessType" ? "business_type" : name]: "" }));
   };
+  const toggleChannel = (id: string) => {
+    setChannels((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
+    setErrors((current) => ({ ...current, channel: "" }));
+  };
 
   const stepOneReady = form.company.trim().length >= 2 && form.location.trim().length >= 2;
-  const stepTwoReady = Boolean(form.businessType && form.budget && (!copy.collectChannel || form.channel));
+  const stepTwoReady = Boolean(form.businessType && form.budget && (!copy.collectChannel || (multiChannel ? channels.length > 0 : form.channel)));
 
   const goTo = (next: number) => {
     if (pending) return;
@@ -292,7 +298,9 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
         ) : null}
         <input type="hidden" name="business_type" value={form.businessType} readOnly />
         <input type="hidden" name="budget" value={form.budget} readOnly />
-        {copy.collectChannel ? <input type="hidden" name="channel" value={form.channel} readOnly /> : null}
+        {copy.collectChannel ? multiChannel ? MULTISELECT_LANDING_CHANNELS.filter(({ id }) => channels.includes(id)).map(({ id }) => (
+          <input key={id} type="hidden" name="channel" value={id} readOnly />
+        )) : <input type="hidden" name="channel" value={form.channel} readOnly /> : null}
         {state.message && !state.ok ? (
           <p className="form-error" role="alert" ref={feedbackRef} tabIndex={-1}>
             {state.message}
@@ -394,8 +402,14 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
             {copy.collectChannel ? (
               <fieldset className="choice-fieldset budget-fieldset">
                 <legend>Which channels are you interested in?</legend>
-                <div className="budget-grid" role="radiogroup" data-field="channel" aria-label="Advertising channels" aria-invalid={Boolean(errors.channel)} aria-describedby={errors.channel ? "channel-error" : undefined}>
-                  {LANDING_CHANNELS.map(({ id, label }, index) => (
+                {multiChannel ? <p className="channel-choice-hint" id="channel-choice-hint">Select all that apply.</p> : null}
+                <div className="budget-grid" role={multiChannel ? "group" : "radiogroup"} data-field="channel" aria-label="Channels of interest" aria-invalid={Boolean(errors.channel)} aria-describedby={[multiChannel ? "channel-choice-hint" : "", errors.channel ? "channel-error" : ""].filter(Boolean).join(" ") || undefined}>
+                  {multiChannel ? MULTISELECT_LANDING_CHANNELS.map(({ id, label }) => (
+                    <button key={id} type="button" className={channels.includes(id) ? "budget-choice channel-choice is-selected" : "budget-choice channel-choice"} role="checkbox" aria-checked={channels.includes(id)} onClick={() => toggleChannel(id)}>
+                      <span className="channel-check" aria-hidden="true">{channels.includes(id) ? <Check /> : null}</span>
+                      <span>{label}</span>
+                    </button>
+                  )) : LANDING_CHANNELS.map(({ id, label }, index) => (
                     <button key={id} type="button" className={form.channel === id ? "budget-choice is-selected" : "budget-choice"} role="radio" aria-checked={form.channel === id} tabIndex={form.channel === id || (!form.channel && index === 0) ? 0 : -1} onKeyDown={(event) => chooseWithArrow(event, "channel", LANDING_CHANNELS)} onClick={() => choose("channel", id)}>
                       {label}
                     </button>
