@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
   alternates: { canonical: SEO_LANDING_PATH },
   openGraph: {
-    title: "Make your business the obvious answer — in Google and AI search | PPC Guru",
+    title: "Get found on Google. Get recommended by AI. | PPC Guru",
     description: "A measurable 30-day search-visibility target across Google, Maps and AI answers, agreed upfront.",
     url: SEO_LANDING_PATH,
     type: "website",
