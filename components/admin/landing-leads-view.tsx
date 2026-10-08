@@ -7,6 +7,16 @@ import { budgetLabel, businessTypeLabel, LANDING_PATH } from "@/lib/data/landing
 import { SEO_LANDING_PATH, SEO_LANDING_ID, seoGoalLabel, seoInvestmentLabel } from "@/lib/data/landing-seo";
 import { GTA_LANDING_ID, GTA_LANDING_PATH } from "@/lib/data/landing-gta";
 import { GOOGLE_META_LANDING_ID, GOOGLE_META_LANDING_PATH } from "@/lib/data/landing-google-meta";
+import { landingChannelLabel } from "@/lib/landing-lead-fields";
+
+function answerText(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value.join(", ") : value ?? "";
+}
+
+function channelText(r: LandingLeadRow) {
+  const value = r.answers?.channels ?? r.answers?.channel;
+  return (Array.isArray(value) ? value : value ? [value] : []).map((id) => landingChannelLabel(id) || id).join(", ");
+}
 
 /** Per-landing rendering of qualification answers. */
 function marketCell(r: LandingLeadRow) {
@@ -14,9 +24,9 @@ function marketCell(r: LandingLeadRow) {
     const a = r.answers ?? {};
     return (
       <>
-        {a.search || r.location || "—"}
+        {answerText(a.search) || r.location || "—"}
         <span className="block text-xs text-[var(--color-ink-faint)]">
-          {seoGoalLabel(a.goal)}
+          {seoGoalLabel(answerText(a.goal))}
           {r.website ? ` · ${r.website}` : ""}
         </span>
       </>
@@ -26,6 +36,7 @@ function marketCell(r: LandingLeadRow) {
     <>
       {r.location || "—"}
       <span className="block text-xs text-[var(--color-ink-faint)]">{businessTypeLabel(r.business_type)}</span>
+      {channelText(r) ? <span className="block text-xs text-[var(--color-ink-faint)]">{channelText(r)}</span> : null}
     </>
   );
 }
@@ -94,7 +105,7 @@ function toCsv(rows: LandingLeadRow[]) {
         .map((c) => {
           if (c === "business_type") return esc(r.landing === SEO_LANDING_ID ? "" : businessTypeLabel(r.business_type));
           if (c === "budget") return esc(budgetCell(r));
-          if (c === "answers") return esc(Object.entries(r.answers ?? {}).map(([k, v]) => `${k}=${v}`).join("; "));
+          if (c === "answers") return esc(Object.entries(r.answers ?? {}).map(([k, v]) => `${k}=${k === "channels" || k === "channel" ? channelText(r) : answerText(v)}`).join("; "));
           if (c.startsWith("utm_") || c === "gclid" || c === "fbclid") return esc(r.utm?.[c]);
           return esc((r as unknown as Record<string, unknown>)[c]);
         })
@@ -122,7 +133,7 @@ export function LandingLeadsView({ rows: initialRows, fallback }: { rows: Landin
     return rows.filter((r) => {
       if (statusFilter !== "all" && r.status !== statusFilter) return false;
       if (!s) return true;
-      return [r.name, r.email, r.phone, r.company, r.location, r.website, r.landing, ...Object.values(r.answers ?? {}), businessTypeLabel(r.business_type), budgetCell(r), attributionLabel(r.utm)]
+      return [r.name, r.email, r.phone, r.company, r.location, r.website, r.landing, ...Object.values(r.answers ?? {}).map(answerText), channelText(r), businessTypeLabel(r.business_type), budgetCell(r), attributionLabel(r.utm)]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()

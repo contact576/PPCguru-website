@@ -52,6 +52,10 @@ function validForm(source = gta.GTA_LANDING_SOURCE) {
     utm: JSON.stringify({ utm_source: "google", gclid: "google-click", fbclid: "meta-click", gbraid: "google-braid", junk: "drop-this" }),
   })) form.set(key, value);
   if (source === hundred.LANDING_SOURCE) form.delete("channel");
+  if (source === googleMeta.GOOGLE_META_LANDING_SOURCE) {
+    form.set("channel", "google");
+    form.append("channel", "meta");
+  }
   return form;
 }
 
@@ -168,9 +172,9 @@ await check("Google + Meta keeps its own accepted lead, source, receipt and PII-
   const record = h.calls.store[0][0];
   assert.equal(record.source, googleMeta.GOOGLE_META_LANDING_SOURCE);
   assert.equal(record.service, googleMeta.GOOGLE_META_LANDING_SERVICE_LABEL);
-  assert.match(record.message, /Preferred channel: Google \+ Meta/);
+  assert.match(record.message, /Preferred channels: Google Ads, Meta Ads/);
   assert.equal(h.calls.landing[0][0].landing, googleMeta.GOOGLE_META_LANDING_ID);
-  assert.equal(h.calls.landing[0][0].answers.channel, "both");
+  assert.deepEqual(h.calls.landing[0][0].answers, { channels: ["google", "meta"] });
   assert.equal(h.calls.landing[0][0].utm.gclid, "google-click");
   assert.deepEqual(h.calls.receipt[0], [EVENT_ID, googleMeta.GOOGLE_META_LANDING_SOURCE]);
   await h.flush();
@@ -189,7 +193,7 @@ for (const business of fields.GTA_EXTRA_BUSINESS_TYPES) {
     await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
     assert.equal(h.calls.landing[0][0].businessType, business.id);
     assert.equal(h.calls.landing[0][0].budget, "recommend");
-    assert.equal(h.calls.landing[0][0].answers.channel, "recommend");
+    assert.deepEqual(h.calls.landing[0][0].answers, { channels: ["recommend"] });
     await h.flush();
     assert.ok(h.calls.email[0][0].text.includes(`Business type: ${business.label}`));
     assert.match(h.calls.email[0][0].text, /Monthly ad budget: Help me set a budget/);
@@ -197,15 +201,87 @@ for (const business of fields.GTA_EXTRA_BUSINESS_TYPES) {
 }
 
 await check("Google + Meta requires a supported channel before any delivery or conversion", async () => {
-  for (const channel of ["", "unsupported"]) {
+  for (const channels of [[], [""], ["unsupported"], ["google", "unsupported"], ["google", "meta", "seo", "recommend", "google"], [new Blob(["google"])]]) {
     const h = harness();
     const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
-    form.set("channel", channel);
+    form.delete("channel");
+    for (const channel of channels) form.append("channel", channel);
     const result = await h.run(form);
     assert.equal(result.ok, false);
     assert.ok(result.errors.channel);
     noAcceptedLead(h);
   }
+});
+
+await check("Google + Meta offers independent Google, Meta, SEO and guidance while GTA retains its legacy choices", () => {
+  assert.deepEqual(Array.from(fields.MULTISELECT_LANDING_CHANNELS, ({ id }) => id), ["google", "meta", "seo", "recommend"]);
+  assert.deepEqual(Array.from(fields.LANDING_CHANNEL_IDS), ["google", "meta", "both", "recommend"]);
+  assert.equal(fields.landingChannelLabel("seo"), "SEO");
+  assert.equal(fields.landingChannelLabel("both"), "Google + Meta");
+});
+
+await check("all selected services survive storage, team email and GHL in canonical display order", async () => {
+  const h = harness();
+  const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
+  form.delete("channel");
+  for (const id of ["recommend", "seo", "meta", "google"]) form.append("channel", id);
+  await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  assert.deepEqual(h.calls.landing[0][0].answers, { channels: ["google", "meta", "seo", "recommend"] });
+  const line = "Preferred channels: Google Ads, Meta Ads, SEO, Help me choose";
+  assert.ok(h.calls.store[0][0].message.includes(line));
+  assert.ok(h.calls.email[0][0].text.includes(line));
+  assert.ok(h.calls.ghl[0][0].message.includes(line));
+  assert.equal(h.calls.store[0][0].service, googleMeta.GOOGLE_META_LANDING_SERVICE_LABEL, "preserve the funnel's service identifier");
+});
+
+for (const choice of ["google", "meta", "seo", "recommend"]) {
+  await check(`Google + Meta accepts ${choice} as the only service`, async () => {
+    const h = harness();
+    const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
+    form.set("channel", choice);
+    await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+    assert.deepEqual(h.calls.landing[0][0].answers, { channels: [choice] });
+    assert.ok(h.calls.email[0][0].text.includes(`Preferred channels: ${fields.landingChannelLabel(choice)}`));
+  });
+}
+
+await check("legacy Google + Meta both is expanded and duplicate selections are saved once", async () => {
+  for (const submitted of [["both"], ["meta", "both", "google"], ["meta", "google", "meta"]]) {
+    const h = harness();
+    const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
+    form.delete("channel");
+    for (const id of submitted) form.append("channel", id);
+    await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+    assert.deepEqual(h.calls.landing[0][0].answers, { channels: ["google", "meta"] });
+    assert.ok(h.calls.email[0][0].text.includes("Preferred channels: Google Ads, Meta Ads\n"));
+  }
+});
+
+await check("GTA rejects SEO without adopting Google + Meta multiselect answers", async () => {
+  const h = harness();
+  const form = validForm();
+  form.set("channel", "seo");
+  const result = await h.run(form);
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.channel);
+  noAcceptedLead(h);
+});
+
+await check("equivalent reordered services reuse the same retry and accepted notifications", async () => {
+  const h = harness({ ghlResult: false });
+  const form = validForm(googleMeta.GOOGLE_META_LANDING_SOURCE);
+  form.append("channel", "seo");
+  assert.equal((await h.run(form)).ok, false);
+  form.delete("channel");
+  for (const id of ["seo", "meta", "google", "google"]) form.append("channel", id);
+  h.config.ghlResult = true;
+  await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
+  assert.equal(h.calls.store.length, 1);
+  assert.equal(h.calls.landing.length, 1);
+  assert.equal(h.calls.email.length, 1);
+  assert.equal(h.calls.ghl.length, 2);
+  assert.equal(h.calls.ghl[0][0].submissionId, h.calls.ghl[1][0].submissionId);
+  assert.deepEqual(h.calls.landing[0][0].answers.channels, ["google", "meta", "seo"]);
 });
 
 await check("Google + Meta rejected spam cannot issue a success receipt or send a conversion", async () => {
@@ -315,7 +391,7 @@ await check("edited Google + Meta answers are delivered afresh even with the sam
   await expectRedirect(h, form, googleMeta.GOOGLE_META_LANDING_THANK_YOU_PATH);
   assert.equal(h.calls.store.length, 2);
   assert.equal(h.calls.email.length, 2);
-  assert.match(h.calls.ghl[1][0].message, /Preferred channel: Google Ads/);
+  assert.match(h.calls.ghl[1][0].message, /Preferred channels: Google Ads/);
 });
 
 await check("without a database the fallback GHL submission marker survives a process restart", async () => {
@@ -712,6 +788,7 @@ const jsxRuntime = {
   jsxs: (type, props) => ({ type, props }),
 };
 function descendants(node) {
+  if (Array.isArray(node)) return node.flatMap(descendants);
   if (!node || typeof node !== "object") return [];
   return [node, ...[].concat(node.props?.children ?? []).flatMap(descendants)];
 }
@@ -784,7 +861,7 @@ for (const receipt of [undefined, EVENT_ID]) {
   });
 }
 
-await check("server error focus is consumed once and never steals focus after correction or Back", () => {
+await check("service selections survive Back and server errors, can be deselected, and focus moves only for new errors", () => {
   const slots = [];
   const focus = [];
   let cursor = 0;
@@ -849,18 +926,31 @@ await check("server error focus is consumed once and never steals focus after co
   const next = () => { nodes().find((n) => n.type === "button" && n.props.className === "primary-button").props.onClick(); render(); };
   render();
   fill("company", "Offline Test"); fill("location", "Toronto"); fill("website", "example.invalid"); next();
-  for (const field of ["business_type", "budget", "channel"]) {
+  for (const field of ["business_type", "budget"]) {
     const group = nodes().find((n) => n.props?.["data-field"] === field);
     descendants(group).find((n) => n.props?.role === "radio").props.onClick(); render();
   }
+  const channelOptions = () => descendants(nodes().find((n) => n.props?.["data-field"] === "channel")).filter((n) => n.props?.role === "checkbox");
+  const submittedChannels = () => nodes().filter((n) => n.type === "input" && n.props.name === "channel").map((n) => n.props.value);
+  assert.deepEqual(channelOptions().map(textOf), ["Google Ads", "Meta Ads", "SEO", "Help me choose"]);
+  assert.equal(nodes().find((n) => n.type === "button" && n.props.className === "primary-button").props.disabled, true, "at least one service is needed");
+  for (const index of [2, 0, 1]) { channelOptions()[index].props.onClick(); render(); }
+  assert.deepEqual(submittedChannels(), ["google", "meta", "seo"], "hidden inputs follow display order, not click order");
+  next();
+  nodes().find((n) => n.type === "button" && n.props.className === "secondary-button").props.onClick(); render();
+  assert.deepEqual(channelOptions().map((n) => n.props["aria-checked"]), [true, true, true, false], "Back retains every selected service");
+  channelOptions()[1].props.onClick(); render();
+  assert.deepEqual(submittedChannels(), ["google", "seo"], "deselecting Meta does not clear the other services");
   next();
   response = { ok: false, message: "Please fix the highlighted fields.", errors: { website: "Please check this website." } };
   render();
   assert.equal(focus.at(-1), "website", "new server error returns to and focuses its visible field");
   fill("website", "fixed.example.invalid");
+  assert.deepEqual(submittedChannels(), ["google", "seo"], "a server validation failure preserves repeated service inputs");
   const afterCorrection = focus.length;
   next();
   assert.deepEqual(focus.slice(afterCorrection), ["heading:What best describes Offline Test?"], "old failure cannot override the next panel's heading focus");
+  assert.deepEqual(channelOptions().map((n) => n.props["aria-checked"]), [true, false, true, false]);
   next();
   response = { ok: false, message: "Please try again." };
   render();

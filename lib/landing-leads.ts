@@ -32,7 +32,7 @@ export type LandingLeadInput = {
   budget?: string;
   /** Landing-specific extra answers (e.g. SEO page: website, target search, goal). */
   website?: string;
-  answers?: Record<string, string> | null;
+  answers?: Record<string, string | string[]> | null;
   utm?: Record<string, string> | null;
 };
 
@@ -48,7 +48,7 @@ export type LandingLeadRow = {
   business_type: string | null;
   budget: string | null;
   website: string | null;
-  answers: Record<string, string> | null;
+  answers: Record<string, string | string[]> | null;
   utm: Record<string, string> | null;
   status: LandingLeadStatus;
   created_at: string;

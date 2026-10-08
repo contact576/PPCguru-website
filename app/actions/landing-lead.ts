@@ -20,7 +20,7 @@ import {
 } from "@/lib/data/landing-100-leads";
 import { GTA_LANDING_ID, GTA_LANDING_SERVICE_LABEL, GTA_LANDING_SOURCE, GTA_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-gta";
 import { GOOGLE_META_LANDING_ID, GOOGLE_META_LANDING_SERVICE_LABEL, GOOGLE_META_LANDING_SOURCE, GOOGLE_META_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-google-meta";
-import { GTA_EXTRA_BUSINESS_TYPE_IDS, GTA_EXTRA_BUDGET_IDS, LANDING_CHANNEL_IDS, isValidLeadPhone, landingChannelLabel, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
+import { GTA_EXTRA_BUSINESS_TYPE_IDS, GTA_EXTRA_BUDGET_IDS, LANDING_CHANNEL_IDS, MULTISELECT_LANDING_CHANNELS, MULTISELECT_LANDING_CHANNEL_IDS, isValidLeadPhone, landingChannelLabel, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
 import { setLandingConversionReceipt } from "@/lib/landing-conversion";
 import { readConversionContext } from "@/lib/conversion-context";
 import { withGoogleMetaAttempt, type GoogleMetaAttempt } from "@/lib/google-meta-submission";
@@ -56,7 +56,10 @@ const schema = z.object({
   website: z.string().trim().max(200, "Please keep your website under 200 characters.").refine((value) => normaliseWebOrSocial(value) !== null, "Enter a website such as yourbusiness.ca or an Instagram @handle.").optional(),
   business_type: z.enum([...BUSINESS_TYPE_IDS, ...GTA_EXTRA_BUSINESS_TYPE_IDS], { message: "Please choose a business type." }),
   budget: z.enum([...LANDING_BUDGET_IDS, ...GTA_EXTRA_BUDGET_IDS], { message: "Please choose a monthly ad budget." }),
-  channel: z.enum(LANDING_CHANNEL_IDS, { message: "Please choose a channel, or let us recommend one." }).optional().or(z.literal("")),
+  channel: z.union([
+    z.enum(LANDING_CHANNEL_IDS).or(z.literal("")),
+    z.array(z.enum([...MULTISELECT_LANDING_CHANNEL_IDS, "both"])).min(1).max(MULTISELECT_LANDING_CHANNELS.length),
+  ], { message: "Please choose at least one of the listed services, or let us help you choose." }).optional(),
   name: z.string().trim().min(2, "Please enter your name.").max(100, "Please keep your name under 100 characters."),
   email: z.string().trim().email("Please enter a valid email.").max(254),
   phone: z.string().trim().max(40).refine(isValidLeadPhone, "Please enter a valid phone number, including the area code."),
@@ -71,7 +74,9 @@ const schema = z.object({
   renderedAt: z.string().max(20).optional().or(z.literal("")),
 }).superRefine((data, ctx) => {
   const growthPlan = data.source === GTA_LANDING_SOURCE || data.source === GOOGLE_META_LANDING_SOURCE;
-  if (growthPlan && !data.channel) {
+  if (data.source === GOOGLE_META_LANDING_SOURCE && (!Array.isArray(data.channel) || !data.channel.length)) {
+    ctx.addIssue({ code: "custom", path: ["channel"], message: "Please choose at least one service, or let us help you choose." });
+  } else if (growthPlan && !data.channel) {
     ctx.addIssue({ code: "custom", path: ["channel"], message: "Please choose a channel, or let us recommend one." });
   }
   if (!growthPlan) {
@@ -112,7 +117,10 @@ function firstName(full: string) {
 }
 
 export async function submitLandingLead(_prev: LandingLeadState, formData: FormData): Promise<LandingLeadState> {
-  const parsed = schema.safeParse(Object.fromEntries(formData.entries()));
+  const input: Record<string, unknown> = Object.fromEntries(formData.entries());
+  // Repeated checkbox values must not collapse to the last selected service.
+  if (input.source === GOOGLE_META_LANDING_SOURCE) input.channel = formData.getAll("channel");
+  const parsed = schema.safeParse(input);
   if (!parsed.success) {
     const errors: Record<string, string> = {};
     for (const issue of parsed.error.issues) errors[String(issue.path[0])] = issue.message;
@@ -162,7 +170,18 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   const utm = parseUtm(data.utm);
   const typeLabel = businessTypeLabel(data.business_type);
   const budgetText = budgetLabel(data.budget);
-  const channelText = landingChannelLabel(data.channel);
+  // Canonical order makes equivalent retries identical even if submitted in a
+  // different order. Older tabs posting "both" still mean Google Ads + Meta Ads.
+  const selectedChannels = Array.isArray(data.channel)
+    ? new Set(data.channel.flatMap((id) => id === "both" ? ["google", "meta"] : [id]))
+    : null;
+  const channels = selectedChannels
+    ? MULTISELECT_LANDING_CHANNELS.filter(({ id }) => selectedChannels.has(id))
+    : null;
+  const channelText = channels
+    ? channels.map(({ label }) => label).join(", ")
+    : landingChannelLabel(typeof data.channel === "string" ? data.channel : undefined);
+  const channelLine = channelText ? `Preferred channel${channels ? "s" : ""}: ${channelText}` : "";
   const attribution = Object.entries(utm).map(([k, v]) => `${k}=${v}`).join(" ");
 
   // The canonical mirror in `leads` — keeps /admin/leads, CRM delivery, the
@@ -180,7 +199,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
       `Location: ${data.location}`,
       website ? `Website / Instagram: ${website}` : "",
       `Business type: ${typeLabel}`,
-      channelText ? `Preferred channel: ${channelText}` : "",
+      channelLine,
       `Budget: ${budgetText}`,
       attribution ? `Attribution: ${attribution}` : "",
     ]
@@ -207,7 +226,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
         website,
         businessType: data.business_type,
         budget: data.budget,
-        answers: data.channel ? { channel: data.channel } : undefined,
+        answers: channels ? { channels: channels.map(({ id }) => id) } : typeof data.channel === "string" && data.channel ? { channel: data.channel } : undefined,
         utm,
       });
       if (attempt && landingId) attempt.landingSaved = true;
@@ -241,7 +260,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
           `Service area: ${data.location}`,
           website ? `Website / Instagram: ${website}` : "",
           `Business type: ${typeLabel}`,
-          channelText ? `Preferred channel: ${channelText}` : "",
+          channelLine,
           `Monthly ad budget: ${budgetText}`,
           `Email: ${data.email}`,
           `Phone: ${data.phone}`,

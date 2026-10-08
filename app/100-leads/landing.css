@@ -572,6 +572,13 @@
   cursor: pointer;
 }
 
+.lp-root .channel-choice-hint { margin: 0 0 9px; color: #596153; font-size: 12px; }
+.lp-root .channel-choice { display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 9px 11px; text-align: left; }
+.lp-root .channel-check { display: grid; place-items: center; flex: 0 0 17px; width: 17px; height: 17px; border: 1px solid #87907d; border-radius: 4px; }
+.lp-root .channel-check svg { width: 13px; height: 13px; }
+.lp-root .channel-choice.is-selected .channel-check { background: var(--ink); border-color: var(--ink); color: #fff; }
+.lp-root .channel-choice:focus-visible { outline: 3px solid #526d00; outline-offset: 3px; }
+
 .lp-root .form-actions {
   margin-top: 19px;
   display: grid;
