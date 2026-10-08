@@ -6,7 +6,7 @@ import { LandingThankYou } from "@/components/landing/landing-thank-you";
 import { GoogleMetaFooter } from "@/components/landing/google-meta-footer";
 import { ConfirmedLandingConversion } from "@/components/landing/confirmed-conversion";
 import { readLandingConversionReceipt } from "@/lib/landing-conversion";
-import { GOOGLE_META_LANDING_PATH, GOOGLE_META_LANDING_SOURCE, GOOGLE_META_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-google-meta";
+import { GOOGLE_META_LANDING_PATH, GOOGLE_META_LANDING_SOURCE, GOOGLE_META_LANDING_THANK_YOU_PATH, GOOGLE_META_WHATSAPP_URL } from "@/lib/data/landing-google-meta";
 
 export const metadata: Metadata = {
   title: "Book your Google Ads eligibility review | PPC Guru",
@@ -38,6 +38,7 @@ export default async function GoogleMetaThankYouPage() {
           { Icon: Rocket, title: "Confirm the comparison", copy: "Before launch, we agree lead criteria, baseline, attribution, campaign period and a comparable advertising budget. We’ll also discuss where Meta Ads can support your growth." },
         ]}
         whatsappOpener={confirmed ? "Hi PPC Guru — I just requested an eligibility review for your Google Ads qualified-lead offer. Can we talk?" : "Hi PPC Guru — I’d like to check whether my Google Ads account qualifies for your qualified-lead offer. Can we talk?"}
+        whatsappBaseUrl={GOOGLE_META_WHATSAPP_URL}
         backHref={`${GOOGLE_META_LANDING_PATH}#qualification`}
         source={`${GOOGLE_META_LANDING_SOURCE}:thank-you`}
         headerCtaLabel="Review the offer"

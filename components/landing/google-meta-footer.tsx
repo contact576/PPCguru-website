@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import { GOOGLE_META_LANDING_PATH } from "@/lib/data/landing-google-meta";
+import { GOOGLE_META_LANDING_PATH, GOOGLE_META_WHATSAPP_URL } from "@/lib/data/landing-google-meta";
 import { addressLines, siteConfig } from "@/lib/site-config";
 
 /** A complete landing-page footer, with useful links that preserve the funnel. */
@@ -29,15 +29,12 @@ export function GoogleMetaFooter({ fromThankYou = false }: { fromThankYou?: bool
           <a href={siteConfig.contact.phoneHref} data-phone-link="business"><Phone aria-hidden="true" /> {siteConfig.contact.phone}</a>
           <a href={`mailto:${siteConfig.contact.salesEmail}`}><Mail aria-hidden="true" /> {siteConfig.contact.salesEmail}</a>
           <a href={`mailto:${siteConfig.contact.email}`}><Mail aria-hidden="true" /> {siteConfig.contact.email}</a>
-          <a href={siteConfig.contact.whatsapp} target="_blank" rel="noopener noreferrer">Chat on WhatsApp <ArrowUpRight aria-hidden="true" /></a>
+          <a href={GOOGLE_META_WHATSAPP_URL} target="_blank" rel="noopener noreferrer">Chat on WhatsApp <ArrowUpRight aria-hidden="true" /></a>
           <small>{siteConfig.contact.hours}</small>
         </div>
         <div className="gm-footer-location">
           <h2>Find us</h2>
           <a href={siteConfig.maps.mapUrl} target="_blank" rel="noopener noreferrer" className="gm-address"><MapPin aria-hidden="true" /><address>{addressLines().map((line) => <span key={line}>{line}</span>)}</address></a>
-          <div className="gm-socials" aria-label="PPC Guru social profiles">
-            {Object.entries(siteConfig.social).map(([name, href]) => <a key={name} href={href} target="_blank" rel="noopener noreferrer">{name === "youtube" ? "YouTube" : name === "linkedin" ? "LinkedIn" : name[0].toUpperCase() + name.slice(1)} <ArrowUpRight aria-hidden="true" /></a>)}
-          </div>
         </div>
       </div>
       <div className="gm-container gm-footer-bottom">

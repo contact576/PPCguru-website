@@ -24,8 +24,7 @@ export function cleanParam(v: string | string[] | undefined, max: number) {
   return s.replace(/[^\p{L}\p{N} .,'&-]/gu, "").trim().slice(0, max);
 }
 
-export function whatsappLink(opener: string) {
-  const base = siteConfig.contact.whatsapp;
+export function whatsappLink(opener: string, base: string = siteConfig.contact.whatsapp) {
   if (!base) return null;
   return `${base}${base.includes("?") ? "&" : "?"}text=${encodeURIComponent(opener)}`;
 }
@@ -39,6 +38,7 @@ export function LandingThankYou({
   chips,
   steps,
   whatsappOpener,
+  whatsappBaseUrl,
   backHref,
   source,
   headerCtaLabel,
@@ -58,6 +58,7 @@ export function LandingThankYou({
   chips?: ThankYouChip[];
   steps: ThankYouStep[];
   whatsappOpener: string;
+  whatsappBaseUrl?: string;
   backHref: string;
   /** analytics source for the call / WhatsApp taps, e.g. "landing:100-leads:thank-you". */
   source: string;
@@ -88,7 +89,7 @@ export function LandingThankYou({
                   {name ? `${title}, ${name}.` : `${title}.`} <em>{titleEm}</em>
                 </h1>
                 <p className="thanks-lede">{lede}</p>
-                <ThankYouActions phoneLabel={siteConfig.contact.phone} phoneHref={siteConfig.contact.phoneHref} whatsappHref={whatsappLink(whatsappOpener)} source={source} />
+                <ThankYouActions phoneLabel={siteConfig.contact.phone} phoneHref={siteConfig.contact.phoneHref} whatsappHref={whatsappLink(whatsappOpener, whatsappBaseUrl)} source={source} />
                 {chips?.length ? (
                   <div className="success-summary">
                     {chips.map(({ Icon, label }) => (

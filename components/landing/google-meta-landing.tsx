@@ -54,7 +54,7 @@ export function GoogleMetaLanding() {
           <section className="hero-section" aria-labelledby="google-meta-title">
             <div className="hero-copy">
               <p className="hero-kicker"><span /> Google Ads + Meta Ads · Canada &amp; USA</p>
-              <h1 id="google-meta-title">Beat your last 30 days of qualified leads<em>—or pay $0 in management fees.</em></h1>
+              <h1 id="google-meta-title">Beat your last 30 days of qualified leads <em>or pay $0 in management fees.</em></h1>
               <p className="hero-lede">We verify your previous 30-day Google Ads performance before launch. If we don’t generate more qualified leads during the agreed comparison period, our management fee for that period is $0.</p>
               <div className="hero-checks">
                 <span><Check aria-hidden="true" /> Your accounts stay yours</span>

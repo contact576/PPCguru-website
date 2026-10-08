@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
   alternates: { canonical: GOOGLE_META_LANDING_PATH },
   openGraph: {
-    title: "Beat your last 30 days of qualified leads—or pay $0 in management fees.",
+    title: "Beat your last 30 days of qualified leads or pay $0 in management fees.",
     description: "For eligible existing Google Ads advertisers. Baseline, lead criteria, attribution, campaign period and comparable ad budget agreed before launch. Ad spend is separate and non-refundable.",
     url: GOOGLE_META_LANDING_PATH,
     type: "website",
