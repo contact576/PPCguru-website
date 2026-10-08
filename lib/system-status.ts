@@ -30,8 +30,8 @@ export function getIntegrationStatus(): IntegrationStatus[] {
       key: "smtp",
       label: "Hostinger SMTP",
       configured: Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS),
-      detail: process.env.EMAIL_PROVIDER === "resend"
-        ? "Bypassed: direct Resend delivery is selected."
+      detail: process.env.NODE_ENV === "production" || process.env.EMAIL_PROVIDER === "resend"
+        ? "Bypassed: production email uses direct Resend delivery."
         : "Primary channel for form notifications + autoresponders. Keys present ≠ delivery — see Email delivery above.",
     },
     {
