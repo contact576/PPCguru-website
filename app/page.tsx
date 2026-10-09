@@ -12,6 +12,7 @@ import {
 import { AuditForm } from "@/components/home/audit-form";
 import { BlogPosts } from "@/components/home/blog-section";
 import { HomeCampaignReports } from "@/components/home/home-campaign-reports";
+import { HomeScrollMotion } from "@/components/home/home-scroll-motion";
 import { GrowthJourney } from "@/components/home/growth-journey";
 import { GrowthGoals } from "@/components/home/growth-goals";
 import { HomePartners, HomeClientMarquee } from "@/components/home/home-trust";
@@ -66,7 +67,7 @@ const services = [
   {
     number: "03",
     title: "SEO & local search",
-    description: "Help customers find clear answers about your services and locations through useful pages, technical SEO and local presence.",
+    description: "Make your services and locations easier to find in Google and AI search with useful content, technical SEO and accurate business information.",
     href: "/services/seo",
     visual: "seo",
     detail: "Earn visibility",
@@ -121,6 +122,7 @@ const faqItems = [
   { q: "How are ad spend and agency fees handled?", a: "You pay ad spend directly to the platforms. We agree on management, creative and landing-page scope and fees separately before paid work begins." },
   { q: "How do you measure success?", a: "We track calls, forms and other agreed conversion actions, then review cost and lead quality with your team. Where the data is available, we also look at bookings and work won rather than treating every platform conversion as a sale." },
   { q: "Where does PPC Guru work?", a: "Our team is based in Toronto. We work with businesses across the Greater Toronto Area, Canada and the United States." },
+  { q: "Can you help us appear in AI search?", a: "We improve the content, technical accessibility and business information that search and AI systems can use to understand your services. That includes clear answers, accurate service and location pages, and first-hand evidence. Placement in ChatGPT, Google AI Overviews or another AI answer is decided by each platform and cannot be guaranteed." },
 ] as const;
 
 const reviews = ["Neel Donda", "Aditi Singh", "Joseph Clary"].flatMap((name) =>
@@ -136,7 +138,8 @@ function TextLink({ href, children }: { href: string; children: React.ReactNode 
 export default function HomePage() {
   return (
     <div className="home-revamp">
-      <JsonLd data={homepageSchema()} />
+      <HomeScrollMotion />
+      <JsonLd data={homepageSchema("2026-10-10")} />
       <JsonLd data={faqSchema(faqItems.map(({ q, a }) => ({ q, a })))} />
 
       <section className="home-hero" id="top" aria-labelledby="home-title">
@@ -144,8 +147,8 @@ export default function HomePage() {
         <div className="home-wrap home-hero-grid">
           <div className="home-hero-copy">
             <p className="home-kicker home-kicker-light"><span className="home-kicker-dot" /> Toronto PPC agency <span className="home-kicker-divider">/</span> Canada &amp; the US</p>
-            <h1 id="home-title">Turn clicks into <em>real conversations.</em></h1>
-            <p className="home-hero-lede">Reach the right people. Give them a reason to choose you. We connect Google Ads, Meta Ads, SEO and your website to turn interest into enquiries worth following up.</p>
+            <h1 id="home-title">Turn clicks into <em>real conversions.</em></h1>
+            <p className="home-hero-lede">Reach the right people. Give them a reason to choose you. We connect Google Ads, Meta Ads, SEO and AI search with a website built to turn interest into enquiries worth following up.</p>
             <div className="home-hero-platforms" aria-label="Advertising services">
               <Link href="/services/google-ads"><Image src="/platforms/google-ads.svg" alt="" width={30} height={30} /><span>Google Ads</span></Link>
               <Link href="/services/meta-ads"><Image src="/platforms/meta.svg" alt="" width={34} height={30} /><span>Meta Ads</span></Link>
@@ -173,6 +176,8 @@ export default function HomePage() {
 
       <HomeClientMarquee />
 
+      <HomeCampaignReports />
+
       <section className="home-section home-services" id="services" aria-labelledby="home-services-title">
         <div className="home-wrap">
           <div className="home-section-head"><div><p className="home-kicker">What we do</p><h2 id="home-services-title">Everything your next customer <em>needs to say yes.</em></h2></div><p>From the ad they notice to the page they trust, choose the support your business needs. Each service works on its own or as part of one plan.</p></div>
@@ -182,8 +187,6 @@ export default function HomePage() {
       </section>
 
       <section className="home-section home-reviews" id="reviews" aria-labelledby="home-reviews-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Client voices</p><h2 id="home-reviews-title">What clients say <em>about the work.</em></h2></div><p>Named comments from PPC Guru&apos;s public Google Business Profile. Read them in context on Google.</p></div><div className="home-review-grid">{reviews.map((review) => <blockquote className="home-review-card" key={review.name}><div className="home-review-source"><Image src="/platforms/google.svg" alt="Google" width={26} height={26} /><div className="home-review-stars" aria-label={`${review.stars} out of 5 stars`}>{Array.from({ length: review.stars }, (_, index) => <Star key={index} size={16} fill="currentColor" aria-hidden="true" />)}</div></div><p>“{review.text}”</p><footer><strong>{review.name}</strong><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer">Google review <ArrowUpRight size={15} aria-hidden="true" /></a></footer></blockquote>)}</div><div className="home-reviews-foot"><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer" className="home-text-link">Read reviews on Google <ArrowUpRight size={17} aria-hidden="true" /></a></div></div></section>
-
-      <HomeCampaignReports />
 
       <GrowthGoals />
 

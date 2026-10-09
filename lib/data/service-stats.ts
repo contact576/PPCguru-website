@@ -7,7 +7,7 @@
  *   - paid-channel "ad spend managed" sums to ~$100M (the aggregate)
  *   - paid leads (~620K) + SEO organic (~380K) ≈ the 1M+ qualified-leads aggregate
  *   - client counts intentionally OVERLAP (one client uses several services), so they do
- *     NOT sum to the 500+ unique-businesses aggregate — that's expected, not a contradiction.
+ *     NOT sum to the 200+ unique-businesses aggregate — that's expected, not a contradiction.
  *
  * Every figure is [VERIFY-client] — swap for audited numbers before launch in this one file.
  * Basis lines are shown as small print so the numbers read as honest, sourced claims (a key
@@ -29,7 +29,7 @@ export const serviceCredentials = [
   "Google Partner",
   "Meta Business Partner",
   "10+ yrs combined founder experience",
-  "500+ businesses served",
+  "200+ businesses served",
 ] as const;
 
 /** Keyed by service slug. Undefined for an unknown slug → the stat band simply doesn't render. */
@@ -39,7 +39,7 @@ export const serviceStats: Record<string, ServiceStatBlock> = {
       { value: "$65M+", label: "Google Ads spend managed" },
       { value: "320K+", label: "qualified leads generated" },
       { value: "6.8x", label: "average return on ad spend" },
-      { value: "500+", label: "businesses served" },
+      { value: "200+", label: "businesses served" },
     ],
     basis: PAID_BASIS,
   },

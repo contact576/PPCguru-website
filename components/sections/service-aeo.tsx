@@ -104,10 +104,10 @@ export function CityCallout({ serviceName }: { serviceName?: string }) {
 const CONTENT_UPDATED = "June 2026";
 
 /** Small visible "Last reviewed" line — a freshness signal for search + LLMs. */
-export function LastReviewed() {
+export function LastReviewed({ date = CONTENT_UPDATED }: { date?: string }) {
   return (
     <p className="container-page pb-3 text-center text-[11px] text-[var(--color-ink-faint)]">
-      Last reviewed {CONTENT_UPDATED} by the PPC Guru team.
+      Last reviewed {date} by the PPC Guru team.
     </p>
   );
 }
