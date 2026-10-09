@@ -1,0 +1,85 @@
+/* Homepage-only campaign evidence. No paid-landing-page styles are imported. */
+.home-campaign-reports {
+  padding-block: 44px 38px;
+  overflow: hidden;
+  scroll-margin-top: 90px;
+  color: #141b13;
+  background: #e9eee3;
+  border-block: 1px solid #d7dfce;
+}
+.home-campaign-reports *, .home-campaign-reports *::before, .home-campaign-reports *::after { box-sizing: border-box; }
+.home-campaign-reports .hcr-results-heading,
+.home-campaign-reports .hcr-rail-heading,
+.home-campaign-reports .hcr-results-disclosure { width: min(100% - 64px, 1320px); margin-inline: auto; }
+.home-campaign-reports .hcr-results-heading { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr); align-items: end; gap: 8px 36px; margin-bottom: 17px; }
+.home-campaign-reports .hcr-kicker { grid-column: 1 / -1; margin: 0 0 5px; color: #5b6d39; font: 700 10px/1.4 var(--font-jetbrains), monospace; letter-spacing: .12em; text-transform: uppercase; }
+.home-campaign-reports .hcr-results-heading h2 { margin: 0; font-family: var(--font-archivo), Arial, sans-serif; font-size: clamp(30px, 3.3vw, 44px); font-weight: 800; letter-spacing: -.05em; line-height: 1.12; }
+.home-campaign-reports .hcr-results-heading h2 em { color: #4d6526; font-family: var(--font-dm-serif), Georgia, serif; font-weight: 400; }
+.home-campaign-reports .hcr-results-intro p { margin: 0 0 4px; color: #586055; font-size: 14px; line-height: 1.5; }
+.home-campaign-reports .hcr-autoplay-button { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 5px 0; border: 0; background: transparent; color: #465c31; font: inherit; font-size: 11px; font-weight: 700; cursor: pointer; }
+.home-campaign-reports .hcr-autoplay-button:hover { text-decoration: underline; text-underline-offset: 4px; }
+.home-campaign-reports .hcr-autoplay-button svg { width: 14px; height: 14px; }
+.home-campaign-reports .hcr-report-rail { --report-width: 160px; --report-gap: 18px; margin-top: 10px; }
+.home-campaign-reports .hcr-rail-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.home-campaign-reports .hcr-rail-heading h3 { display: flex; align-items: center; gap: 5px; margin: 0; font: 650 18px/1 Arial, sans-serif; letter-spacing: -.03em; }
+.home-campaign-reports .hcr-rail-heading h3 img { display: block; width: 112px; height: 29px; object-fit: contain; object-position: left center; }
+.home-campaign-reports .hcr-report-rail[data-platform="meta"] .hcr-rail-heading h3 img { width: 92px; height: 24px; }
+.home-campaign-reports .hcr-rail-controls { display: flex; align-items: center; gap: 7px; }
+.home-campaign-reports .hcr-rail-controls > span { margin-right: 6px; color: #586055; font-size: 11px; }
+.home-campaign-reports .hcr-rail-controls button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #c7d2bc; border-radius: 50%; background: #ffffffb3; color: #465c31; cursor: pointer; }
+.home-campaign-reports .hcr-rail-controls button:hover { border-color: #72895a; background: white; }
+.home-campaign-reports .hcr-rail-controls button svg { width: 16px; height: 16px; }
+.home-campaign-reports .hcr-report-viewport { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; touch-action: pan-x pan-y pinch-zoom; scrollbar-width: none; padding-block: 16px 20px; cursor: grab; }
+.home-campaign-reports .hcr-report-viewport::-webkit-scrollbar { display: none; }
+.home-campaign-reports .hcr-report-strip, .home-campaign-reports .hcr-report-group { display: flex; align-items: center; width: max-content; }
+.home-campaign-reports .hcr-report-group { flex: 0 0 auto; gap: var(--report-gap); padding-right: var(--report-gap); }
+.home-campaign-reports .hcr-report-card { display: block; flex: 0 0 var(--report-width); width: var(--report-width); min-width: 0; padding: 4px; border: 0; border-radius: 11px; background: white; box-shadow: 0 6px 17px #26392020; cursor: zoom-in; animation: hcr-report-float 6s ease-in-out infinite; animation-delay: var(--float-delay, 0s); animation-play-state: paused; }
+.home-campaign-reports .hcr-report-rail.is-moving .hcr-report-card { animation-play-state: running; }
+.home-campaign-reports .hcr-report-viewport:active, .home-campaign-reports .hcr-report-viewport:active .hcr-report-card { cursor: grabbing; }
+.home-campaign-reports .hcr-report-image { display: block; width: 100%; height: auto; border-radius: 7px; object-fit: contain; pointer-events: none; user-select: none; }
+.home-campaign-reports :is(button, [tabindex="0"]):focus-visible { outline: 3px solid #476224; outline-offset: 4px; }
+.home-campaign-reports .hcr-results-disclosure { max-width: 950px; margin-top: 11px; margin-bottom: 0; text-align: center; color: #586055; font-size: 11px; line-height: 1.6; }
+@keyframes hcr-report-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+/* Native dialog keeps full reports readable and keyboard focus contained. */
+.home-campaign-reports .hcr-result-dialog { margin: auto; width: min(94vw, 750px); max-height: 92dvh; padding: 18px; overflow: auto; border: 1px solid #d8e1d2; border-radius: 18px; background: #fffef9; color: #141b13; }
+.home-campaign-reports .hcr-result-dialog::backdrop { background: #101a12e6; }
+.home-campaign-reports .hcr-dialog-header { position: sticky; top: -18px; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 12px; padding-block: 8px 10px; background: #fffef9; }
+.home-campaign-reports .hcr-dialog-header > span { font-size: 13px; font-weight: 800; }
+.home-campaign-reports .hcr-dialog-close { flex-shrink: 0; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #c7d2bc; border-radius: 50%; background: white; cursor: pointer; }
+.home-campaign-reports .hcr-dialog-close svg { width: 19px; height: 19px; }
+.home-campaign-reports .hcr-dialog-image { display: block; width: min(100%, 865px); max-width: 100%; height: auto; margin-inline: auto; object-fit: contain; }
+.home-campaign-reports .hcr-dialog-controls { display: flex; align-items: center; justify-content: center; gap: 18px; margin: 0 0 16px; font-size: 12px; }
+.home-campaign-reports .hcr-dialog-controls button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 8px 14px; border: 1px solid #b7c7a8; border-radius: 999px; background: white; cursor: pointer; }
+.home-campaign-reports .hcr-dialog-controls button svg { width: 17px; height: 17px; }
+@media (max-width: 820px) {
+  .home-campaign-reports .hcr-results-heading { grid-template-columns: 1fr; gap: 9px; }
+  .home-campaign-reports .hcr-results-intro { display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+  .home-campaign-reports .hcr-results-intro p { max-width: 450px; margin: 0; }
+  .home-campaign-reports .hcr-autoplay-button { flex-shrink: 0; }
+}
+@media (max-width: 600px) {
+  .home-campaign-reports { padding-block: 32px 29px; }
+  .home-campaign-reports .hcr-results-heading, .home-campaign-reports .hcr-rail-heading, .home-campaign-reports .hcr-results-disclosure { width: calc(100% - 36px); }
+  .home-campaign-reports .hcr-results-heading { margin-bottom: 10px; }
+  .home-campaign-reports .hcr-results-intro { display: block; }
+  .home-campaign-reports .hcr-results-intro p { font-size: 13px; }
+  .home-campaign-reports .hcr-autoplay-button { min-height: 44px; }
+  .home-campaign-reports .hcr-report-rail { --report-width: 132px; --report-gap: 13px; margin-top: 5px; }
+  .home-campaign-reports .hcr-rail-heading { gap: 12px; }
+  .home-campaign-reports .hcr-rail-heading h3 { font-size: 17px; }
+  .home-campaign-reports .hcr-rail-heading h3 img { width: 103px; height: 27px; }
+  .home-campaign-reports .hcr-report-rail[data-platform="meta"] .hcr-rail-heading h3 img { width: 84px; height: 22px; }
+  .home-campaign-reports .hcr-rail-controls { gap: 5px; }
+  .home-campaign-reports .hcr-rail-controls > span { display: none; }
+  .home-campaign-reports .hcr-results-disclosure { text-align: left; }
+  .home-campaign-reports .hcr-result-dialog { padding: 14px; }
+  .home-campaign-reports .hcr-dialog-header { top: -14px; }
+  .home-campaign-reports .hcr-dialog-controls { gap: 10px; }
+  .home-campaign-reports .hcr-dialog-controls button { padding-inline: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-campaign-reports .hcr-report-card { animation: none !important; }
+  .home-campaign-reports .hcr-report-duplicates { display: none; }
+  .home-campaign-reports * { scroll-behavior: auto !important; }
+}

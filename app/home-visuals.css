@@ -1,13 +1,13 @@
 /* Homepage-only motion and original platform artwork. No canvas or video payload. */
 .home-revamp button:focus-visible { outline: 3px solid #ec7b44; outline-offset: 4px; }
 .home-revamp section[id], .home-revamp h2[id] { scroll-margin-top: 100px; }
-.home-trust { padding-block: 24px; }
+.home-trust { padding-block: 16px; }
 .home-trust-top { padding-bottom: 0; border-bottom: 0; }
 .home-revamp .home-trust h2 { font-size: clamp(23px, 2.4vw, 32px); }
 .home-revamp .home-client-marquee h2 { font-size: clamp(27px, 2.6vw, 36px); }
 .home-report-platform { display: inline-flex; align-items: center; gap: 9px; }
 .home-report-platform img { object-fit: contain; }
-.home-review-source { display: flex; align-items: center; justify-content: space-between; margin-bottom: 23px; }
+.home-review-source { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .home-review-source .home-review-stars { margin-bottom: 0; }
 
 /* A report deck with a single active story and explicit reader controls. */
@@ -39,7 +39,7 @@
 .home-deck-footer > span { color: #b9c7aa; font-size: 10px; line-height: 1.6; }
 .home-deck-footer > span > a { display: block; width: fit-content; color: #d7e4c7; text-decoration: underline; text-underline-offset: 3px; }
 .home-deck-controls { display: flex; gap: 6px; }
-.home-deck-controls button { display: grid; place-items: center; width: 38px; height: 38px; padding: 0; border: 1px solid #82906b; border-radius: 50%; color: #f6f8ef; background: transparent; cursor: pointer; transition: color .2s, background .2s; }
+.home-deck-controls button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #82906b; border-radius: 50%; color: #f6f8ef; background: transparent; cursor: pointer; transition: color .2s, background .2s; }
 .home-deck-controls button:hover { background: #ceff3a; color: #192319; }
 .home-deck-controls button:disabled { opacity: .4; cursor: default; background: transparent; color: #f6f8ef; }
 .home-campaign-deck[data-playing="false"] .home-deck-float { animation-play-state: paused; }
@@ -47,10 +47,10 @@
 @keyframes home-deck-float { 0%, 100% { transform: translateY(0) rotateX(0); } 50% { transform: translateY(-7px) rotateX(2deg); } }
 
 /* Each service has a recognisable visual; the page preview is our actual work. */
-.home-service-card { padding: 25px; overflow: hidden; }
-.home-service-visual { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; height: 168px; margin: 22px -10px 25px; border-radius: 7px; overflow: hidden; isolation: isolate; perspective: 850px; }
+.home-service-card { padding: 20px; overflow: hidden; }
+.home-service-visual { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; height: 132px; margin: 14px -6px 18px; border-radius: 7px; overflow: hidden; isolation: isolate; perspective: 850px; }
 .home-service-visual-google { background: #eff4e9; }
-.home-service-wordmark { position: relative; z-index: 1; object-fit: contain; max-width: 62%; height: auto; }
+.home-service-wordmark { position: relative; z-index: 1; object-fit: contain; max-width: 78%; height: auto; }
 .home-search-moment { position: relative; display: flex; align-items: center; gap: 10px; padding: 12px 15px; border: 1px solid #dce1d5; background: #fff; box-shadow: 0 7px 18px #182a1210; border-radius: 7px; color: #67725f; font-size: 10px; white-space: nowrap; transition: transform .35s ease; }
 .home-service-card:hover .home-search-moment { transform: translateY(-4px); }
 .home-service-visual-meta { background: #edf3fe; }
@@ -61,14 +61,14 @@
 .home-map-pin { width: 38px; height: 50px; filter: drop-shadow(0 8px 5px #37512725); transition: transform .35s; }
 .home-service-card:hover .home-map-pin { transform: translateY(-6px); }
 .home-service-visual-seo { gap: 10px; }
-.home-service-visual-website { background: #e6e7d9; height: 204px; }
-.home-browser-preview { position: relative; flex-shrink: 0; width: 85%; max-width: 440px; margin-top: 43px; border: 4px solid #fff; border-radius: 10px; overflow: hidden; transform: rotateY(-7deg) rotateX(7deg) rotateZ(-3deg); box-shadow: 10px 16px 25px #13221030; animation: home-browser-float 8s ease-in-out infinite; }
+.home-service-visual-website { background: #e6e7d9; height: 154px; }
+.home-browser-preview { position: relative; flex-shrink: 0; width: 85%; max-width: 440px; margin-top: 24px; border: 4px solid #fff; border-radius: 10px; overflow: hidden; transform: rotateY(-7deg) rotateX(7deg) rotateZ(-3deg); box-shadow: 10px 16px 25px #13221030; animation: home-browser-float 8s ease-in-out infinite; }
 .home-browser-preview > img { display: block; width: 100%; height: auto; }
 .home-browser-chrome { display: flex; align-items: center; gap: 4px; height: 21px; padding: 0 8px; background: #fff; }
 .home-browser-chrome i { width: 4px; height: 4px; border-radius: 50%; background: #d2d8cb; }
 .home-browser-chrome span { margin-left: 10px; color: #748066; font: 7px/1 monospace; }
 .home-design-label { position: absolute; display: flex; align-items: center; gap: 7px; bottom: 10px; right: 10px; padding: 8px 11px; border-radius: 5px; background: #1e2c1c; color: #e7f5d5; font-size: 9px; box-shadow: 0 5px 15px #13221030; }
-.home-service-visual-tracking { background: #edf0e4; height: 204px; }
+.home-service-visual-tracking { background: #edf0e4; height: 154px; }
 .home-tracking-path { display: flex; align-items: center; width: 85%; max-width: 430px; }
 .home-tracking-node { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; flex: 0 0 26%; aspect-ratio: 1; padding: 10px; background: #fffef9; border: 1px solid #d8decb; border-radius: 12px; box-shadow: 0 12px 20px #3441210a; }
 .home-tracking-node small { white-space: nowrap; font-size: 9px; color: #67755d; }
@@ -101,7 +101,7 @@
   .home-deck-stage { height: 365px; }
   .home-deck-front, .home-deck-back { height: 337px; width: 66%; }
   .home-service-card:last-child { grid-column: 1 / -1; }
-  .home-service-visual-website, .home-service-visual-tracking { height: 190px; }
+  .home-service-visual-website, .home-service-visual-tracking { height: 154px; }
 }
 @media (max-width: 600px) {
   .home-partner-mark { min-height: 80px; }
@@ -114,11 +114,11 @@
   .home-deck-summary { min-height: 111px; padding: 15px; }
   .home-deck-summary strong { font-size: 31px; }
   .home-deck-summary span { max-width: 210px; font-size: 9px; }
-  .home-deck-summary > a { flex-shrink: 0; width: 36px; height: 36px; }
+  .home-deck-summary > a { flex-shrink: 0; width: 44px; height: 44px; }
   .home-deck-platform { padding: 10px 13px; }
   .home-deck-platform span { font-size: 14px; }
-  .home-service-visual { height: 182px; }
-  .home-service-visual-website, .home-service-visual-tracking { height: 210px; }
+  .home-service-visual { height: 132px; }
+  .home-service-visual-website, .home-service-visual-tracking { height: 154px; }
   .home-report-top { padding: 13px 16px; font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
