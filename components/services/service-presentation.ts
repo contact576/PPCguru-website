@@ -1,5 +1,6 @@
 /** Page presentation only. Service definitions, metadata and FAQ content stay canonical. */
 export const servicePresentation: Record<string, { headline: string; emphasis: string; focus: string; logo?: string; logoAlt?: string }> = {
+  "chatgpt-ads": { headline: "Reach customers", emphasis: "while they decide.", focus: "Conversation intent → relevant ad → measurable enquiry", logo: "/platforms/openai.svg", logoAlt: "OpenAI" },
   "google-ads": { headline: "Be there when", emphasis: "they’re ready to buy.", focus: "Search intent → relevant page → qualified enquiry", logo: "/platforms/google-ads.svg", logoAlt: "Google Ads" },
   "meta-ads": { headline: "Turn the next scroll into", emphasis: "your next conversation.", focus: "Creative → audience → lead quality", logo: "/platforms/meta.svg", logoAlt: "Meta" },
   seo: { headline: "Be the business", emphasis: "they find first.", focus: "Technical foundations → useful content → local visibility", logo: "/platforms/google.svg", logoAlt: "Google" },

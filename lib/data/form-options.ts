@@ -2,7 +2,7 @@
  * Single source of truth for the service + budget choices offered on EVERY lead
  * capture point (pop-up funnel, contact form, homepage audit wizard, tool gates).
  *
- * Deliberately separate from `lib/data/services.ts`: that file drives the 13
+ * Deliberately separate from `lib/data/services.ts`: that file drives the
  * marketing service PAGES, while this is the shorter commercial menu a prospect
  * actually picks from. Keeping them apart means we can add a service page
  * without silently changing what every form asks.
@@ -15,6 +15,7 @@
 export const SERVICE_OPTIONS = [
   "Google Ads",
   "Meta Ads",
+  "ChatGPT Ads",
   "Google Guaranteed Ads",
   "SEO",
   "Google Business Profile Management",

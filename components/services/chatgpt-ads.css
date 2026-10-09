@@ -1,0 +1,138 @@
+/* A proposed creative and working plan, deliberately separate from platform UI. */
+.cga-concept { position: relative; min-width: 0; margin: 0; padding: 19px; border: 1px solid #cad5bd; border-radius: 18px; background: #e4ebdb; }
+.cga-concept-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+.cga-concept-heading > span:first-child { display: flex; align-items: center; gap: 9px; color: #26341c; font-size: 12px; font-weight: 750; }
+.cga-concept-heading > span:first-child img { width: 25px; height: 25px; object-fit: contain; }
+.cga-concept-label { padding: 6px 8px; border: 1px solid #bdcaaa; border-radius: 4px; color: #4e623e; background: #f4f7ee; font: 600 8px/1.35 var(--font-jetbrains), monospace; letter-spacing: .045em; text-transform: uppercase; }
+.cga-ad-sheet { position: relative; overflow: hidden; border: 1px solid #d2dac6; border-radius: 12px; background: #fffefa; box-shadow: 0 15px 30px #21351212; animation: cga-concept-arrive .85s ease-out both; }
+.cga-ad-identity { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 18px; }
+.cga-ad-identity > img { display: block; width: 125px; height: auto; }
+.cga-ad-identity > span { color: #707766; font-size: 9px; }
+.cga-ad-poster { position: relative; isolation: isolate; min-height: 196px; padding: 24px 22px 20px; overflow: hidden; color: #172410; background: #dcf0b9; }
+.cga-poster-kicker { position: relative; display: block; margin-bottom: 14px; font: 600 8px/1.5 var(--font-jetbrains), monospace; letter-spacing: .065em; text-transform: uppercase; }
+.cga-ad-poster > strong { position: relative; display: block; font: 800 clamp(29px, 2.6vw, 39px)/1.02 var(--font-archivo), Arial, sans-serif; letter-spacing: -.06em; }
+.cga-poster-checks { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 13px; margin-top: 22px; font-size: 9px; }
+.cga-poster-checks span { display: inline-flex; align-items: center; gap: 4px; }
+.cga-poster-orbit { position: absolute; z-index: -1; width: 260px; height: 260px; right: -139px; top: -44px; border: 1px solid #77964747; border-radius: 50%; box-shadow: 0 0 0 24px #77964710, 0 0 0 49px #7796470b; }
+.cga-poster-focus { position: absolute; display: grid; place-items: center; right: 21px; top: 70px; width: 54px; height: 54px; border: 1px solid #a6bd82; border-radius: 15px; background: #edfad9b3; color: #526f2d; transform: rotate(7deg); }
+.cga-ad-copy { padding: 21px 21px 17px; }
+.service-revamp .cga-ad-copy h3 { max-width: 330px; margin: 0 0 10px; font-size: 24px; line-height: 1.12; }
+.cga-ad-copy > p { margin: 0 0 17px; color: #586055; font-size: 12px; line-height: 1.6; }
+.cga-ad-address { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 11px; color: #405930; font-size: 10px; font-weight: 700; }
+.cga-ad-address > span { color: #737d69; font-size: 9px; font-weight: 400; }
+.service-revamp .cga-concept figcaption { margin: 13px 2px 0; color: #58664b; font-size: 9px; line-height: 1.55; }
+@keyframes cga-concept-arrive { from { transform: translateY(8px) rotate(.7deg); } to { transform: translateY(0) rotate(0); } }
+
+.cga-structure { background: #fbfaf5; border-block: 1px solid #d8ddce; }
+.cga-campaign-node { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 27px; max-width: 930px; margin-inline: auto; padding: 23px 27px; border: 1px solid #bdd09e; border-radius: 12px; background: #e9f2da; }
+.cga-flow-label { display: flex; align-items: center; gap: 7px; margin-bottom: 12px; color: #64774d; font: 650 9px/1.4 var(--font-jetbrains), monospace; letter-spacing: .045em; text-transform: uppercase; }
+.cga-flow-label b { font-weight: 700; color: #3b5724; }
+.service-revamp .cga-campaign-node h3 { margin-bottom: 8px; font-size: 25px; }
+.cga-campaign-node p { max-width: 380px; margin: 0; color: #5f6d53; font-size: 12px; line-height: 1.55; }
+.cga-campaign-objectives { border-left: 1px solid #bdcca9; padding-left: 27px; }
+.cga-campaign-objectives > span { color: #52673c; font-size: 11px; font-weight: 700; }
+.cga-campaign-objectives ul { display: flex; flex-wrap: wrap; gap: 7px; list-style: none; margin: 10px 0; padding: 0; }
+.cga-campaign-objectives li { padding: 7px 10px; border: 1px solid #c7d3b7; border-radius: 4px; background: #f9fcef; color: #2b3e1d; font-size: 11px; }
+.cga-campaign-objectives small { display: block; color: #637554; font-size: 10px; line-height: 1.5; }
+.cga-branch { position: relative; height: 40px; margin: 0 16.5%; color: #8b9e71; }
+.cga-branch::before { content: ""; position: absolute; top: 0; bottom: 20px; left: 50%; width: 1px; background: #c3cfb5; }
+.cga-branch::after { content: ""; position: absolute; inset: 20px 0 0; border: 1px solid #c3cfb5; border-bottom: 0; border-radius: 7px 7px 0 0; }
+.cga-branch > svg { position: absolute; top: 20px; left: calc(50% - 9px); }
+.cga-angle-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.cga-angle { min-width: 0; overflow: hidden; border: 1px solid #d6deca; border-radius: 11px; background: #fffefa; }
+.cga-angle-context { padding: 22px; background: #f0f3e9; border-bottom: 1px solid #dce4d1; }
+.service-revamp .cga-angle-context h3 { margin-bottom: 13px; font-size: 22px; }
+.cga-angle-context p { margin: 0; color: #66735b; font-size: 12px; line-height: 1.55; }
+.cga-detail-label { display: block; margin-bottom: 5px; color: #4f633b; font-size: 9px; font-weight: 650; }
+.cga-angle-creative { padding: 22px; }
+.cga-angle-creative h4 { margin: 0 0 11px; color: #21341a; font: 750 21px/1.15 var(--font-archivo), Arial, sans-serif; letter-spacing: -.04em; }
+.cga-angle-creative > p { margin: 0 0 19px; color: #65725a; font-size: 12px; line-height: 1.6; }
+.cga-image-direction { display: flex; align-items: center; gap: 12px; padding-top: 15px; border-top: 1px solid #e0e6d6; color: #526b39; }
+.cga-image-direction > svg { flex-shrink: 0; }
+.cga-image-direction > span { font-size: 10px; line-height: 1.5; }
+.cga-image-direction small { display: block; margin-bottom: 3px; color: #7b866f; font-size: 9px; }
+.cga-context-note { max-width: 880px; margin: 17px auto 28px; color: #6a765e; font-size: 11px; text-align: center; line-height: 1.65; }
+.cga-context-note a { color: #3f5e28; text-underline-offset: 3px; }
+.cga-finish-path { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 20px; padding: 23px 25px; border: 1px solid #cbd6be; border-radius: 11px; background: #edf2e4; }
+.cga-finish-step { display: flex; align-items: start; gap: 17px; }
+.cga-finish-icon { display: grid; place-items: center; flex: 0 0 46px; width: 46px; height: 46px; border: 1px solid #cedbbc; border-radius: 10px; color: #617b40; background: #faffef; }
+.cga-finish-step .cga-flow-label { margin-bottom: 8px; }
+.service-revamp .cga-finish-step h3 { margin: 0 0 8px; font-size: 20px; }
+.cga-finish-step p { margin: 0; color: #637257; font-size: 12px; line-height: 1.55; }
+.cga-finish-arrow { flex-shrink: 0; color: #8b9c75; }
+.cga-organic-note { display: grid; grid-template-columns: minmax(180px, .45fr) minmax(0, 1fr); gap: 16px 26px; margin-top: 24px; padding-top: 20px; border-top: 1px solid #d8ddce; }
+.cga-organic-note > strong { color: #344928; font: 650 17px/1.3 var(--font-archivo), Arial, sans-serif; letter-spacing: -.035em; }
+.cga-organic-note > p { max-width: 770px; margin: 0; color: #637257; font-size: 12px; line-height: 1.6; }
+.cga-organic-note a { color: #3f5e28; text-underline-offset: 3px; }
+.cga-structure-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 9px 22px; margin-top: 16px; color: #6b7760; font-size: 10px; line-height: 1.6; }
+.cga-structure-foot > div { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.cga-structure-foot a { display: inline-flex; align-items: center; min-height: 44px; color: #3f5e28; text-underline-offset: 3px; }
+
+@media (max-width: 1000px) {
+  .cga-concept { padding: 15px; }
+  .cga-concept-heading { align-items: flex-start; }
+  .cga-ad-identity { padding: 14px; }
+  .cga-ad-identity > img { width: 111px; }
+  .cga-ad-poster { padding-inline: 17px; }
+  .cga-poster-focus { right: 13px; width: 44px; height: 44px; }
+  .cga-poster-focus svg { width: 27px; height: 27px; }
+  .cga-ad-copy { padding-inline: 17px; }
+  .cga-angle-context, .cga-angle-creative { padding: 18px; }
+  .cga-angle-creative h4 { font-size: 19px; }
+  .cga-finish-path { gap: 16px; padding: 20px; }
+  .cga-finish-step { gap: 12px; }
+}
+@media (max-width: 800px) {
+  .cga-concept { width: min(100%, 520px); margin-inline: auto; padding: 19px; }
+  .cga-concept-heading { align-items: center; }
+  .cga-concept-label { font-size: 8px; }
+  .cga-ad-poster { padding: 24px; }
+  .cga-ad-poster > strong { font-size: 38px; }
+  .cga-poster-focus { right: 28px; width: 54px; height: 54px; }
+  .cga-poster-focus svg { width: 33px; height: 33px; }
+  .cga-campaign-node { grid-template-columns: 1fr; gap: 19px; padding: 23px; }
+  .cga-campaign-objectives { border-left: 0; border-top: 1px solid #bdcca9; padding: 17px 0 0; }
+  .cga-campaign-node p { max-width: none; }
+  .cga-branch { height: 32px; margin-inline: 0; }
+  .cga-branch::before { bottom: 8px; }
+  .cga-branch::after { display: none; }
+  .cga-branch > svg { top: 15px; }
+  .cga-angle-grid { grid-template-columns: 1fr; gap: 14px; }
+  .cga-angle { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+  .cga-angle-context { border-bottom: 0; border-right: 1px solid #dce4d1; }
+  .cga-angle-creative h4 { font-size: 21px; }
+  .cga-finish-path { grid-template-columns: 1fr; gap: 16px; }
+  .cga-finish-arrow { margin-left: 11px; transform: rotate(90deg); }
+  .cga-context-note { margin-bottom: 22px; text-align: left; }
+  .cga-organic-note { grid-template-columns: 1fr; gap: 8px; }
+}
+@media (max-width: 500px) {
+  .cga-concept { padding: 14px; }
+  .cga-concept-heading { gap: 9px; margin-bottom: 13px; }
+  .cga-concept-heading > span:first-child { font-size: 11px; }
+  .cga-concept-label { padding: 5px 6px; }
+  .cga-ad-poster { min-height: 180px; padding: 21px 17px; }
+  .cga-ad-poster > strong { font-size: 32px; }
+  .cga-poster-kicker { max-width: 200px; font-size: 7px; }
+  .cga-poster-focus { width: 42px; height: 42px; top: 73px; right: 12px; }
+  .cga-poster-focus svg { width: 26px; height: 26px; }
+  .cga-poster-checks { gap: 7px 10px; font-size: 8px; }
+  .service-revamp .cga-ad-copy h3 { font-size: 22px; }
+  .cga-campaign-node { padding: 20px; }
+  .service-revamp .cga-campaign-node h3 { font-size: 23px; }
+  .cga-angle { grid-template-columns: 1fr; }
+  .cga-angle-context { border-right: 0; border-bottom: 1px solid #dce4d1; }
+  .cga-angle-context, .cga-angle-creative { padding: 20px; }
+  .cga-finish-path { padding: 19px; }
+  .cga-finish-step { gap: 11px; }
+  .cga-finish-icon { flex-basis: 37px; width: 37px; height: 37px; }
+  .cga-finish-icon svg { width: 21px; height: 21px; }
+  .service-revamp .cga-finish-step h3 { font-size: 19px; }
+}
+@media (max-width: 360px) {
+  .cga-poster-focus { display: none; }
+  .cga-ad-poster > strong { font-size: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cga-ad-sheet { animation: none; }
+}

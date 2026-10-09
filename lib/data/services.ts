@@ -13,6 +13,7 @@ import {
   MousePointerClick,
   type LucideIcon,
 } from "lucide-react";
+import { chatgptAdsService } from "./chatgpt-ads-service";
 
 export type Service = {
   slug: string;
@@ -62,6 +63,7 @@ export type Service = {
 };
 
 export const services: Service[] = [
+  chatgptAdsService,
   {
     slug: "google-ads",
     caseStudySlugs: ["physiotherapy-clinic-north-york", "hvac-mississauga-lead-gen", "basement-renovation-gta"],

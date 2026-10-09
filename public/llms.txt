@@ -20,6 +20,7 @@ Reported performance figures are blended, client-reported results and are repres
 ## Services
 
 - [Google Ads Management](https://ppcguru.ca/services/google-ads): Google Ads strategy, campaign management, optimization, tracking, and lead generation.
+- [ChatGPT Ads Management](https://ppcguru.ca/services/chatgpt-ads): Paid ChatGPT campaign planning, creative, landing pages and conversion measurement for eligible advertisers. Paid ads do not buy organic recommendations.
 - [Meta Ads Management](https://ppcguru.ca/services/meta-ads): Facebook and Instagram advertising for customer acquisition, lead generation, and remarketing.
 - [SEO and Local Search](https://ppcguru.ca/services/seo): Search engine optimization, local SEO, content strategy, and organic visibility services.
 - [Microsoft Advertising](https://ppcguru.ca/services/microsoft-ads): Microsoft Ads and Bing Ads campaign strategy, management, and optimization.

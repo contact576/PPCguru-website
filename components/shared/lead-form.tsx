@@ -57,7 +57,7 @@ export function LeadForm({
         <div className={`grid grid-cols-2 gap-1.5 ${compact ? "max-h-[136px] overflow-y-auto pr-0.5" : ""}`}>
           {SERVICE_OPTIONS.map((s) => (
             <label key={s} className="flex cursor-pointer items-center gap-2 rounded-lg border border-[var(--color-border)] px-2.5 py-2 text-[12.5px] leading-tight transition-colors has-[:checked]:border-[var(--color-ink)] has-[:checked]:bg-[color-mix(in_srgb,var(--color-lime)_28%,transparent)]">
-              <input type="checkbox" name="services" value={s} className="h-3.5 w-3.5 shrink-0 accent-[var(--color-ink)]" />
+              <input type="checkbox" name="services" value={s} defaultChecked={s === "ChatGPT Ads" && /^offer:chatgpt-ads(?::|$)/.test(source)} className="h-3.5 w-3.5 shrink-0 accent-[var(--color-ink)]" />
               {s}
             </label>
           ))}
