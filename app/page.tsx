@@ -7,12 +7,12 @@ import {
   Check,
   CircleCheck,
   ShieldCheck,
-  Sparkles,
   Star,
 } from "lucide-react";
 import { AuditForm } from "@/components/home/audit-form";
 import { BlogPosts } from "@/components/home/blog-section";
-import { CampaignDeck } from "@/components/home/campaign-deck";
+import { HomeCampaignReports } from "@/components/home/home-campaign-reports";
+import { HomeScrollMotion } from "@/components/home/home-scroll-motion";
 import { GrowthJourney } from "@/components/home/growth-journey";
 import { GrowthGoals } from "@/components/home/growth-goals";
 import { HomePartners, HomeClientMarquee } from "@/components/home/home-trust";
@@ -67,7 +67,7 @@ const services = [
   {
     number: "03",
     title: "SEO & local search",
-    description: "Help customers find clear answers about your services and locations through useful pages, technical SEO and local presence.",
+    description: "Make your services and locations easier to find in Google and AI search with useful content, technical SEO and accurate business information.",
     href: "/services/seo",
     visual: "seo",
     detail: "Earn visibility",
@@ -122,6 +122,7 @@ const faqItems = [
   { q: "How are ad spend and agency fees handled?", a: "You pay ad spend directly to the platforms. We agree on management, creative and landing-page scope and fees separately before paid work begins." },
   { q: "How do you measure success?", a: "We track calls, forms and other agreed conversion actions, then review cost and lead quality with your team. Where the data is available, we also look at bookings and work won rather than treating every platform conversion as a sale." },
   { q: "Where does PPC Guru work?", a: "Our team is based in Toronto. We work with businesses across the Greater Toronto Area, Canada and the United States." },
+  { q: "Can you help us appear in AI search?", a: "We improve the content, technical accessibility and business information that search and AI systems can use to understand your services. That includes clear answers, accurate service and location pages, and first-hand evidence. Placement in ChatGPT, Google AI Overviews or another AI answer is decided by each platform and cannot be guaranteed." },
 ] as const;
 
 const reviews = ["Neel Donda", "Aditi Singh", "Joseph Clary"].flatMap((name) =>
@@ -137,7 +138,8 @@ function TextLink({ href, children }: { href: string; children: React.ReactNode 
 export default function HomePage() {
   return (
     <div className="home-revamp">
-      <JsonLd data={homepageSchema()} />
+      <HomeScrollMotion />
+      <JsonLd data={homepageSchema("2026-10-10")} />
       <JsonLd data={faqSchema(faqItems.map(({ q, a }) => ({ q, a })))} />
 
       <section className="home-hero" id="top" aria-labelledby="home-title">
@@ -145,8 +147,12 @@ export default function HomePage() {
         <div className="home-wrap home-hero-grid">
           <div className="home-hero-copy">
             <p className="home-kicker home-kicker-light"><span className="home-kicker-dot" /> Toronto PPC agency <span className="home-kicker-divider">/</span> Canada &amp; the US</p>
-            <h1 id="home-title">Turn clicks into <em>real conversations.</em></h1>
-            <p className="home-hero-lede">Reach the right people. Give them a reason to choose you. We connect Google Ads, Meta Ads, SEO and your website to turn interest into enquiries worth following up.</p>
+            <h1 id="home-title">Turn clicks into <em>real conversions.</em></h1>
+            <p className="home-hero-lede">Reach the right people. Give them a reason to choose you. We connect Google Ads, Meta Ads, SEO and AI search with a website built to turn interest into enquiries worth following up.</p>
+            <div className="home-hero-platforms" aria-label="Advertising services">
+              <Link href="/services/google-ads"><Image src="/platforms/google-ads.svg" alt="" width={30} height={30} /><span>Google Ads</span></Link>
+              <Link href="/services/meta-ads"><Image src="/platforms/meta.svg" alt="" width={34} height={30} /><span>Meta Ads</span></Link>
+            </div>
             <div className="home-hero-actions">
               <a className="home-button home-button-lime" href="#audit">Get my free audit <ArrowRight size={18} aria-hidden="true" /></a>
               <a className="home-button home-button-outline" href="#proof">See the work <ArrowUpRight size={18} aria-hidden="true" /></a>
@@ -170,24 +176,7 @@ export default function HomePage() {
 
       <HomeClientMarquee />
 
-      <GrowthGoals />
-
-      <section className="home-section home-proof" id="proof" aria-labelledby="home-proof-title">
-        <div className="home-wrap home-evidence-layout">
-          <div className="home-evidence-copy">
-            <p className="home-kicker">The work behind the results</p>
-            <h2 id="home-proof-title">Less guesswork.<br /><em>More to go on.</em></h2>
-            <p>See the campaigns, the costs and the outcomes. Browse Google and Meta report visuals with the context you need to understand each result.</p>
-            <ul className="home-evidence-points">
-              <li><Image src="/platforms/google-ads.svg" alt="" width={29} height={29} /><div><strong>Google Ads campaign reports</strong><span>Conversions, cost per conversion and campaign spend.</span></div></li>
-              <li><Image src="/platforms/meta.svg" alt="" width={29} height={29} /><div><strong>Meta Ads campaign reports</strong><span>Leads, cost per lead and campaign spend.</span></div></li>
-            </ul>
-            <Link className="home-button home-button-dark" href="/google-ads-and-meta-ads#results">Explore all campaign reports <ArrowUpRight size={18} aria-hidden="true" /></Link>
-            <p className="home-proof-disclosure" id="report-context">Styled, redacted report visuals supplied by PPC Guru; figures have not been independently verified in the ad accounts. A lead or conversion is not necessarily a sale. Past results do not predict future performance.</p>
-          </div>
-          <CampaignDeck />
-        </div>
-      </section>
+      <HomeCampaignReports />
 
       <section className="home-section home-services" id="services" aria-labelledby="home-services-title">
         <div className="home-wrap">
@@ -197,13 +186,13 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="home-section home-reviews" id="reviews" aria-labelledby="home-reviews-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Client voices</p><h2 id="home-reviews-title">What clients say <em>about the work.</em></h2></div><p>Named comments from PPC Guru&apos;s public Google Business Profile. Read them in context on Google.</p></div><div className="home-review-grid">{reviews.map((review) => <blockquote className="home-review-card" key={review.name}><div className="home-review-source"><Image src="/platforms/google.svg" alt="Google" width={26} height={26} /><div className="home-review-stars" aria-label={`${review.stars} out of 5 stars`}>{Array.from({ length: review.stars }, (_, index) => <Star key={index} size={16} fill="currentColor" aria-hidden="true" />)}</div></div><p>“{review.text}”</p><footer><strong>{review.name}</strong><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer">Google review <ArrowUpRight size={15} aria-hidden="true" /></a></footer></blockquote>)}</div><div className="home-reviews-foot"><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer" className="home-text-link">Read reviews on Google <ArrowUpRight size={17} aria-hidden="true" /></a></div></div></section>
+
+      <GrowthGoals />
+
       <section className="home-section home-process" id="process" aria-labelledby="home-process-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">How we work</p><h2 id="home-process-title">A clear plan. <em>Steady improvement.</em></h2></div><p>Meet the people behind the plan. You should know who is doing the work, what happens next and why a campaign changes. <Link href="/about" className="home-text-link">Meet PPC Guru <ArrowUpRight size={16} aria-hidden="true" /></Link></p></div><ol className="home-steps">{steps.map((step) => <li key={step.number}><span className="home-step-number">{step.number}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol><div className="home-process-promise"><ShieldCheck size={24} aria-hidden="true" /><p><strong>Account ownership stays with you.</strong> We agree on access, scope, budget and reporting before launch.</p><a href="#audit">Start with a free audit <ArrowRight size={17} aria-hidden="true" /></a></div></div></section>
 
-      <section className="home-section home-organic" aria-labelledby="home-organic-title"><div className="home-wrap home-organic-grid"><div className="home-organic-symbol" aria-hidden="true"><Sparkles size={34} /><span>SEARCH<br />MAPS<br />ANSWERS</span><div className="home-organic-orbit" /></div><div><p className="home-kicker">Organic &amp; AI-assisted discovery</p><h2 id="home-organic-title">Be useful wherever <em>customers search.</em></h2><p>Paid campaigns bring demand now. Clear service and location pages help people understand your business when they search in Google, Maps or AI-assisted products. We work on technical SEO, local signals and genuinely useful answers that make your expertise easier to find and evaluate.</p><p className="home-organic-note">No one can promise a ranking or an AI citation. We focus on accurate information, strong pages and evidence that stands up to a closer look.</p><TextLink href="/services/seo">Explore SEO &amp; local search</TextLink></div></div></section>
-
       <section className="home-section home-markets" id="industries" aria-labelledby="home-markets-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Who we help</p><h2 id="home-markets-title">Built for businesses where <em>an enquiry matters.</em></h2></div><p>From a Toronto clinic to a multi-location service team, the right plan starts with your market and the work you want more of.</p></div><div className="home-markets-grid"><div><h3>Industries</h3><div className="home-link-list">{industries.map((industry) => <Link href={industry.href} key={industry.name}>{industry.name}<ArrowUpRight size={16} aria-hidden="true" /></Link>)}</div><TextLink href="/industries">Explore all industries</TextLink></div><div><h3>Toronto &amp; beyond</h3><p>Based at {siteConfig.contact.streetAddress}, Toronto. We work throughout the GTA and with teams across Canada and the US.</p><div className="home-location-links">{locations.map((location) => <Link href={location.href} key={location.name}>{location.name}</Link>)}</div><TextLink href="/locations">Explore service areas</TextLink></div></div></div></section>
-
-      <section className="home-section home-reviews" id="reviews" aria-labelledby="home-reviews-title"><div className="home-wrap"><div className="home-section-head"><div><p className="home-kicker">Client voices</p><h2 id="home-reviews-title">What clients say <em>about the work.</em></h2></div><p>Named comments from PPC Guru&apos;s public Google Business Profile. Read them in context on Google.</p></div><div className="home-review-grid">{reviews.map((review) => <blockquote className="home-review-card" key={review.name}><div className="home-review-source"><Image src="/platforms/google.svg" alt="Google" width={26} height={26} /><div className="home-review-stars" aria-label={`${review.stars} out of 5 stars`}>{Array.from({ length: review.stars }, (_, index) => <Star key={index} size={16} fill="currentColor" aria-hidden="true" />)}</div></div><p>“{review.text}”</p><footer><strong>{review.name}</strong><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer">Google review <ArrowUpRight size={15} aria-hidden="true" /></a></footer></blockquote>)}</div><div className="home-reviews-foot"><a href={googleBusinessProfile.url} target="_blank" rel="noopener noreferrer" className="home-text-link">Read reviews on Google <ArrowUpRight size={17} aria-hidden="true" /></a></div></div></section>
 
       <HomeCredentials />
 

@@ -264,7 +264,7 @@ export function offerCatalogSchema() {
 }
 
 /** Homepage entity node; the root layout supplies the linked site and business nodes. */
-export function homepageSchema() {
+export function homepageSchema(dateModified?: string) {
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -275,6 +275,7 @@ export function homepageSchema() {
     isPartOf: { "@id": `${siteConfig.url}/#website` },
     about: { "@id": `${siteConfig.url}/#organization` },
     mainEntity: { "@id": `${siteConfig.url}/#organization` },
+    ...(dateModified ? { dateModified } : {}),
     inLanguage: "en-CA",
   };
 }
@@ -337,6 +338,7 @@ export function servicePageGraphSchema(opts: {
   areaServed?: SchemaArea[];
   serviceType?: string[];
   relatedServicePath?: string;
+  dateModified?: string;
 }) {
   const url = `${siteConfig.url}${opts.path}`;
   const serviceId = `${url}#service`;
@@ -368,7 +370,7 @@ export function servicePageGraphSchema(opts: {
         mainEntity: { "@id": serviceId },
         hasPart: { "@id": faqId },
         breadcrumb: { "@id": breadcrumbId },
-        dateModified: CONTENT_UPDATED_ISO,
+        dateModified: opts.dateModified ?? CONTENT_UPDATED_ISO,
         inLanguage: "en-CA",
       },
       {
