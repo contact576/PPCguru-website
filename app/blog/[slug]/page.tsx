@@ -133,14 +133,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
            * unrecognised URL degrades to a plain tag inside the same fixed
            * ratio box — slower, but never a 500.
            */
-          <div className="relative mx-auto mb-10 aspect-[16/9] w-full max-w-3xl overflow-hidden rounded-[24px] border border-[var(--color-border)]">
+          <div className="relative mx-auto mb-10 aspect-[16/9] w-full max-w-5xl overflow-hidden rounded-[24px] border border-[var(--color-border)]">
             {canOptimizeImage(post.coverImage) ? (
               <Image
                 src={post.coverImage}
                 alt={post.coverImageAlt ?? post.title}
                 fill
                 priority
-                sizes="(max-width: 768px) 100vw, 768px"
+                sizes="(max-width: 768px) 100vw, 1024px"
                 className="object-cover"
               />
             ) : (
