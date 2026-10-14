@@ -26,24 +26,25 @@ export function Logo({
   href?: string;
   className?: string;
 }) {
-  // WebP at 420px wide: enough for 3x at the largest rendered size (~140px),
-  // ~20KB each vs ~80KB for the 720px PNGs (kept in /brand for other uses).
-  const src = wordmark ? (variant === "light" ? "/brand/ppc-guru-logo-light-420.webp" : "/brand/ppc-guru-logo-420.webp") : "/brand/ppc-guru-mark.webp";
+  // Use the approved 720px PNG derivative for the wordmark. Its fine dark
+  // lettering stays legible in the global header, where the smaller WebP
+  // appeared undersized and soft on high-density displays.
+  const src = wordmark ? (variant === "light" ? "/brand/ppc-guru-logo-light-720.png" : "/brand/ppc-guru-logo-720.png") : "/brand/ppc-guru-mark.webp";
   const width = wordmark ? Math.round(size * RATIO) : size;
   // The light edition only appears in the footer — don't let it compete with
   // the header logo and hero for bandwidth on first load.
   const belowFold = variant === "light";
 
   const content = (
-    <span className={className} style={{ display: "inline-flex", alignItems: "center", lineHeight: 0 }}>
+    <span className={className} style={{ display: "inline-flex", alignItems: "center", lineHeight: 0, flex: "0 0 auto" }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- brand logo; next/image adds nothing for a fixed-size logo */}
-      <img src={src} alt="PPC Guru" width={width} height={size} style={{ height: size, width: "auto", display: "block" }} decoding="async" loading={belowFold ? "lazy" : undefined} fetchPriority={belowFold ? "low" : "high"} />
+      <img src={src} alt="PPC Guru" width={width} height={size} style={{ height: size, width: "auto", display: "block", flex: "0 0 auto" }} decoding="async" loading={belowFold ? "lazy" : undefined} fetchPriority={belowFold ? "low" : "high"} />
     </span>
   );
 
   if (href) {
     return (
-      <Link href={href} aria-label="PPC Guru — home" className="logo-link" style={{ display: "inline-flex" }}>
+      <Link href={href} aria-label="PPC Guru — home" className="logo-link" style={{ display: "inline-flex", flex: "0 0 auto" }}>
         {content}
       </Link>
     );
