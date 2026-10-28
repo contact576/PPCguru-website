@@ -145,8 +145,9 @@ export const nav: NavItem[] = [
     label: "Services",
     href: "/services",
     children: [
-      { label: "Paid search & shopping", href: "", heading: true },
+      { label: "Search & discovery ads", href: "", heading: true },
       { label: "Google Ads", href: "/services/google-ads" },
+      { label: "ChatGPT Ads", href: "/services/chatgpt-ads" },
       { label: "Microsoft (Bing) Ads", href: "/services/microsoft-ads" },
       { label: "Paid social", href: "", heading: true },
       { label: "Meta Ads", href: "/services/meta-ads" },

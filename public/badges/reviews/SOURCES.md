@@ -10,5 +10,10 @@ event handlers, foreign objects and external resource references before saving.
 - `goodfirms.svg`: https://assets.goodfirms.co/images/goodfirms.svg
 - `designrush.svg`: https://www.designrush.com/topbest/images/svg/designrush-purple-logo.svg?v=1
 
-Other directories use ordinary text profile links rather than reconstructed logos.
-Profile destinations are the owner-confirmed URLs in `lib/data/reviews.ts`.
+The remaining directory logos were added on 28 October 2026; see
+`SOURCES-directory-a.md` and `SOURCES-directory-b.md` for individual sources,
+native dimensions and any third-party mirrors. The TechBehemoths icon is paired
+with a plain-text name. No wordmarks were redrawn.
+
+All 13 profiles appear in a continuous left-to-right strip. Profile destinations
+remain the owner-confirmed URLs in `lib/data/reviews.ts`.

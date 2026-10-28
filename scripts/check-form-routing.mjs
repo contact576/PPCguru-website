@@ -60,15 +60,17 @@ function harness(action, overrides = {}) {
     spam: false,
     ...overrides,
   };
-  const calls = { store: [], ghl: [], zoho: [], identify: [], mail: [], autoresponder: [] };
+  const calls = { store: [], ghl: [], zoho: [], identify: [], mail: [], autoresponder: [], meta: [], openai: [] };
   const persisted = new Map();
   const events = [];
+  const deferred = [];
   const spy = (key, result) => async (value) => {
     calls[key].push(structuredClone(value));
     events.push(key);
     return result;
   };
   const imports = {
+    'next/server': { after: (callback) => deferred.push(callback) },
     zod,
     '@/lib/data/form-options': options,
     '@/lib/email': {
@@ -96,6 +98,13 @@ function harness(action, overrides = {}) {
       ghlConfigured: () => config.ghlConfigured,
       sendLeadToGhl: spy('ghl', config.ghlResult),
     },
+    '@/lib/meta-capi': { sendMetaLead: spy('meta', true) },
+    '@/lib/openai-capi': { sendOpenAiLead: spy('openai', true) },
+    '@/lib/conversion-context': {
+      readConversionContext: async () => ({ declined: false, sourceUrl: 'https://example.invalid/form' }),
+      cleanEventId: (value) => typeof value === 'string' && value ? value : undefined,
+    },
+    '@/lib/data/landing-google-meta': { GOOGLE_META_LANDING_SOURCE: 'landing:google-meta-ads' },
     '@/lib/identity': { identifyVisitor: spy('identify', undefined) },
     '@/lib/turnstile': {
       verifyTurnstile: async () => ({ ok: config.turnstileOk }),
@@ -110,8 +119,18 @@ function harness(action, overrides = {}) {
       clientIpFromHeaders: async () => '192.0.2.1',
     },
   };
+  // Actions delegate to the shared delivery layer. Run that real code while
+  // keeping every network, credential and conversion dependency mocked.
+  imports['@/lib/lead-delivery'] = compileModule('lib/lead-delivery.ts', imports);
   const fn = compileModule(action.file, imports)[action.exportName];
-  return { config, calls, persisted, events, run: (form) => fn({ ok: false, message: '' }, form) };
+  return {
+    config, calls, persisted, events,
+    run: async (form) => {
+      const result = await fn({ ok: false, message: '' }, form);
+      for (const callback of deferred.splice(0)) await callback();
+      return result;
+    },
+  };
 }
 
 function validForm(action) {
@@ -136,7 +155,7 @@ function validForm(action) {
 }
 
 function noOutbound(h) {
-  for (const key of ['ghl', 'zoho', 'identify', 'mail', 'autoresponder']) {
+  for (const key of ['ghl', 'zoho', 'identify', 'mail', 'autoresponder', 'meta', 'openai']) {
     assert.equal(h.calls[key].length, 0, `${key} must not run`);
   }
 }
@@ -153,6 +172,36 @@ const actions = [
 ];
 
 for (const action of actions) {
+  await check(action, 'ChatGPT Ads interest is accepted, stored and delivered with the correct source', async () => {
+    const h = harness(action);
+    const form = validForm(action);
+    form.set('services', 'ChatGPT Ads');
+    form.set('source', 'offer:chatgpt-ads');
+    form.set('event_id', 'chatgpt-offline-conversion-1');
+    assert.equal((await h.run(form)).ok, true);
+    assert.equal(h.calls.store.length, 1);
+    assert.equal(h.calls.ghl.length, 1);
+    assert.equal(h.calls.zoho.length, 0);
+    const stored = h.persisted.get(leadId);
+    const expectedSource = action.exportName === 'submitContact' ? 'contact' : 'offer:chatgpt-ads';
+    assert.equal(stored.service, 'ChatGPT Ads');
+    assert.equal(stored.source, expectedSource);
+    const { submissionId, createdAt, ...crmRecord } = h.calls.ghl[0];
+    assert.equal(submissionId, leadId);
+    assert.ok(Number.isFinite(Date.parse(createdAt)));
+    assert.deepEqual(crmRecord, stored);
+    assert.ok(h.events.indexOf('save-complete') < h.events.indexOf('ghl'));
+    assert.equal(h.calls.mail.length, 1);
+    assert.match(h.calls.mail[0].text, /(?:Services|Interested in): ChatGPT Ads/);
+    assert.equal(h.calls.mail[0].replyTo, 'routing-check@example.invalid');
+    if (action.exportName === 'captureLead') assert.match(h.calls.mail[0].text, /Source: offer:chatgpt-ads/);
+    for (const api of ['meta', 'openai']) {
+      assert.equal(h.calls[api].length, 1);
+      assert.equal(h.calls[api][0].source, expectedSource);
+      assert.equal(h.calls[api][0].eventId, 'chatgpt-offline-conversion-1');
+    }
+  });
+
   await check(action, 'GHL replaces Zoho and receives the persisted submission id and full form data', async () => {
     const h = harness(action);
     const result = await h.run(validForm(action));

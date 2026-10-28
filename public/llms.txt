@@ -6,7 +6,7 @@ PPC Guru provides Google Ads, Meta Ads, SEO, web design, conversion optimization
 
 Founded in 2021, PPC Guru is led by Jaydeep Patel, Founder and CEO, and Dhaval Patel, Co-founder and Head of Delivery. Services are provided month-to-month without long-term contracts. Advertising spend is separate from management fees, and clients retain ownership of their advertising accounts, data, billing, and associated assets.
 
-Reported performance figures are blended, client-reported results and are representative rather than guaranteed. PPC Guru reports more than $100 million in managed advertising spend, more than 1 million qualified leads generated, a 6.3x average return on advertising spend, and more than 500 businesses served.
+Reported performance figures are blended, client-reported results and are representative rather than guaranteed. PPC Guru reports more than $100 million in managed advertising spend, more than 1 million qualified leads generated, a 6.3x average return on advertising spend, and more than 200 businesses served.
 
 ## Primary Pages
 
@@ -20,6 +20,7 @@ Reported performance figures are blended, client-reported results and are repres
 ## Services
 
 - [Google Ads Management](https://ppcguru.ca/services/google-ads): Google Ads strategy, campaign management, optimization, tracking, and lead generation.
+- [ChatGPT Ads Management](https://ppcguru.ca/services/chatgpt-ads): Paid ChatGPT campaign planning, creative, landing pages and conversion measurement for eligible advertisers. Paid ads do not buy organic recommendations.
 - [Meta Ads Management](https://ppcguru.ca/services/meta-ads): Facebook and Instagram advertising for customer acquisition, lead generation, and remarketing.
 - [SEO and Local Search](https://ppcguru.ca/services/seo): Search engine optimization, local SEO, content strategy, and organic visibility services.
 - [Microsoft Advertising](https://ppcguru.ca/services/microsoft-ads): Microsoft Ads and Bing Ads campaign strategy, management, and optimization.

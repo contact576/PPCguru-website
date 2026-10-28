@@ -33,6 +33,12 @@ export type ServiceContent = {
 };
 
 export const serviceContent: Record<string, ServiceContent> = {
+  "chatgpt-ads": {
+    definitionHeading: "What is ChatGPT Ads management?",
+    definition: "ChatGPT Ads management is the planning, creation, measurement and ongoing improvement of paid campaigns in ChatGPT. PPC Guru helps eligible businesses in Toronto, the GTA and across Canada connect relevant ad creative with useful landing pages and measurable enquiries. Paid ads are separate from ChatGPT’s organic answers and recommendations.",
+    geoHeading: "ChatGPT Ads management in Toronto & Canada",
+    geoBlurb: "Work with a Toronto-based team on your offer, campaign plan and lead journey. We support businesses across Canada and the United States, with advertiser eligibility and available campaign locations checked in your account before launch. Platform access does not guarantee approval or delivery in every market.",
+  },
   "google-ads": {
     definitionHeading: "What is Google Ads management?",
     definition:

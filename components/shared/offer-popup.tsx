@@ -21,8 +21,9 @@ const mark = (k: string) => { try { sessionStorage.setItem(k, "1"); } catch { /*
 /**
  * Page-aware lead-capture popup. Picks the offer matching the current route
  * (`lib/data/service-offers.ts`) so the copy is page-specific. On **service
- * pages** it opens as a **centre-screen modal ~4s after landing** (catchy hook);
- * elsewhere it's a gentle bottom-right slide-in after longer. Once per session
+ * pages** it opens as a **centre-screen modal ~4s after landing**;
+ * the homepage opens only after 40% scroll. Other pages keep the corner card.
+ * Once per session
  * (the shaking floating button reopens it), dismissible (X / Esc / backdrop),
  * and any CTA can open it by dispatching `window` event `ppcg:open-offer`.
  */
@@ -32,17 +33,29 @@ export function OfferPopup() {
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const forced = useRef(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const successRef = useRef<HTMLHeadingElement>(null);
 
-  const offer = offerForPath(pathname);
-  // Homepage visitors already have a dedicated audit funnel. Match it exactly
-  // so adding "/" never suppresses offers on every other route.
-  const suppressed = pathname === "/" || SUPPRESS_ON.some((p) => pathname === p || pathname.startsWith(p + "/"));
+  const isHome = pathname === "/";
+  const pageOffer = offerForPath(pathname);
+  const offer = isHome ? {
+    ...pageOffer,
+    popupTitle: "Find what’s holding back your conversions.",
+    popupBody: "Get a free review of your website, ads and enquiry path. We’ll identify the gaps and recommend what to improve first. No obligation.",
+    formSource: "offer:homepage",
+  } : pageOffer;
+  const suppressed = SUPPRESS_ON.some((p) => pathname === p || pathname.startsWith(p + "/"));
   const isService = pathname.startsWith("/services/");
   // Centre modal for service pages + any explicit open; gentle corner card elsewhere.
   const [centered, setCentered] = useState(isService);
 
   useEffect(() => {
-    const openNow = () => { forced.current = true; setCentered(true); setSubmitted(false); setOpen(true); };
+    if (submitted) successRef.current?.focus({ preventScroll: true });
+  }, [submitted]);
+
+  useEffect(() => {
+    const openNow = () => { forced.current = true; mark(K_DONE); setCentered(true); setSubmitted(false); setOpen(true); };
     window.addEventListener("ppcg:open-offer", openNow);
     return () => window.removeEventListener("ppcg:open-offer", openNow);
   }, []);
@@ -61,24 +74,32 @@ export function OfferPopup() {
     if (typeof window === "undefined" || suppressed || seen(K_DONE)) return;
     let armed = false;
     const startedAt = Date.now();
-    const MIN_DWELL = isService ? 3500 : 8000;
+    const MIN_DWELL = isHome ? 0 : isService ? 3500 : 8000;
     const dwell = isService ? 4000 : 14000;
-    const scrollGate = isService ? 0.45 : 0.6;
+    const scrollGate = isHome ? 0.4 : isService ? 0.45 : 0.6;
     const fire = () => {
-      if (armed || Date.now() - startedAt < MIN_DWELL) return;
-      armed = true; setCentered(isService); setOpen(true); mark(K_DONE); cleanup();
+      if (armed || seen(K_DONE) || Date.now() - startedAt < MIN_DWELL) return;
+      // Do not interrupt someone already typing or inspecting a campaign report.
+      if (document.querySelector('dialog[open], [role="dialog"][aria-modal="true"]') || document.activeElement?.closest("form")) return;
+      armed = true; setCentered(isHome || isService); setOpen(true); mark(K_DONE); cleanup();
+      if (isHome) {
+        const trackedWindow = window as typeof window & { dataLayer?: Record<string, unknown>[] };
+        (trackedWindow.dataLayer ??= []).push({ event: "offer_popup_view", source: "homepage_scroll", scroll_threshold: 40, page_path: pathname });
+      }
     };
     const onScroll = () => {
       const p = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight || 1);
       if (p >= scrollGate) fire();
     };
     const onExit = (e: MouseEvent) => { if (e.clientY <= 0) fire(); };
-    const timer = setTimeout(fire, dwell);
+    // The homepage has no timer or exit-intent shortcut: 40% scroll is the trigger.
+    const timer = isHome ? null : setTimeout(fire, dwell);
     window.addEventListener("scroll", onScroll, { passive: true });
-    document.addEventListener("mouseout", onExit);
-    function cleanup() { clearTimeout(timer); window.removeEventListener("scroll", onScroll); document.removeEventListener("mouseout", onExit); }
+    if (!isHome) document.addEventListener("mouseout", onExit);
+    function cleanup() { if (timer !== null) clearTimeout(timer); window.removeEventListener("scroll", onScroll); document.removeEventListener("mouseout", onExit); }
+    onScroll();
     return cleanup;
-  }, [suppressed, isService, pathname]);
+  }, [suppressed, isService, isHome, pathname]);
 
   // Centre-modal for service pages, any explicit CTA open, and the submitted state.
   const isModal = centered || forced.current;
@@ -86,7 +107,23 @@ export function OfferPopup() {
   useEffect(() => {
     if (!open) { document.body.removeAttribute("data-offer-open"); return; }
     document.body.setAttribute("data-offer-open", "1");
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const focusFrame = isModal ? window.requestAnimationFrame(() => closeRef.current?.focus({ preventScroll: true })) : 0;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+      if (!isModal || e.key !== "Tab") return;
+      const focusable = Array.from(panelRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]',
+      ) ?? []).filter((element) => element.getClientRects().length > 0 && element.tabIndex >= 0);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!first || !last) return;
+      if (e.shiftKey && (document.activeElement === first || !panelRef.current?.contains(document.activeElement))) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && (document.activeElement === last || !panelRef.current?.contains(document.activeElement))) {
+        e.preventDefault(); first.focus();
+      }
+    };
     document.addEventListener("keydown", onKey);
     // Lock the page behind the MODAL only, so a swipe/wheel inside the card
     // scrolls the form instead of chaining to the page underneath. The gentle
@@ -102,11 +139,13 @@ export function OfferPopup() {
     }
     return () => {
       document.removeEventListener("keydown", onKey);
+      window.cancelAnimationFrame(focusFrame);
       document.body.removeAttribute("data-offer-open");
       if (prev) {
         document.body.style.overflow = prev.overflow;
         document.body.style.paddingRight = prev.pad;
         lenis?.start();
+        if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
       }
     };
   }, [open, isModal, lenis]);
@@ -121,8 +160,9 @@ export function OfferPopup() {
     // split into a fixed close bar + an INNER scroll region — the X stays pinned
     // at the top while the form scrolls, so the submit button is always reachable
     // and the popup is always closable on short viewports.
-    <div className="relative flex max-h-[88dvh] w-full max-w-md flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white shadow-tile">
+    <div ref={panelRef} className="relative flex max-h-[88dvh] w-full max-w-md flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white shadow-tile">
       <button
+        ref={closeRef}
         onClick={() => setOpen(false)}
         aria-label="Close"
         className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] bg-white/95 text-[var(--color-ink)] shadow-sm backdrop-blur transition-colors hover:bg-[var(--color-surface-2)]"
@@ -134,9 +174,9 @@ export function OfferPopup() {
           frozen without it — this is what made the popup form unscrollable. */}
       <div data-lenis-prevent className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-6 sm:p-7">
         {submitted ? (
-          <div className="py-6 text-center">
+          <div className="py-6 text-center" role="status" aria-live="polite">
             <CircleCheck aria-hidden className="mx-auto mb-3 h-11 w-11 text-[#6f7d22]" />
-            <h3 className="text-2xl font-bold">You&apos;re in</h3>
+            <h3 ref={successRef} tabIndex={-1} className="text-2xl font-bold">You&apos;re in</h3>
             <p className="mt-2 text-sm text-[var(--color-ink-dim)]">We&apos;ll review your details and reply within one business day.</p>
           </div>
         ) : (

@@ -51,6 +51,15 @@ export type ServiceOffer = {
 
 /** Keyed by service slug. Services without an entry fall back to the generic audit offer. */
 export const serviceOffers: Record<string, ServiceOffer> = {
+  "chatgpt-ads": {
+    hook: "Free ChatGPT Ads readiness review",
+    subhook: "Find out whether ChatGPT Ads fits your offer, website and growth plan.",
+    popupTitle: "Is your business ready for ChatGPT Ads?",
+    popupBody: "Tell us about your business. We’ll review your offer, website and measurement needs, then discuss whether a ChatGPT Ads test makes sense. No obligation.",
+    ctaLabel: "Get my free ChatGPT Ads review",
+    formSource: "offer:chatgpt-ads",
+    credit: false,
+  },
   "google-ads": {
     hook: "Free website + Google Ads audit",
     subhook: "Find the wasted spend before you scale — no contract, no obligation.",

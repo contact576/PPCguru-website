@@ -60,6 +60,7 @@ export function SiteFooter() {
             { label: "Free website audit", href: "/free-audit" },
             { label: "Google Ads Management", href: "/services/google-ads" },
             { label: "Meta Ads", href: "/services/meta-ads" },
+            { label: "ChatGPT Ads Management", href: "/services/chatgpt-ads" },
             { label: "SEO & Local Search", href: "/services/seo" },
             { label: "Creative Production", href: "/services/creative" },
             { label: "Websites & Landing Pages", href: "/services/web-design" },

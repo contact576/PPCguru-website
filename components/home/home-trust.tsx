@@ -43,6 +43,7 @@ const logoSource = (file: string) => clientLogosWebp.has(file)
 
 // These supplied transparent marks contain white lettering.
 const darkLogoBackdrop = new Set(["the-ups-store-604.svg", "ecocare-home-comfort.png"]);
+const clientLogoRows = [clientLogos.filter((_, index) => index % 2 === 0), clientLogos.filter((_, index) => index % 2 === 1)];
 
 /** Native checkbox controls the CSS animation, keeping this entire strip server-rendered. */
 export function HomeClientMarquee() {
@@ -57,18 +58,20 @@ export function HomeClientMarquee() {
       <div className="home-wrap home-client-marquee-heading">
         <div>
           <p className="home-kicker">Selected client work</p>
-          <h2 id="home-client-marquee-title">Good company to grow with.</h2>
+          <h2 id="home-client-marquee-title">Trusted by 200+ businesses</h2>
+          <p className="home-client-marquee-intro">We’ve worked with 200+ businesses. Here are some of the brands we’ve helped grow.</p>
         </div>
         <label htmlFor="home-client-motion-toggle" className="home-client-motion-control">
           <span className="home-client-pause"><Pause size={13} aria-hidden="true" /> Pause motion</span>
           <span className="home-client-resume"><Play size={13} aria-hidden="true" /> Resume motion</span>
         </label>
       </div>
-      <div className="home-client-marquee-viewport" tabIndex={0} role="region" aria-label="Selected client logos. Focus to pause animation.">
-        <div className="home-client-marquee-track" style={{ "--client-marquee-duration": `${clientLogos.length * 4.1}s` } as CSSProperties}>
+      <div className="home-client-marquee-rows">
+      {clientLogoRows.map((logos, row) => <div className="home-client-marquee-viewport" tabIndex={0} role="region" aria-label={`Selected client logos, row ${row + 1} of 2. Focus to pause both rows.`} key={row}>
+        <div className={`home-client-marquee-track${row === 1 ? " home-client-marquee-reverse" : ""}`} style={{ "--client-marquee-duration": `${logos.length * 4.1}s` } as CSSProperties}>
           {[false, true].map((duplicate) => (
             <ul className="home-client-marquee-group" key={String(duplicate)} aria-hidden={duplicate || undefined}>
-              {clientLogos.map((file) => (
+              {logos.map((file) => (
                 <li className={`home-client-marquee-logo${darkLogoBackdrop.has(file) ? " home-client-logo-dark" : ""}`} key={file}>
                   <img
                     src={logoSource(file)}
@@ -84,6 +87,7 @@ export function HomeClientMarquee() {
             </ul>
           ))}
         </div>
+      </div>)}
       </div>
     </section>
   );
