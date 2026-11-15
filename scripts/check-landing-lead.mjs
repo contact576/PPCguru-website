@@ -98,7 +98,7 @@ function harness(overrides = {}) {
     "@/lib/zoho": { zohoConfigured: () => false, sendLeadToZoho: spy("zoho", false) },
     "@/lib/meta-capi": { sendMetaLead: spy("meta", true) },
     "@/lib/openai-capi": { sendOpenAiLead: spy("openai", true) },
-    "@/lib/conversion-context": { cleanEventId: conversion.cleanEventId, readConversionContext: async () => ({ declined: config.declined, sourceUrl: "https://example.invalid/gta-marketing-agency" }) },
+    "@/lib/conversion-context": { cleanEventId: conversion.cleanEventId, readConversionContext: async () => ({ declined: config.declined, oppref: config.cookieOppref, sourceUrl: "https://example.invalid/gta-marketing-agency" }) },
   };
   deps["@/lib/google-meta-submission"] = load("lib/google-meta-submission.ts", { ...deps, "node:crypto": require("node:crypto") });
   deps["@/lib/lead-delivery"] = load("lib/lead-delivery.ts", deps);
@@ -151,7 +151,36 @@ await check("100-leads accepts the original question set and keeps its offer rou
   const h = harness();
   await expectRedirect(h, validForm(hundred.LANDING_SOURCE), `${hundred.LANDING_THANK_YOU_PATH}?n=Test&c=Offline%20Heating`);
   assert.equal(h.calls.store[0][0].service, hundred.LANDING_SERVICE_LABEL);
-  assert.equal(h.calls.receipt.length, 0);
+  assert.equal(h.calls.receipt[0][0], EVENT_ID);
+  assert.equal(h.calls.receipt[0][1], hundred.LANDING_SOURCE);
+});
+
+await check("100-leads forwards the exact click reference only to OpenAI and keeps the event ID for reconciliation", async () => {
+  const h = harness({ cookieOppref: "previous-click" });
+  const form = validForm(hundred.LANDING_SOURCE);
+  form.set("utm", JSON.stringify({ utm_source: "chatgpt", utm_medium: "paid" }));
+  form.set("openai_click_reference", "offline-opaque-click_123");
+  await expectRedirect(h, form, `${hundred.LANDING_THANK_YOU_PATH}?n=Test&c=Offline%20Heating`);
+  await h.flush();
+  assert.equal(h.calls.openai[0][0].eventId, EVENT_ID);
+  assert.equal(h.calls.openai[0][1].oppref, "offline-opaque-click_123");
+  assert.equal(h.calls.openai[0][1].sourceUrl, "https://ppcguru.ca/100-leads");
+  assert.equal(h.calls.meta[0][1].oppref, "previous-click");
+  assert.match(h.calls.ghl[0][0].message, /OpenAI event ID: offline-event-0001/);
+  assert.doesNotMatch(JSON.stringify([h.calls.store, h.calls.landing, h.calls.ghl, h.calls.email]), /offline-opaque-click_123/);
+});
+
+await check("100-leads honours opt-out without losing the enquiry", async () => {
+  const h = harness({ declined: true, cookieOppref: "previous-click" });
+  const form = validForm(hundred.LANDING_SOURCE);
+  form.set("utm", JSON.stringify({ utm_source: "chatgpt" }));
+  form.set("openai_click_reference", "offline-click");
+  await expectRedirect(h, form, `${hundred.LANDING_THANK_YOU_PATH}?n=Test&c=Offline%20Heating`);
+  await h.flush();
+  assert.equal(h.calls.ghl.length, 1);
+  assert.equal(h.calls.openai[0][1].declined, true);
+  assert.equal(h.calls.openai[0][1].oppref, undefined);
+  assert.doesNotMatch(h.calls.ghl[0][0].message, /OpenAI event ID/);
 });
 
 await check("declined consent still delivers a Google + Meta enquiry but never stitches its stale session", async () => {
@@ -566,6 +595,7 @@ function browserHarness(consent = "accepted", googleTagReady = false) {
     "@/lib/analytics": { ...analytics, sendEvent: (...args) => events.push(["first-party", ...args]) },
     "@/lib/data/landing-gta": gta,
     "@/lib/data/landing-google-meta": googleMeta,
+    "@/lib/data/landing-100-leads": hundred,
     "@/components/landing/google-meta-analytics": googleMetaAnalytics,
   }, globals).ConfirmedLandingConversion;
   return {
@@ -577,6 +607,19 @@ function browserHarness(consent = "accepted", googleTagReady = false) {
     run: (eventId, source) => Confirmed({ eventId, source }),
   };
 }
+
+await check("100-leads browser conversion requires a matching receipt and fires once", () => {
+  const h = browserHarness();
+  h.storage.set("ppcg_lead_eid", EVENT_ID);
+  h.run(undefined, hundred.LANDING_SOURCE);
+  h.run("different-receipt", hundred.LANDING_SOURCE);
+  assert.equal(h.events.length, 0);
+  h.run(EVENT_ID, hundred.LANDING_SOURCE);
+  h.run(EVENT_ID, hundred.LANDING_SOURCE);
+  assert.equal(h.events.length, 1);
+  assert.equal(h.events[0][2], "lead_created");
+  assert.equal(h.events[0][4].event_id, EVENT_ID);
+});
 
 function assertConfirmedGoogleCommands(h) {
   const commands = h.commands();
@@ -734,9 +777,10 @@ await check("sitewide tracker leaves confirmed funnels to their receipts and pre
       "@/lib/analytics": { sendEvent() {}, trackPageViewed() {}, trackLead: (...args) => leads.push(args) },
       "@/lib/data/landing-gta": gta,
       "@/lib/data/landing-google-meta": googleMeta,
+      "@/lib/data/landing-100-leads": hundred,
     }, { document: { addEventListener() {}, removeEventListener() {} } }).VisitorTracker;
     VisitorTracker();
-    assert.equal(leads.length, pathname === hundred.LANDING_THANK_YOU_PATH ? 1 : 0);
+    assert.equal(leads.length, 0);
   }
 });
 
@@ -747,6 +791,7 @@ await check("receipt is a scoped httpOnly non-PII event id with a short expiry",
     "@/lib/conversion-context": conversion,
     "@/lib/data/landing-gta": gta,
     "@/lib/data/landing-google-meta": googleMeta,
+    "@/lib/data/landing-100-leads": hundred,
   });
   await receipt.setLandingConversionReceipt("invalid value with spaces");
   assert.equal(writes.length, 0);
@@ -769,6 +814,7 @@ await check("Google + Meta receipt is isolated from GTA and scoped to its own th
     "@/lib/conversion-context": conversion,
     "@/lib/data/landing-gta": gta,
     "@/lib/data/landing-google-meta": googleMeta,
+    "@/lib/data/landing-100-leads": hundred,
   });
   await receipt.setLandingConversionReceipt(EVENT_ID);
   assert.equal(await receipt.readLandingConversionReceipt(googleMeta.GOOGLE_META_LANDING_SOURCE), undefined);

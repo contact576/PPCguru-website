@@ -29,10 +29,20 @@ export type OpenAiLead = {
   phone?: string;
   name?: string;
   source?: string;
+  audit?: boolean;
 };
 
 export async function sendOpenAiLead(lead: OpenAiLead, ctx: ConversionContext): Promise<boolean> {
-  if (!openAiCapiConfigured() || ctx.declined) return false;
+  if (ctx.declined) return false;
+  const audit = (status: string) => {
+    if (lead.audit) console.info("[openai-capi] 100-leads measurement", {
+      eventId: lead.eventId, status, hasClickReference: Boolean(ctx.oppref),
+    });
+  };
+  if (!openAiCapiConfigured()) {
+    audit("not_configured");
+    return false;
+  }
 
   const user: Record<string, unknown> = {};
   const email = lead.email?.trim().toLowerCase();
@@ -72,12 +82,15 @@ export async function sendOpenAiLead(lead: OpenAiLead, ctx: ConversionContext): 
       signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) {
-      console.error(`[openai-capi] ${res.status}:`, (await res.text()).slice(0, 300));
+      console.error(`[openai-capi] HTTP ${res.status}`);
+      audit("rejected");
       return false;
     }
+    audit(body.validate_only ? "validated_only" : "accepted");
     return true;
   } catch (err) {
-    console.error("[openai-capi] failed:", err instanceof Error ? err.message : err);
+    console.error("[openai-capi] request failed");
+    audit("request_failed");
     return false;
   }
 }

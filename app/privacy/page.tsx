@@ -38,7 +38,7 @@ export default function PrivacyPage() {
       <p>If we send you commercial electronic messages, we do so in accordance with CASL — with your consent, with a clear identification of who we are, and with an unsubscribe option in every message. You can opt out of marketing emails at any time using the unsubscribe link or by contacting us.</p>
 
       <h2 id="cookies">Cookies &amp; analytics</h2>
-      <p>We use cookies and similar technologies to operate the site and measure performance. You can control cookies through your browser settings. Where we run advertising pixels (e.g. Google or Meta), they may set cookies to measure ad performance; you can opt out via your ad-platform and browser settings.</p>
+      <p>We use cookies and similar technologies to operate the site and measure performance. Where we run advertising pixels (e.g. Google, Meta or OpenAI), they may set cookies to measure ad performance. When permitted, our server may share a click reference, a lead event ID, hashed contact identifiers and browser information with an ad platform to measure a submitted enquiry. You can decline this measurement in our cookie notice and control cookies through your browser settings.</p>
 
       <h2>Sharing your information</h2>
       <p>We do not sell your personal information. We may share it with trusted service providers (such as email delivery, CRM and analytics vendors) who process it on our behalf under appropriate safeguards, or where required by law.</p>

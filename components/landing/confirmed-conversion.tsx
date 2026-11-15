@@ -4,13 +4,16 @@ import { useEffect } from "react";
 import { consentState, sendEvent, trackLead } from "@/lib/analytics";
 import { GTA_LANDING_SOURCE } from "@/lib/data/landing-gta";
 import { GOOGLE_META_LANDING_SOURCE } from "@/lib/data/landing-google-meta";
+import { LANDING_SOURCE } from "@/lib/data/landing-100-leads";
 import { configureGoogleMetaAds, googleMetaTag, GOOGLE_META_ADS_CONVERSION, GOOGLE_META_GA4_ID } from "@/components/landing/google-meta-analytics";
 
 /** Conversion events require a receipt for this funnel AND its matching tab event. */
-export function ConfirmedLandingConversion({ eventId, source = GTA_LANDING_SOURCE }: { eventId?: string; source?: typeof GTA_LANDING_SOURCE | typeof GOOGLE_META_LANDING_SOURCE }) {
+export function ConfirmedLandingConversion({ eventId, source = GTA_LANDING_SOURCE }: { eventId?: string; source?: typeof GTA_LANDING_SOURCE | typeof GOOGLE_META_LANDING_SOURCE | typeof LANDING_SOURCE }) {
   useEffect(() => {
     if (!eventId || consentState() === "declined") return;
     if (!trackLead({ requireId: true, expectedEventId: eventId })) return;
+    // Preserve this offer's existing Google/Meta settings.
+    if (source === LANDING_SOURCE) return;
     sendEvent("audit_form_submit", { target: source });
     const win = window as typeof window & {
       dataLayer?: Array<Record<string, unknown> | IArguments>;

@@ -7,6 +7,7 @@ import { sendMetaLead } from "@/lib/meta-capi";
 import { sendOpenAiLead } from "@/lib/openai-capi";
 import { readConversionContext, cleanEventId, type ConversionContext } from "@/lib/conversion-context";
 import { GOOGLE_META_LANDING_SOURCE } from "@/lib/data/landing-google-meta";
+import { LANDING_PATH, LANDING_SOURCE } from "@/lib/data/landing-100-leads";
 import type { GoogleMetaAttempt } from "@/lib/google-meta-submission";
 
 /**
@@ -43,6 +44,9 @@ export type DeliveryInput = {
   lead: { name?: string; email?: string };
   /** The form's hidden `event_id` — the browser pixels fire with the same id. */
   eventId?: FormDataEntryValue | null;
+  conversionContext?: ConversionContext;
+  openAiClickReference?: string;
+  openAiAudit?: boolean;
   /** Paid landing pages may only confirm a lead accepted by a durable channel. */
   requireDelivery?: boolean;
   /** Server-owned retry progress, only used by the Google + Meta funnel. */
@@ -63,9 +67,12 @@ async function safe<T>(label: string, p: Promise<T>, fallback: T): Promise<T> {
 async function sendConversions(input: DeliveryInput, ctx: ConversionContext): Promise<void> {
   const { record, leadId } = input;
   const conversion = { eventId: cleanEventId(input.eventId) ?? leadId ?? undefined, email: record.email, phone: record.phone, name: record.name, source: record.source };
+  const openAiContext = record.source === LANDING_SOURCE
+    ? { ...ctx, oppref: ctx.declined ? undefined : input.openAiClickReference ?? ctx.oppref, sourceUrl: `https://ppcguru.ca${LANDING_PATH}` }
+    : ctx;
   await Promise.all([
     safe("meta capi", sendMetaLead(conversion, ctx), false),
-    safe("openai capi", sendOpenAiLead(conversion, ctx), false),
+    safe("openai capi", sendOpenAiLead({ ...conversion, audit: input.openAiAudit }, openAiContext), false),
   ]);
 }
 
@@ -87,6 +94,9 @@ export async function fanOut(input: DeliveryInput, ctx?: ConversionContext): Pro
     !input.requireDelivery || leadId !== null ? safe("autoresponder", sendLeadAutoresponder(lead, { source: record.source }), false) : false,
     ctx ? sendConversions(input, ctx) : undefined,
   ]);
+  if (input.openAiAudit && !ctx?.declined) {
+    console.info("[lead-delivery] 100-leads delivery", { eventId: cleanEventId(input.eventId) ?? leadId, ghlAccepted: ghlConfigured() && crmed });
+  }
   if (!emailed) {
     console.error(
       `[lead-delivery] team notification NOT delivered for ${record.email ?? "?"} (${record.source ?? "site"}) — check /admin/settings → Email delivery.`,
@@ -109,7 +119,7 @@ export type DeliveryOutcome =
 export async function deliverLead(input: DeliveryInput): Promise<DeliveryOutcome> {
   const stored = input.leadId !== null;
   // Headers/cookies are request-scoped: read them now, before `after()`.
-  const ctx = await readConversionContext();
+  const ctx = input.conversionContext ?? await readConversionContext();
   // This funnel promises all three team inboxes AND GHL. A stored row is a
   // recovery copy, not confirmation of those deliveries; Zoho cannot replace GHL.
   if (input.record.source === GOOGLE_META_LANDING_SOURCE) {
