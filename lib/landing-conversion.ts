@@ -2,8 +2,10 @@ import { cookies } from "next/headers";
 import { cleanEventId } from "@/lib/conversion-context";
 import { GTA_LANDING_SOURCE, GTA_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-gta";
 import { GOOGLE_META_LANDING_SOURCE, GOOGLE_META_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-google-meta";
+import { LANDING_SOURCE, LANDING_THANK_YOU_PATH } from "@/lib/data/landing-100-leads";
 
 const RECEIPTS = {
+  [LANDING_SOURCE]: { cookie: "ppcg_100_leads_receipt", path: LANDING_THANK_YOU_PATH },
   [GTA_LANDING_SOURCE]: { cookie: "ppcg_gta_receipt", path: GTA_LANDING_THANK_YOU_PATH },
   [GOOGLE_META_LANDING_SOURCE]: { cookie: "ppcg_google_meta_receipt", path: GOOGLE_META_LANDING_THANK_YOU_PATH },
 } as const;

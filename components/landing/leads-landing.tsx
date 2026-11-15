@@ -82,8 +82,8 @@ function useReducedMotion() {
 }
 
 /** utm_* / click ids / referrer from the landing URL → one hidden JSON field. */
-function useAttribution() {
-  const [utm, setUtm] = useState("");
+function useAttribution(isLeadOffer: boolean) {
+  const [attribution, setAttribution] = useState({ utm: "", oppref: "" });
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -94,12 +94,13 @@ function useAttribution() {
       }
       if (document.referrer) out.referrer = document.referrer.slice(0, 300);
       out.path = window.location.pathname;
-      setUtm(JSON.stringify(out));
+      const oppref = isLeadOffer ? params.get("oppref") || "" : "";
+      setAttribution({ utm: JSON.stringify(out), oppref: oppref.length <= 2048 ? oppref : "" });
     } catch {
       /* attribution is a nice-to-have */
     }
-  }, []);
-  return utm;
+  }, [isLeadOffer]);
+  return attribution;
 }
 
 function scrollToForm() {
@@ -163,7 +164,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
   const feedbackRef = useRef<HTMLParagraphElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const previousStep = useRef(1);
-  const utm = useAttribution();
+  const { utm, oppref } = useAttribution(copy.source === LANDING_SOURCE);
 
   useEffect(() => { setRenderedAt(String(Date.now())); }, []);
   useEffect(() => {
@@ -287,6 +288,7 @@ export function QualificationForm({ copy = DEFAULT_COPY }: { copy?: Qualificatio
         </div>
         <input type="hidden" name="source" value={copy.source} />
         <input type="hidden" name="utm" value={utm} readOnly />
+        {copy.source === LANDING_SOURCE ? <input type="hidden" name="openai_click_reference" value={oppref} readOnly /> : null}
         <SessionField />
         {/* Answers from earlier steps ride along as hidden fields. */}
         {step !== 1 ? (

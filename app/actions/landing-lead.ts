@@ -22,7 +22,7 @@ import { GTA_LANDING_ID, GTA_LANDING_SERVICE_LABEL, GTA_LANDING_SOURCE, GTA_LAND
 import { GOOGLE_META_LANDING_ID, GOOGLE_META_LANDING_SERVICE_LABEL, GOOGLE_META_LANDING_SOURCE, GOOGLE_META_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-google-meta";
 import { GTA_EXTRA_BUSINESS_TYPE_IDS, GTA_EXTRA_BUDGET_IDS, LANDING_CHANNEL_IDS, MULTISELECT_LANDING_CHANNELS, MULTISELECT_LANDING_CHANNEL_IDS, isValidLeadPhone, landingChannelLabel, normaliseWebOrSocial } from "@/lib/landing-lead-fields";
 import { setLandingConversionReceipt } from "@/lib/landing-conversion";
-import { readConversionContext } from "@/lib/conversion-context";
+import { cleanEventId, readConversionContext } from "@/lib/conversion-context";
 import { withGoogleMetaAttempt, type GoogleMetaAttempt } from "@/lib/google-meta-submission";
 
 /** Pages that share this form, keyed by their hidden `source` value. */
@@ -168,6 +168,13 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
   }
 
   const utm = parseUtm(data.utm);
+  const eventId = cleanEventId(formData.get("event_id"));
+  // Keep the raw OpenAI click reference out of email, CRM and analytics state.
+  const postedClickReference = formData.get("openai_click_reference");
+  const openAiClickReference = source === LANDING_SOURCE && typeof postedClickReference === "string"
+    && postedClickReference.length <= 2048 && postedClickReference.trim()
+    ? postedClickReference : undefined;
+  const isChatGptLead = source === LANDING_SOURCE && (utm.utm_source?.toLowerCase() === "chatgpt" || Boolean(openAiClickReference));
   const typeLabel = businessTypeLabel(data.business_type);
   const budgetText = budgetLabel(data.budget);
   // Canonical order makes equivalent retries identical even if submitted in a
@@ -186,6 +193,8 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
 
   // The canonical mirror in `leads` — keeps /admin/leads, CRM delivery, the
   // identity stitch and email exactly as they are for every other form.
+  const conversionContext = await readConversionContext();
+  const measurementLine = isChatGptLead && eventId && !conversionContext.declined ? `OpenAI event ID: ${eventId}` : "";
   const record = {
     name: data.name,
     email: data.email,
@@ -202,6 +211,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
       channelLine,
       `Budget: ${budgetText}`,
       attribution ? `Attribution: ${attribution}` : "",
+      measurementLine,
     ]
       .filter(Boolean)
       .join("\n"),
@@ -235,7 +245,6 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     // A stale tab may still post its old session id after the visitor opts out.
     // Enforce consent at the server before linking browsing history or setting
     // the identity cookie; the enquiry itself is still saved and delivered.
-    const conversionContext = await readConversionContext();
     if (!conversionContext.declined && !attempt?.identified) {
       await identifyVisitor({ sessionId: data.session_id, leadId, email: data.email, name: data.name });
       if (attempt) attempt.identified = true;
@@ -245,6 +254,9 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     // Existing funnels retain their deferred post-save delivery behavior.
     const delivery = await deliverLead({
       eventId: formData.get("event_id"),
+      conversionContext,
+      openAiClickReference,
+      openAiAudit: isChatGptLead,
       requireDelivery: true,
       record,
       leadId,
@@ -265,6 +277,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
           `Email: ${data.email}`,
           `Phone: ${data.phone}`,
           attribution ? `Attribution: ${attribution}` : "",
+          measurementLine,
           "",
           "Next step: qualification call — agree lead criteria, geography, budget and written terms.",
         ]
@@ -285,7 +298,7 @@ export async function submitLandingLead(_prev: LandingLeadState, formData: FormD
     : await persistAndDeliver();
   if (!result.ok) return result;
 
-  if (source === GTA_LANDING_SOURCE || source === GOOGLE_META_LANDING_SOURCE) {
+  if (source === LANDING_SOURCE || source === GTA_LANDING_SOURCE || source === GOOGLE_META_LANDING_SOURCE) {
     try {
       await setLandingConversionReceipt(formData.get("event_id"), source);
     } catch {

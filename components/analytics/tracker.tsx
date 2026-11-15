@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { sendEvent, trackBusinessPhoneClick, trackLead, trackPageViewed } from "@/lib/analytics";
 import { GTA_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-gta";
 import { GOOGLE_META_LANDING_THANK_YOU_PATH } from "@/lib/data/landing-google-meta";
+import { LANDING_THANK_YOU_PATH } from "@/lib/data/landing-100-leads";
 
 /**
  * Site-wide, consent-aware visitor tracker. Mounted once in the root layout.
@@ -29,9 +30,8 @@ export function VisitorTracker() {
       (window as { fbq?: (...a: unknown[]) => void }).fbq?.("track", "PageView");
       trackPageViewed(pathname);
     }
-    // The /100-leads and /seo-visibility actions redirect here on success.
-    // Growth-plan funnels use ConfirmedLandingConversion with a server receipt.
-    if (pathname.endsWith("/thank-you") && pathname !== GTA_LANDING_THANK_YOU_PATH && pathname !== GOOGLE_META_LANDING_THANK_YOU_PATH) trackLead({ requireId: true });
+    // Paid landing funnels use ConfirmedLandingConversion with a server receipt.
+    if (pathname.endsWith("/thank-you") && pathname !== LANDING_THANK_YOU_PATH && pathname !== GTA_LANDING_THANK_YOU_PATH && pathname !== GOOGLE_META_LANDING_THANK_YOU_PATH) trackLead({ requireId: true });
   }, [pathname]);
 
   // Delegated click capture across the whole document.

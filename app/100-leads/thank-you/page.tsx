@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { CalendarCheck, ClipboardList, ShieldCheck } from "lucide-react";
 import "../landing.css";
 import { LandingThankYou, cleanParam } from "@/components/landing/landing-thank-you";
-import { LANDING_PATH, LANDING_THANK_YOU_PATH } from "@/lib/data/landing-100-leads";
+import { LANDING_PATH, LANDING_SOURCE, LANDING_THANK_YOU_PATH } from "@/lib/data/landing-100-leads";
+import { readLandingConversionReceipt } from "@/lib/landing-conversion";
+import { ConfirmedLandingConversion } from "@/components/landing/confirmed-conversion";
 
 /**
  * /100-leads/thank-you — where `submitLandingLead` redirects after a saved
@@ -25,8 +27,11 @@ export default async function ThankYouPage({ searchParams }: { searchParams: Pro
   const sp = await searchParams;
   const name = cleanParam(sp.n, 40);
   const company = cleanParam(sp.c, 80);
+  const eventId = await readLandingConversionReceipt(LANDING_SOURCE);
 
   return (
+    <>
+    <ConfirmedLandingConversion eventId={eventId} source={LANDING_SOURCE} />
     <LandingThankYou
       name={name}
       kicker="Application received"
@@ -48,5 +53,6 @@ export default async function ThankYouPage({ searchParams }: { searchParams: Pro
       headerCtaLabel="Get my lead plan"
       footerTagline="Performance advertising for local service businesses."
     />
+    </>
   );
 }
