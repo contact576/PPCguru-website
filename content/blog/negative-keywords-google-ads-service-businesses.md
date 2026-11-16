@@ -29,7 +29,7 @@ Open the [search terms report](https://support.google.com/google-ads/answer/1373
 4. Did this term produce a qualified enquiry, appointment or customer?
 5. Would excluding it also block a valuable variant?
 
-Sort by spend and group similar terms. A single expensive query deserves attention, but one click is not enough to declare an entire theme worthless. Compare the search terms with your CRM outcomes where possible; our [lead-quality tracking guide](/blog/google-ads-lead-quality-tracking-booked-jobs) explains how to separate form fills from booked jobs.
+Sort by spend and group similar terms. A single expensive query deserves attention, but one click is not enough to declare an entire theme worthless. Compare the search terms with your CRM outcomes where possible; our [guide to lowering Google Ads cost per lead](/blog/lower-cost-per-lead-google-ads) explains how search intent and conversion tracking work together.
 
 Google notes that the search terms report can reveal irrelevant queries and help you add negative keywords. The report's “Match type” column describes how a search term related to the keyword that triggered the ad; it is not always the same as the match type you assigned to that keyword. [Google explains the distinction](https://support.google.com/google-ads/answer/2472708?hl=en).
 
