@@ -2,11 +2,14 @@
 title: "Google Ads Lead Quality Tracking: From Form Fills to Booked Jobs"
 description: "A practical guide for Toronto service businesses to track qualified leads, booked appointments and customers in Google Ads instead of optimizing for form fills alone."
 date: "2026-11-13"
+dateModified: "2026-11-17"
 publishAt: "2026-11-13T13:00:00-05:00"
 draft: false
 status: "approved-to-publish"
 category: "Google Ads"
-author: "PPC Guru"
+author: "Shrikaanth Shyamsunder"
+coverImage: "/blog/google-ads-lead-quality-tracking-cover.webp"
+coverImageAlt: "A search ads dashboard, lead intake forms, and an appointment planner with booked slots."
 ---
 
 A Google Ads campaign can generate more leads while producing fewer jobs. The gap usually appears after the form: missed calls, enquiries outside the service area, price shoppers, and prospects who never book. If every submission counts as an equal success, the campaign report hides that difference.
