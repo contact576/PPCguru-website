@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { PHASE_PRODUCTION_BUILD } from "next/constants";
 
 const securityHeaders = [
   // Stop MIME sniffing (e.g. a text response treated as active script).
@@ -29,8 +28,6 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Hostinger's build container exposes more CPUs than its process limit can support.
-  experimental: { cpus: 2 },
   images: {
     formats: ["image/avif", "image/webp"],
     // Phones first: the narrow widths are what a 390pt viewport actually asks
@@ -77,7 +74,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default function configure(phase: string): NextConfig {
-  if (phase === PHASE_PRODUCTION_BUILD) process.env.TURBO_TASKS_AVAILABLE_PARALLELISM ??= "2";
-  return nextConfig;
-}
+export default nextConfig;
