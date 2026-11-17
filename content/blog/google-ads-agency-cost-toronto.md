@@ -7,9 +7,8 @@ description: >-
 date: '2026-11-17'
 category: Google Ads
 author: Shrikaanth Shyamsunder
-coverImage: /Users/deepakbhatt/Downloads/google-ads-agency-cost-toronto.png
-draft: true
 ---
+
 
 
 
