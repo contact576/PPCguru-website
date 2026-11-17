@@ -67,6 +67,8 @@ The auditor should review titles and headings, but also the substance beneath th
 
 Internal links matter here. A useful audit identifies where a related page should point to a priority service page and whether the anchor text tells a reader what they will find. It should not recommend adding dozens of repetitive links merely to hit a count.
 
+If the audit identifies a competitor or content gap, PPC Guru's [SEO competitor-analysis guide for Toronto businesses](/blog/seo-competitor-analysis-toronto-service-businesses) shows how to score the opportunity before adding another URL.
+
 For owners also investing in AI-search visibility, this is the place to check whether the page gives clear, accurate answers and whether the business information is consistent. It is **not** a separate promise that an AI model will recommend the business. Google says its AI search features continue to rely on foundational SEO and useful, original content; there is no special markup requirement to appear in AI Overviews. [Read Google's guidance on AI features](https://developers.google.com/search/docs/appearance/ai-features).
 
 ### 3. Is local information accurate where it affects discovery?
@@ -201,3 +203,4 @@ Ask for the first three actions, the evidence behind each one, the affected page
 An SEO audit should leave you with a clearer decision, not just a larger spreadsheet. For a Toronto business, that means knowing which pages and local touchpoints matter, which findings are verified, what the business should fix first, and who is accountable for the work.
 
 If you want PPC Guru to review your website, start with the SEO and local search service page and ask what the free review will include for your specific site. You can use the seven questions above with us—or with any agency you consider.
+
