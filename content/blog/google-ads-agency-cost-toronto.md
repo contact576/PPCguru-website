@@ -20,14 +20,24 @@ Your monthly outlay is ad spend plus the management fee, with any separately bil
 
 For example, C$3,000 in monthly ad spend plus a C$750 management fee equals C$3,750 per month, before separately billed work. This is an illustration, not a PPC Guru quote or a recommended minimum budget.
 
+| Monthly cost | Illustrative amount | Paid to |
+| --- | ---: | --- |
+| Google Ads media spend | C$3,000 | Google |
+| Agency management fee | C$750 | Agency |
+| Combined monthly total | C$3,750 | Google and agency |
+
+
+
 At PPC Guru, clients pay ad spend directly to the platform. We confirm the management scope and fee in writing after reviewing the account and business goals.
 
 ## What are Toronto agencies advertising?
 
 These are individual published offers checked in November 2026. They are not a market average and may change. Review each provider's current terms before comparing them with a proposal.
 
-- ether. advertises Google Ads management at C$700 per month with a three-month minimum. Its service page also lists C$600 per month with a 12-month commitment: https://etherpartners.ca/services/google-ads/
-- The Social Shepherd describes a flat management fee from C$500 per month. Confirm the scope that applies to your account: https://thesocialshepherd.ca/about-us/
+| Agency | Advertised management fee | Term or condition |
+| --- | --- | --- |
+| [ether.](https://etherpartners.ca/services/google-ads/) | C$700/month, or C$600/month | Three-month minimum at C$700; 12-month commitment at C$600 |
+| [The Social Shepherd](https://thesocialshepherd.ca/about-us/) | From C$500/month | Confirm the scope and terms for your account |
 
 Ask whether tracking, landing pages, call reporting and search-term reviews are included, and how the fee changes if your ad budget grows.
 
