@@ -5,10 +5,13 @@ description: >-
   What does a Google Ads agency cost in Toronto? Compare management fees, ad
   spend and extra charges, then learn how to assess the full cost per customer.
 date: '2026-11-17'
+publishAt: '2026-11-17T09:16:00+05:30'
 category: Google Ads
 author: PPC Guru
+coverImage: /Users/deepakbhatt/Downloads/google-ads-agency-cost-toronto.png
 draft: true
 ---
+
 
 A Toronto business hiring a Google Ads agency usually pays two separate bills: ad spend paid to Google and a management fee paid to the agency. Setup, tracking or landing page work may cost extra. The useful question is: What will the entire program cost, and can it acquire customers profitably?
 
