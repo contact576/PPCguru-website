@@ -7,9 +7,10 @@ description: >-
   follow-up.
 date: '2026-11-18'
 category: Google Ads
-author: Shrikaanth shyam sunder
+author: Shrikaanth Shyamsunder
 coverImage: /images/blog/cheap-toronto-google-ads-leads-that-dont-book.jpeg
 ---
+
 
 
 
