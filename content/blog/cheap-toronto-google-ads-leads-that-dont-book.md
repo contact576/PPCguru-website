@@ -1,14 +1,16 @@
 ---
-title: "Cheap Toronto Google Ads Leads That Don’t Book"
-seoTitle: "Cheap Toronto Google Ads Leads That Don’t Book | PPC Guru"
-description: "Getting low-cost Google Ads leads but few appointments? Discover why Toronto leads fail to book and how to check targeting, search intent, tracking, and follow-up."
-date: "2026-11-18"
-category: "Google Ads"
-author: "PPC Guru"
-coverImage: "/images/blog/cheap-toronto-google-ads-leads-that-dont-book.jpeg"
-coverImageAlt: "PPC Guru field guide: cheap leads, few bookings—why Toronto Google Ads enquiries fail to book."
-draft: false
+title: Cheap Toronto Google Ads Leads That Don’t Book
+seoTitle: Cheap Toronto Google Ads Leads That Don’t Book | PPC Guru
+description: >-
+  Getting low-cost Google Ads leads but few appointments? Discover why Toronto
+  leads fail to book and how to check targeting, search intent, tracking, and
+  follow-up.
+date: '2026-11-18'
+category: Google Ads
+author: Shrikaanth Shyam sunder
+coverImage: /images/blog/cheap-toronto-google-ads-leads-that-dont-book.jpeg
 ---
+
 
 A Toronto business owner opens a Google Ads report and sees a promising number: leads cost $40 each. The phones are ringing, forms are arriving, and the campaign appears to be improving. Then the calendar tells a different story. Few enquiries become appointments, and fewer still become paying customers.
 
