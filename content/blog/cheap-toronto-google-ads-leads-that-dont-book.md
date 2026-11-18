@@ -7,9 +7,10 @@ description: >-
   follow-up.
 date: '2026-11-18'
 category: Google Ads
-author: Shrikaanth Shyam sunder
+author: Shrikaanth shyam sunder
 coverImage: /images/blog/cheap-toronto-google-ads-leads-that-dont-book.jpeg
 ---
+
 
 
 A Toronto business owner opens a Google Ads report and sees a promising number: leads cost $40 each. The phones are ringing, forms are arriving, and the campaign appears to be improving. Then the calendar tells a different story. Few enquiries become appointments, and fewer still become paying customers.
