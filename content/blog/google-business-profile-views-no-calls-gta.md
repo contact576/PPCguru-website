@@ -4,6 +4,7 @@ description: "Getting Google Business Profile views but few calls? Use this GTA 
 date: "2026-11-24"
 category: "Local SEO"
 author: "PPC Guru"
+coverImage: "/images/blog/google-business-profile-views-to-calls-bookings-gta.jpg"
 ---
 
 A Toronto service business may appear on Google Maps and receive profile views while its appointment calendar stays empty. If that sounds familiar, check the path from discovery to booking. Customers may select another listing, reach voicemail or click through to a website that makes booking difficult.
