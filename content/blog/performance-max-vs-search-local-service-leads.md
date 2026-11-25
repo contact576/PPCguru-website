@@ -8,7 +8,7 @@ author: "Jaydeep Patel"
 
 Two campaigns that generate booked tasks and missed calls, out-of-area enquiries, or persons who never answer can have the same cost per lead, according to a GTA service company. Because of this, the lead count cannot be the only factor used to decide between Google Search and Performance Max.
 
-**Quick answer:** Start with Search when you need to capture specific, high-intent service queries and learn which jobs your budget can win. Consider Performance Max when your conversion tracking is reliable, you have useful creative assets and you want to test reach beyond keyword-led Search. Judge both on qualified leads and bookings, not just form submissions.
+**Quick answer:** Start with Search when you need to capture specific, high-intent service queries and learn [which jobs your budget can win](https://ppcguru.ca/blog/how-much-google-ads-cost-service-business). Consider Performance Max when your conversion tracking is reliable, you have useful creative assets and you want to test reach beyond keyword-led Search. Judge both on qualified leads and bookings, not just form submissions.
 
 ## What does each campaign actually do?
 
@@ -27,7 +27,7 @@ Performance Max is predicated on objectives. Google's available inventory, which
 
 Local service demand is frequently explicit. Someone searching “furnace repair Vaughan” or “emergency dentist North York” has named the service and area. Search lets you put that offer in front of them, then examine the terms that triggered the ads.
 
-This facilitates the diagnosis of a first campaign. Examine searches, match kinds, negatives, location settings, ad copy, and the destination page if calls are pointless. Examine call handling and scheduling if calls are pertinent but few are booked. How to make those choices without obstructing worthwhile searches is demonstrated in PPC Guru's [search-term triage guide](https://ppcguru.ca/blog/search-terms-triage-board-gta-service-businesses). Use reasonable service boundaries to safeguard budgets.
+This facilitates the diagnosis of a first campaign. Examine searches, match kinds, negatives, location settings, ad copy, and the [destination page](https://ppcguru.ca/blog/landing-page-mistakes-killing-conversions) if calls are pointless. Examine [call handling and scheduling](https://ppcguru.ca/blog/speed-to-lead-why-follow-up-fast) if calls are pertinent but few are booked. How to make those choices without obstructing worthwhile searches is demonstrated in PPC Guru's [search-term triage guide](https://ppcguru.ca/blog/search-terms-triage-board-gta-service-businesses). Use reasonable service boundaries to safeguard budgets.
 
 ## When Performance Max becomes worth testing
 
@@ -39,7 +39,7 @@ Don't think that Performance Max is a blank slate. Ad-format context is included
 
 Both campaign types can look successful when every form or short call is counted as a conversion. For a local service company, the useful stages are **new enquiry → qualified lead → booked appointment or estimate → customer**.
 
-Define a qualified lead in operational terms: contactable, in the service area and seeking a service the business offers. Record missed calls and duplicate forms separately. Feed later outcomes back into Google Ads when the tracking setup and consent allow it. Google recommends [enhanced conversions for leads](https://support.google.com/google-ads/answer/14587068) and conversion goals such as qualified leads or booked appointments to give its systems better quality signals.
+[Define a qualified lead in operational terms](https://ppcguru.ca/blog/google-ads-lead-quality-tracking-booked-jobs): contactable, in the service area and seeking a service the business offers. Record missed calls and duplicate forms separately. Feed later outcomes back into Google Ads when the tracking setup and consent allow it. Google recommends [enhanced conversions for leads](https://support.google.com/google-ads/answer/14587068) and conversion goals such as qualified leads or booked appointments to give its systems better quality signals.
 
 Compare **cost per qualified lead**, **cost per booking** and, when the sales cycle permits, **cost per customer**. If Performance Max brings more cheap enquiries but fewer booked jobs, the lower cost per lead is misleading. If it brings additional bookings at an acceptable cost without reducing Search performance, it may have earned a place in the budget.
 
