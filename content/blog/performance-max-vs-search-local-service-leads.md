@@ -4,7 +4,7 @@ description: "Should a local service business use Google Search or Performance M
 date: "2026-11-25"
 category: "Google Ads"
 author: "Jaydeep Patel"
-coverImage: "/images/blog/performance-max-vs-search-local-service-leads-cover.svg"
+coverImage: "https://pozpdqckjqnsdjtvdnft.supabase.co/storage/v1/object/public/blog-images/performance-max-vs-search-local-service-leads-cover-correct-logo-mww8e3gv.png"
 ---
 
 Two campaigns that generate booked tasks and missed calls, out-of-area enquiries, or persons who never answer can have the same cost per lead, according to a GTA service company. Because of this, the lead count cannot be the only factor used to decide between Google Search and Performance Max.
