@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // Attribute to a real person ONLY when the frontmatter author matches a team member;
   // otherwise keep Organization (honest — the post is bylined "PPC Guru"). [VERIFY-client]:
   // assign real individual authors in content/blog/*.md frontmatter for stronger E-E-A-T.
-  const authorMember = team.find((m) => m.name === post.author);
+  const authorMember = team.find((m) => m.name === post.author || (post.author === "Dhawal Patel" && m.name === "Dhaval Patel"));
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -63,7 +63,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     datePublished: post.date,
     dateModified: post.date,
     author: authorMember
-      ? { "@type": "Person", "@id": `${siteConfig.url}/about#${authorMember.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, name: authorMember.name }
+      ? { "@type": "Person", "@id": `${siteConfig.url}/about#${authorMember.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, name: post.author }
       : { "@type": "Organization", "@id": `${siteConfig.url}/#organization`, name: siteConfig.name },
     publisher: { "@id": `${siteConfig.url}/#organization` },
     image: `${siteConfig.url}/opengraph-image`,
@@ -121,15 +121,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="mx-auto flex max-w-3xl items-start gap-4 rounded-[18px] border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6">
             {authorMember.photo ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={authorMember.photo} alt={authorMember.name} className="h-14 w-14 shrink-0 rounded-[14px] object-cover" />
+              <img src={authorMember.photo} alt={post.author} className="h-14 w-14 shrink-0 rounded-[14px] object-cover" />
             ) : (
               <span className="head flex h-14 w-14 shrink-0 items-center justify-center rounded-[14px] bg-[var(--color-ink)] text-lg text-[var(--color-lime)]">
-                {authorMember.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                {post.author.split(" ").map((n) => n[0]).join("").slice(0, 2)}
               </span>
             )}
             <div>
               <p className="mono text-[11px] uppercase tracking-[.08em] text-[#5f6f17]">About the author</p>
-              <p className="head mt-1 text-[17px] text-[var(--color-ink)]">{authorMember.name} · <span className="text-[var(--color-ink-dim)]">{authorMember.role}</span></p>
+              <p className="head mt-1 text-[17px] text-[var(--color-ink)]">{post.author} · <span className="text-[var(--color-ink-dim)]">{authorMember.role}</span></p>
               <p className="mt-2 text-sm text-[var(--color-ink-dim)]">{authorMember.bio}</p>
               {authorMember.linkedin && (
                 <a href={authorMember.linkedin} target="_blank" rel="noopener noreferrer" className="mono mt-3 inline-block text-[11px] font-bold uppercase tracking-[.06em] text-[var(--color-ink)] hover:text-[#5f6f17]">Connect on LinkedIn →</a>
