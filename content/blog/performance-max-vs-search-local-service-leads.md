@@ -9,7 +9,7 @@ coverImage: "/images/blog/performance-max-vs-search-local-service-leads-cover.sv
 
 Two campaigns that generate booked tasks and missed calls, out-of-area enquiries, or persons who never answer can have the same cost per lead, according to a GTA service company. Because of this, the lead count cannot be the only factor used to decide between Google Search and Performance Max.
 
-**Quick answer:** Start with Search when you need to capture specific, high-intent service queries and learn [which jobs your budget can win](https://ppcguru.ca/blog/how-much-google-ads-cost-service-business). Consider Performance Max when your conversion tracking is reliable, you have useful creative assets and you want to test reach beyond keyword-led Search. Judge both on qualified leads and bookings, not just form submissions.
+Start with Search when you need to capture specific, high-intent service queries and learn [which jobs your budget can win](https://ppcguru.ca/blog/how-much-google-ads-cost-service-business). Consider Performance Max when your conversion tracking is reliable, you have useful creative assets and you want to test reach beyond keyword-led Search. Judge both on qualified leads and bookings, not just form submissions.
 
 ## What does each campaign actually do?
 
