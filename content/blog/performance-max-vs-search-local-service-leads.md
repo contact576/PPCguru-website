@@ -3,7 +3,7 @@ title: "Performance Max vs Search Campaigns for Local Service Leads"
 description: "Should a local service business use Google Search or Performance Max? Compare control, lead quality, tracking and testing before changing your ad budget."
 date: "2026-11-25"
 category: "Google Ads"
-author: "Jaydeep Patel"
+author: "Dhawal Patel"
 coverImage: "https://pozpdqckjqnsdjtvdnft.supabase.co/storage/v1/object/public/blog-images/performance-max-vs-search-local-service-leads-cover-correct-logo-mww8e3gv.png"
 ---
 
