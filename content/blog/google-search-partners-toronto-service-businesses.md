@@ -36,7 +36,7 @@ For an existing Search campaign, open its **Networks** settings and look for **I
 
 Then use the **Network (with search partners)** segment in a Google Ads statistics table or Report Editor. Google says this segment separates Google Search, search partners and Display Network performance ([Google Ads Help: table segments](https://support.google.com/google-ads/answer/2454072?hl=en)). Look at a period long enough to include normal lead follow-up and booking delays. Note each campaign's spend, clicks and reported conversions by network.
 
-Do not merge all campaigns into one verdict. A search partner may perform differently for emergency repair, planned renovation and clinic appointments. Compare similar service lines and location targets. Our [Google Ads location targeting checklist](https://ppcguru.ca/blog/google-ads-location-targeting-toronto-service-businesses) is useful when out-of-area leads are part of the concern; that article is currently awaiting publication, so use the live [contractor lead-quality guide](https://ppcguru.ca/blog/google-ads-contractors-gta-qualified-leads) in the meantime.
+Do not merge all campaigns into one verdict. A search partner may perform differently for emergency repair, planned renovation and clinic appointments. Compare similar service lines and location targets. For businesses serving multiple GTA areas, our [contractor lead-quality guide](https://ppcguru.ca/blog/google-ads-contractors-gta-qualified-leads) shows how to assess whether an enquiry fits the work you can deliver.
 
 ## Bring the CRM into the decision
 
