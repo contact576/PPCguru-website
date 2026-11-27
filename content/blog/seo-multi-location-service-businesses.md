@@ -10,8 +10,8 @@ description: >-
 date: '2026-11-27'
 category: SEO
 author: Jaydeep Patel
-draft: true
 ---
+
 
 
 **How should a multi-location service business allocate SEO work?** Give one central owner responsibility for shared website issues, assign a local contact to verify each branch’s facts, and have a content lead decide which service and location pages deserve to exist. Measure qualified enquiries and bookings by location so the team can see whether the work helps customers find the right branch.
