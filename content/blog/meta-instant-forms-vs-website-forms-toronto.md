@@ -45,7 +45,7 @@ Ask only for information your team will use to decide the next step. For a local
 
 Keep the ad promise, form wording and follow-up aligned. If the ad offers a free estimate, the confirmation should explain when and how the estimate request will be reviewed. If an instant form captures a lead in seconds but nobody contacts them until the next day, the easy submission has not solved the business problem. Our [speed-to-lead guide](https://ppcguru.ca/blog/speed-to-lead-why-follow-up-fast) covers the operational side of that handoff.
 
-For services where people must review detailed information or take a specific action such as booking, a website page can make the next step clearer. Meta itself lists booking appointments and generating quotes as examples where website forms can be useful ([Meta for Business: lead ads with forms](https://www.facebook.com/business/ads/ad-objectives/lead-generation/lead-ads-with-forms)). Our [landing page optimization checklist](https://ppcguru.ca/blog/landing-page-optimization-toronto-service-businesses) can help evaluate that page if it is live in your current site version.
+For services where people must review detailed information or take a specific action such as booking, a website page can make the next step clearer. Meta itself lists booking appointments and generating quotes as examples where website forms can be useful ([Meta for Business: lead ads with forms](https://www.facebook.com/business/ads/ad-objectives/lead-generation/lead-ads-with-forms)). Our [landing page optimization checklist](https://ppcguru.ca/blog/landing-page-optimization-toronto-service-businesses) can help evaluate that page.
 
 ## Make sure every lead arrives and gets a response
 
