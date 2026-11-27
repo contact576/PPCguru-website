@@ -13,13 +13,8 @@ author: Jaydeep Patel
 draft: true
 ---
 
+
 **How should a multi-location service business allocate SEO work?** Give one central owner responsibility for shared website issues, assign a local contact to verify each branch’s facts, and have a content lead decide which service and location pages deserve to exist. Measure qualified enquiries and bookings by location so the team can see whether the work helps customers find the right branch.
-
-A service business with three locations rarely needs three independent SEO strategies. It needs one coordinated plan that fixes shared website problems, represents each real location accurately, and helps customers choose the right team.
-
-Choosing what needs to be verified locally and what belongs at the company level is challenging. Pages may overlap and business information may drift if each branch makes independent website changes. Pages describing services, hours or coverage may no longer reflect reality if headquarters maintains complete control without consulting branch teams.
-
-The solution is to divide SEO into three workstreams: **technical, local and content**. Each needs a clear owner, a source of evidence and a way to measure whether the work helps the business. The example below uses a service company with locations in Toronto, Mississauga and Ottawa, but the method applies across Canada.
 
 ## First, inventory your locations and services
 
@@ -48,8 +43,6 @@ Next, review duplicate URLs, redirects and canonical signals. A template error r
 
 Tracking belongs here too. A company-wide organic traffic total cannot show whether Mississauga’s booking form works or Ottawa receives suitable enquiries. Connect calls, forms and bookings to the destination page and the team receiving them. Where possible, record whether each enquiry was contactable, within the service area and relevant to an available service.
 
-The technical owner’s deliverable should be more specific than “SEO fixes.” Request a URL inventory, prioritized issues, affected locations, an owner for each change and proof that important contact paths work after the changes.
-
 **Central owner:** Website or SEO lead  
 **Local input:** Branch teams test their own contact routes  
 **Expected evidence:** URL inventory, crawl findings, tested forms and calls, and location-level reporting
@@ -59,8 +52,6 @@ The technical owner’s deliverable should be more specific than “SEO fixes.�
 Local SEO needs shared rules and local knowledge. A central lead should manage standards for business names, profile ownership, categories and change records. A named person at each location should confirm facts that marketing cannot safely infer.
 
 Check each eligible Google Business Profile against its corresponding website page. Do the address or service area, hours, phone number and services agree? If customers can visit the address, is the team available as described? If the business travels to customers, does the profile reflect how that location operates?
-
-Correct inaccuracies before sending more people to the listing. Better search visibility will not help a customer who calls the wrong number or arrives when the office is closed.
 
 Avoid creating an extra profile merely to appear in a neighbouring city. Google allows separate profiles for certain service-business locations with separate staff and service areas, but eligibility depends on the real operation. If profiles appear to overlap, investigate ownership and eligibility before changing them. PPC Guru’s [duplicate Business Profile checklist](https://ppcguru.ca/blog/duplicate-google-business-profile-toronto) provides a process for that review.
 
@@ -83,8 +74,6 @@ Content work should start with a page map. Give each URL one primary job:
 
 The central content lead can maintain the core service explanation: who the service suits, what the process involves and how customers request it. Local teams supply facts that change the decision at their branch, such as available practitioners, project types, booking options, service limits and recurring questions.
 
-For example, a physiotherapy company might have one main page explaining a treatment. Its Toronto location page could clarify that branch’s practitioners, access and booking options. Its Ottawa page could describe the team and services actually available there. Neither location page needs a rewritten version of the entire treatment guide.
-
 Internal links should follow these roles. A location page can point to relevant services; a service page can help visitors choose an available location. A genuine project example can link to both. This gives customers a clear route through the site without asking every page to target every combination of service and city.
 
 Resist building dozens of pages by swapping place names in a template. Google’s [spam policies](https://developers.google.com/search/docs/essentials/spam-policies) describe doorway abuse as creating substantially similar pages for similar searches that funnel visitors toward the same destination. PPC Guru’s [service-area page guide](https://ppcguru.ca/blog/contractor-service-area-pages-gta) offers a practical test for whether a market page has enough real coverage, proof and decision information to earn its place.
@@ -103,10 +92,6 @@ Consider a service company with teams in Toronto, Mississauga and Ottawa. The lo
 | **Mississauga** | Fix inconsistent hours and contact details across the website and Business Profile | Mississauga manager confirms details; local SEO lead makes the changes | Current hours, checks of both surfaces and a change log |
 | **Ottawa** | Decide whether a proposed service page answers a distinct local need | Ottawa manager supplies operational details; content lead decides the page’s role | Customer questions, available services, original local proof and a clear page purpose |
 
-At the same time, the technical lead checks the shared location-page template, internal links and conversion tracking. Plan that website-wide work once, then test it across all three locations.
-
-The workplan also gives the team a reason to say “not yet.” If Ottawa cannot verify the proposed service or explain what a new page would add, improve an existing page first. If Mississauga’s phone number is wrong, correcting it matters more than writing another blog post.
-
 ## Put the work in a 90-day sequence
 
 A simple sequence prevents every branch request from becoming an urgent content project:
@@ -115,16 +100,12 @@ A simple sequence prevents every branch request from becoming an urgent content 
 2. **Days 31–60:** Improve priority service and location pages using details verified by the teams that deliver the work.
 3. **Days 61–90:** Review qualified enquiries, update pages attracting unsuitable requests and decide which additional pages have a distinct purpose.
 
-These intervals are for planning, not promises of ranking gains. The pace depends on the number of locations, the website’s condition and how quickly operational details can be verified.
-
 For each proposed task, ask:
 
 1. What customer problem or search need does it address?
 2. Which location or service does it affect?
 3. Who can verify the facts or test the fix?
 4. What result would show that the work helped?
-
-The answer to the last question is not always a higher ranking. A corrected page may reduce out-of-area requests. A clearer booking path may produce more appointments. Better internal links may help customers reach the branch that offers the service.
 
 PPC Guru’s [SEO services](https://ppcguru.ca/services/seo) connect website health, local visibility, content and lead measurement. Whether the work is managed internally or by an agency, ask for evidence of completed changes and their business effect, not only a keyword report.
 
@@ -133,8 +114,6 @@ PPC Guru’s [SEO services](https://ppcguru.ca/services/seo) connect website hea
 Clear page roles also help people who discover the business through direct answers, AI-assisted search or a conventional results page. Put the answer to a location or service question in readable text near the relevant heading. State who provides the service, where it is available, what limits apply and how to contact the right team. Support claims with details the business can verify.
 
 Do not add a page or markup solely because it is described as “AEO” or “GEO.” Google says its established SEO practices remain relevant to AI features in Search and that there are no special technical requirements to appear in AI Overviews or AI Mode beyond eligibility for Search and snippets. Its guidance also emphasizes accessible text, useful internal links and accurate business information. [Read Google’s guidance on AI features](https://developers.google.com/search/docs/appearance/ai-features).
-
-Those practices serve readers first. A concise answer helps someone establish whether the Ottawa team provides a service; the detailed page gives them the evidence needed to book. Keep both accurate as the operation changes.
 
 ## Measure results by location and service
 
